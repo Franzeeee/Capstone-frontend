@@ -1,0 +1,106 @@
+.content {
+    flex-direction: column;
+    padding: 2em;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100%;
+    overflow: hidden;
+}
+.content h4 {
+    color: var(--main-color);
+    font-weight: 800;
+    margin: 0 !important;
+}
+.form-container {
+    width: 95% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    min-width: 270px;
+}
+
+.form-container form {
+    min-height: 50px;
+    width: 100%;
+    max-width: 500px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+.form-container form input {
+    padding: 12px;
+    border-radius: 0 !important;
+    outline: none !important;
+    background: linear-gradient(#f6f7fc, #f7f9ff);
+    border: 1px solid rgba(164, 164, 164, 0.181);
+}
+.form-container form label {
+    font-size: .75rem !important;
+    font-weight: 600 !important;
+    color: rgba(40, 40, 40, 0.871);
+    margin-top: 5px;
+}
+.form-container form input:hover {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.form-container form input[type="radio"]{
+    border-radius: 100% !important;
+    padding: 5px !important;
+    box-shadow: none ;
+    cursor: pointer;
+}
+.form-container form input[type="radio"]:checked {
+    background:var(--main-color) !important;
+}
+.form-container form button {
+    width: 70% !important;
+    align-self: center;
+    margin-top: 2rem;
+    border-radius: 11px;
+    font-weight: 600;
+}
+
+.form-container form input:focus {
+    box-shadow: none;
+    outline: none;
+}
+.form-container form p:last-child {
+    font-size: .9rem;
+}
+.form-container form p:last-child span {
+    color: var(--main-color);
+    cursor: pointer;
+    transition: all .3s ease;
+    font-weight: 600;
+}
+.form-container form p:last-child span:hover {
+    color: rgb(37, 37, 255);
+}
+
+/* Error message style */
+.errorMessage {
+    color: red;
+}
+.errorMessage ul {
+    list-style: none;
+    padding-inline: 0;
+    padding-top: 5px;
+}
+.errorMessage ul li {
+    font-size: .9rem;
+}
+.errorBorder {
+    border: 1px solid rgb(219, 27, 27) !important;
+}
+@media (max-width: 767px) {
+    /* Media query for screens smaller than 768px (mobile devices) */
+    .content {
+        align-content: center !important;
+        justify-content: start !important;
+        overflow: auto;
+    }
+}

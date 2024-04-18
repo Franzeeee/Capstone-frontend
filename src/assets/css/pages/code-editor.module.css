@@ -1,0 +1,242 @@
+.container {
+    background-color: #272822;
+    overflow: hidden;
+}
+
+.nav{
+    color: white !important;
+    height: 100%;
+    background-color: #1D1E1A;
+    padding: 15px;
+}
+.nav ul {
+    padding: 0;
+}
+.nav .icon {
+    color: #5F6257;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+.nav .folderIcon {
+    font-size: 1.3rem;
+}
+.nav .icon:hover {
+    filter: brightness(2);
+}
+.section header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1D1E1A;
+    color: #000000;
+    padding: 10px;
+    color: white;
+    border-left: 1px solid rgb(47, 47, 47);
+}
+
+.main {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    height: 100%;
+}
+.codeArea {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+}
+.codeArea {
+    min-height: 100%;
+}
+.aiArea {
+    background-color: #3E4036;
+    flex: .35;
+    color: white;
+}
+.codeEditor {
+    background: #272822;
+    flex: 1;
+    height: auto;
+}
+.outputInput {
+    background-color: #272822;
+    flex: .5;
+    display: flex;
+    gap: 2px;
+    border-top: 5px solid #13131396;
+}
+.inputArea {
+    flex: .6;
+}
+.inputArea textarea {
+    background-color: transparent;
+    resize: none;
+    width: 100%;
+    height: 98%;
+    color: white;
+    border: none;
+    padding: 5px;
+}
+.outputArea {
+    flex: 1;
+    border-left: 5px solid #13131396;
+    color: white;
+    padding: 5px;
+    font-size: .9rem;
+    position: relative;
+}
+.outputArea textarea{
+    background: transparent;
+    color: white;
+    width: 100%;
+    resize: none;
+    height: 83%;
+    border: none;
+    outline: none;
+}
+.controls button{
+    background-color: #4a4a4a;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    position: relative;
+    border-radius: 5px;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+.controls button:hover {
+    filter: brightness(1.7);
+}
+.exit {
+    font-size: 1rem;
+    padding: 10px;
+    background-color: #4a4a4a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.exit:hover {
+    filter: brightness(1.7);
+    cursor: pointer;
+}
+.outputArea .title {
+    border-bottom: 1px solid #9a9a9a;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: .9rem;
+    color: rgb(236, 236, 236);
+}
+
+.aiArea {
+    display: flex;
+    flex-direction: column;
+}
+.task {
+
+    flex: 1;
+}
+.aiBot {
+    flex: 1;
+    border: 2px solid rgb(138, 138, 138);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.chatHead {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chatHead p {
+    font-weight: 600;
+}
+.closeIcon {
+    background-color: #565656;
+    padding: 5px;
+    font-size: .7rem;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.closeIcon:hover {
+    filter: brightness(2s);
+
+}
+.chatContent{
+    flex: 1;
+    padding-block: 5px;
+}
+.message {
+    width: 100%;
+    padding: 2px;
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    text-wrap: wrap;
+    font-size: .8rem;
+}
+.user {
+    border-radius: 100%;
+    min-width: 30px;
+    aspect-ratio: 1/1;
+    font-size: 1.3rem;
+    text-align: center;
+    background-color: #ffffff;
+    color: #080808;
+    align-items: center;
+    justify-content: center;
+}
+.messageContent {
+    width: calc(100% - 5.7rem);
+}
+.response {
+    flex-direction: row-reverse;
+    text-align: end;
+    text-wrap: wrap;
+    font-size: .8rem;
+}
+.userName {
+    font-size: .8rem;
+    font-weight: 600;
+}
+.chatbox {
+    width: 100%;
+    min-height: 40px;
+    border: 1px solid white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 5px;
+    
+}
+.chatbox input {
+    flex: 1;
+    margin: 0;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 5px;
+    font-size: .8rem;
+}
+.chatbox .sendIcon {
+    flex: .1
+}
+.minimize {
+    flex: .05;
+}
+.minimize .chatContent, .minimize .chatbox {
+    display: none;
+}

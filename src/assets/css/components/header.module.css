@@ -1,0 +1,43 @@
+:root {
+    --primary-color: #0569FF;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    text-align: center;
+}
+.logo {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+.nav ul {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+.nav ul li {
+    display: flex;
+    gap: 5px;
+    padding-block: 10px;
+    padding-inline: 5px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer !important;
+    transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.icons {
+    color: var(--primary-color);
+    font-size: 1.6rem !important;
+}
+
+.nav ul li:hover{
+    background-color: #0569FF;
+    color: white;
+    border-radius: 5px;
+}
+.nav ul li:hover .icons {
+    color: white !important;
+}

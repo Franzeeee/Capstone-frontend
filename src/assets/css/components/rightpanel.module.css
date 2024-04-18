@@ -1,0 +1,10 @@
+.rightPanel {
+    
+}
+
+@media (max-width: 600px) {
+    .rightPanel{
+        color: red !important;
+        display: none !important;
+    }
+}
