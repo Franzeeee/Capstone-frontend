@@ -1,21 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
 function Sample() {
   const [output, setOutput] = useState("");
-  const [socketClient, setSocketClient] = useState(null);
+  const token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKRE9PRExFIiwic3ViIjoiV1MtQVBJLVRPS0VOIiwiY2xpZW50LWlkIjoiZGFiODU3YzgxNzJlMmZjZjRkN2I5NDNlMjZiNjcxM2YiLCJpYXQiOjE3MTM0NTY2ODQsImV4cCI6MTcxMzQ1Njg2NH0.75kybtZ6QCcdxc6PGCrQzigdoDpmOOQB8nAZzl7irIs"
+  const socketClientRef = useRef("null")
+  const [messageBody, setMessageBody] = useState("")
+  const [initialRun, setInitialRun] = useState(true)
+
+  useEffect(()=> {
+    console.log("Upated SOCKET CLIENT: ", socketClientRef.current)
+  },[socketClientRef.current]);
 
   useEffect(() => {
+
+    const apiCredentials = {
+      clientId: "dab857c8172e2fcf4d7b943e26b6713f",
+      clientSecret: "20ea5e30a6e4dbe7928ee2df3c852706de38e63a2b64b4bee7ba9a0761ef0321"
+    }
+    // axios.post('https://api.jdoodle.com/v1/auth-token', JSON.stringify(apiCredentials))
+    //       .then(response => {
+    //         setToken(response.data)
+    //       })
+    //       .catch(error => console.error("Error fetching token: ", error))
+    
+
     const initializeSocket = () => {
       const client = webstomp.over(
         new SockJS("https://api.jdoodle.com/v1/stomp"),
         { heartbeat: false, debug: true }
       );
       client.connect({}, onWsConnection, onWsConnectionFailed);
-      setSocketClient(client);
+
+      console.log("Client: ", client)
+      socketClientRef.current = client;
     };
 
     const onWsConnection = () => {
       console.log("connection succeeded");
+
+      const socketClient = socketClientRef.current;
 
       if (!socketClient) {
         console.error('WebSocket client is null or undefined');
@@ -23,46 +47,20 @@ function Sample() {
         return;
       }
 
-      socketClient.subscribe("/user/queue/execute-i", (message) => {
-        let msgId = message.headers["message-id"];
-        let msgSeq = parseInt(msgId.substring(msgId.lastIndexOf("-") + 1));
-
-        let statusCode = parseInt(message.headers.statusCode);
-
-        if (statusCode === 201) {
-          return;
-        }
-
-        let t0;
-        try {
-          t0 = performance.now();
-          while (
-            performance.now() - t0 < 2500 &&
-            msgSeq !== msgSeq
-          ) {}
-        } catch (e) {}
-
-        if (statusCode === 204) {
-          //executionTime = message.body
-        } else if (statusCode === 500 || statusCode === 410) {
-          //server error
-          console.log("server error");
-        } else if (statusCode === 206) {
-          //outputFiles = JSON.parse(message.body)
-          //returns file list - not supported in this custom api
-        } else if (statusCode === 429) {
-          //Daily limit reached
-          console.log("daily limit reached");
-        } else if (statusCode === 400) {
-          //Invalid request - invalid signature or token expired - check the body for details
-          console.log(
-            "invalid request - invalid signature or token expired"
-          );
-        } else if (statusCode === 401) {
-          //Unauthorised request
-          console.log("Unauthorised request");
-        } else {
-          setOutput((prevOutput) => prevOutput + message.body);
+      socketClient.subscribe('/user/queue/execute-i', message => {
+        const messageBody = message.body;
+        const statusCode = parseInt(message.headers.statusCode);
+  
+        if (statusCode === 200) {
+          console.log('Received message:', messageBody);
+          if(initialRun){
+            setOutput(prevOutput => prevOutput + messageBody);
+            setInitialRun(true)
+          }else{
+            setOutput(prevOutput => prevOutput + messageBody + '\n');
+          }
+        } else if (statusCode === 204) {
+          setOutput(prevOutput => prevOutput + ' <--------- End of execution ---------->\n');
         }
       });
 
@@ -85,8 +83,7 @@ sum()`;
         data,
         {
           message_type: "execute",
-          token:
-          "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKRE9PRExFIiwic3ViIjoiV1MtQVBJLVRPS0VOIiwiY2xpZW50LWlkIjoiZGFiODU3YzgxNzJlMmZjZjRkN2I5NDNlMjZiNjcxM2YiLCJpYXQiOjE3MTM0MDc5ODYsImV4cCI6MTcxMzQwODE2Nn0.VjFfum2QTh8H2-TjzxWVo7eaIGUhhsDfkAmntYZ79k4",
+          token: token,
         },
         () => console.log("Message sent")
       );
@@ -97,37 +94,50 @@ sum()`;
       console.log(e);
     };
 
-    if (!socketClient) {
+    if (!socketClientRef.current) {
       initializeSocket();
     }
 
     // Clean up the socket connection on component unmount
     return () => {
+      const socketClient = socketClientRef.current;
       if (socketClient) {
         socketClient.disconnect(() => console.log("Socket disconnected"));
       }
     };
-  }, [socketClient]);
-
+  }, []);
+  
   const handleInput = (event) => {
+    const socketClient = socketClientRef.current;
+    // Ensure socketClient is not null before proceeding
+    if (!socketClient) {
+      console.error('WebSocket client is null or undefined');
+      return;
+    }
+  
     let key = event.key;
     if (event.key === "Enter") {
       key = "\n";
+      // Prevent the default behavior of adding a new line in the textarea
+
     }
     socketClient.send("/app/execute-ws-api-token", key, {
       message_type: "input",
     });
   };
-
+  
+  
   return (
     <div>
+      
       <h1>Output</h1>
       <textarea
         rows="5"
         cols="100"
         id="result"
-        defaultValue={output} // Use defaultValue instead of value
+        value={output} // Use defaultValue instead of value
         onKeyPress={handleInput}
+        onChange={(e) => setOutput(e.target.value)}
       ></textarea>
 
     </div>

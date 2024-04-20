@@ -1,0 +1,3 @@
+export default function token(){
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKRE9PRExFIiwic3ViIjoiV1MtQVBJLVRPS0VOIiwiY2xpZW50LWlkIjoiZGFiODU3YzgxNzJlMmZjZjRkN2I5NDNlMjZiNjcxM2YiLCJpYXQiOjE3MTM0NTI2MDgsImV4cCI6MTcxMzQ1Mjc4OH0.YIdf9npa43s9u9rIdNkcUhxw_3T_HTesIoEm2L2eE8o"
+}

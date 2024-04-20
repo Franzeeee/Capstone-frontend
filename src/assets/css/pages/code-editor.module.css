@@ -111,6 +111,13 @@
     transition: all .3s ease;
     cursor: pointer;
 }
+.controls .execute {
+    filter: brightness(1);
+}
+.controls .execute:hover {
+    filter: brightness(1);
+    background-color: rgba(235, 8, 8, 0.69);
+}
 .controls button:hover {
     filter: brightness(1.7);
 }

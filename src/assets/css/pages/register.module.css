@@ -17,7 +17,6 @@
     flex-direction: column !important;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
     min-width: 270px;
 }
 
@@ -29,6 +28,7 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+
 }
 .form-container form input {
     padding: 12px;
@@ -88,7 +88,7 @@
 .errorMessage ul {
     list-style: none;
     padding-inline: 0;
-    padding-top: 5px;
+    display: block !important;
 }
 .errorMessage ul li {
     font-size: .9rem;
@@ -96,6 +96,11 @@
 .errorBorder {
     border: 1px solid rgb(219, 27, 27) !important;
 }
+
+.form-container ul {
+    
+}
+
 @media (max-width: 767px) {
     /* Media query for screens smaller than 768px (mobile devices) */
     .content {

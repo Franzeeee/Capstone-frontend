@@ -116,7 +116,7 @@ export const Register = () => {
         <div className={`${styles['form-container']}`}>
           <h4>Create an account</h4>
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="form-group">
+            <div className={`${styles.formGroup}`}>
               <label htmlFor="fullname">Full Name</label>
               <input 
                 type="text" 
@@ -129,7 +129,7 @@ export const Register = () => {
               />
               {!validated.name[0] && (
                 <div className={styles.errorMessage}>
-                  <ul>
+                  <ul className="m-0">
                     {validated.name[1].map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -137,7 +137,7 @@ export const Register = () => {
                 </div>
               )}
             </div>
-            <div className="form-group">
+            <div className={`${styles.formGroup}`}>
               <label htmlFor="email">Email Address</label>
               <input 
                 type="email" 
@@ -150,7 +150,7 @@ export const Register = () => {
               />
               {!validated.email[0] && (
                 <div className={styles.errorMessage}>
-                  <ul>
+                  <ul className="m-0">
                     {validated.email[1].map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -158,7 +158,7 @@ export const Register = () => {
                 </div>
               )}
             </div>
-            <div className="form-group">
+            <div className={`${styles.formGroup}`}>
               <label htmlFor="phone">Phone Number</label>
               <input 
                 type="tel" 
@@ -171,7 +171,7 @@ export const Register = () => {
               />
               {!validated.phone[0] && (
                 <div className={styles.errorMessage}>
-                  <ul>
+                  <ul className="m-0">
                     {validated.phone[1].map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -179,7 +179,7 @@ export const Register = () => {
                 </div>
               )}
             </div>
-            <div className="form-group">
+            <div className={`${styles.formGroup}`}>
               <label htmlFor="password">Password</label>
               <input 
                 type="password" 
@@ -192,7 +192,7 @@ export const Register = () => {
               />
               {!validated.password[0] && (
                 <div className={styles.errorMessage}>
-                  <ul>
+                  <ul className="m-0">
                     {validated.password[1].map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -200,7 +200,7 @@ export const Register = () => {
                 </div>
               )}
             </div>
-            <div className="form-group">
+            <div className={`${styles.formGroup}`}>
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input 
                 type="password" 
@@ -213,7 +213,7 @@ export const Register = () => {
               />
               {!validated.confirm[0] && (
                 <div className={styles.errorMessage}>
-                  <ul>
+                  <ul className="m-0">
                     {validated.confirm[1].map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -233,7 +233,7 @@ export const Register = () => {
             </div>
               {!validated.role[0] && (
                 <div className={styles.errorMessage}>
-                  <ul>
+                  <ul className="m-0">
                     {validated.role[1].map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
