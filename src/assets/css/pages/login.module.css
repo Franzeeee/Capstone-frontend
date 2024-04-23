@@ -5,11 +5,24 @@
     justify-content: center !important;
     width: 100%;
     overflow: hidden;
+    /* background:  linear-gradient(to left, rgb(0, 0, 0), rgb(0, 0, 0));    */
+    color: #fff !important;
 }
 .content h4 {
     color: var(--main-color);
     font-weight: 800;
     margin: 0 !important;
+}
+.headerText {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: -5rem;
+}
+.logo {
+    width: 20rem;
+    margin-bottom: -2rem;
 }
 .form-container {
     width: 95% !important;
@@ -17,12 +30,12 @@
     flex-direction: column !important;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
     min-width: 270px !important;
 }
 .tagline {
     font-size: .8rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 21px;
 }
 
@@ -37,7 +50,7 @@
 }
 .form-container form input {
     padding: 12px;
-    border-radius: 0 !important;
+    border-radius: 5px !important;
     outline: none !important;
     background: linear-gradient(#f6f7fc, #f7f9ff);
     border: 1px solid rgba(164, 164, 164, 0.181);
@@ -45,7 +58,7 @@
 .form-container form label {
     font-size: .75rem !important;
     font-weight: 600 !important;
-    color: rgba(40, 40, 40, 0.871);
+    color: #fff;
     margin-top: 5px;
 }
 .form-container form input:hover {
@@ -62,7 +75,7 @@
     background:var(--main-color) !important;
 }
 .form-container form button {
-    width: 70% !important;
+    width: 100% !important;
     align-self: center;
     margin-top: 2rem;
     border-radius: 11px;
@@ -84,10 +97,11 @@
     right: 10px;
     font-size: 1.1rem;
     cursor: pointer;
+    color: #000;
     transition: all .3s ease;
 }
 .showPassword:hover {
-    color: var(--main-color);
+    color: #000;
 }
 
 .form-container form p:last-child {

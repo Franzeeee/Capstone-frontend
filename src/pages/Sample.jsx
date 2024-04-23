@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { checkLoggedIn } from "../utils/auth";
 
 function Sample() {
   const [output, setOutput] = useState("");
@@ -7,10 +9,20 @@ function Sample() {
   const socketClientRef = useRef("null")
   const [messageBody, setMessageBody] = useState("")
   const [initialRun, setInitialRun] = useState(true)
+  const navigate = useNavigate();
+
 
   useEffect(()=> {
-    console.log("Upated SOCKET CLIENT: ", socketClientRef.current)
-  },[socketClientRef.current]);
+    const checkLoginStatus = async () => {
+      const loggedIn = await checkLoggedIn();
+      if (loggedIn) {
+        console.log("User is logged in");
+      } else {
+        navigate('/login')
+      }
+    }
+    checkLoginStatus();
+  },[]);
 
   useEffect(() => {
 

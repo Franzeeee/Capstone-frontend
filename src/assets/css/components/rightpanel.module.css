@@ -1,10 +1,45 @@
-.rightPanel {
-    
+.body {
+    background-color: #272822;
 }
+.head {
+    width: 100%;
+    padding: 10px;
+    background: #1D1E1A;
+    border-left: 2px solid rgb(60, 60, 60);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo img{
+    max-width: 50px !important;
+}
+.user {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-align: end;
+}
+.user img {
+    max-width: 50px !important;
+    border-radius: 100%;
+    border: 2px solid rgb(143, 143, 143);
+    cursor: pointer;
+}
+.user p{
+    margin: 0;
+    color: white;
+    font-size: .8rem;
+}
+.user p:first-child{
+    font-weight: 600;
+}
+.user p:last-child{
+    font-size: .7rem;
+}
+.content {
+    overflow: auto;
+    display: grid !important;
 
-@media (max-width: 600px) {
-    .rightPanel{
-        color: red !important;
-        display: none !important;
-    }
 }

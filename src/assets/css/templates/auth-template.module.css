@@ -3,9 +3,13 @@
     margin: 0 !important;
     width: 100% !important;
     max-width: 100%;
+    background: linear-gradient(to right, rgb(0, 0, 0), rgba(0, 0, 0, 0.293)), url('../../img/bg2.jpg');
+    height: 100svh;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat;
 }
 .rightPanel {
-    background-color: var(--main-color) !important;
     color: white;
 }
 .row {

@@ -1,29 +1,46 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styles from '../assets/css/components/header.module.css'
-import { RxDashboard } from 'react-icons/rx'
-import { LuGraduationCap } from "react-icons/lu";
-import { LuUserCheck2 } from "react-icons/lu";
-import { VscTools } from "react-icons/vsc";
+import { IoMdAnalytics } from 'react-icons/io';
+import { MdAnnouncement } from 'react-icons/md';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaHome, FaCode } from 'react-icons/fa';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
+  const [show, setShow] = useState(false)
+  const navigate = useNavigate();
+
+  const showMenu = () => {
+    setShow(!show)
+  }
   return (
-    <div className={`col-sm-2 border border-1 p-4 ${styles.headerContainer}`}>
-        <div className={`${styles.logo}`}>
-            Logo Here
+    <div className={`col-2 ${styles.headerContainer} ${show && (styles.show)}`}>
+        <div className={`${styles.logo} ${styles.show}`}>
+            <FontAwesomeIcon icon={faBars} onClick={showMenu}/>
         </div>
         <nav className={`${styles.nav}`}>
           <ul>
             <li className='d-flex align-items-center justify-content-start'>
-                <RxDashboard className={`${styles.icons}`} /> Dashboard
+                <Tooltip title="Home" placement="right">
+                  <FaHome className={`${styles.icons}`} />{show && "Home"}
+                </Tooltip>
+            </li>
+            <li className='d-flex align-items-center justify-content-start' onClick={() => navigate('/playground')}>
+              <Tooltip title="Playground" placement='right'>
+                <FaCode className={`${styles.icons}`}/>{show && "Playground"}
+              </Tooltip>
             </li>
             <li className='d-flex align-items-center justify-content-start'>
-                <LuGraduationCap className={`${styles.icons}`} /> Courses
+              <Tooltip title="Dashboard" placement='right'>
+                <IoMdAnalytics className={`${styles.icons}`}/>{show && "Dashboard"}
+              </Tooltip>
             </li>
             <li className='d-flex align-items-center justify-content-start'>
-                <LuUserCheck2 className={`${styles.icons}`} /> Attendance
-            </li>
-            <li className='d-flex align-items-center justify-content-start'>
-                <VscTools className={`${styles.icons}`} /> Tools
+              <Tooltip title="Announcements" placement='right'>
+                <MdAnnouncement className={`${styles.icons}`}/>{show && "Announcement"}
+              </Tooltip>
             </li>
           </ul>
         </nav>

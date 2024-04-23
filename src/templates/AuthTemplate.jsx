@@ -6,8 +6,7 @@ export const AuthTemplate = ({children}) => {
     <div className={`container-lg center ${styles.container}`}>
         <div className={`row ${styles.row}`}>
             {children}
-            <div className={`col-md-5 ${styles.rightPanel}`}>
-                <h5>Logo here</h5>
+            <div className={`col-md-6 ${styles.rightPanel}`}>
             </div>
         </div>
     </div>

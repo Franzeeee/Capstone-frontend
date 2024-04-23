@@ -7,6 +7,10 @@
 }
 body {
   font-family: var(--main-font) !important;
+  overflow: auto !important;
+  position: relative;
+  max-height: 100svh !important;
+  min-height: 100svh !important;
 }
 li {
   list-style: none;
@@ -19,4 +23,9 @@ li {
 }
 .CodeMirror-gutter {
   background-color: #282828 !important;
+}
+.homeContainer {
+  width: 100%;
+  min-height: 600px !important;
+  height: 100%;
 }

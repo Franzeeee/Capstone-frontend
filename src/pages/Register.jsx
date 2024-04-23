@@ -12,6 +12,8 @@ import {
 } from '../utils/registerValidation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
+import { customFetch } from '../utils/api';
+import { toast, ToastContainer } from 'react-toastify'
 
 export const Register = () => {
   const [loading, setLoading] = useState(false)
@@ -69,7 +71,7 @@ export const Register = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Perform form validation
@@ -108,11 +110,67 @@ export const Register = () => {
       ...prevState,
       role: [roleValid, roleError]
     }))
+
+    if (
+      nameValid &&
+      emailValid &&
+      phoneValid &&
+      passwordValid &&
+      confirmValid &&
+      roleValid
+    ) {
+      
+      customFetch('/register', {
+        method: 'POST',
+        body: JSON.stringify(formData)
+      })
+        .then(response => {
+          console.log(response)
+          const url = response.url === 'http://localhost:5173/';
+          if(response.statusText === 'OK' && url){
+            return {"message": "Duplicate"}
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data.message)
+          if(data.message === "Duplicate"){
+            toast.error("Email already exists!")
+            return
+          }
+          toast.success("Registered Successfully")
+          toast.loading("Redirecting...")
+          customFetch('/login', {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            })
+            .then(response => {
+                    return response.json();
+                })
+            .then(data => {
+                console.log(data.message);
+
+                if(data.message === 'Invalid Credintials!'){
+                    toast.error(data.message)
+                }else{
+                  setTimeout(() => {
+                    navigate('/')
+                  }, 3000)
+                }
+                
+                })
+            .catch(error => console.error(error))
+        })
+        .catch(error => console.error(error))
+    }
   }
 
   return (
     <AuthTemplate>
       <div className={`col text-black d-flex ${styles.content}`}>
+        <ToastContainer 
+          hideProgressBar={true}
+        />
         <div className={`${styles['form-container']}`}>
           <h4>Create an account</h4>
           <form onSubmit={(e) => handleSubmit(e)}>

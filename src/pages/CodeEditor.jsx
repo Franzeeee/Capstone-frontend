@@ -3,6 +3,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2';
 import styles from '../assets/css/pages/code-editor.module.css';
 import axios from 'axios'; // Import Axios for making HTTP requests
 import token from '../utils/token';
+import { useNavigate } from 'react-router-dom'
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -11,6 +12,8 @@ import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faBars, faCaretDown, faCaretUp, faClock, faClose, faCopy, faHome, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faTriangleCircleSquare, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
+import getAuthToken from '../utils/fetchToken';
+import logo from '../assets/img/logo.png';
 
 const CodeEditor = () => {
     const [code, setCode] = useState('');
@@ -18,22 +21,26 @@ const CodeEditor = () => {
     const [output, setOutput] = useState();
     const [minimize, setMinimize] = useState(false);
     const [execute, setExecute] = useState(false);
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKRE9PRExFIiwic3ViIjoiV1MtQVBJLVRPS0VOIiwiY2xpZW50LWlkIjoiZGFiODU3YzgxNzJlMmZjZjRkN2I5NDNlMjZiNjcxM2YiLCJpYXQiOjE3MTM1NzYyODAsImV4cCI6MTcxMzU3NjQ2MH0.yvi6BypVavWB_nFnVB2mD3qV_90OvT-CTp5LCX-tKMI"
+    const token = localStorage.getItem('API_TOKEN');
     const socketClientRef = useRef(null);
     const [time, setTime] = useState(0)
-
+    const [authToken, setAuthToken] = useState(null)
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios.post('https://cors-anywhere.herokuapp.com/https://api.jdoodle.com/v1/auth-token', {
-            "clientId": "dab857c8172e2fcf4d7b943e26b6713f",
-            "clientSecret": "20ea5e30a6e4dbe7928ee2df3c852706de38e63a2b64b4bee7ba9a0761ef0321"
-        })
-        .then(response => {
-            alert(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        const fetchAuthToken = async () => {
+            try {
+                const clientId = 'dab857c8172e2fcf4d7b943e26b6713f'; // Provide your clientId
+                const clientSecret = '20ea5e30a6e4dbe7928ee2df3c852706de38e63a2b64b4bee7ba9a0761ef0321'; // Provide your clientSecret
+                
+                const data = await getAuthToken(clientId, clientSecret);
+                setAuthToken(data);
+            } catch (error) {
+                console.error('Error getting auth token:', error);
+            }
+        }; 
+
+        fetchAuthToken();
     }, []);
     
 
@@ -43,13 +50,10 @@ const CodeEditor = () => {
             { heartbeat: false, debug: true }
         );
         client.connect({}, onWsConnection, onWsConnectionFailed);
-
-        console.log("Client: ", client);
         socketClientRef.current = client;
     };
 
     const onWsConnection = () => {
-        console.log("connection succeeded");
 
         const socketClient = socketClientRef.current;
 
@@ -62,19 +66,14 @@ const CodeEditor = () => {
             const messageBody = message.body;
             const statusCode = parseInt(message.headers.statusCode);
         
-            console.log("Received message:", messageBody);
-            console.log("Status code:", statusCode);
-        
             if (statusCode === 200) {
                 setTime(prev => prev + 1)
-                console.log("Appending message to output:", messageBody);
                 setOutput(prev => prev + messageBody);
             } else if (statusCode === 204) {
-                console.log("End of execution.");
                 setOutput(prevOutput => prevOutput + '\n <--------- End of execution ---------->\n');
                 setExecute(false);
             }else if(statusCode === 400){
-                setOutput("Warning: Expired Token. Please contact the developer")
+                setOutput("Warning: Expired Token. Please rerun the program.")
                 setExecute(false)
             }
         });
@@ -94,14 +93,12 @@ const CodeEditor = () => {
             {
                 message_type: "execute",
                 token: token,
-            },
-            () => console.log("Message sent")
+            }
         );
     };
 
     const onWsConnectionFailed = (e) => {
         console.log("connection failed");
-        console.log(e);
     };
 
     const handleInput = (event) => {
@@ -160,6 +157,8 @@ const CodeEditor = () => {
                 // Check if the request was successful
                 if (response.status === 200) {
                     // Return the compilation result
+                    setOutput(response.data.output)
+                    setExecute(false)
                     return response.data.output;
                 } else {
                     throw new Error('Compilation failed. Please try again.');
@@ -172,6 +171,26 @@ const CodeEditor = () => {
     };
 
     const handleExecute = async () => {
+
+        if(!isInteractive) {
+            setExecute(true)
+            compileCode(code, inputValues)
+            return;
+        }
+        const fetchAuthToken = async () => {
+            try {
+                const clientId = '80d7f4c9e24d6d17354e31f6301d1203';
+                const clientSecret = '74d8130f970462b618aba4bdb77a8b07c5c67c35601fd857960a1659129d4556';
+                
+                const data = await getAuthToken(clientId, clientSecret);
+                setAuthToken(data);
+            } catch (error) {
+                console.error('Error getting auth token:', error);
+            }
+        }; 
+
+        fetchAuthToken();
+
         setExecute(true);
         setOutput("")
         // Initialize WebSocket connection
@@ -189,7 +208,6 @@ const CodeEditor = () => {
         if (socketClient && socketClient.connected) {
             // Disconnect the socket client
             socketClient.disconnect(() => {
-                console.log("Socket disconnected");
                 // Once disconnected, update the output state
                 setOutput(prev => prev.concat("\n <---------- Execution Terminated ---------->"));
             });
@@ -197,12 +215,25 @@ const CodeEditor = () => {
         } else {
             // If the socket client is not yet established or connected,
             // wait for it to be established and then terminate
-            console.log("Waiting for socket connection...");
             socketClient.connect({}, () => {
                 // After the connection is established, terminate the connection
-                console.log("Socket connection established. Terminating...");
                 terminate();
             });
+        }
+    };
+
+    const [isInteractive, setIsInteractive] = useState(false);
+    const handleIteractive = () => {
+        setIsInteractive(!isInteractive);
+    }
+
+    const handleGetHighlightedCode = () => {
+        const editor = document.querySelector('.CodeMirror').CodeMirror; // Get the CodeMirror instance
+        if (editor) {
+            const highlightedCode = editor.getSelection(); // Get the selected text
+            console.log('Highlighted code:', highlightedCode);
+        } else {
+            console.log('CodeMirror instance not found');
         }
     };
 
@@ -219,8 +250,8 @@ const CodeEditor = () => {
             </nav>
             <section className={`w-100 d-flex flex-column ${styles.section}`}>
                 <header>
-                    <div className="logo d-flex align-items-center justify-content-center ">
-                        Logo Here
+                    <div className={` position-relative logo d-flex align-items-center justify-content-center ${styles.logo}`}>
+                        <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/')}/>
                     </div>
                     <div className="timer">
                         <p className='text-light m-0'><span><FontAwesomeIcon icon={faClock} /></span> 2:00</p>
@@ -234,7 +265,7 @@ const CodeEditor = () => {
                         </button>
                     </div>
                     <div className={`${styles.exit}`} title="Exit Playground">
-                        <FontAwesomeIcon icon={faRightFromBracket}/>
+                        <FontAwesomeIcon icon={faRightFromBracket} onClick={() => navigate('/')}/>
                     </div>
                 </header>
                 <main className={`${styles.main}`}>
@@ -243,31 +274,42 @@ const CodeEditor = () => {
                             <CodeMirror
                                 value={code}
                                 options={{
-                                    mode: 'python', // Set mode to Python
+                                    mode: 'python',
                                     theme: 'material',
                                     lineNumbers: true,
+                                    extraKeys: {
+                                        "Enter": (cm) => {
+                                            // Custom behavior here
+                                            // To insert a new line as default, you can call:
+                                            cm.replaceSelection("\n", "end");
+                                        }
+                                    }
                                 }}
                                 onBeforeChange={(editor, data, value) => {
                                     setCode(value);
                                 }}
                                 className={`${styles.codeMirror}`}
+                                
                             />
                         </div>
                         <div className={` ${styles.outputInput}`}>
                             <div className={`${styles.inputArea}`}>
+                            <div className={`${styles.switchContainer} position-absolute`}>
+                                <div className={`${styles.switch} ${isInteractive ? styles.active : ''}`} onClick={handleIteractive}>
+                                </div>
+                                <p className='text-light'>Interactive</p>
+                            </div>
                                 <textarea
                                     value={inputValues}
                                     onChange={handleInputChange}
                                     placeholder="Stdin Inputs"
                                     cols="30"
+                                    disabled={isInteractive}
                                 />
-                                <div className="switch">
-
-                                </div>
                             </div>
                             <div className={`${styles.outputArea}`}>
                                 <p className={`${styles.title}`}>Output:</p>
-                                {output && <textarea readOnly={!execute} onChange={(e) => setOutput(e.target.value)} onKeyPress={handleInput} className='m-0' value={output} />}
+                                {output && <textarea readOnly={!isInteractive} onChange={(e) => setOutput(e.target.value)} onKeyPress={handleInput} className='m-0' value={output} />}
                             </div>
                         </div>
                     </div>
