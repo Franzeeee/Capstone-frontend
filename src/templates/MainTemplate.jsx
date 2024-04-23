@@ -2,11 +2,12 @@ import React, { createContext, useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import styles from '../assets/css/components/rightpanel.module.css'
 import logo from '../assets/img/logo.png'
-import user from '../assets/img/user.png'
+import userImage from '../assets/img/user.png'
 import { Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { checkLoggedIn } from '../utils/auth';
 import { customFetch } from '../utils/api';
+import CryptoJS from 'crypto-js';
 
 const ErrorContext = createContext();
 
@@ -44,12 +45,18 @@ export const MainTemplate = ({children}) => {
                 response.json()
             })
             .then(data => {
+                localStorage.removeItem('jwt_token')
+                localStorage.removeItem('API_TOKEN')
+                localStorage.removeItem('userData')
                 navigate('/login');
             })
             .catch(error => {
                 console.log(error);
             })
     }
+
+    const userData = localStorage.getItem('userData');
+    const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
 
     return(
         <ErrorContext.Provider value={{errors, setErrors}}>
@@ -63,15 +70,15 @@ export const MainTemplate = ({children}) => {
                                 <img src={logo} alt="Website Logo" />
                             </div>
                             <div className={`${styles.user}`}>
-                                <img src={user} 
+                                <img src={userImage} 
                                     onClick={handleClick} 
                                     aria-controls={open ? 'basic-menu' : undefined}
                                     aria-haspopup="true"
                                     aria-expanded={open ? 'true' : undefined}
                                 />
                                 <div className="info">
-                                    <p>John Doe</p>
-                                    <p>Student</p>
+                                    <p>{user.name}</p>
+                                    <p className='text-capitalize'>{user.role}</p>
                                 </div>
                             </div>
                             <Menu

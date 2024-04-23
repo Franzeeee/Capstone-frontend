@@ -153,6 +153,8 @@ export const Register = () => {
                 if(data.message === 'Invalid Credintials!'){
                     toast.error(data.message)
                 }else{
+                  const hashedData = CryptoJS.SHA256(JSON.stringify(data.message)).toString();
+                  localStorage.setItem('userData', hashedData);
                   setTimeout(() => {
                     navigate('/')
                   }, 3000)

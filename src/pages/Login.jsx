@@ -8,6 +8,7 @@ import logoHorizontal from '../assets/img/logo-horizontal.png'
 import { customFetch } from '../utils/api';
 import { toast, ToastContainer } from 'react-toastify'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import CryptoJS from 'crypto-js'
 import { checkLoggedIn } from '../utils/auth';
 
 export const Login = () => {
@@ -59,6 +60,9 @@ export const Login = () => {
                 if(data.message === 'Invalid Credintials!'){
                     toast.error(data.message)
                 }else{
+                    const stringData = JSON.stringify(data.message);
+                    const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
+                    localStorage.setItem('userData', hashedData);
                     navigate('/')
                 }
                 

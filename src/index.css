@@ -29,3 +29,29 @@ li {
   min-height: 600px !important;
   height: 100%;
 }
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  background: transparent !important;
+  border-bottom: 2px solid white !important;
+}
+.MuiDateCalendar-root {
+  max-width: 100% !important;
+  border-radius: 10px;
+  margin: 0 !important;
+  width: 100% !important;
+  margin-bottom: 10px !important;
+}
+.accordion-header button:first-child {
+  background-color:#D9D9D9;
+  color: black !important;
+  font-weight: 600;
+  padding: 10px !important;
+}
+.accordion-body {
+  max-height: 150px !important;
+  position: relative;
+  overflow: auto;
+  padding: 10px !important;
+}
+.css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+  border: 1px solid rgb(63, 194, 255) !important;
+}

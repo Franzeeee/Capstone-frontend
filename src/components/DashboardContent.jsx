@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { checkLoggedIn } from '../utils/auth';
 import { customFetch } from '../utils/api';
@@ -7,6 +7,13 @@ import styles from '../assets/css/pages/home.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import cardImage from '../assets/img/card-img.jfif';
+
+import { Tab, Tabs } from 'react-bootstrap';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { Accordion } from 'react-bootstrap';
+import CryptoJS from 'crypto-js';
 
 export const DashboardContent = () => {
     const navigate = useNavigate();
@@ -40,6 +47,8 @@ export const DashboardContent = () => {
             })
     }
 
+    const [activeKey, setActiveKey] = useState('activities');
+
   return (
     <div className={`row m-0 overflow-hidden ${styles.row} `}>
         <div className={`col-9 ${styles.leftContent}`}>
@@ -55,7 +64,7 @@ export const DashboardContent = () => {
           <div className="row">
             <div className="col">
               <div className={`row ${styles.title}`}>
-                <p clasName={`m-0 text-white`}>Assessments (20)</p>
+                <p className={`m-0 text-white`}>Assessments (20)</p>
               </div>
               <div className="row">
                 <div className={`col ${styles.wrapper}`}>
@@ -144,7 +153,7 @@ export const DashboardContent = () => {
           </div>
           <div className="row">
             <div className={`row ${styles.title}`}>
-              <p clasName={`m-0 text-white`}>Course Materials</p>
+              <p className={`m-0 text-white`}>Course Materials</p>
             </div>
             <div className="row"> 
                 
@@ -152,7 +161,44 @@ export const DashboardContent = () => {
           </div>
         </div>
         <div className={`col-3 ${styles.rightContent} h-100`}>
+        
+        <Tabs
+          defaultActiveKey="activities"
+          id="uncontrolled-tab-example"
+          className={`${styles.tab}`}
+          activeKey={activeKey}
+          onSelect={(eventKey) => setActiveKey(eventKey)}
 
+        >
+          <Tab eventKey="activities" title="Activities" className={`${styles.active}`}>
+            <div className={`${styles.tabConent}`}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar style={{width: '310px !important', background: '#141529'}}/>
+            </LocalizationProvider>
+            <Accordion defaultActiveKey={0}>
+              <Accordion.Item eventKey="0">
+              <Accordion.Header>Today's Task <span className='text-danger' style={{fontSize: '.9rem'}}> (1)</span></Accordion.Header>
+                <Accordion.Body>
+                  <div className={`${styles.task}`}>
+                    <p className={`m-0`}>Activity 1</p>
+                    <span>Due: 11:59 PM</span>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis non corrupti a praesentium magnam dolorum dicta ducimus, perspiciatis tempora laudantium quas similique, suscipit aspernatur unde necessitatibus distinctio cupiditate nihil placeat!
+                    </p>
+                  </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+
+            </div>
+          </Tab>
+          <Tab eventKey="todo" title="To-do">
+            Tab content for To-do List
+          </Tab>
+          <Tab eventKey="assignments" title="Assignments">
+            Tab content for Assignments
+          </Tab>
+        </Tabs>
         </div>
     </div>
   )

@@ -24,8 +24,12 @@
 .user img {
     max-width: 50px !important;
     border-radius: 100%;
-    border: 2px solid rgb(143, 143, 143);
+    border: 3px solid rgb(143, 143, 143);
     cursor: pointer;
+    transform: all .3s ease;
+}
+.user img:hover, .user img:active {
+    border: 3px solid white;
 }
 .user p{
     margin: 0;
