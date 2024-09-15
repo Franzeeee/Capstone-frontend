@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { customFetch } from '../utils/api';
 import { toast, ToastContainer } from 'react-toastify'
+import CryptoJS from 'crypto-js';
 
 export const Register = () => {
   const [loading, setLoading] = useState(false)
@@ -153,11 +154,12 @@ export const Register = () => {
                 if(data.message === 'Invalid Credintials!'){
                     toast.error(data.message)
                 }else{
-                  const hashedData = CryptoJS.SHA256(JSON.stringify(data.message)).toString();
+                  const stringData = JSON.stringify(data.message);
+                  const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
                   localStorage.setItem('userData', hashedData);
                   setTimeout(() => {
                     navigate('/')
-                  }, 3000)
+                  }, 2000)
                 }
                 
                 })

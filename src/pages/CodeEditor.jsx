@@ -4,16 +4,24 @@ import styles from '../assets/css/pages/code-editor.module.css';
 import axios from 'axios'; // Import Axios for making HTTP requests
 import token from '../utils/token';
 import { useNavigate } from 'react-router-dom'
+import { customFetch } from '../utils/api';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
 import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faBars, faCaretDown, faCaretUp, faClock, faClose, faCopy, faHome, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faTriangleCircleSquare, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faClock, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import getAuthToken from '../utils/fetchToken';
-import logo from '../assets/img/logo.png';
+import logo from '../assets/img/logoCodelab.png';
+import practiceTest from '../assets/img/practice-test.png';
+import pythonPng from '../assets/img/Python_logo.png'
+import htmlCss from '../assets/img/html-css.png'
+import success from '../assets/img/excellent.png'
+import fail from '../assets/img/tiger.png'
+import html5 from '../assets/img/html-5.png'
+import css3 from '../assets/img/css-3.png'
 
 const CodeEditor = () => {
     const [code, setCode] = useState('');
@@ -26,6 +34,176 @@ const CodeEditor = () => {
     const [time, setTime] = useState(0)
     const [authToken, setAuthToken] = useState(null)
     const navigate = useNavigate();
+
+    const [testGenLevel, setTestGenLevel] = useState(0);
+
+
+    const saveAsPyFile = () => {
+        const filename = 'script.py';
+        const blob = new Blob([code], { type: 'text/plain' });
+        const link = document.createElement('a');
+        
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+    
+        // Clean up the URL object after the download
+        URL.revokeObjectURL(link.href);
+      };
+
+    // Warn user about losing progress if they try to leave the page
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = 'Your code will be permanently lost if you reload or close the page. Are you sure you want to proceed?';
+        };
+    
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        // Cleanup the event listener on component unmount
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+    
+
+    // Chat history
+    const [chatHistory, setChatHistory] = useState([]);
+
+    const [userMessage, setUserMessage] = useState('');
+
+    const handleMessageInput = (e) => {
+        setUserMessage(e.target.value);
+    }
+
+    const [challangeDetails, setChallangeDetails] = useState({
+        language: '',
+        difficulty: '',
+        time: 0,
+        withAssistance: null,
+    });
+
+    const [timer, setTimer] = useState(0)
+    const [isActive, setIsActive] = useState(false);
+    const [isCorrect, setIsCorrect] = useState();
+
+    useEffect(() => {
+        if (timer <= 0 || !isActive) return;
+
+        const intervalId = setInterval(() => {
+            setTimer(prevTimer => {
+                if (prevTimer <= 1) {
+                    clearInterval(intervalId);
+                    setIsCorrect(false);
+                    startPractice();
+                    setChallangeDetails(prevState => ({
+                        ...prevState,
+                        withAssistance: true
+                    }));
+                    return 0; // Ensures the timer stops at 0
+                }
+                return prevTimer - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [timer, isActive]);
+
+    const handleReset = () => {
+        setIsActive(false);
+        setTimer(0); // Reset to 2 minutes
+    };
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+
+    const [problem, setProblem] = useState("")
+    const [generating, setGenerating] = useState(false)
+
+    const resetChallange = () => {
+        setChallangeDetails({
+            language: '',
+            difficulty: '',
+            time: 0,
+            withAssistance: false,
+        });
+    }
+
+    const generateProblem = () => {
+        
+        let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.(no hints)`
+
+        customFetch('/receiveMessage', {
+            method: 'POST',
+            body: JSON.stringify({ "userMessage": prompt })
+        })
+        .then(response => response.json())
+        .then(data => {
+            setProblem(data.message)
+            setIsActive(true)
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            setGenerating(false)
+        })
+    }
+
+    const setLanguage = (language) => {
+        setChallangeDetails(prevState => ({...prevState, language: language}));
+    }
+
+    const setDifficulty = (difficulty) => {
+        setChallangeDetails(prevState => ({
+            ...prevState,
+            difficulty: difficulty
+        }));
+    };
+
+    const handleTime = (time) => {
+        setChallangeDetails(prevState => ({...prevState, time: time}));
+        setTimer(time * 60)
+    }
+
+    const setWithAssistance = (withAssistance) => {
+        setChallangeDetails(prevState => ({
+            ...prevState,
+            withAssistance: withAssistance
+        }));
+    };
+
+
+    const handleSendMessage = () => {
+        // Add the user's message to the chat history
+        setChatHistory(prevChatHistory => [
+            ...prevChatHistory, 
+            { 'user': 1, 'message': userMessage }
+        ]);
+        setUserMessage('');
+    
+        customFetch('/receiveMessage', {
+            method: 'POST',
+            body: JSON.stringify({ "userMessage": userMessage })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Add the response message to the chat history
+            setChatHistory(prevChatHistory => [
+                ...prevChatHistory, 
+                { 'user': 0, 'message': data.message }
+            ]);
+        })
+        .catch(error => console.error(error));
+    }
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && userMessage) {
+            handleSendMessage();
+        }
+    }
 
     useEffect(() => {
         const fetchAuthToken = async () => {
@@ -139,7 +317,7 @@ const CodeEditor = () => {
             method: 'POST',
             url: compilerApiUrl,
             headers: {
-                'content-type': 'application/json',
+                'contcentert-type': 'application/json',
                 'X-RapidAPI-Key': 'b3e4824fb9msh01176d2848430cbp1ef336jsnaa7b7d95fae0',
                 'X-RapidAPI-Host': 'online-code-compiler.p.rapidapi.com'
             },
@@ -222,7 +400,7 @@ const CodeEditor = () => {
         }
     };
 
-    const [isInteractive, setIsInteractive] = useState(false);
+    const [isInteractive, setIsInteractive] = useState(true);
     const handleIteractive = () => {
         setIsInteractive(!isInteractive);
     }
@@ -237,15 +415,116 @@ const CodeEditor = () => {
         }
     };
 
+    const startPractice = () => {
+        setTestGenLevel(prev => prev + 1) 
+        setChallangeDetails(prevState => ({
+            ...prevState,
+            withAssistance: false
+        }));
+        if(testGenLevel == 4) {
+            setGenerating(true)
+            generateProblem()
+        }
+    }
+    const prevOption = () => {
+        setTestGenLevel(prev => prev - 1)
+        if(testGenLevel == 1){
+            resetChallange()
+        }
+    }
+
+    const newChallange = () => {
+        setTestGenLevel(0)
+        resetChallange()
+        setChallangeDetails(prevState => ({
+            ...prevState,
+            withAssistance: true
+        }));
+    }
+
+    const assisted = () => {
+        setTestGenLevel(prev => prev + 1)
+        setWithAssistance(true)
+    }
+
+    const submitCode = () => {
+        if(code === "") {
+            alert("Please provide a code to evaluate.")
+            return;
+        }
+        let prompt = `Evaluate the following code based on the problem description. If the code solves the problem correctly, return "Correct". If the code is incorrect, incomplete, or no code is provided, return "Wrong". Code: "${code}" Problem: "${problem}"`;
+        customFetch('/receiveMessage', {
+            method: 'POST',
+            body: JSON.stringify({ "userMessage": prompt })
+        })
+        .then(response => response.json())
+        .then(data => {
+            setIsCorrect(data.message === "Correct");
+            startPractice();
+            setChallangeDetails(prevState => ({
+                ...prevState,
+                withAssistance: true
+            }));
+        })
+        .catch(error => console.error(error));
+    }
+
+    const [ide, setIde] = useState(0);
+
+    const handleIde = () => {
+        setIde(prevIde => (prevIde === 0 ? 1 : 0));
+    };
+
+    const [htmlCode, setHtmlCode] = useState('');
+    const [cssCode, setCssCode] = useState('');
+
+    const htmlRef = useRef(null);
+    const cssRef = useRef(null);
+    const iframeRef = useRef(null);
+
+    const run = () => {
+        const htmlCodeValue = htmlRef.current.value; // Access HTML textarea value via ref
+        const cssCodeValue = cssRef.current.value;   // Access CSS textarea value via ref
+        const iframe = iframeRef.current;
+    
+        // Update state based on the content
+        setHtmlCode(htmlCodeValue);
+        setCssCode(cssCodeValue);
+        if (iframe && iframe.contentDocument) {
+            iframe.contentDocument.body.innerHTML = htmlCode + "<style>" + cssCode + "</syle>";  // Set the HTML content
+            }
+        };
+
+        const openIframeInNewTab = () => {
+            // Create a new window
+            const newWindow = window.open('Output', '_blank');
+            if (newWindow) {
+              // Write the HTML content to the new window
+                newWindow.document.open();
+                newWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                    <title>Output</title>
+                    </head>
+                    <body>
+                    ${htmlCode + "<style>" + cssCode + "</syle>"}
+                    </body>
+                    </html>
+                `);
+                newWindow.document.close();
+                }
+        };
+
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
             <nav className={`${styles.nav}`}>
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column gap-3'>
-                    <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li>
+                    {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
                     <li title='Open Project'><FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon} ${styles.folderIcon}`}/></li>
-                    <li title='Save'><FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/></li>
-                    <li title='Copy'><FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/></li>
+                    <li title='Save' onClick={openIframeInNewTab}><FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/></li>
+                    <li title='Copy' onClick={handleIde}><FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/></li>
                 </ul>
             </nav>
             <section className={`w-100 d-flex flex-column ${styles.section}`}>
@@ -253,8 +532,8 @@ const CodeEditor = () => {
                     <div className={` position-relative logo d-flex align-items-center justify-content-center ${styles.logo}`}>
                         <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/')}/>
                     </div>
-                    <div className="timer">
-                        <p className='text-light m-0'><span><FontAwesomeIcon icon={faClock} /></span> 2:00</p>
+                    <div className={`${styles.clockLogo}`}>
+                        <p className={`m-0 ${styles.timer}`}><span><FontAwesomeIcon icon={faClock} /></span> {formatTime(timer)}</p>
                         <div className="play">
 
                         </div>
@@ -269,13 +548,13 @@ const CodeEditor = () => {
                     </div>
                 </header>
                 <main className={`${styles.main}`}>
-                    <div className={`d-flex flex-column ${styles.codeArea}`}>
+                    <div className={` ${ide == 0 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
                         <div className={`${styles.codeEditor}`}>
                             <CodeMirror
                                 value={code}
                                 options={{
                                     mode: 'python',
-                                    theme: 'material',
+                                    theme: 'default',
                                     lineNumbers: true,
                                     extraKeys: {
                                         "Enter": (cm) => {
@@ -297,7 +576,7 @@ const CodeEditor = () => {
                             <div className={`${styles.switchContainer} position-absolute`}>
                                 <div className={`${styles.switch} ${isInteractive ? styles.active : ''}`} onClick={handleIteractive}>
                                 </div>
-                                <p className='text-light'>Interactive</p>
+                                <p className='text-black'>Interactive</p>
                             </div>
                                 <textarea
                                     value={inputValues}
@@ -308,46 +587,210 @@ const CodeEditor = () => {
                                 />
                             </div>
                             <div className={`${styles.outputArea}`}>
-                                <p className={`${styles.title}`}>Output:</p>
+                                <p className={`${styles.title}`}>Output</p>
                                 {output && <textarea readOnly={!isInteractive} onChange={(e) => setOutput(e.target.value)} onKeyPress={handleInput} className='m-0' value={output} />}
                             </div>
                         </div>
+
                     </div>
+                     {/* Web Dev IDE */}
+
+                     <div className={`${ide == 1 ? "d-flex" : "d-none"} flex-column ${styles.webIDE}`}>
+                            <div className={`${styles.webOutput}`}> 
+                                <label><FontAwesomeIcon icon={faPlay}></FontAwesomeIcon> Ouput</label>
+                                <iframe id='0' title="Preview" ref={iframeRef} ></iframe>
+                            </div>
+                            <div className={`${styles.containerIDE}`}>
+                                <div>
+                                    <div className={`${styles.languageTab}`}>
+                                        <div>
+                                            <img src={html5} alt="html logo" />
+                                            <p className='m-0'>HTML</p>
+                                        </div>
+                                    </div>
+                                    <div className={`${styles.codingInput}`}>
+                                        <textarea ref={htmlRef} onKeyUp={run} id="html-code"></textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className={`${styles.languageTab}`}>
+                                        <div>
+                                            <img src={css3} alt="html logo" />
+                                            <p className='m-0'>CSS</p>
+                                        </div>
+                                    </div>
+                                    <div className={`${styles.codingInput}`}>
+                                        <textarea ref={cssRef} onKeyUp={run} id="css-code"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <div className={`${styles.aiArea}`}>
                         <div className={`${styles.task}`}>
+                        <div className={`${styles.taskBox} ${testGenLevel !== 0 ? styles.alignStart : ''}`}>
+                            {testGenLevel === 0 ? (
+                                <>
+                                    <img src={practiceTest} alt="Practice Test" className={`${styles.practiceTest}`} />
+                                    <button className={`${styles.firstButton}`} onClick={startPractice}>Start Practice Test</button>
+                                </>
+                            ) : (
+                                testGenLevel === 1 && (
+                                    <>
+                                        <p className={`${styles.colorBlack}`}>Choose a language</p>
+                                        <div className={`${styles.option1Container}`}>
+                                            <div className={`${styles.langguageOption} ${challangeDetails.language == 'python' ? styles.selectedLanguage : ''}`} onClick={() => setLanguage("python")}>
+                                                <img src={pythonPng} alt="" />
+                                                <p>Python</p>
+                                            </div>
+                                            <div className={`${styles.langguageOption} ${challangeDetails.language == 'html_css' ? styles.selectedLanguage : ''}`} onClick={() => setLanguage("html_css")}>
+                                                <img src={htmlCss} alt="" />
+                                                <p>Basic Web Development</p>
+                                            </div>
+                                        </div>
+                                        <div className={`${styles.controller}`}>
+                                            <button onClick={prevOption}>Cancel</button>
+                                            <button disabled={challangeDetails.language == ""} className={`${challangeDetails.language == '' && styles.notAvailable}`} onClick={challangeDetails.language !== "" && startPractice}>Next</button>
+                                        </div>
+                                    </>
+                                )
+                            )}
+                            {testGenLevel === 2 && (
+                                <>
+                                    <p className={`${styles.colorBlack}`}>Choose difficulty level</p>
+                                    <div className={`${styles.option1Container}`}>
+                                        <div className={`${styles.levelOption} ${challangeDetails.difficulty === 'easy' ? styles.selectedLanguage : ''}`}
+                                        onClick={() => setDifficulty("easy")}>
+                                            <p>Easy</p>
+                                        </div>
+                                        <div className={`${styles.levelOption} ${challangeDetails.difficulty === 'medium' ? styles.selectedLanguage : ''}`}
+                                        onClick={() => setDifficulty("medium")}>
+                                            <p>Medium</p>
+                                        </div>
+                                        <div className={`${styles.levelOption} ${challangeDetails.difficulty === 'hard' ? styles.selectedLanguage : ''}`}
+                                        onClick={() => setDifficulty("hard")}>
+                                            <p>Hard</p>
+                                        </div>
+                                        <div className={`${styles.levelOption} ${challangeDetails.difficulty === 'mastery' ? styles.selectedLanguage : ''}`}
+                                        onClick={() => setDifficulty("mastery")}>
+                                            <p>Mastery</p>
+                                        </div>
+                                    </div>
+                                    <div className={`${styles.controller}`}>
+                                        <button onClick={prevOption}>Cancel</button>
+                                        <button className={`${challangeDetails.difficulty == '' && styles.notAvailable}`} onClick={startPractice}>Next</button>
+                                    </div>
+                                </>
+                            )}
+                            {testGenLevel === 3 && (
+                                <>
+                                    <p className={`${styles.colorBlack}`}>Set time limit</p>
+                                    <div className={`${styles.option1Container}`}>
+                                        <div className={`${styles.levelOption} ${challangeDetails.time === 2 ? styles.selectedLanguage : ''}`}
+                                        onClick={() => handleTime(2)}>
+                                            <p>02:00 minutes</p>
+                                        </div>
+                                        <div className={`${styles.levelOption} ${challangeDetails.time === 5 ? styles.selectedLanguage : ''}`}
+                                        onClick={() => handleTime(5)}>
+                                            <p>05:00 minuets</p>
+                                        </div>
+                                        <div className={`${styles.levelOption} ${challangeDetails.time === 10 ? styles.selectedLanguage : ''}`}
+                                        onClick={() => handleTime(10)}>
+                                            <p>10:00 minutes</p>
+                                        </div>
+                                        <div className={`${styles.levelOption} ${challangeDetails.time === 30 ? styles.selectedLanguage : ''}`}
+                                        onClick={() => handleTime(30)}>
+                                            <p>30:00 minutes</p>
+                                        </div>
+                                    </div>
+                                    <div className={`${styles.controller}`}>
+                                        <button onClick={prevOption}>Cancel</button>
+                                        <button disabled={challangeDetails.time == 0} onClick={startPractice}>Next</button>
+                                    </div>
+                                </>
+                            )}
+                            {testGenLevel === 4 && (
+                                <>
+                                    <p className={`${styles.colorBlack}`}>Turn on AI chat assistance?</p>
+                                    <div className={`${styles.reminder}`}>
+                                        <p>
+                                        <span>NOTE</span>: Turning off AI assistance may challenge you to solve coding problems independently, which is essential for mastering core concepts. 
+                                        Proceed to disable AI if you wish to promote deeper learning through hands-on practice.
+                                        </p>
+                                    </div>
+                                    <div className={`${styles.controller}`}>
+                                        <button onClick={assisted}>Yes</button>
+                                        <button onClick={startPractice}>No</button>
+                                    </div>
+                                </>
+                            )}
+                            {
+                                testGenLevel === 5 && 
+                                <>
+                                    <p className={`${styles.colorBlack}`}>Coding Challange</p>
+                                    <div className={`${styles.option1Container}`}>
+                                        {
+                                            generating ? ( 
+                                            <>
+                                                <FontAwesomeIcon className={`${styles.loader}`} icon={faSpinner } spin={true} color='black' size='2x'/>
+                                                <p className={`${styles.challangeText}`}>Generating Challange...</p>
+                                            </> ) :
+                                            (
+                                                <>
+                                                    <div className={`${styles.problemContainer}`}>
+                                                        <p className={`${styles.problem}`}>{problem}</p>
+                                                    </div>
+                                                </> 
+                                            )
+                                        }
+                                    </div>
+                                    <div className={`${styles.controller}`}>
+                                        <button className={`${styles.submitCode}`} disabled={generating} onClick={submitCode}>Submit Code</button>
+                                    </div>
+                                </>
+                            }
+                            {
+                                testGenLevel === 6 && 
+                                <>
+                                    <p className={`${styles.colorBlack} text-center`}>{isCorrect ? "Congartulations! You aced the challange." : "Sorry You Fail. Try again."}</p>
+                                    <div className={`${styles.option1Container}`}>
+                                        <img src={isCorrect ? success : fail} alt="" className={`${ isCorrect ? styles.successGif : styles.failGif}`}/>
+                                    </div>
+                                    <div className={`${styles.controller}`}>
+                                        <button className={`${styles.submitCode}`} onClick={newChallange}>Take Again</button>
+                                    </div>
+                                </>
+                            }
                         </div>
-                        <div className={`${styles.aiBot} ${minimize && styles.minimize}`}>
+                        </div>
+                        <div className={`${styles.aiBot} ${minimize && styles.minimize} ${challangeDetails.withAssistance == false && styles.hideBot}`}>
                             <div className={`${styles.chatHead}`}>
-                                <p className='m-0'>Challange Generator AI</p>
-                                <FontAwesomeIcon icon={minimize ?faCaretUp : faCaretDown} onClick={() => setMinimize(!minimize)} className={`${styles.closeIcon}`}/>
+                                <p className='m-0 text-black'>Ask help to CodeLab AI</p>
+                                {/* <FontAwesomeIcon icon={minimize ?faCaretUp : faCaretDown} onClick={() => setMinimize(!minimize)} className={`${styles.closeIcon}`}/> */}
                             </div>
 
                             {/* Chat content */}
                             <div className={`${styles.chatContent}`}>
                                 {/* Chat Sample */}
-                                <div className={`${styles.message}`}>
-                                    <div className={`${styles.user}`}>
-                                        <FontAwesomeIcon icon={faRobot} />
-                                    </div>
-                                    <div className={`${styles.messageContent}`}>
-                                        <p className={`m-0 ${styles.userName}`}>AI</p>
-                                        <p className='m-0'>This is a message</p>
-                                    </div>
-                                </div>
+                                {chatHistory.length > 0 && 
+                                    chatHistory.map((chat, index) => {
+                                        return (
+                                            <div key={index} className={`${styles.message} ${chat.user === 0 ? styles.modelResponse : styles.response}`}>
+                                                <div className={`${styles.user}`}>
+                                                    <FontAwesomeIcon icon={chat.user === 0 ? faRobot : faUser}/>
+                                                </div>
+                                                <div className={`${styles.messageContent}`}>
+                                                    <p className={`m-0 ${styles.userName}`}>{chat.user === 0 ? 'AI' : 'USER'}</p>
+                                                    <p className='m-0'>{chat.message}</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
 
-                                <div className={`${styles.message} ${styles.response}`}>
-                                    <div className={`${styles.user}`}>
-                                        <FontAwesomeIcon icon={faUser}/>
-                                    </div>
-                                    <div className={`${styles.messageContent}`}>
-                                        <p className={`m-0 ${styles.userName}`}>USER</p>
-                                        <p className='m-0'>This is a resposnse message from user</p>
-                                    </div>
-                                </div>
                             </div>
                             <div className={`${styles.chatbox}`}>
-                                <input type="text" name="" id="" />
-                                <FontAwesomeIcon icon={faPaperPlane} className={`${styles.sendIcon}`}/>
+                                <input type="text" name="" id="" value={userMessage} onChange={handleMessageInput} onKeyPress={handleKeyPress}/>
+                                <FontAwesomeIcon icon={faPaperPlane} title="Send" className={`${styles.sendIcon}`} onClick={handleSendMessage}/>
                             </div>
                         </div>
                     </div>
