@@ -1,3 +1,8 @@
+:root {
+    --maimColor: #DBDBFF;
+    
+}
+
 .container {
     background-color: #272822;
     overflow: hidden;
@@ -9,6 +14,7 @@
     background-color: #fff;
     padding: 15px;
     border-right: 4px solid #EDEEF5;
+    position: relative;
 }
 .nav ul {
     padding: 0;
@@ -127,6 +133,18 @@
 .codeArea {
     min-height: 100%;
 }
+.languageDropdown {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    background-color: #fff;
+    padding: 5px;
+}
+.languageDropdown option {
+    padding: 5px;
+}
+
 .aiArea {
     background-color: #EDEEF5;
     flex: .35;
@@ -594,4 +612,58 @@
 .active::after {
     background-color: rgb(0, 82, 235) !important;
     transform: translateX(17px);
+}
+
+
+
+.language:hover ul {
+    display: block;
+}
+/* .language img {
+    width: 40px;
+    object-fit: fill;
+    aspect-ratio: 1/1;
+} */
+
+.selectLanguage {
+    position: absolute;
+    top: 20px;
+    left: 100%;
+    background-color: #fff;
+    padding: 10px !important;
+    box-shadow: 0px 2px 5px 1px rgba(97, 97, 97, 0.86);
+    display: none;
+    z-index: 2;
+    width: auto;
+    min-width: 200px;
+}
+.selectLanguage:hover {
+    display: block;
+}
+.selectLanguage li {
+    white-space: nowrap; /* Prevents text from wrapping */
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    gap: 2px;
+}
+.selectLanguage label {
+    font-weight: 600;
+}
+.selectLanguage li:hover {
+    background-color: rgb(207, 207, 207);
+    cursor: pointer;
+}
+.selectLanguage li svg:hover {
+    filter: brightness(1) !important;
+}
+.html {
+    color: red !important;
+}
+.css {
+    color: blue !important;
+}
+.pythonLogo {
+    width: 15%;
 }

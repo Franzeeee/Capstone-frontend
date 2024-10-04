@@ -1,0 +1,62 @@
+p {
+    margin: 0;
+}
+.contentContainer {
+    width: 100%;
+    /* overflow: auto; */
+    display: flex;
+    padding: 5px;
+    gap: 10px;
+    flex-direction: column;
+
+}
+.contentContainer::-webkit-scrollbar {
+    display: none
+}
+.card {
+    width: 20%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-shadow: 1px 3px 5px 1px rgb(219 219 219);
+    min-height: 160px;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    border-radius: 10px;
+}
+.lessonTitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+.lessonDescription {
+    font-size: .85rem;
+    color: #8C8CAB;
+    
+}.right {
+    position: relative;
+    padding: 10px;
+}
+.status {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    padding: 3px;
+    width: 115px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #5C5CD1;
+    color: #fff;
+    font-size: .85rem;
+}
+.left img {
+    width: 110%;
+    object-fit: contain;
+}
+.left {
+    background: linear-gradient(110.75deg, #8E8EE9 5.35%, #5D5DD4 72.54%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

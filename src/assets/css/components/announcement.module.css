@@ -1,0 +1,104 @@
+.container {
+    margin-bottom: 10px;
+}
+.formGroup textarea{
+    border: none;
+    outline: none;
+    background-color: #DBDBFF;
+    width: 100%;
+    padding: 10px;
+    color: #000;
+    border-radius: 10px;
+    font-size: .9rem;
+    resize: none;
+    height: 41px;
+    transition: all .5s ease;
+}
+.formGroup {
+    transition: all .5s ease;
+}
+.formGroup textarea::placeholder {
+    color: #B5B5B5;
+}
+.formGroup.active {
+    background-color: #DBDBFF;
+    padding: 15px;
+}
+
+.formGroup.active textarea {
+    background-color: #CACAEA;
+    height: 120px;
+}
+.formGroup.active textarea::-webkit-scrollbar {
+    display: none;
+}
+.formGroup.active .dropDowns {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start; 
+    margin-bottom: 10px;
+}
+.customDropdown {
+    display: none;
+    transition: all .5s ease;
+    
+}
+.formGroup.active .customDropdown {
+    background-color: #5D5DD4;
+    border-radius: 0;
+    padding: 1px 5px !important;
+    outline: none;
+    width: auto;
+    min-width: 150px;
+    display: flex;
+}
+
+.customDropdown:first-child {
+    min-width: 160px;
+}
+.customDropdown span {
+    padding: 5px !important;
+    font-size: .9rem !important;
+    color: #fff;
+}
+.customDropdown svg {
+    color: #fff;
+}
+.customDropdown:hover {
+background-color: #1900ff;
+}
+.buttonControls {
+    display: none;
+}
+.formGroup.active .buttonControls {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.formGroup.active .buttonControls button {
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 2px;
+    background-color: transparent;
+    transition: all .5s ease;
+}
+.formGroup.active .buttonControls button:first-child {
+    color: #484848;
+}
+.formGroup.active .buttonControls button:first-child:hover {
+    background-color: #cdcdcd42;
+    color: black;
+}
+.formGroup.active .buttonControls button:last-child {
+    background-color: #5D5DD4;
+    color: white;
+    padding-inline: 20px;
+}
+.formGroup.active .buttonControls button:last-child:hover {
+    background-color: #3232db;
+}

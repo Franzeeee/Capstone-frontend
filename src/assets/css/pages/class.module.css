@@ -1,0 +1,186 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 350px;
+}
+.contentContainer {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    padding: 0 1rem;
+    height: 97svh;
+    overflow: auto;
+}
+.contentContainer::-webkit-scrollbar {
+    display: none;
+}
+.contentContainer .header {
+    width: 100%;
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
+.header ul {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0px 0 0 !important;
+    font-size: .9rem;
+    margin: 5px;
+}
+.header ul li {
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+}
+.header ul .active {
+    text-decoration: underline;
+    color: #5D5DD4;
+}
+.contentContainer .header .create p {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.7rem;
+}
+.create div ul {
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: .7rem;
+}
+.create div ul li {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+    cursor: default;
+}
+.create div ul li:not(:nth-child(even)){
+    cursor: pointer;
+}
+.create div ul .active {
+    color: #5D5DD4;
+    text-decoration: none;
+}
+
+
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+}
+.profileHeader {
+    font-size: 1.1rem;
+    font-family: "Montserrat", sans-serif;
+    padding: 1rem 5px 5px 0;
+    font-weight: 500;
+}
+.userInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.userInfo img {
+    width: 35%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    margin-bottom: 5px;
+    border: 3px solid rgb(236, 236, 236);
+    box-shadow:0px 2px 5px 1px rgb(97 97 97);
+}
+.userInfo p:last-child {
+    font-size: .8rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.9);
+}
+.userInfo .userName {
+    font-size: 1.1rem !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    margin-bottom: -3px;
+    margin-top: 5px;
+}
+.userName svg {
+    font-size: .8rem;
+    cursor: pointer;
+}
+.schedule {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    overflow: auto;
+}
+.profileContainer .card {
+    padding: 10px;
+    width: 100%;
+    background-color: #DBDBFF;
+    border-radius: 10px;
+    box-shadow: 1px 3px 5px 1px rgb(219 219 219);
+}
+.scheduleText, .profileText {
+    font-weight: 600;
+}
+.activityInfo{
+    position: relative;
+}
+
+.activityContainer {
+    width: 100%;
+    overflow: auto;
+    padding: 5px 10px 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+    height: 310px;
+}
+
+.activityInfo p:first-child{
+    font-size: .9rem;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+}
+.activityInfo p:nth-child(2) {
+    font-size: .7rem;
+    /* margin-top: 5px; */
+}
+.taskInfo {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 5px;
+}
+.taskInfo p {
+    font-size: .75rem !important;
+}
+.editActivity {
+    position: absolute;
+    right: 2px;
+    top: 0;
+    font-size:.88rem;
+    color: #646464;
+    cursor: pointer;
+}
+
+.activityContainer::-webkit-scrollbar {
+    display: none;
+}
+
+@media screen and (min-height: 700px) {
+    .activityContainer {
+        height: 100%;
+    }
+}

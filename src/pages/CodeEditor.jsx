@@ -22,6 +22,9 @@ import success from '../assets/img/excellent.png'
 import fail from '../assets/img/tiger.png'
 import html5 from '../assets/img/html-5.png'
 import css3 from '../assets/img/css-3.png'
+import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
+import swap1 from '../assets/img/Swap1.png'
+import swap2 from '../assets/img/swap2.png'
 
 const CodeEditor = () => {
     const [code, setCode] = useState('');
@@ -208,10 +211,7 @@ const CodeEditor = () => {
     useEffect(() => {
         const fetchAuthToken = async () => {
             try {
-                const clientId = 'dab857c8172e2fcf4d7b943e26b6713f'; // Provide your clientId
-                const clientSecret = '20ea5e30a6e4dbe7928ee2df3c852706de38e63a2b64b4bee7ba9a0761ef0321'; // Provide your clientSecret
-                
-                const data = await getAuthToken(clientId, clientSecret);
+                const data = await getAuthToken();
                 setAuthToken(data);
             } catch (error) {
                 console.error('Error getting auth token:', error);
@@ -461,6 +461,7 @@ const CodeEditor = () => {
         .then(data => {
             setIsCorrect(data.message === "Correct");
             startPractice();
+            setTimer(0)
             setChallangeDetails(prevState => ({
                 ...prevState,
                 withAssistance: true
@@ -520,23 +521,31 @@ const CodeEditor = () => {
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
             <nav className={`${styles.nav}`}>
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
-                <ul className='d-flex flex-column gap-3'>
+                <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
                     <li title='Open Project'><FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon} ${styles.folderIcon}`}/></li>
                     <li title='Save' onClick={openIframeInNewTab}><FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/></li>
                     <li title='Copy' onClick={handleIde}><FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/></li>
+                    <li className={`position-relative ${styles.language}`}>
+                    {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
+                        <FontAwesomeIcon icon={faPython} className={`${styles.icon}`} title='IDE: Python'></FontAwesomeIcon>
+                        <ul className={`${styles.selectLanguage}`}>
+                            <label htmlFor="">Select Language</label>
+                            <li onClick =  {() => setIde(0)}> <img src={pythonPng} className={`${styles.pythonLogo}`} alt="" /> Python</li>
+                            <li onClick =  {() => setIde(1)}> <FontAwesomeIcon icon={faHtml5} className={`${styles.icon} ${styles.html}`} title='IDE: Python'> </FontAwesomeIcon><FontAwesomeIcon  icon={faCss3Alt} className={`${styles.icon} ${styles.css} ml-1`} title='IDE: Python'></FontAwesomeIcon>  HTML and CSS</li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <section className={`w-100 d-flex flex-column ${styles.section}`}>
                 <header>
                     <div className={` position-relative logo d-flex align-items-center justify-content-center ${styles.logo}`}>
-                        <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/')}/>
+                        <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/dashboard')}/>
                     </div>
                     <div className={`${styles.clockLogo}`}>
                         <p className={`m-0 ${styles.timer}`}><span><FontAwesomeIcon icon={faClock} /></span> {formatTime(timer)}</p>
-                        <div className="play">
-
-                        </div>
+                        {/* <div className="play">
+                        </div> */}
                     </div>
                     <div className={`${styles.controls}`}>
                         <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute}`}>
@@ -549,6 +558,7 @@ const CodeEditor = () => {
                 </header>
                 <main className={`${styles.main}`}>
                     <div className={` ${ide == 0 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
+
                         <div className={`${styles.codeEditor}`}>
                             <CodeMirror
                                 value={code}

@@ -1,0 +1,55 @@
+p {
+    margin: 0;
+}
+.practiceContainer {
+    height: 200px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 4rem;
+}
+
+.box {
+    width: 85%;
+    height: 180px;
+    background-color: #DBDBFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: inherit;
+    justify-content: flex-end;
+    padding: 10px 5px
+}
+.box img {
+    width: 140%;
+    object-fit: contain;
+    position: absolute;
+    top: -60%;
+}
+.box p:first-child {
+    text-transform: uppercase;
+    font-size: .8rem;
+    font-weight: 600;
+}
+.qoute{
+    color: #737373;
+    font-size: .65rem;
+}
+.box button {
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    width: 100%;
+    background-color: #5C5CD1;
+    color: white;
+    border-radius: 5px;
+}
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    flex: .4
+}

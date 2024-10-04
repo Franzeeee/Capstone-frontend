@@ -63,7 +63,7 @@ export const Login = () => {
                     const stringData = JSON.stringify(data.message);
                     const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
                     localStorage.setItem('userData', hashedData);
-                    navigate('/')
+                    navigate('/dashboard')
                 }
                 
                 })

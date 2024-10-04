@@ -1,0 +1,78 @@
+body {
+    height: 100svh;
+    overflow: hidden !important;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container {
+    min-height: 100svh;
+    max-height: 100svh;
+    background-color: #EDEEF5;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+}
+/* Sidebar css */
+.sidebar {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    height: 100%;
+}
+
+.sideContent {
+    flex: 1;
+    height: 98.5%;
+    background: #fff;
+    border-top-right-radius: 25px;
+    box-shadow: -1px 1px 10px 1px rgba(191,191,191,1);
+    overflow: hidden;
+}
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+}
+.menu ul{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+}
+.menu ul li svg {
+    color: #8C8CAB;
+    margin-right: 1px;
+}
+.menu ul li {
+    padding: 7px;
+    width: 100%;
+    transition: all .2s ease;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.menu ul li:hover, .active {
+    background-color: #DBDBFF !important;
+}
+
+/* Header css */
+.header {
+    padding: 15px 5px 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.header img {
+    width: 75%;
+    object-fit: contain;
+}
+
+/* Main css */
+.main {
+
+    display: grid;
+    padding: 1rem 1rem;
+    height: 100%;
+    overflow: hidden;
+}

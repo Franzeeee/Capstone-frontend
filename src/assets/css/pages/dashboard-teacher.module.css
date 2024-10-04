@@ -1,0 +1,272 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 350px;
+}
+.container p {
+    margin: 0;
+}
+.contentContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 0 1rem;
+    height: 95svh;
+    overflow: auto;
+}
+.contentContainer::-webkit-scrollbar {
+    display: none;
+}
+/* 
+.contentContainer::-webkit-scrollbar-thumb {
+    background-color: #2e8fff88;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.contentContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #1232ff7c; 
+}
+
+.contentContainer::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+} */
+
+.contentContainer .header {
+    width: 100%;
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.contentContainer .header .create p {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.7rem;
+}
+.contentContainer .header svg {
+    font-size: 1.2rem;
+    color: #4040e2;
+    background-color: #fff;
+    overflow: hidden;
+    border-radius: 100%;
+    box-shadow: 1px 0px 5px 0px rgb(233, 233, 233);
+    cursor: pointer;
+}
+.contentContainer .header .moreCourse {
+    display: flex;
+    align-items: flex-end;
+    justify-content: end;
+}
+.contentContainer .header .moreCourse p{
+    font-size: .8rem;
+    margin: 0;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.contentContainer .header .moreCourse p:hover {
+    color: blue;
+}
+.cardContainer {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr;
+}
+.cardContainer .card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: .5rem 0;
+    border-radius: 10px;
+    overflow: auto;
+    min-height: 250px;
+}
+.courseCard {
+    background-color: rgb(189, 209, 255);
+    border-radius: 5px;
+    box-shadow: 1px 4px 5px 1px rgb(215 215 215);
+    border-top: 4px solid blue;
+    padding: 10px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.courseCard:hover {
+    border-color: rgb(54, 54, 54);
+    text-decoration: underline;
+}
+.courseCard p {
+    font-size: .9rem;
+}
+.courseCard p:nth-child(2){
+    font-size: .7rem;
+}
+.cardHeader {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.cardHeader svg {
+    font-size: .9rem;
+}
+.studentPerformance {
+    display: flex !important;
+    flex-direction: column;
+    border-top: 4px solid blue;
+    padding-top: 5px;
+    background-color: #ffffff;
+    padding: .4rem 1rem !important;
+    background: #bdd1ff;
+}
+
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+}
+.profileHeader {
+    font-size: 1.1rem;
+    font-family: "Montserrat", sans-serif;
+    padding: 1rem 5px 5px 0;
+    font-weight: 500;
+}
+.userInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.userInfo img {
+    width: 35%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    margin-bottom: 5px;
+    border: 3px solid rgb(236, 236, 236);
+    box-shadow:0px 2px 5px 1px rgb(97 97 97);
+}
+.userInfo p:last-child {
+    font-size: .8rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.9);
+}
+.userInfo .userName {
+    font-size: 1.1rem !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    margin-bottom: -3px;
+    margin-top: 5px;
+}
+.userName svg {
+    font-size: .8rem;
+    cursor: pointer;
+}
+.schedule {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    overflow: auto;
+}
+.profileContainer .card {
+    padding: 10px;
+    width: 100%;
+    background-color: #DBDBFF;
+    border-radius: 10px;
+    box-shadow: 1px 3px 5px 1px rgb(219 219 219);
+}
+.scheduleText, .profileText {
+    font-weight: 600;
+}
+.activityInfo{
+    position: relative;
+}
+
+.activityContainer {
+    width: 100%;
+    overflow: auto;
+    padding: 5px 10px 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+    height: 310px;
+}
+
+.activityInfo p:first-child{
+    font-size: .9rem;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+}
+.activityInfo p:nth-child(2) {
+    font-size: .7rem;
+    /* margin-top: 5px; */
+}
+.taskInfo {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 5px;
+}
+.taskInfo p {
+    font-size: .75rem !important;
+}
+.editActivity {
+    position: absolute;
+    right: 2px;
+    top: 0;
+    font-size:.88rem;
+    color: #646464;
+    cursor: pointer;
+}
+
+.activityContainer::-webkit-scrollbar {
+    display: none;
+}
+
+/* .activityContainer::-webkit-scrollbar-thumb {
+    background-color: #2e8fff88;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.activityContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #1232ff7c; 
+}
+
+.activityContainer::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+} */
+
+.cancelButton, .createButton {
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.cancelButton {
+    background-color: rgb(236, 13, 13);
+    color: #fff   
+}
+.createButton {
+    background-color: #4200FF;
+    color: #fff 
+}
+
+
+@media screen and (min-height: 700px) {
+    .activityContainer {
+        height: 100%;
+    }
+}

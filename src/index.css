@@ -1,5 +1,6 @@
 /* import font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
   --main-color: #0066F5;
@@ -55,4 +56,57 @@ li {
 }
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
   border: 1px solid rgb(63, 194, 255) !important;
+}
+
+
+
+/* data table css */
+.custom-td-padding .p-datatable-tbody > tr > td {
+  padding: 10px !important; /* Adjust the padding as needed */
+  font-size: .9rem;
+}
+.custom-td-padding .p-datatable-tbody > tr > td {
+  background: #bdd1ff;
+}
+.custom-td-padding th {
+  background: #bdd1ff !important;
+  padding: 10px;
+}
+.custom-td-padding tr {
+  border-bottom: 1px solid black;
+}
+.custom-td-padding tr:last-child {
+  border: none;
+}
+/* Custom scrollbar styles */
+.p-datatable-wrapper::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+  height: 10px; /* Height of the scrollbar */
+  cursor: all-scroll;
+}
+
+.p-datatable-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+.p-datatable-wrapper::-webkit-scrollbar-thumb {
+  background: #3d6dff; /* Color of the scrollbar thumb */
+  border-radius: 6px; /* Rounded corners for the scrollbar thumb */
+  cursor: grabbing;
+}
+
+.p-datatable-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 255, 0.612); /* Color of the scrollbar thumb on hover */
+}
+.p-paginator {
+  background-color: #bdd1ff; /* Replace with your desired color */
+}
+.p-dropdown-items {
+  padding: 0;
+}
+.p-dropdown {
+  background: #7da3fb;
+}
+.p-paginator-bottom {
+  border: none;
 }
