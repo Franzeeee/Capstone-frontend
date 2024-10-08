@@ -1,13 +1,16 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import HomeTemplate from '../../templates/HomeTemplate'
 import styles from '../../assets/css/pages/student-home.module.css'
 import headImage from '../../assets/img/studentHead.png'
 import book from '../../assets/img/book.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGreaterThan, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faGreaterThan, faPlus } from '@fortawesome/free-solid-svg-icons'
 import CryptoJS from 'crypto-js';
 import ProfileSide from '../../components/ProfileSide'
 import { useNavigate } from 'react-router-dom'
+import JoinClassModal from '../../components/JoinClassModal'
+import { toast } from 'react-toastify'
+import LessonCardLoader from '../../components/LazyLoaders/LessonCardLoader'
 
 export default function StudentHome() {
 
@@ -15,9 +18,53 @@ export default function StudentHome() {
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
     const navigate = useNavigate();
 
+    const [showModal, setShowModal] = useState(false);
+    const [classData, setClassData] = useState(null);
+
+    useEffect(() => {
+        const fetchClasses = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/student/${user.id}/classes`, {  // Replace with your actual API endpoint
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    setClassData(data);
+                } else {
+                    toast.error(data.message || 'An error occurred.');
+                }
+            } catch (err) {
+                toast.error(err.message);
+            }
+        };
+
+        fetchClasses();
+        console.log(classData)
+    }, [user.id]);
+
+    const handleJoinSuccess = (data) => {
+        setClassData(data);
+        toast.success(data.message, {autoClose: 5000})
+    };
+
+    useEffect(() => {
+        console.log(classData)
+    }, [classData])
+
     return (
     <HomeTemplate>
         <div className={`${styles.container}`}>
+        <JoinClassModal 
+            show={showModal} 
+            handleClose={() => setShowModal(false)} 
+            handleJoinSuccess={handleJoinSuccess} 
+            studentID={2}
+        />
             <div className={`${styles.contentContainer}`}>
                 <div className={`${styles.header}`}>
                     <div className={`${styles.create}`}>
@@ -40,25 +87,36 @@ export default function StudentHome() {
                     </div>
                 <div className={`${styles.cardContainer}`}>
 
-                    <div className={`${styles.card} ${styles.joinClassCard}`}>
-                        <p><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></p>
-                        <p>Join Class</p>
-                    </div>
-
-                    <div className={`${styles.card}`}>
-                        <div className={`${styles.courseImage}`}>
-                            <img src={book} alt="" />
-                        </div>
-                        <div className={`${styles.courseText}`}>
-                            <p>Course Name</p>
-                            <p>12 Lessons</p>
-                        </div>
-                        <div className={`${styles.goTo}`}>
-                            <div className={`${styles.viewButton}`} onClick={() => navigate('/c/testurl')}>
-                                <p><FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon></p>
+                    { classData !== null ?
+                        <>
+                            <div className={`${styles.card} ${styles.joinClassCard}`} onClick={() => setShowModal(true)}>
+                                <p><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></p>
+                                <p>Join Class</p>
                             </div>
-                        </div>
-                    </div>
+
+                            { classData.length > 0 ?
+                                classData.map((classItem, index) => (
+                                <div key={index} className={`${styles.card}`}>
+                                    <div className={`${styles.courseImage}`}>
+                                        <img src={book} alt="" />
+                                    </div>
+                                    <div className={`${styles.courseText}`}>
+                                        <p>{classItem.name}</p>
+                                        <p>{classItem.subject.toLowerCase() === 'python' ? '12 Lessons' : '10 Lessons'}</p>
+                                    </div>
+                                    <div className={`${styles.goTo}`}>
+                                        <div className={`${styles.viewButton}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
+                                            <p className='m-0'><FontAwesomeIcon icon={faArrowRight} fade /></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )) : ""
+                        }
+                        </>
+                        :
+                        <LessonCardLoader />
+                    }
+
                     
                     
                 </div>

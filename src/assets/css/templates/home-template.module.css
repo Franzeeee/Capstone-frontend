@@ -27,6 +27,9 @@ body {
     border-top-right-radius: 25px;
     box-shadow: -1px 1px 10px 1px rgba(191,191,191,1);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 .menu {
     display: flex;

@@ -3,6 +3,9 @@
     font-family: "Montserrat", sans-serif;
     padding: 1rem 5px 5px 0;
     font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .userInfo {
     display: flex;
@@ -11,6 +14,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+}
+.notification {
+    color: #373737;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.customDropdownToggle::after {
+    display: none !important;
 }
 .userInfo img {
     width: 35%;
@@ -25,7 +36,11 @@
     font-size: .8rem;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
-    color: rgba(0, 0, 0, 0.9);
+    color: rgba(255, 255, 255, 0.9);
+    background-color: rgb(83, 133, 241);
+    padding: 3px 15px;
+    border-radius: 15px;
+    margin-top: 3px;
 }
 .userInfo .userName {
     font-size: 1.1rem !important;

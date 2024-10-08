@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullhorn, faCalendarDays, faCode, faHome, faStar,faWarning } from '@fortawesome/free-solid-svg-icons';
 import PracticeTest from '../components/PracticeTest';
 import Modal from 'react-bootstrap/Modal'
+import { ToastContainer } from 'react-toastify';
 
 const ErrorContext = createContext();
 
@@ -21,7 +22,6 @@ export default function HomeTemplate({children}) {
     return (
         <ErrorContext.Provider value={{ error, setError }}>
             <div className={`${styles.container}`}>
-
             <Modal show={show} onHide={toggleShow}>
             <Modal.Header closeButton>
                 <p className='m-0'><FontAwesomeIcon color='red' size='lg' icon={faWarning} /> Temporary Unavailable.</p>
@@ -47,6 +47,7 @@ export default function HomeTemplate({children}) {
                     </div>
                 </div>
                 <div className={`${styles.main}`}>
+                    <ToastContainer autoClose={3000} />
                     {children}
                 </div>
             </div>

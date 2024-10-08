@@ -11,11 +11,11 @@ import 'primeicons/primeicons.css';
 import profile from '../assets/img/user.png'
 import Modal from 'react-bootstrap/Modal';
 import CryptoJS from 'crypto-js';
-import { Home } from '../pages/Home.jsx';
 import StudentHome from './Student/StudentHome.jsx';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LoadingPage from './LoadingPage.jsx';
 import { ToastContainer, toast } from 'react-toastify';
+import ClassCardLoader from '../components/ClassCardLoader.jsx';
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ export const Dashboard = () => {
 
     const sampleData = [
         { name: 'John Doe', section: 'AI41', avgScore: 85 },
-        { name: 'Jane Smith', section: 'AI41', avgScore: 90 },
+        { name: 'Jane Smith', section: 'AI41', avgScore: 90 }, 
         { name: 'Alice Johnson', section: 'AI42', avgScore: 78 },
         { name: 'Bob Brown', section: 'AI42', avgScore: 82 },
         { name: 'John Doe', section: 'AI41', avgScore: 85 },
@@ -41,7 +41,10 @@ export const Dashboard = () => {
         subject: '',
         startDate: '',
         endDate: '',
+        teacher_id: 1
     });
+
+    const [latestClasses, setLatestClasses] = useState(null)
 
     const handleChange = (e) => {
         const { id, value } = e.target; // Get the id and value from the input
@@ -50,11 +53,32 @@ export const Dashboard = () => {
             [id]: value, // Update the state with the new value
         }));
     };
-
     
     const [show, setShow] = useState(false);
 
     const toggleShow = () => setShow(prevShow => !prevShow);
+
+    useEffect(() => {
+        if (user.role === 'teacher') {
+            // Fetch at least 4 latest classes
+            fetch(`http://localhost:8000/api/classes?teacher_id=${user.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setLatestClasses(data);
+                })
+                .catch(error => console.error('Error fetching classes:', error));
+        }
+    }, [user.id, user.role]);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -64,8 +88,37 @@ export const Dashboard = () => {
             toast.error('Please fill in all required fields.');
             return; // Prevent form submission
         }
-        console.log(formData);
-        toggleShow()
+        fetch('http://localhost:8000/api/class/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Specify the content type
+            },
+            body: JSON.stringify(formData),
+        })
+        .then( async response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 422) {
+                return response.json().then(errorData => {
+                    // Create a string of error messages
+                    const errorMessages = Object.values(errorData.errors).flat().join(', ');
+                    // Show the error messages using toast.error
+                    toast.error(`Error: ${errorMessages}`);
+                    throw new Error('Validation failed'); // This will go to the catch block
+                });
+            } else {
+                throw new Error('Network response was not ok: ' + response.status);
+            }
+        })
+        .then(data => {
+            toast.success("Course Successfully Created!");
+            setLatestClasses(prev => {
+                return [{ name: formData.className, section: formData.section, schedule: formData.schedule, room: formData.room }, 
+                    ...prev];
+            });
+            toggleShow();
+        })
+        .catch(error => console.error(error));
     };
 
     useEffect(() => {
@@ -73,21 +126,22 @@ export const Dashboard = () => {
         setUserRole(role);
     }, []);
 
+    
     const getUserRole = () => {
         // Mock function, replace this with actual role-check logic
         return user.role
     };
-
+    
     if (userRole === null) {
         return <LoadingPage /> // Show loading while determining the role
-    }else if (!userRole === 'student') {
+    }else if (userRole === 'student') {
         return  <StudentHome />
     }
-
+    
     const moveTo = (url) => {
         navigate(`/${url}`)
     }
-
+    
 
     return (
         <HomeTemplate>
@@ -140,6 +194,7 @@ export const Dashboard = () => {
                             <select className="form-control" id="subject" 
                             value={formData.subject}
                             onChange={handleChange}>
+                                <option value="">Select a subject</option>
                                 <option value={"Python"}>Python</option>
                                 <option value={"Web Development"}>Web Development</option>
                             </select>
@@ -174,23 +229,28 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 <div className={`${styles.cardContainer}`}>
-                    <div className={`${styles.card}`} onClick={() => navigate('/c/testurl')}>
-                        <div className={`${styles.courseCard}`}>
-                            <p>Introduction to Web Development</p>
-                            <p>AI41 (1st Semester AY 2023-2024)</p>
-                        </div>
-                        <div className={`${styles.courseCard}`}>
-                            <p>Introduction to Python</p>
-                            <p>AI41 (1st Semester AY 2023-2024)</p>
-                        </div>
-                        <div className={`${styles.courseCard}`}>
-                            <p>Introduction to Python</p>
-                            <p>AI42 (1st Semester AY 2023-2024)</p>
-                        </div>
-                        <div className={`${styles.courseCard}`}>
-                            <p>Introduction to Web Development</p>
-                            <p>AI412 (1st Semester AY 2023-2024)</p>
-                        </div>
+                    <div className={`${styles.card}`} >
+                    {latestClasses !== null ? (
+                        latestClasses.length > 0 ? (
+                            latestClasses.map((classItem, index) => (
+                                <div key={index} className={`${styles.courseCard}`} onClick={() => navigate('/c/testurl')}>
+                                    <p>{classItem.name}</p>
+                                    <p>{classItem.section} ( {classItem.schedule} {classItem.room} )</p>
+                                    <p className={`${styles.classCode}`}>Class Code: 89fdajh</p>
+                                </div>
+                            ))
+                        ) : (
+                            <div className={`${styles.noClasses}`}>
+                                <p>No classes created yet</p>
+                            </div>
+                        )
+                    ) : (
+                        <>
+                            {[...Array(4)].map((_, index) => (
+                                <ClassCardLoader key={index} />
+                            ))}
+                        </>
+                    )}
                     </div>
                     <div className={`${styles.card} pt-1 ${styles.studentPerformance}`}>
                         <div className={`${styles.cardHeader}`}>
@@ -222,7 +282,7 @@ export const Dashboard = () => {
                 <div className={`${styles.userInfo}`}>
                     <img src={profile} alt="" />
                     <p className={`${styles.userName}`}>Leonel Abanilla <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon></p>
-                    <p>Instructor</p>
+                    <p>Teacher</p>
                 </div>
                 <div className={`${styles.schedule}`}>
                     <p className={`${styles.scheduleText}`}>Tooday's Schedule</p>

@@ -13,6 +13,7 @@
     resize: none;
     height: 41px;
     transition: all .5s ease;
+    overflow: hidden;
 }
 .formGroup {
     transition: all .5s ease;

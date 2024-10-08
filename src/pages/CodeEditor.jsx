@@ -251,7 +251,7 @@ const CodeEditor = () => {
                 setOutput(prevOutput => prevOutput + '\n <--------- End of execution ---------->\n');
                 setExecute(false);
             }else if(statusCode === 400){
-                setOutput("Warning: Expired Token. Please rerun the program.")
+                setOutput("Notice: Expired Token. Please re-run the program.")
                 setExecute(false)
             }
         });

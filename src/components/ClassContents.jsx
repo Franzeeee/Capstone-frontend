@@ -23,7 +23,7 @@ const dummyData = [
     }
 ];
 
-export default function ClassContents() {
+export default function ClassContents({data}) {
     return (
         <div className={styles.contentContainer}>
             {dummyData.map((lesson) => (

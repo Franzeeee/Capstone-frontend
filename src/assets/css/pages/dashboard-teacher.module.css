@@ -95,7 +95,7 @@
 }
 .courseCard:hover {
     border-color: rgb(54, 54, 54);
-    text-decoration: underline;
+    /* text-decoration: underline; */
 }
 .courseCard p {
     font-size: .9rem;
@@ -153,7 +153,11 @@
     font-size: .8rem;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
-    color: rgba(0, 0, 0, 0.9);
+    color: #ffffffe6;
+    background-color: #5e5eff;
+    padding: 2px 12px;
+    border-radius: 10px;
+    margin-top: 1px;
 }
 .userInfo .userName {
     font-size: 1.1rem !important;
@@ -170,7 +174,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     padding: 10px 0;
     overflow: auto;
 }
@@ -264,8 +268,25 @@
     color: #fff 
 }
 
-
-@media screen and (min-height: 700px) {
+div:has(.noClasses) .cardContainer .card{
+    grid-template-columns: 1fr;
+    text-align: center;
+}
+div:has(.noClasses) .cardContainer .card .noClasses {
+    color: green;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.courseCard:hover p:not(.classCode) {
+    text-decoration: underline !important;
+}
+.classCode {
+    font-size: .8rem !important;
+    font-weight: 600;
+}
+@media screen and (min-height: 650px) {
     .activityContainer {
         height: 100%;
     }

@@ -1,14 +1,27 @@
 import React from 'react'
 import styles from '../assets/css/components/profile-side.module.css'
-import { faCheckSquare, faClock, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faCheckSquare, faClock, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import profile from '../assets/img/user.png'
+import { Badge } from 'primereact/badge';
+import { Dropdown } from 'react-bootstrap';
+
 
 export default function ProfileSide({info}) {
   return (
     <>
     <div className={`${styles.profileHeader}`}>
         <p className={`${styles.profileText}`}>Profile</p>
+        <Dropdown>
+                    <Dropdown.Toggle as="div" className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}>
+                        <Badge severity='danger' style={{display: 'none !important'}} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">Notification 1</Dropdown.Item>
+                        <Dropdown.Item href="#/action-2">Notification 2</Dropdown.Item>
+                        <Dropdown.Item href="#/action-3">Notification 3</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
     </div>
     <div className={`${styles.userInfo}`}>
         <img src={profile} alt="" />
@@ -40,7 +53,7 @@ export default function ProfileSide({info}) {
                     <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
                 </div>
                 <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-            </div>
+            </div> q
         </div>
 
         <div className={`${styles.card}`}>
