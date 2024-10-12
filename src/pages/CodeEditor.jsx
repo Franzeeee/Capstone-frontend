@@ -11,7 +11,7 @@ import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
 import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faClock, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import getAuthToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
@@ -26,7 +26,7 @@ import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-s
 import swap1 from '../assets/img/Swap1.png'
 import swap2 from '../assets/img/swap2.png'
 
-const CodeEditor = () => {
+const CodeEditor = ({options = {mode: "playground"}}) => {
     const [code, setCode] = useState('');
     const [inputValues, setInputValues] = useState('');
     const [output, setOutput] = useState();
@@ -41,6 +41,25 @@ const CodeEditor = () => {
     const [testGenLevel, setTestGenLevel] = useState(0);
 
 
+    // Codes for the modes
+    // Code Editor, LessonTest, Lesson Assessments
+    const [mode, setMode] = useState(options.mode)
+    const { closeOverlay } = options
+
+    useEffect(() => {
+        if (options && options.mode) {
+            setMode(options.mode);
+        }
+    }, [options]);
+
+    const closeCodeModal = () => {
+        if (closeOverlay) {
+          closeOverlay(); // Call the closeOverlay function if it exists
+        } else {
+            navigate('/dashboard')
+        }
+    };
+
     const saveAsPyFile = () => {
         const filename = 'script.py';
         const blob = new Blob([code], { type: 'text/plain' });
@@ -52,7 +71,7 @@ const CodeEditor = () => {
     
         // Clean up the URL object after the download
         URL.revokeObjectURL(link.href);
-      };
+        };
 
     // Warn user about losing progress if they try to leave the page
     useEffect(() => {
@@ -358,7 +377,7 @@ const CodeEditor = () => {
         const fetchAuthToken = async () => {
             try {
                 const clientId = '80d7f4c9e24d6d17354e31f6301d1203';
-                const clientSecret = '74d8130f970462b618aba4bdb77a8b07c5c67c35601fd857960a1659129d4556';
+                const clientSecret = 'fe056deb985c4743825673d246460922f68d5bcfa3eb935955618127527d92bf';
                 
                 const data = await getAuthToken(clientId, clientSecret);
                 setAuthToken(data);
@@ -539,10 +558,10 @@ const CodeEditor = () => {
             </nav>
             <section className={`w-100 d-flex flex-column ${styles.section}`}>
                 <header>
-                    <div className={` position-relative logo d-flex align-items-center justify-content-center ${styles.logo}`}>
+                <div className={`position-relative logo d-flex align-items-center justify-content-center ${styles.logo} ${mode !== "playground" ? 'd-none' : 'justify-content-end'}`}>
                         <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/dashboard')}/>
                     </div>
-                    <div className={`${styles.clockLogo}`}>
+                    <div className={`${styles.clockLogo} ${mode !== "playground" ? 'd-none' : ''}`}>
                         <p className={`m-0 ${styles.timer}`}><span><FontAwesomeIcon icon={faClock} /></span> {formatTime(timer)}</p>
                         {/* <div className="play">
                         </div> */}
@@ -552,8 +571,8 @@ const CodeEditor = () => {
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
-                    <div className={`${styles.exit}`} title="Exit Playground">
-                        <FontAwesomeIcon icon={faRightFromBracket} onClick={() => navigate('/')}/>
+                    <div className={`${styles.exit} cursor-pointer`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
+                        <FontAwesomeIcon icon={ mode === 'playground' ? faRightFromBracket : faClose}/>
                     </div>
                 </header>
                 <main className={`${styles.main}`}>
@@ -597,7 +616,7 @@ const CodeEditor = () => {
                                 />
                             </div>
                             <div className={`${styles.outputArea}`}>
-                                <p className={`${styles.title}`}>Output</p>
+                                <p className={`${styles.title}`}>Output:</p>
                                 {output && <textarea readOnly={!isInteractive} onChange={(e) => setOutput(e.target.value)} onKeyPress={handleInput} className='m-0' value={output} />}
                             </div>
                         </div>
@@ -605,7 +624,7 @@ const CodeEditor = () => {
                     </div>
                      {/* Web Dev IDE */}
 
-                     <div className={`${ide == 1 ? "d-flex" : "d-none"} flex-column ${styles.webIDE}`}>
+                        <div className={`${ide == 1 ? "d-flex" : "d-none"} flex-column ${styles.webIDE}`}>
                             <div className={`${styles.webOutput}`}> 
                                 <label><FontAwesomeIcon icon={faPlay}></FontAwesomeIcon> Ouput</label>
                                 <iframe id='0' title="Preview" ref={iframeRef} ></iframe>
@@ -635,7 +654,7 @@ const CodeEditor = () => {
                                 </div>
                             </div>
                         </div>
-                    <div className={`${styles.aiArea}`}>
+                    <div className={`${styles.aiArea} ${mode === "LessonTest" ? 'd-none' : ''}`}>
                         <div className={`${styles.task}`}>
                         <div className={`${styles.taskBox} ${testGenLevel !== 0 ? styles.alignStart : ''}`}>
                             {testGenLevel === 0 ? (

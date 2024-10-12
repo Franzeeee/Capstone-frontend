@@ -40,7 +40,7 @@ export default function HomeTemplate({children}) {
                                 <li onClick={() => navigate('/playground')} ><FontAwesomeIcon icon={faCode}></FontAwesomeIcon> Coding Playground</li>
                                 <li onClick={toggleShow} ><FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Grades</li>
                                 <li onClick={toggleShow}><FontAwesomeIcon icon={faCalendarDays}></FontAwesomeIcon> Calendar</li>
-                                <li onClick={toggleShow}><FontAwesomeIcon icon={faBullhorn}></FontAwesomeIcon> Announcements</li>
+                                <li onClick={() => navigate('/announcements')} className={`${location.pathname === '/announcements' || location.pathname === '/c/testurl' ? styles.active : ""}`}><FontAwesomeIcon icon={faBullhorn}></FontAwesomeIcon> Announcements</li>
                             </ul>
                         </div>
                         <PracticeTest />

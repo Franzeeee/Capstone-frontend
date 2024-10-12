@@ -52,10 +52,6 @@ export default function StudentHome() {
         toast.success(data.message, {autoClose: 5000})
     };
 
-    useEffect(() => {
-        console.log(classData)
-    }, [classData])
-
     return (
     <HomeTemplate>
         <div className={`${styles.container}`}>
@@ -83,7 +79,7 @@ export default function StudentHome() {
                     </div>
                 </div>
                 <div className={`${styles.create} ${styles.cardHead}`}>
-                        <p>Courses</p>
+                        <p>Class Courses</p>
                     </div>
                 <div className={`${styles.cardContainer}`}>
 

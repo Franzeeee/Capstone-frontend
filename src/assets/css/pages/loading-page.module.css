@@ -1,0 +1,25 @@
+.container {
+    width: 100%;
+    height: 100svh;
+    display: grid;
+    grid-template-rows: 100px 1fr;
+    background: #EDEEF5 url('../../img/loader-pattern.png') no-repeat center/cover;
+}
+.head {
+    padding: 1rem 1.5rem;
+}
+.container .head img:first-child {
+    width: 12%;
+}
+.loader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.loader img{
+    width: 30%;
+}
+.loader p {
+    margin-top: -3rem;
+}

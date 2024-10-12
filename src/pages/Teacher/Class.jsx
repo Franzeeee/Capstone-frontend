@@ -4,7 +4,7 @@ import styles from '../../assets/css/pages/class.module.css'
 import profile from '../../assets/img/user.png'
 import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 // Component Imports
 import  AnnouncementForm  from '../../components/AnnouncementForm';
@@ -69,8 +69,8 @@ export default function Class() {
                             <p>{classInfo?.name}</p>
                         </div>
                     </div>
-                    <AnnouncementForm data={[]}/>
-                    <ClassContents />
+                    <AnnouncementForm />
+                    <ClassContents data={[]} code={code} className={classInfo?.name}/>
                 </div>
 
                 <div className={`${styles.profileContainer}`}>

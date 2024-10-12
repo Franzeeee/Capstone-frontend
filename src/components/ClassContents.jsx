@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from '../assets/css/components/course-content.module.css'
 import book from '../assets/img/book.png'
+import { useNavigate } from 'react-router-dom'
 
 const dummyData = [
     {
@@ -23,7 +24,8 @@ const dummyData = [
     }
 ];
 
-export default function ClassContents({data}) {
+export default function ClassContents({data, code, className}) {
+    const navigate = useNavigate()
     return (
         <div className={styles.contentContainer}>
             {dummyData.map((lesson) => (
@@ -34,7 +36,7 @@ export default function ClassContents({data}) {
                     <div className={styles.right}>
                         <p className={styles.lessonTitle}>{lesson.title}</p>
                         <p className={styles.lessonDescription}>{lesson.description}</p>
-                        <div className={styles.status}>
+                        <div className={styles.status} onClick={() => navigate(`/c/${code}/lesson`, { state: { name: className } })}>
                             <p>View More</p>
                         </div>
                     </div>

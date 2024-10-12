@@ -9,6 +9,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Routes providers
 import { ProtectedRoutes } from './routes/ProtectedRoutes'
 import Class from './pages/Teacher/Class'
+import ClassLesson from './pages/Teacher/ClassLesson'
+import LoadingPage from './pages/LoadingPage'
+import Announcement from './pages/Announcement'
 
 
 export const App = () => {
@@ -25,6 +28,9 @@ export const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/c/:code' element={<Class />} />
+        <Route path='/c/:code/:lesson' element={<ClassLesson />}/>
+        <Route path='/loader' element={<LoadingPage />}/>
+        <Route path='/announcements' element={<Announcement />} />
       </Routes>
     </BrowserRouter>
   )

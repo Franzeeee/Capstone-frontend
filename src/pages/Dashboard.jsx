@@ -113,8 +113,21 @@ export const Dashboard = () => {
         .then(data => {
             toast.success("Course Successfully Created!");
             setLatestClasses(prev => {
-                return [{ name: formData.className, section: formData.section, schedule: formData.schedule, room: formData.room }, 
-                    ...prev];
+                const newClass = {
+                    name: formData.className,
+                    section: formData.section,
+                    schedule: formData.schedule,
+                    room: formData.room
+                };
+            
+                // Check if the length is 4 or greater
+                if (prev.length >= 4) {
+                    // Remove the last item and insert the new class at the beginning
+                    return [newClass, ...prev.slice(0, 3)];
+                }
+            
+                // If less than 4, just add the new class to the beginning
+                return [newClass, ...prev];
             });
             toggleShow();
         })
@@ -145,7 +158,6 @@ export const Dashboard = () => {
 
     return (
         <HomeTemplate>
-        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick draggable pauseOnHover />
         <div className={`${styles.container}`}>
 
             <Modal
@@ -233,10 +245,10 @@ export const Dashboard = () => {
                     {latestClasses !== null ? (
                         latestClasses.length > 0 ? (
                             latestClasses.map((classItem, index) => (
-                                <div key={index} className={`${styles.courseCard}`} onClick={() => navigate('/c/testurl')}>
+                                <div key={index} className={`${styles.courseCard}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
                                     <p>{classItem.name}</p>
                                     <p>{classItem.section} ( {classItem.schedule} {classItem.room} )</p>
-                                    <p className={`${styles.classCode}`}>Class Code: 89fdajh</p>
+                                    <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "No Code"}</p>
                                 </div>
                             ))
                         ) : (

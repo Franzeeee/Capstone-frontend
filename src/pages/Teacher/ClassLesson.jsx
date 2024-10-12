@@ -1,0 +1,162 @@
+import React, { useState, useEffect } from 'react'
+import styles from '../../assets/css/pages/class-lesson.module.css'
+import logo from '../../assets/img/logoCodelab.png'
+
+import Accordion from 'react-bootstrap/Accordion';
+import { Button, Offcanvas } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+
+import { useNavigate, useLocation } from 'react-router-dom';
+import CodeEditor from '../CodeEditor';
+import TextFormatter from '../../components/TextFormatter';
+import lessonContent from '../../utils/lessons';
+import lessons from '../../utils/data';
+
+export default function ClassLesson() {
+    const navigate = useNavigate()
+
+    const location = useLocation();
+
+
+    const [currentLesson, setCurrentLesson] = useState('Comments');
+
+    
+    const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+
+    const lesson = lessons.find(lesson => lesson.title === currentLesson);
+
+
+    const [show, setShow] = useState(false);
+
+    // Function to handle the Escape key press
+    const handleKeyPress = (event) => {
+        if (event.key === 'Escape' || event.key === 'Esc') {
+            alert('Escape key was pressed!');
+        }
+    };
+
+    useEffect(() => {
+        // Add key press event listener when component mounts
+        window.addEventListener('keydown', handleKeyPress);
+        
+        // Cleanup the event listener when component unmounts
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
+    const handleClose = () => {
+        setShow(false);
+        alert()
+        // Exit fullscreen mode when the Offcanvas is closed
+        // if (document.exitFullscreen) {
+        //     document.exitFullscreen();
+        // } else if (document.webkitExitFullscreen) { // For Safari
+        //     document.webkitExitFullscreen();
+        // } else if (document.msExitFullscreen) { // For IE/Edge
+        //     document.msExitFullscreen();
+        //}
+    };
+
+    const handleShow = () => {
+        // Open the off-canvas
+        setShow(true);
+
+        // // Request fullscreen mode
+        // if (document.documentElement.requestFullscreen) {
+        //     document.documentElement.requestFullscreen();
+        // } else if (document.documentElement.webkitRequestFullscreen) { // For Safari
+        //     document.documentElement.webkitRequestFullscreen();
+        // } else if (document.documentElement.msRequestFullscreen) { // For IE/Edge
+        //     document.documentElement.msRequestFullscreen();
+        //}
+    };
+
+
+    const handleBack = () => {
+        // Get the current URL path
+        const currentPath = location.pathname;
+
+        // Remove "/lesson" from the URL
+        const newPath = currentPath.replace('/lesson', '');
+
+        // Navigate to the new path without "/lesson"
+        navigate(newPath);
+    };
+  return (
+    <div className={`${styles.container}`}>
+        <div className={`${styles.sideNav}`}>
+            <div className={`${styles.logo}`}>
+                <img src={logo} alt="" />
+            </div>
+            <div className={styles.backButton} onClick={handleBack}>
+                <p><FontAwesomeIcon icon={faArrowLeft} /> Back to Class Page</p>
+            </div>
+            <div className={`${styles.lessons}`}>
+                <Accordion defaultActiveKey="0">
+                    <Accordion.Item eventKey="0" className={styles.accordion}>
+                        <Accordion.Header className={styles.accordionHeader}>Hello World</Accordion.Header>
+                        <Accordion.Body className={styles.accordionBody}>
+                            <ul>
+                                {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (
+                                    <li key={index} className={`${lesson ===  currentLesson ? styles.activeLesson : ""}`} onClick={() => setCurrentLesson(lesson)}>{lesson}</li>
+                                ))
+                                }
+                            </ul>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1" className={styles.accordion}>
+                        <Accordion.Header className={styles.accordionHeader}>Loops</Accordion.Header>
+                        <Accordion.Body className={styles.accordionBody}>
+                            <ul>
+                                <li>While Loop</li>
+                                <li>Do While Loop</li>
+                                <li>For Loop</li>
+                                <li>Foreach Loop</li>
+                            </ul>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="2" className={styles.accordion}>
+                        <Accordion.Header className={styles.accordionHeader}>Array</Accordion.Header>
+                        <Accordion.Body className={styles.accordionBody}>
+                            <ul>
+                                <li>Introduction to Arrays</li>
+                                <li>Array Methods</li>
+                                <li>Multidimensional Arrays</li>
+                                <li>Array Iteration</li>
+                            </ul>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            </div>
+        </div>
+        <div className={`${styles.content}`}>
+            <div className={styles.breadcrumbs}>
+                <ul>
+                    <li onClick={() => navigate('/dashboard')}>Dashboard</li>
+                    <li>/</li>
+                    <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
+                    <li>/</li>
+                    <li className={`${styles.active}`}>{currentLesson}</li>
+                </ul>
+            </div>
+            <div className={styles.lessonContent}>
+                <div className={styles.contentContainer}>
+                    <TextFormatter lessonContent={lesson}/>
+                </div>
+            </div>
+                <div className={`${styles.control}`}>
+                    <button className={`${styles.back}`}>Back</button>
+                    <button onClick={handleShow} className={`${styles.try}`}>Try on Editor</button>
+                    <button className={styles.nextButton}>Next</button>
+                </div>
+            <Offcanvas show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
+                <Offcanvas.Body>
+                    <CodeEditor options={{ mode: 'LessonTest', closeOverlay: () => setShow(false) }} />
+                </Offcanvas.Body>
+            </Offcanvas>
+        </div>
+    </div>
+  )
+}

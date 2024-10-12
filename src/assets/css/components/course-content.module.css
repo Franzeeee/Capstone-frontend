@@ -60,3 +60,6 @@ p {
     align-items: center;
     justify-content: center;
 }
+.status p {
+    cursor: pointer;
+}
