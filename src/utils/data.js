@@ -1,5 +1,6 @@
 const lessons = [
     {
+        id: 0,
         title: "Variables",
         content: `
             \`\`\`Para
@@ -206,6 +207,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 1,
         title: "Operators",
         content: `
             \`\`\`Para
@@ -390,6 +392,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 2,
         title: "Comments",
         content: `
             \`\`\`Para
@@ -485,6 +488,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 3,
         title: "String Manipulation",
         content: `
             \`\`\`Para
@@ -560,6 +564,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 4,
         title: "Built-in methods for manipulating strings",
         content: `
             \`\`\`Para
@@ -641,6 +646,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 5,
         title: "String Formatting",
         content: `
             \`\`\`Para
@@ -675,6 +681,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 6,
         title: "Checking String Characteristics",
         content: `
             \`\`\`Para
@@ -701,6 +708,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 7,
         title: "Example of String Manipulation in Python",
         content: `
             \`\`\`Code
@@ -739,6 +747,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 8,
         title: "Decision Control Structures",
         content: `
             \`\`\`Para
@@ -866,6 +875,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 9,
         title: "Logical Operators with Decision Control Structures",
         content: `
             \`\`\`Para
@@ -912,6 +922,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 10,
         title: "Relational Operators in Conditional Statements",
         content: `
             \`\`\`Para
@@ -935,6 +946,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 11,
         title: "Using Relational Operators in Conditional Statements",
         content: `
             \`\`\`Para
@@ -1007,6 +1019,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 12,
         title: "Combining Relational Operators with Logical Operators",
         content: `
             \`\`\`Para
@@ -1072,6 +1085,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 13,
         title: "Data Structures",
         content: `
             \`\`\`Para
@@ -1093,6 +1107,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 14,
         title: "Lists",
         content: `
             \`\`\`Para
@@ -1129,6 +1144,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 15,
         title: "Tuples",
         content: `
             \`\`\`Para
@@ -1156,6 +1172,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 16,
         title: "Sets",
         content: `
             \`\`\`Para
@@ -1195,6 +1212,8 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+
+        id: 17,
         title: "Dictionaries",
         content: `
             \`\`\`Para
@@ -1231,6 +1250,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 18,
         title: "Function Calls",
         content: `
             \`\`\`Para
@@ -1288,6 +1308,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 19,
         title: "Function Arguments",
         content: `
             \`\`\`Para
@@ -1368,6 +1389,8 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+
+        id: 20,
         title: "Return Statement",
         content: `
             \`\`\`Para
@@ -1408,6 +1431,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 21,
         title: "Scope of Variables",
         content: `
             \`\`\`Para
@@ -1435,6 +1459,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 22,
         title: "Lambda Functions (Anonymous Functions)",
         content: `
             \`\`\`Para
@@ -1526,6 +1551,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 23,
         title: "Using Built-In Modules",
         content: `
             \`\`\`Para
@@ -1538,6 +1564,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 24,
         title: "The math Module",
         content: `
             \`\`\`Para
@@ -1581,6 +1608,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 25,
         title: "The random Module",
         content: `
             \`\`\`Para
@@ -1637,6 +1665,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 26,
         title: "File Handling in Python",
         content: `
             \`\`\`Para
@@ -1706,6 +1735,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 27,
         title: "Exception Handling in Python",
         content: `
             \`\`\`Para
@@ -1772,6 +1802,7 @@ Invalid-Name = "This is invalid"  # Hyphen is not allowed
         `
     },
     {
+        id: 28,
         title: "Combining File Handling and Exception Handling",
         content: `
             \`\`\`Para
