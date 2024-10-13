@@ -6,7 +6,7 @@ const lessons = [
             In Python, variables are used to store information to be referenced and manipulated within a program. They serve as symbolic names (or identifiers) for values. Variables provide a way to label data with a descriptive name, making your code more readable and logical.
             \`\`\`End
     
-            \`\`\`Bold
+            \`\`\`Sub-topic
             Key Characteristics of Python Variables:
             \`\`\`End
     
@@ -21,7 +21,7 @@ const lessons = [
     
             \`\`\`Code
             x = 5         # x is an integer
-            x = "Hello"   # Now, x is a string
+x = "Hello"   # Now, x is a string
             \`\`\`End
     
             \`\`\`Para
@@ -38,10 +38,10 @@ const lessons = [
     
             \`\`\`Code
             variable = 10
-            Variable = 20
+Variable = 20
     
-            print(variable)  # Output: 10
-            print(Variable)  # Output: 20
+print(variable)  # Output: 10
+print(Variable)  # Output: 20
             \`\`\`End
     
             \`\`\`Para
@@ -56,7 +56,7 @@ const lessons = [
             Python has specific rules and recommendations for naming variables.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Rules for Valid Variable Names:
             \`\`\`List
             ● Variable names can contain letters (A-Z, a-z), digits (0-9), and underscores (_).
@@ -71,9 +71,9 @@ const lessons = [
     
             \`\`\`Code
             valid_name = "This is valid"
-            _valid_name2 = "This is also valid"
-            Invalid-Name = "This is invalid"  # Hyphen is not allowed
-            1variable = "This is invalid"  # Cannot start with a number
+_valid_name2 = "This is also valid"
+Invalid-Name = "This is invalid"  # Hyphen is not allowed
+1variable = "This is invalid"  # Cannot start with a number
             \`\`\`End
     
             \`\`\`Sub-topic
@@ -84,7 +84,7 @@ const lessons = [
             Use descriptive names that make the purpose of the variable clear.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Follow PEP8 guidelines for naming:
             \`\`\`List
             ● Use lowercase letters with words separated by underscores (snake_case), especially for general-purpose variables.
@@ -193,7 +193,7 @@ const lessons = [
             In this example, x is first an integer, but then it is reassigned as a string. Python allows this flexibility due to its dynamic typing nature.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Key Points from the Example:
             \`\`\`List
             ● Assignment and Reassignment:
@@ -206,8 +206,8 @@ const lessons = [
         `
     },
     {
-        "title": "Operators",
-        "content": `
+        title: "Operators",
+        content: `
             \`\`\`Para
             Operators are special symbols or keywords in Python that perform operations on variables and values. Python supports a variety of operators, which are categorized based on the type of operations they perform. These include arithmetic, comparison, logical, bitwise, assignment, and more.
             \`\`\`End
@@ -390,13 +390,13 @@ const lessons = [
         `
     },
     {
-        "title": "Comments",
-        "content": `
+        title: "Comments",
+        content: `
             \`\`\`Para
             Comments in Python are used to explain code, make it more readable, or to prevent the execution of certain lines of code. They are not executed by Python, and their purpose is purely for humans reading the code. Comments are crucial when writing clean, understandable, and maintainable code.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Python supports two types of comments
             \`\`\`List
                 Single-line comments
@@ -475,7 +475,7 @@ const lessons = [
             #     return a - b
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Key Points:
             \`\`\`List
                 Single-line comments are marked with #.
@@ -485,13 +485,13 @@ const lessons = [
         `
     },
     {
-        "title": "String Manipulation",
-        "content": `
+        title: "String Manipulation",
+        content: `
             \`\`\`Para
             In Python, strings are sequences of characters enclosed in either single quotes ('), double quotes ("), or triple quotes (''' or """). Python provides a wide range of functionalities to manipulate strings, from basic slicing to more advanced formatting and operations.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Key Characteristics of Strings in Python:
             \`\`\`List
             Immutable: Once a string is created, it cannot be changed. You can create a new string, but you cannot modify the original string.
@@ -560,8 +560,8 @@ const lessons = [
         `
     },
     {
-        "title": "Built-in methods for manipulating strings",
-        "content": `
+        title: "Built-in methods for manipulating strings",
+        content: `
             \`\`\`Para
             Python provides a wide range of built-in methods for manipulating strings, making it easier to perform various text processing tasks.
             \`\`\`End
@@ -641,8 +641,8 @@ const lessons = [
         `
     },
     {
-        "title": "String Formatting",
-        "content": `
+        title: "String Formatting",
+        content: `
             \`\`\`Para
             Python offers several ways to format strings, such as using the % operator, str.format() method, and f-strings.
             \`\`\`End
@@ -675,8 +675,8 @@ const lessons = [
         `
     },
     {
-        "title": "Checking String Characteristics",
-        "content": `
+        title: "Checking String Characteristics",
+        content: `
             \`\`\`Para
             In Python, checking string characteristics involves using built-in methods to determine certain properties or attributes of a string. These methods can help identify whether a string contains only alphabetic characters, digits, whitespace, or other patterns.
             \`\`\`End
@@ -701,8 +701,8 @@ const lessons = [
         `
     },
     {
-        "title": "Example of String Manipulation in Python",
-        "content": `
+        title: "Example of String Manipulation in Python",
+        content: `
             \`\`\`Code
             # String creation and basic manipulation
             text = "Hello, Python!"
@@ -739,8 +739,8 @@ const lessons = [
         `
     },
     {
-        "title": "Decision Control Structures",
-        "content": `
+        title: "Decision Control Structures",
+        content: `
             \`\`\`Para
             Decision control structures in Python enable you to control the flow of your program based on conditions. These structures allow your code to make decisions and execute certain sections based on whether a given condition is True or False. The primary decision control structures in Python include if, elif, and else statements, which are used for conditional execution of code.
             \`\`\`End
@@ -765,7 +765,7 @@ const lessons = [
                 print(f"{number} is positive.")  # If the condition is True, this message is printed
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Explanation
             \`\`\`List
             Here, the variable number is assigned the value 10.
@@ -791,7 +791,7 @@ const lessons = [
                 print(f"{number} is negative.")  # If the condition is False, this message is printed
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Explanation
             \`\`\`List
             The program checks whether number > 0. In this case, since number is -5, the condition is False.
@@ -823,7 +823,7 @@ const lessons = [
                 print(f"{number} is zero.")  # If both previous conditions are False, this message is printed
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Explanation
             \`\`\`List
             The program first checks if number > 0. Since number is 0, the condition is False.
@@ -854,25 +854,25 @@ const lessons = [
                 print(f"{number} is not positive.")  # If the first condition is False, this message is printed
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Explanation
             \`\`\`List
-            The first if block checks if number > 0. If True, it proceeds to check whether number % 2 == 0 (i.e., whether the number is even).
-            If both conditions are True, it prints "8 is positive and even."
-            If the number is positive but odd, it prints "8 is positive but odd."
-            If the number is not positive (e.g., negative or zero), the outer else block handles that case.
-            Nested if statements are useful for handling more complex decision-making scenarios where multiple conditions must be checked.
+            ●The first if block checks if number > 0. If True, it proceeds to check whether number % 2 == 0 (i.e., whether the number is even).
+            ●If both conditions are True, it prints "8 is positive and even."
+            ●If the number is positive but odd, it prints "8 is positive but odd."
+            ●If the number is not positive (e.g., negative or zero), the outer else block handles that case.
+            ●Nested if statements are useful for handling more complex decision-making scenarios where multiple conditions must be checked.
             \`\`\`End
         `
     },
     {
-        "title": "Logical Operators with Decision Control Structures",
-        "content": `
+        title: "Logical Operators with Decision Control Structures",
+        content: `
             \`\`\`Para
             You can combine conditions using logical operators (and, or, not) to create more complex decision-making processes.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             \`\`\`List
             and: Both conditions must be True for the block of code to execute.
             or: At least one condition must be True for the block of code to execute.
@@ -896,7 +896,7 @@ const lessons = [
                 print("You meet the basic requirements to vote.")  # If both conditions are False, this message is printed
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Key Points
             \`\`\`List
             if statement: Executes a block of code if a condition is True.
@@ -912,8 +912,8 @@ const lessons = [
         `
     },
     {
-        "title": "Relational Operators in Conditional Statements",
-        "content": `
+        title: "Relational Operators in Conditional Statements",
+        content: `
             \`\`\`Para
             Relational operators (also known as comparison operators) are used in Python to compare two values or expressions. The result of a relational operation is a Boolean value, meaning it evaluates to either True or False. These operators are often used in conditional statements (if, elif, else) to control the flow of the program based on comparisons.
             \`\`\`End
@@ -935,8 +935,8 @@ const lessons = [
         `
     },
     {
-        "title": "Using Relational Operators in Conditional Statements",
-        "content": `
+        title: "Using Relational Operators in Conditional Statements",
+        content: `
             \`\`\`Para
             Relational operators are frequently used in if statements to determine the execution of specific code blocks based on conditions.
             \`\`\`End
@@ -1007,8 +1007,8 @@ const lessons = [
         `
     },
     {
-        "title": "Combining Relational Operators with Logical Operators",
-        "content": `
+        title: "Combining Relational Operators with Logical Operators",
+        content: `
             \`\`\`Para
             You can also combine relational operators with logical operators (and, or, not) to form more complex conditions.
             \`\`\`End
@@ -1060,7 +1060,7 @@ const lessons = [
             If neither condition is satisfied, it prints "You cannot enter."
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Key Points:
             \`\`\`List
             Relational Operators: Used to compare two values, returning True or False.
@@ -1072,16 +1072,16 @@ const lessons = [
         `
     },
     {
-        "title": "Data Structures",
-        "content": `
+        title: "Data Structures",
+        content: `
             \`\`\`Para
             Data structures are fundamental components of any programming language, allowing you to store, organize, and manage data efficiently. Python provides several built-in data structures that are easy to use and versatile for various applications. The most common data structures in 
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Python include:
             \`\`\`List
-            Lists
+            L1ists
             Tuples
             Sets
             Dictionaries
@@ -1093,8 +1093,8 @@ const lessons = [
         `
     },
     {
-        "title": "Lists",
-        "content": `
+        title: "Lists",
+        content: `
             \`\`\`Para
             Lists are one of the most versatile and commonly used data structures in Python. They are ordered, meaning that elements maintain the sequence in which they are added. Lists are also mutable, which allows them to grow or shrink as needed by adding, modifying, or removing elements. Furthermore, lists allow duplicate elements, which makes them suitable for scenarios where data redundancy is acceptable.
             \`\`\`End
@@ -1129,8 +1129,8 @@ const lessons = [
         `
     },
     {
-        "title": "Tuples",
-        "content": `
+        title: "Tuples",
+        content: `
             \`\`\`Para
             Tuples are similar to lists in that they are ordered collections. However, unlike lists, tuples are immutable, meaning that once a tuple is created, its content cannot be changed. This immutability makes tuples ideal for situations where the integrity of the data must be preserved throughout the program. Although tuples allow duplicate elements, their fixed nature makes them useful in cases where you want to prevent accidental modification.
             \`\`\`End
@@ -1156,8 +1156,8 @@ const lessons = [
         `
     },
     {
-        "title": "Sets",
-        "content": `
+        title: "Sets",
+        content: `
             \`\`\`Para
             Sets are unordered collections of unique elements. Unlike lists and tuples, sets do not allow duplicate values, making them perfect for storing collections where uniqueness is important. Sets are highly efficient for membership testing (i.e., checking if an element exists in the set) and performing operations like union, intersection, and difference between sets.
             \`\`\`End
@@ -1195,8 +1195,8 @@ const lessons = [
         `
     },
     {
-        "title": "Dictionaries",
-        "content": `
+        title: "Dictionaries",
+        content: `
             \`\`\`Para
             Dictionaries are unordered collections of key-value pairs. Each key in a dictionary must be unique, although the associated values can be duplicated. Dictionaries provide fast lookups, making them ideal for mapping relationships between pieces of data, such as storing records where each key represents a field (e.g., name, age, city), and the value represents the corresponding data.
             \`\`\`End
@@ -1231,8 +1231,8 @@ const lessons = [
         `
     },
     {
-        "title": "Function Calls",
-        "content": `
+        title: "Function Calls",
+        content: `
             \`\`\`Para
             A function in Python is a reusable block of code that performs a specific task. Functions help break down complex problems into smaller, manageable parts, making code modular, organized, and easier to maintain. Functions can take inputs (called arguments), perform actions, and return an output (or result).
             \`\`\`End
@@ -1288,8 +1288,8 @@ const lessons = [
         `
     },
     {
-        "title": "Function Arguments",
-        "content": `
+        title: "Function Arguments",
+        content: `
             \`\`\`Para
             Functions can take zero or more arguments, which are passed when the function is called. There are different ways to pass arguments to functions.
             \`\`\`End
@@ -1368,8 +1368,8 @@ const lessons = [
         `
     },
     {
-        "title": "Return Statement",
-        "content": `
+        title: "Return Statement",
+        content: `
             \`\`\`Para
             The return statement is used to send back a result from the function to the caller. Once the return statement is executed, the function terminates.
             \`\`\`End
@@ -1408,8 +1408,8 @@ const lessons = [
         `
     },
     {
-        "title": "Scope of Variables",
-        "content": `
+        title: "Scope of Variables",
+        content: `
             \`\`\`Para
             Local Variables: Variables defined inside a function are local to that function. They cannot be accessed outside the function.
             \`\`\`End
@@ -1435,8 +1435,8 @@ const lessons = [
         `
     },
     {
-        "title": "Lambda Functions (Anonymous Functions)",
-        "content": `
+        title: "Lambda Functions (Anonymous Functions)",
+        content: `
             \`\`\`Para
             Lambda functions are small, anonymous functions defined using the lambda keyword. They are typically used for short, simple operations.
             \`\`\`End
@@ -1509,7 +1509,7 @@ const lessons = [
             print_results(length, width)
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Key Points:
             \`\`\`List
             Function Definition: Defined using the def keyword and can return values using return.
@@ -1526,8 +1526,8 @@ const lessons = [
         `
     },
     {
-        "title": "Using Built-In Modules",
-        "content": `
+        title: "Using Built-In Modules",
+        content: `
             \`\`\`Para
             Python has an extensive collection of built-in modules that make it easier to perform various operations, such as mathematical calculations, random number generation, file handling, date and time manipulation, and more. These modules are designed to provide functionality without the need to install any external libraries, making Python a powerful and versatile programming language right out of the box.
             \`\`\`End
@@ -1538,8 +1538,8 @@ const lessons = [
         `
     },
     {
-        "title": "The math Module",
-        "content": `
+        title: "The math Module",
+        content: `
             \`\`\`Para
             The math module provides access to various mathematical functions and constants. It includes trigonometric functions (like sin, cos, and tan), logarithmic functions, exponential functions, and constants like pi and e. This module is useful for performing precise mathematical operations beyond Python's basic arithmetic operators.
             \`\`\`End
@@ -1581,8 +1581,8 @@ const lessons = [
         `
     },
     {
-        "title": "The random Module",
-        "content": `
+        title: "The random Module",
+        content: `
             \`\`\`Para
             The random module allows you to generate random numbers, shuffle lists, and make random choices. It is widely used in applications such as simulations, games, cryptography, or any situation where randomness is required. The module provides functions to generate random integers, floats, or select random elements from a sequence.
             \`\`\`End
@@ -1627,7 +1627,7 @@ const lessons = [
             random.uniform(a, b): Generates a random floating-point number between two values a and b.
             \`\`\`End
     
-            \`\`\`ListTitle
+            \`\`\`Title
             Practical Use Cases for random Module:
             \`\`\`List
             Simulations: When you need to simulate randomness, such as rolling dice, drawing cards, or modeling probabilistic events.
@@ -1637,8 +1637,8 @@ const lessons = [
         `
     },
     {
-        "title": "File Handling in Python",
-        "content": `
+        title: "File Handling in Python",
+        content: `
             \`\`\`Para
             File handling refers to the process of opening, reading, writing, and closing files. Python provides several built-in functions and methods that make file operations straightforward. Files are an important way to store persistent data, such as logs, configurations, or datasets, that can be accessed by a Python program at any point.
             \`\`\`End
@@ -1660,7 +1660,7 @@ const lessons = [
             \`\`\`Para
             'b': Binary mode. It is used to work with binary files like images or executable files.
             \`\`\`End
-            \`\`\`ListTitle
+            \`\`\`Title
             Steps for File Handling:
             \`\`\`List
             Open the file: You can use the open() function to open a file in a specified mode.
@@ -1706,8 +1706,8 @@ const lessons = [
         `
     },
     {
-        "title": "Exception Handling in Python",
-        "content": `
+        title: "Exception Handling in Python",
+        content: `
             \`\`\`Para
             Exception handling allows you to deal with runtime errors in a controlled way, ensuring your program doesn't crash unexpectedly. Exceptions occur when something goes wrong during the execution of a program (e.g., trying to divide by zero or access a file that doesn’t exist).
             \`\`\`End
@@ -1744,7 +1744,7 @@ const lessons = [
                 if 'file' in locals():
                     file.close()
             \`\`\`End
-            \`\`\`ListTitle
+            \`\`\`Title
             Commonly Used Exceptions in Python
             \`\`\`List
             FileNotFoundError: Raised when trying to access a file that does not exist.
@@ -1752,7 +1752,7 @@ const lessons = [
             ValueError: Raised when a function receives the correct type of argument but an inappropriate value.
             TypeError: Raised when an operation is applied to an object of an inappropriate type.
             \`\`\`End
-            \`\`\`ListTitle
+            \`\`\`Title
             Catching Multiple Exceptions
             \`\`\`End
             \`\`\`Para
@@ -1772,8 +1772,8 @@ const lessons = [
         `
     },
     {
-        "title": "Combining File Handling and Exception Handling",
-        "content": `
+        title: "Combining File Handling and Exception Handling",
+        content: `
             \`\`\`Para
             When working with files, errors can frequently occur, such as trying to open a file that doesn’t exist, or attempting to read from a file that cannot be accessed. Exception handling makes it easy to anticipate and handle these issues gracefully, so the program doesn’t crash unexpectedly.
             \`\`\`End
@@ -1791,14 +1791,14 @@ const lessons = [
             except IOError:
                 print("Error: Could not read the file!")
             \`\`\`End
-            \`\`\`ListTitle
+            \`\`\`Title
             In this example:
             \`\`\`List
             The program tries to open and read the file.
             If the file doesn’t exist, it catches a FileNotFoundError and prints an error message.
             If there’s any other input/output error (IOError), it handles that too.
             \`\`\`End
-            \`\`\`ListTitle
+            \`\`\`Title
             Best Practices
             \`\`\`List
             Use the with statement: Always use with for file handling to automatically close the file, even if an exception occurs.

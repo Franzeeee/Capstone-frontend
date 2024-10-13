@@ -4,6 +4,7 @@ import CryptoJS from 'crypto-js';
 import HomeTemplate from '../templates/HomeTemplate'
 import ProfileSide from '../components/ProfileSide'
 import AnnouncementForm from '../components/AnnouncementForm';
+import AnnouncementContent from '../components/AnnouncementContent';
 
 export default function Announcement() {
     const userData = localStorage.getItem('userData');
@@ -19,6 +20,7 @@ export default function Announcement() {
                     </div>
                 </div>
                 <AnnouncementForm />
+                <AnnouncementContent />
             </div>
             <div className={`${styles.profileContainer}`}>
                 <ProfileSide info={user}/>

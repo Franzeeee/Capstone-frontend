@@ -1,7 +1,7 @@
 const BASE_URL = 'http://127.0.0.1:8000/api';
 
 // Custom fetch function using Promises
-export const customFetch = (url, options = {}) => {
+const customFetch = (url, options = {}) => {
     return fetch(`${BASE_URL}${url}`, {
         ...options,
         headers: {
@@ -54,3 +54,5 @@ export const customFetch = (url, options = {}) => {
 //     .catch(error => {
 //         console.error('Error:', error.message);
 //     });
+
+export default customFetch;

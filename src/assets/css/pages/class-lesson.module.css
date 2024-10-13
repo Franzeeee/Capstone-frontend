@@ -148,6 +148,9 @@
     color: white;
     margin-bottom: 10px;
 }
+
+
+
 .comment {
     color: #949494;
 }
@@ -190,4 +193,8 @@
 }
 .bold {
     font-weight: 700;
+}
+
+.dataList li{
+    list-style: disc;
 }

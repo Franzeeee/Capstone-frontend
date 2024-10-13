@@ -19,10 +19,15 @@ export default function ClassLesson() {
     const location = useLocation();
 
 
-    const [currentLesson, setCurrentLesson] = useState('Comments');
+    const [currentLesson, setCurrentLesson] = useState('Variables');
 
     
     const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+    
+
+    const getNextLesson = () => {
+        setCurrentLesson(lessonTitle[lessonTitle.indexOf(currentLesson) + 1]);
+    };
 
     const lesson = lessons.find(lesson => lesson.title === currentLesson);
 
@@ -149,7 +154,7 @@ export default function ClassLesson() {
                 <div className={`${styles.control}`}>
                     <button className={`${styles.back}`}>Back</button>
                     <button onClick={handleShow} className={`${styles.try}`}>Try on Editor</button>
-                    <button className={styles.nextButton}>Next</button>
+                    <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button>
                 </div>
             <Offcanvas show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                 <Offcanvas.Body>

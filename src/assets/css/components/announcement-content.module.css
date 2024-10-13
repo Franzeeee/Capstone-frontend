@@ -1,0 +1,91 @@
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    max-width: 100%;
+    width: 100%;
+    gap: 10px;
+    height: 100svh;
+}
+.cardContainer .card {
+    width: 100%;
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 1fr;
+    padding: .5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-left: 5px solid blue;
+    grid-template-rows: 60px 1fr;
+}
+.info {
+    width: 100%;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 1fr 40px;
+}
+.info .profile {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 5px;
+}
+.info .profile .profileImage {
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #5D5DD4;
+}
+.info .profile .profileImage img {
+    width: 100%;
+    object-fit: cover;
+}
+.info .profileInfo {
+    display: grid;
+    grid-template-rows: 1fr .5fr .5fr;
+    padding-top: .1rem;
+}
+
+.info .profileInfo p:first-child {
+    font-size: .9rem;
+    margin: 0;
+    font-weight: 600;
+}
+.info .profileInfo p:last-child, .info .profileInfo p:nth-child(2) {
+    font-size: .8rem;
+    margin: 0;
+    color: #000000;
+    margin-top: -.3rem;
+}
+.info .profileInfo p:last-child {
+    color: #292929;
+    font-size: .7rem;
+    margin-top: -.3rem;
+}
+.info .more {
+    display: flex;
+    align-items: start;
+    justify-self: end;
+    padding: 0 5px 0 0;
+    cursor: pointer;
+}
+
+.content {
+    width: 100%;
+    padding: 5px;
+    font-size: .9rem;
+    padding: 0 5px;
+}
+
+/* .content .otherContent {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+    padding-top: 5px;
+}
+.content .otherContent img {
+    width: 80px;
+    border: 1px solid black;
+} */
