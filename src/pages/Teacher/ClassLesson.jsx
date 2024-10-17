@@ -18,9 +18,9 @@ export default function ClassLesson() {
 
     const location = useLocation();
 
+    const lessonIndex = location.state?.lesson|| 0;
 
-    const [currentLesson, setCurrentLesson] = useState('Variables');
-
+    const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);
     
     const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     
@@ -83,10 +83,10 @@ export default function ClassLesson() {
         // Get the current URL path
         const currentPath = location.pathname;
 
-        // Remove "/lesson" from the URL
-        const newPath = currentPath.replace('/lesson', '');
+        // Remove the last segment from the URL
+        const newPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
 
-        // Navigate to the new path without "/lesson"
+        // Navigate to the new path without the last segment
         navigate(newPath);
     };
   return (

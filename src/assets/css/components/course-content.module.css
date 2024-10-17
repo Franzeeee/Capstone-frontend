@@ -60,6 +60,19 @@ p {
     align-items: center;
     justify-content: center;
 }
-.status p {
+.status {
     cursor: pointer;
+}
+
+.locked {
+    background: #ec2f2f !important;
+    color: #fcfcfc !important;
+    cursor: not-allowed !important;
+}
+.lesson {
+    background-color: #35d404;
+}
+.status svg {
+    font-size: .7rem;
+    margin-right: 4px;
 }

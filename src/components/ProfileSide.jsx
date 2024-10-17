@@ -53,7 +53,7 @@ export default function ProfileSide({info}) {
                     <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
                 </div>
                 <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-            </div> q
+            </div>
         </div>
 
         <div className={`${styles.card}`}>
