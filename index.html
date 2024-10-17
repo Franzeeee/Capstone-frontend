@@ -13,22 +13,22 @@
     <script type="module" src="/src/main.jsx"></script>
     <script>
       var global = window
-      // Define the paths where console.log should be disabled
-      const disabledPathnames = ['/playground', '/another/path'];
+      // // Define the paths where console.log should be disabled
+      // const disabledPathnames = ['/playground', '/another/path'];
 
-      // Store the original console.log function
-      const originalConsoleLog = console.log;
+      // // Store the original console.log function
+      // const originalConsoleLog = console.log;
 
-      // Override console.log
-      console.log = function(...args) {
-          // Get the current pathname
-          const currentPathname = window.location.pathname;
+      // // Override console.log
+      // console.log = function(...args) {
+      //     // Get the current pathname
+      //     const currentPathname = window.location.pathname;
 
-          // Check if the current pathname is in the disabled pathnames
-          if (!disabledPathnames.includes(currentPathname)) {
-              originalConsoleLog(...args); // Call the original console.log if not disabled
-          }
-      };
+      //     // Check if the current pathname is in the disabled pathnames
+      //     // if (!disabledPathnames.includes(currentPathname)) {
+      //     //     originalConsoleLog(...args); // Call the original console.log if not disabled
+      //     // }
+      // };
     </script>
   </body>
 </html>

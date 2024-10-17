@@ -12,6 +12,7 @@ import Class from './pages/Teacher/Class'
 import ClassLesson from './pages/Teacher/ClassLesson'
 import LoadingPage from './pages/LoadingPage'
 import Announcement from './pages/Announcement'
+import ClassAssessment from './pages/ClassAssessment'
 import NotFound from './pages/NotFound'
 
 
@@ -30,6 +31,7 @@ export const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/c/:code' element={<Class />} />
         <Route path='/c/:code/:lesson' element={<ClassLesson />}/>
+        <Route path='/c/:code/a/:assessment' element={<ClassAssessment />} />
         <Route path='/loader' element={<LoadingPage />}/>
         <Route path='/announcements' element={<Announcement />} />
         <Route path="*" element={<NotFound/>} />
