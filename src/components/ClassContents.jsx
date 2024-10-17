@@ -26,12 +26,12 @@ export default function ClassContents({ data, code, className }) {
     }, [progress]);
 
     const isLessonUnlocked = (lessonId) => {
-        return progress && progress.last_completed_lesson >= lessonId;
+        return progress && progress.last_completed_lesson >= lessonId || user.role === 'teacher';
     };
 
     // Function to determine if an assessment is unlocked
     const isAssessmentUnlocked = (lessonId) => {
-        return progress && progress.last_completed_lesson >= lessonId;
+        return progress && progress.last_completed_lesson >= lessonId || user.role === 'teacher';
     };
 
 
