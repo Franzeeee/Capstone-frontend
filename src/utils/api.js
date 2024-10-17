@@ -8,6 +8,6 @@ export const customFetch = (url, options = {}) => {
         'Content-Type': 'application/json',
         ...options.headers,
         },
-        credentials: 'include',
+        credentials: 'include', // Include cookies in the request
     });
 };
