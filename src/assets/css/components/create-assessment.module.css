@@ -1,0 +1,18 @@
+.createContainer {
+    padding: 5px;
+    display: flex;
+    justify-content: flex-end;
+}
+.createContainer p {
+    padding: 5px 10px; 
+    background-color: #5D5DD4;
+    border-radius: 5px;
+    color: #DBDBFF;
+    cursor: pointer;
+    transition: all .3s ease;
+    max-height: 33px;
+}
+.createContainer p:hover {
+    background-color: #4A4AC3;
+    color : #fff
+}

@@ -158,7 +158,7 @@ export const Register = () => {
                   const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
                   localStorage.setItem('userData', hashedData);
                   setTimeout(() => {
-                    navigate('/')
+                    navigate('/dashboard')
                   }, 2000)
                 }
                 

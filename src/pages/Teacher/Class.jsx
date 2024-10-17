@@ -12,6 +12,7 @@ import  AnnouncementForm  from '../../components/AnnouncementForm';
 import ClassContents from '../../components/ClassContents';
 import LoadingPage from '../LoadingPage';
 import ProfileSide from '../../components/ProfileSide';
+import CreateAssessment from '../../components/CreateAssessment';
 
 
 export default function Class() {
@@ -75,6 +76,7 @@ export default function Class() {
                         </div>
                     </div>
                     <AnnouncementForm />
+                    <CreateAssessment />
                     <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
                 </div>
 

@@ -83,6 +83,7 @@ export const Dashboard = () => {
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
         const { className, section, schedule, room, subject, startDate, endDate } = formData;
+        formData.teacher_id = user.id;
 
         if (!className || !section || !schedule || !room || !subject || !startDate || !endDate) {
             toast.error('Please fill in all required fields.');
@@ -117,7 +118,8 @@ export const Dashboard = () => {
                     name: formData.className,
                     section: formData.section,
                     schedule: formData.schedule,
-                    room: formData.room
+                    room: formData.room,
+                    class_code: {code: data.code}
                 };
             
                 // Check if the length is 4 or greater

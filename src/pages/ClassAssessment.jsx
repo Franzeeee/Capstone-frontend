@@ -6,6 +6,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import { Button, Offcanvas } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import CryptoJS from 'crypto-js';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import CodeEditor from './CodeEditor';
@@ -18,10 +19,19 @@ export default function ClassAssessment() {
 
     const location = useLocation();
 
-    const lessonIndex = location.state?.progress.last_completed_lesson || 0;
+    const userData = localStorage.getItem('userData');
+    const [user, setUser] = useState(
+        JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
+    );
 
+    const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
 
-    const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);
+    const [currentLesson, setCurrentLesson] = useState(() => {
+        if (user.role === 'teacher') {
+            return lessons[0].title || "Introduction";
+        }
+        return lessons[lessonIndex].title || "Variables";
+    });
 
     
     const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));

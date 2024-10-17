@@ -2,8 +2,12 @@ import React from 'react'
 import styles from '../assets/css/pages/notFound.module.css'
 import logo from '../assets/img/logoCodelab.png'
 import notFound from '../assets/img/notFound.png'
+import { useNavigate } from 'react-router-dom'
 
 export default function NotFound() {
+
+  const navigate = useNavigate()
+
   return (
     <div className={styles.container}>
       <div className={styles.head}>
@@ -22,7 +26,7 @@ export default function NotFound() {
           </p>
       </div>
       <div className={styles.BButton}>
-        <button>Go back</button>
+        <button onClick={() => navigate('/dashboard')}>Go back</button>
       </div>
     </div>
   )

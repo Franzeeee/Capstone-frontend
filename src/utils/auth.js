@@ -1,7 +1,7 @@
 // auth.js
 
-// const BASE_URL = 'http://localhost:8000/api';
-const BASE_URL = 'http://ec2-3-24-134-80.ap-southeast-2.compute.amazonaws.com/api';
+const BASE_URL = 'http://localhost:8000/api';
+// const BASE_URL = 'http://ec2-3-24-134-80.ap-southeast-2.compute.amazonaws.com/api';
 
 export async function checkLoggedIn() {
     try {

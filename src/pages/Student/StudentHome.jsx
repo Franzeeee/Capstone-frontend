@@ -59,7 +59,7 @@ export default function StudentHome() {
             show={showModal} 
             handleClose={() => setShowModal(false)} 
             handleJoinSuccess={handleJoinSuccess} 
-            studentID={2}
+            studentID={user.id}
         />
             <div className={`${styles.contentContainer}`}>
                 <div className={`${styles.header}`}>
