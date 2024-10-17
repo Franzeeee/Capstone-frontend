@@ -13,6 +13,7 @@ import ClassLesson from './pages/Teacher/ClassLesson'
 import LoadingPage from './pages/LoadingPage'
 import Announcement from './pages/Announcement'
 import ClassAssessment from './pages/ClassAssessment'
+import NotFound from './pages/NotFound'
 
 
 export const App = () => {
@@ -33,6 +34,7 @@ export const App = () => {
         <Route path='/c/:code/a/:assessment' element={<ClassAssessment />} />
         <Route path='/loader' element={<LoadingPage />}/>
         <Route path='/announcements' element={<Announcement />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   )
