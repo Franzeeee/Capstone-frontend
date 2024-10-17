@@ -12,6 +12,7 @@ import Class from './pages/Teacher/Class'
 import ClassLesson from './pages/Teacher/ClassLesson'
 import LoadingPage from './pages/LoadingPage'
 import Announcement from './pages/Announcement'
+import NotFound from './pages/NotFound'
 
 
 export const App = () => {
@@ -31,6 +32,7 @@ export const App = () => {
         <Route path='/c/:code/:lesson' element={<ClassLesson />}/>
         <Route path='/loader' element={<LoadingPage />}/>
         <Route path='/announcements' element={<Announcement />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   )
