@@ -1,4 +1,4 @@
-const BASE_URL = 'https://cors-everywhere.herokuapp.comhttp://ec2-3-24-134-80.ap-southeast-2.compute.amazonaws.com/api';
+const BASE_URL = 'https://cors-everywhere.herokuapp.comhttp//ec2-3-24-134-80.ap-southeast-2.compute.amazonaws.com/api/user';
 
 export const customFetch = (url, options = {}) => {
     return fetch(`${BASE_URL}${url}`, {
