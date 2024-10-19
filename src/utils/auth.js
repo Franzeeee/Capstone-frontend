@@ -5,19 +5,19 @@ export async function checkLoggedIn() {
     try {
         const response = await fetch(`${BASE_URL}/user`, {
             method: 'GET',
-            withCredentials: true,
-            credentials: 'include',
+            credentials: 'include', // Ensure cookies are sent with requests
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
                 // Add any other headers if needed
             }
         });
 
         if (response.ok) {
-            return true;
+            const data = await response.json(); // Optionally retrieve the data
+            return data; // Return user data or true if you just want a boolean
         } else {
-            // User is not logged in
-            return false;
+            // User is not logged in or some other error occurred
+            return false; // You can also log the status or message for debugging
         }
     } catch (error) {
         console.error('Error checking login status:', error);

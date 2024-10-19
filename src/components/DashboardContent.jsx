@@ -18,6 +18,7 @@ import LoadingPage from '../pages/LoadingPage';
 
 export const DashboardContent = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
     const userData = localStorage.getItem('userData');
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
 
@@ -28,7 +29,7 @@ export const DashboardContent = () => {
     useEffect(() => {
       const checkLoginStatus = async () => {
         const loggedIn = await checkLoggedIn();
-
+        return <LoadingPage />
         if (!loggedIn) {
           navigate('/login');
         }
@@ -56,10 +57,6 @@ export const DashboardContent = () => {
     }
 
     const [activeKey, setActiveKey] = useState('activities');
-
-    if (!user) {
-      return <LoadingPage />;
-    }
 
   return (
     <div className={`row m-0 overflow-hidden ${styles.row} `}>
