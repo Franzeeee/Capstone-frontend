@@ -60,25 +60,17 @@
     scrollbar-width: none;  /* Firefox */
     border: none;
     max-height: 300px !important;
-    padding: 0 !important;
 }
 .accordionBody ul {
-    padding: 0;
+    padding: 0 25px;
     display: flex;
     flex-direction: column;
-    padding: 5px 0;
+    gap: 5px;
 }
 .accordionBody ul li {
-    padding: 10px;
+    padding: 5px 0;
     cursor: pointer;
-    display: grid;
-    grid-template-columns: 20px 1fr;
-}
-.accordionBody ul li * {
-    align-self: center;
-}
-.accordionBody ul li svg * {
-    border: 1px solid rgb(255, 255, 255);
+    list-style: disc;
 }
 .accordion {
     border: none;
@@ -88,9 +80,8 @@
 .activeLesson {
     color: #000000;
     font-weight: 600;
-    background-color: #f1f1f1 !important;
-    border-radius: 5px;
 }
+
 .content {
     padding: 10px;
     display: flex;
@@ -135,6 +126,10 @@
 .lessonContent {
     padding-bottom: 10px;
     width: 95%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .lessonContent * {
     margin: 0;

@@ -5,8 +5,8 @@ import logo from '../../assets/img/logoCodelab.png'
 import Accordion from 'react-bootstrap/Accordion';
 import { Button, Offcanvas } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-
+import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faSquare as regularSquare } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import CodeEditor from '../CodeEditor';
 import TextFormatter from '../../components/TextFormatter';
@@ -105,7 +105,9 @@ export default function ClassLesson() {
                         <Accordion.Body className={styles.accordionBody}>
                             <ul>
                                 {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (
-                                    <li key={index} className={`${lesson ===  currentLesson ? styles.activeLesson : ""}`} onClick={() => setCurrentLesson(lesson)}>{lesson}</li>
+                                    <li key={index} className={`${lesson ===  currentLesson ? styles.activeLesson : ""}`} onClick={() => setCurrentLesson(lesson)}>
+                                        <FontAwesomeIcon icon={faLock} /> {lesson}
+                                    </li>
                                 ))
                                 }
                             </ul>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styles from '../assets/css/pages/class-lesson.module.css'
+import styles from '../assets/css/pages/class-assessment.module.css'
 import logo from '../assets/img/logoCodelab.png'
 
 import Accordion from 'react-bootstrap/Accordion';
@@ -13,6 +13,7 @@ import CodeEditor from './CodeEditor';
 import TextFormatter from '../components/TextFormatter';
 import lessonContent from '../utils/lessons';
 import lessons from '../utils/data';
+import AssessmentContent from '../components/AssessmentContent';
 
 export default function ClassAssessment() {
     const navigate = useNavigate()
@@ -160,7 +161,7 @@ export default function ClassAssessment() {
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer}>
-                        {/* <TextFormatter lessonContent={lesson}/> */}
+                        <AssessmentContent startButton={handleShow}/>
                     </div>
                 </div>
                     <div className={`${styles.control}`}>
