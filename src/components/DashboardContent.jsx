@@ -17,18 +17,23 @@ import CryptoJS from 'crypto-js';
 
 export const DashboardContent = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
-    useEffect(()=> {
-        const checkLoginStatus = async () => {
-          const loggedIn = await checkLoggedIn();
-          if (loggedIn) {
-            
-          } else {
-            navigate('/login')
-          }
+    useEffect(() => {
+      const checkLoginStatus = async () => {
+        const loggedIn = await checkLoggedIn();
+        setLoading(false); // Set loading to false once check is done
+        if (!loggedIn) {
+          navigate('/login');
         }
-        checkLoginStatus();
-      },[]);
+      };
+  
+      checkLoginStatus();
+    }, [navigate]);
+
+    if (loading) {
+      return <div>Loading...</div>; // You can customize this as needed
+    }
 
     const handleLogout = () => {
         customFetch('/logout', {
