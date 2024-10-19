@@ -9,12 +9,13 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function ProfileSide({info}) {
+    const api = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
 
     const handleLogout = async  () => {
         
         try {
-            const response = await fetch(`https://codelab-edu.com/api/logout`, {
+            const response = await fetch(`${api}/logout`, {
                 method: 'POST',
                 credentials: 'include', // Include cookies with the request
                 headers: {
