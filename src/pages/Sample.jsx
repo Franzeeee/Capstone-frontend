@@ -10,6 +10,7 @@ const Sample = () => {
     const [error, setError] = useState(null); // State to store any errors
     const navigate = useNavigate(); // Get navigate function from react-router-dom
 
+    // Effect to check user authentication status
     useEffect(() => {
         const checkUserAuth = async () => {
             try {
@@ -35,23 +36,23 @@ const Sample = () => {
         };
 
         checkUserAuth(); // Call the function to check user authentication
-    }, []);
+    }, []); // Run once on component mount
 
+    // Effect to handle navigation based on authentication status
     useEffect(() => {
-        // Redirect based on authentication status
         if (isAuthenticated === true) {
             navigate('/dashboard'); // Navigate to dashboard if authenticated
         } else if (isAuthenticated === false) {
             navigate('/login'); // Navigate to login if not authenticated
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate]); // Re-run on isAuthenticated change
 
     // Show loading while checking authentication status
     if (isAuthenticated === null) {
         return <LoadingPage />; // Display loading component while checking
     }
 
-    return null; // Render nothing if already navigated (will not reach here)
+    return null; // No additional rendering required after navigation
 };
 
 export default Sample;
