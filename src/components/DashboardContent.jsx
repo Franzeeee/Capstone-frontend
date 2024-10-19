@@ -19,11 +19,12 @@ export const DashboardContent = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const userData = localStorage.getItem('userData');
-    const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
 
-    if (user === null) {
+    if (!userData) {
       return <div>Loading...</div>; // You can customize this as needed
     }
+
+    const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
 
     useEffect(() => {
       const checkLoginStatus = async () => {
