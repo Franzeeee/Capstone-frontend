@@ -62,7 +62,7 @@ export const Dashboard = () => {
     useEffect(() => {
         if (user.role === 'teacher') {
             // Fetch at least 4 latest classes
-            fetch(`http://localhost:8000/api/classes?teacher_id=${user.id}`, {
+            fetch(`https://codelab-edu.com/api/classes?teacher_id=${user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export const Dashboard = () => {
             toast.error('Please fill in all required fields.');
             return; // Prevent form submission
         }
-        fetch('http://localhost:8000/api/class/create', {
+        fetch('https://codelab-edu.com/api/class/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Specify the content type

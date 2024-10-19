@@ -24,7 +24,7 @@ export default function StudentHome() {
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/student/${user.id}/classes`, {  // Replace with your actual API endpoint
+                const response = await fetch(`https://codelab-edu.com/api/student/${user.id}/classes`, {  // Replace with your actual API endpoint
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

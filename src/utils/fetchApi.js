@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:8000/api';
+const BASE_URL = 'https://codelab-edu.com/apihttps://codelab-edu.com/api';
 
 // Custom fetch function using Promises
 const customFetch = (url, options = {}) => {

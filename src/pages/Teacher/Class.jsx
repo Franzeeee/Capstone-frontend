@@ -31,7 +31,7 @@ export default function Class() {
     // Fetch class information by class code
     const fetchClassInfo = async () => {
         try {
-        const response = await fetch(`http://127.0.0.1:8000/api/class/${code}`);
+        const response = await fetch(`https://codelab-edu.com/api/class/${code}`);
 
         if (!response.ok) {
             // If the response is not OK, throw an error
