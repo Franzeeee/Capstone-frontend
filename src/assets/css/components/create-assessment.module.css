@@ -16,3 +16,23 @@
     background-color: #4A4AC3;
     color : #fff
 }
+.Header{
+    background-color: #DBDBFF;
+}
+.Title{
+    font-weight: 600;
+    color: #5D5DD4;
+}
+.Create{
+    background-color: #5D5DD4;
+    border-radius: 20px;
+}
+.Create :hover{
+    background-color: #4A4AC3;
+}
+.Close{
+    border-radius: 20px;
+}
+.Close:hover{
+    background-color: #424242;
+}

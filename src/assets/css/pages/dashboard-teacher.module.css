@@ -252,21 +252,6 @@
     background-color: #f1f1f1; 
 } */
 
-.cancelButton, .createButton {
-    border: none;
-    outline: none;
-    padding: 5px 15px;
-    border-radius: 5px;
-}
-
-.cancelButton {
-    background-color: rgb(236, 13, 13);
-    color: #fff   
-}
-.createButton {
-    background-color: #4200FF;
-    color: #fff 
-}
 
 div:has(.noClasses) .cardContainer .card{
     grid-template-columns: 1fr;
@@ -290,4 +275,26 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     .activityContainer {
         height: 100%;
     }
+}
+.Header{
+    background-color: #DBDBFF;
+}
+.Title{
+    font-weight: 600;
+    color: #5D5DD4;
+}
+.Create{
+    background-color: #5D5DD4;
+    border-radius: 20px;
+}
+.Create:hover{
+    background-color: #4A4AC3;
+}
+.Close{
+    border-radius: 20px;
+    background-color: #646464;
+    border: none;
+}
+.Close:hover{
+    background-color: #424242;
 }

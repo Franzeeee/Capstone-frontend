@@ -16,6 +16,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import LoadingPage from './LoadingPage.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import ClassCardLoader from '../components/ClassCardLoader.jsx';
+import Button from 'react-bootstrap/Button';
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -168,8 +169,8 @@ export const Dashboard = () => {
                 backdrop="static"
                 keyboard={false}
             >
-                <Modal.Header closeButton>
-                <Modal.Title>Create Class</Modal.Title>
+                <Modal.Header closeButton className={`${styles.Header}`}>
+                <Modal.Title className={`${styles.Title}`}>Create Class</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={handleSubmit}>
@@ -228,8 +229,8 @@ export const Dashboard = () => {
                     </form>
                 </Modal.Body>
                 <Modal.Footer className='border-none'>
-                    <button className={`${styles.cancelButton}`} onClick={toggleShow}>Cancel</button>
-                    <button className={`${styles.createButton}`} onClick={handleSubmit}>Create</button>
+                    <Button className={`${styles.Close}`} onClick={toggleShow} >Cancel</Button>
+                    <Button className={`${styles.Create}`} onClick={handleSubmit}>Create</Button>
                 </Modal.Footer>
             </Modal>
 
