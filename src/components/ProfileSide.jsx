@@ -14,6 +14,7 @@ export default function ProfileSide({info}) {
 
     const handleLogout = async  () => {
         
+        navigate('/login');
         try {
             const response = await fetch(`${api}/logout`, {
                 method: 'POST',
@@ -26,7 +27,6 @@ export default function ProfileSide({info}) {
             if (response.ok) {
                 // Handle successful logout, e.g., redirect to login page
                 localStorage.removeItem('userData');
-                navigate('/login');
             } else {
                 // Handle errors, e.g., display an error message
                 console.error('Logout failed:', response.statusText);
