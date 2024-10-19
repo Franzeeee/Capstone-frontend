@@ -12,7 +12,6 @@ export default function ProfileSide({info}) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        alert('Logging out...')
         navigate('/login');
         localStorage.removeItem('jwt_token')
         localStorage.removeItem('API_TOKEN')

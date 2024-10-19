@@ -18,19 +18,17 @@ import LoadingPage from '../pages/LoadingPage';
 
 export const DashboardContent = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
     const userData = localStorage.getItem('userData');
+    const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
 
     if (!userData) {
       return <LoadingPage />; // You can customize this as needed
     }
 
-    const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
-
     useEffect(() => {
       const checkLoginStatus = async () => {
         const loggedIn = await checkLoggedIn();
-        setLoading(false);
+        return <LoadingPage />
         if (!loggedIn) {
           navigate('/login');
         }
