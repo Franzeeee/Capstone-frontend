@@ -81,14 +81,16 @@ export default function ClassAssessment() {
         // Open the off-canvas
         setShow(true);
 
-        // // Request fullscreen mode
-        // if (document.documentElement.requestFullscreen) {
-        //     document.documentElement.requestFullscreen();
-        // } else if (document.documentElement.webkitRequestFullscreen) { // For Safari
-        //     document.documentElement.webkitRequestFullscreen();
-        // } else if (document.documentElement.msRequestFullscreen) { // For IE/Edge
-        //     document.documentElement.msRequestFullscreen();
-        //}
+        // Request fullscreen mode
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+            blockBackNavigation();
+    window.addEventListener('popstate', blockBackNavigation);
+        } else if (document.documentElement.webkitRequestFullscreen) { // For Safari
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // For IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
     };
 
 
@@ -170,7 +172,7 @@ export default function ClassAssessment() {
                     </div>
                 <Offcanvas show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                     <Offcanvas.Body>
-                        <CodeEditor options={{ mode: 'LessonTest', closeOverlay: () => setShow(false) }} />
+                        <CodeEditor options={{ mode: 'Assessment', closeOverlay: () => setShow(false) }} />
                     </Offcanvas.Body>
                 </Offcanvas>
             </div>

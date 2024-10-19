@@ -25,6 +25,7 @@ import css3 from '../assets/img/css-3.png'
 import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
 import swap1 from '../assets/img/Swap1.png'
 import swap2 from '../assets/img/swap2.png'
+import TimerComponent from '../components/TimerComponent';
 
 const CodeEditor = ({options = {mode: "playground"}}) => {
     const [code, setCode] = useState('');
@@ -571,7 +572,11 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
-                    <div className={`${styles.exit} cursor-pointer`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
+                    { mode === 'Assessment' && (
+                        <TimerComponent />
+                    )
+                    }
+                    <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
                         <FontAwesomeIcon icon={ mode === 'playground' ? faRightFromBracket : faClose}/>
                     </div>
                 </header>
@@ -654,7 +659,51 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                 </div>
                             </div>
                         </div>
-                    <div className={`${styles.aiArea} ${mode === "LessonTest" ? 'd-none' : ''}`}>
+                    <div className={`${mode === 'Assessment' && styles.aiArea}`}>
+                        <div className={`${styles.assessmentContainer}`}>
+                            <div className={`${styles.assessmentHeader}`}>
+                                <button>
+                                    Back
+                                </button>
+                                <p>
+                                    Lesson Assessment
+                                </p>
+                                <button>
+                                    Next
+                                </button>
+                            </div>
+                            <div className={`${styles.assessmentContent}`}>
+                                <div className={`${styles.problemTitle}`}>
+                                    <p>1. Problem title number 1</p>
+                                    <p>Write a code that will ask for name and print the entered name.</p>
+                                </div>
+                                <div className={`${styles.sampleIO}`}>
+                                    <p>Sample Input: </p>
+                                    <ul>
+                                        <li>Enter Name: John Does</li>
+                                    </ul>
+                                    <p>Expected Output: </p>
+                                    <ul>
+                                        <li>Hello John Does!</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className={`${styles.assessmentFooter}`}>
+                                <div className={`${styles.assessmentBtns}`}>
+                                    <button>
+                                        Questions
+                                    </button>
+                                    <button>
+                                        Test Cases
+                                    </button>
+                                </div>
+                                <div className={`${styles.submitButton}`}>
+                                    Submit
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={`${styles.aiArea} ${mode === "LessonTest" || mode === "Assessment" ? 'd-none' : ''}`}>
                         <div className={`${styles.task}`}>
                         <div className={`${styles.taskBox} ${testGenLevel !== 0 ? styles.alignStart : ''}`}>
                             {testGenLevel === 0 ? (
