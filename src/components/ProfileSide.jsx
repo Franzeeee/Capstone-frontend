@@ -6,24 +6,38 @@ import profile from '../assets/img/user.png'
 import { Badge } from 'primereact/badge';
 import { Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../utils/logout';
 
 
 export default function ProfileSide({info}) {
     const navigate = useNavigate();
 
     const handleLogout = async  () => {
-        const success = await logout();
-
-        if (success) {
-            localStorage.removeItem('userData')
-            navigate('/login');
-        } else {
-            // Handle logout failure if needed
-            console.error('Logout was unsuccessful');
-        }
-    }
+        
+        try {
+            const response = await fetch(`https://codelab-edu.com/api/logout`, {
+                method: 'POST',
+                credentials: 'include', // Include cookies with the request
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
     
+            if (response.ok) {
+                // Handle successful logout, e.g., redirect to login page
+                localStorage.removeItem('userData');
+                navigate('/login');
+            } else {
+                // Handle errors, e.g., display an error message
+                console.error('Logout failed:', response.statusText);
+                return false; // Logout failed
+            }
+        } catch (error) {
+            console.error('Error during logout:', error);
+            return false; // Error occurred during logout
+        }
+
+    }
+
     return (
         <>
         <div className={`${styles.profileHeader}`}>
