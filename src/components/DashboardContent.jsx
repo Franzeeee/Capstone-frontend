@@ -28,7 +28,6 @@ export const DashboardContent = () => {
     useEffect(() => {
       const checkLoginStatus = async () => {
         const loggedIn = await checkLoggedIn();
-        return <LoadingPage />
         if (!loggedIn) {
           navigate('/login');
         }
