@@ -1,7 +1,5 @@
 // auth.js
-
-// const BASE_URL = 'https://localhost:8000/api';
-const BASE_URL = 'https://codelab-edu.com/api';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export async function checkLoggedIn() {
     try {

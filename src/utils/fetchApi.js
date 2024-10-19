@@ -1,4 +1,4 @@
-const BASE_URL = 'https://codelab-edu.com/apihttps://codelab-edu.com/api';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 // Custom fetch function using Promises
 const customFetch = (url, options = {}) => {

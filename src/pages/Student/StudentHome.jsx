@@ -20,11 +20,12 @@ export default function StudentHome() {
 
     const [showModal, setShowModal] = useState(false);
     const [classData, setClassData] = useState(null);
+    const api = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch(`https://codelab-edu.com/api/student/${user.id}/classes`, {  // Replace with your actual API endpoint
+                const response = await fetch(`${api}/student/${user.id}/classes`, {  // Replace with your actual API endpoint
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

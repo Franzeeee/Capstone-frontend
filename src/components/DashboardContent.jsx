@@ -28,6 +28,7 @@ export const DashboardContent = () => {
     useEffect(() => {
       const checkLoginStatus = async () => {
         const loggedIn = await checkLoggedIn();
+
         if (!loggedIn) {
           navigate('/login');
         }
@@ -55,6 +56,10 @@ export const DashboardContent = () => {
     }
 
     const [activeKey, setActiveKey] = useState('activities');
+
+    if (!user) {
+      return <LoadingPage />;
+    }
 
   return (
     <div className={`row m-0 overflow-hidden ${styles.row} `}>

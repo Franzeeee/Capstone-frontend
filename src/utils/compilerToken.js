@@ -1,6 +1,8 @@
+const api = process.env.REACT_APP_API_URL;
+
 const compilerToken = async () => {
 
-    return fetch(`https://codelab-edu.com/api/fetchCompilerToken`, {
+    return fetch(`${api}/fetchCompilerToken`, {
         method: 'GET',
     })
     .then(response => {

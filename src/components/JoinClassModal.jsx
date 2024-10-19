@@ -6,11 +6,13 @@ const JoinClassModal = ({ show, handleClose, handleJoinSuccess, studentID }) => 
     const [classCode, setClassCode] = useState('');
     const [error, setError] = useState('');
 
+    const api = process.env.REACT_APP_API_URL;
+
     const handleJoinClass = async () => {
         setError(''); // Reset error message
     
         try {
-          const response = await fetch(`https://codelab-edu.com/api/class/join`, {  // Replace with your actual API endpoint
+          const response = await fetch(`${api}/class/join`, {  // Replace with your actual API endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

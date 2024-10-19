@@ -58,11 +58,12 @@ export const Dashboard = () => {
     const [show, setShow] = useState(false);
 
     const toggleShow = () => setShow(prevShow => !prevShow);
+    const api = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         if (user.role === 'teacher') {
             // Fetch at least 4 latest classes
-            fetch(`https://codelab-edu.com/api/classes?teacher_id=${user.id}`, {
+            fetch(`${api}/classes?teacher_id=${user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ export const Dashboard = () => {
             toast.error('Please fill in all required fields.');
             return; // Prevent form submission
         }
-        fetch('https://codelab-edu.com/api/class/create', {
+        fetch(`${api}/class/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Specify the content type

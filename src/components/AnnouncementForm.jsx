@@ -25,7 +25,7 @@ export default function AnnouncementForm() {
   useEffect(() => {
 
     // Fetch at least 4 latest classes
-    fetch(`https://codelab-edu.com/api/classes?teacher_id=${user.id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/classes?teacher_id=${user.id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
