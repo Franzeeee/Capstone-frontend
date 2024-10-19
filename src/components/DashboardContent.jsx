@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Accordion } from 'react-bootstrap';
 import CryptoJS from 'crypto-js';
+import LoadingPage from '../pages/LoadingPage';
 
 export const DashboardContent = () => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const DashboardContent = () => {
     const userData = localStorage.getItem('userData');
 
     if (!userData) {
-      return <div>Loading...</div>; // You can customize this as needed
+      return <LoadingPage />; // You can customize this as needed
     }
 
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
