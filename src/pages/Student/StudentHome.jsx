@@ -20,7 +20,7 @@ export default function StudentHome() {
 
     const [showModal, setShowModal] = useState(false);
     const [classData, setClassData] = useState(null);
-    const api = process.env.REACT_APP_API_URL;
+    const api = import.meta.env.VITE_API_URL;''
 
     useEffect(() => {
         const fetchClasses = async () => {

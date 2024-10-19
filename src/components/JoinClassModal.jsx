@@ -6,7 +6,7 @@ const JoinClassModal = ({ show, handleClose, handleJoinSuccess, studentID }) => 
     const [classCode, setClassCode] = useState('');
     const [error, setError] = useState('');
 
-    const api = process.env.REACT_APP_API_URL;
+    const api = import.meta.env.VITE_API_URL;
 
     const handleJoinClass = async () => {
         setError(''); // Reset error message

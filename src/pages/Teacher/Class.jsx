@@ -26,6 +26,8 @@ export default function Class() {
     const [classInfo, setClassInfo] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const api  = import.meta.env.VITE_API_URL;
     
     useEffect(() => {
     // Fetch class information by class code
