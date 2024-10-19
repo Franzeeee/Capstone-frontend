@@ -6,17 +6,24 @@ import profile from '../assets/img/user.png'
 import { Badge } from 'primereact/badge';
 import { Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../utils/logout';
 
 
 export default function ProfileSide({info}) {
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        navigate('/login');
-        localStorage.removeItem('jwt_token')
-        localStorage.removeItem('API_TOKEN')
-        localStorage.removeItem('userData')
+    const handleLogout = async  () => {
+        const success = await logout();
+
+        if (success) {
+            localStorage.removeItem('userData')
+            navigate('/login');
+        } else {
+            // Handle logout failure if needed
+            console.error('Logout was unsuccessful');
+        }
     }
+    
     return (
         <>
         <div className={`${styles.profileHeader}`}>

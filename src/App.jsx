@@ -24,8 +24,8 @@ export const App = () => {
 
         <Route element={<ProtectedRoutes />} >
             <Route path="/playground" element={<CodeEditor />} />
-            <Route path="/" element={<Sample />} />
         </Route>
+            <Route path="/" element={<Sample />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
