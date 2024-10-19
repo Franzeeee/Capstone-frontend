@@ -18,11 +18,17 @@ import CryptoJS from 'crypto-js';
 export const DashboardContent = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const userData = localStorage.getItem('userData');
+    const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
+
+    if (user === null) {
+      return <div>Loading...</div>; // You can customize this as needed
+    }
 
     useEffect(() => {
       const checkLoginStatus = async () => {
         const loggedIn = await checkLoggedIn();
-        setLoading(false); // Set loading to false once check is done
+        setLoading(false);
         if (!loggedIn) {
           navigate('/login');
         }
@@ -31,9 +37,6 @@ export const DashboardContent = () => {
       checkLoginStatus();
     }, [navigate]);
 
-    if (loading) {
-      return <div>Loading...</div>; // You can customize this as needed
-    }
 
     const handleLogout = () => {
         customFetch('/logout', {
