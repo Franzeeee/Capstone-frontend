@@ -26,6 +26,7 @@ import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-s
 import swap1 from '../assets/img/Swap1.png'
 import swap2 from '../assets/img/swap2.png'
 import TimerComponent from '../components/TimerComponent';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 const CodeEditor = ({options = {mode: "playground"}}) => {
     const [code, setCode] = useState('');
@@ -537,6 +538,13 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                 }
         };
 
+
+        // Off canvas
+        const [show, setShow] = useState(false);
+
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
             <nav className={`${styles.nav}`}>
@@ -659,7 +667,7 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                 </div>
                             </div>
                         </div>
-                    <div className={`${mode === 'Assessment' && styles.aiArea}`}>
+                    <div className={`${mode === 'Assessment' ? styles.aiArea : "d-none"}`}>
                         <div className={`${styles.assessmentContainer}`}>
                             <div className={`${styles.assessmentHeader}`}>
                                 <button>
@@ -690,7 +698,7 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                             </div>
                             <div className={`${styles.assessmentFooter}`}>
                                 <div className={`${styles.assessmentBtns}`}>
-                                    <button>
+                                    <button onClick={() => setShow(true)}>
                                         Questions
                                     </button>
                                     <button>
@@ -874,6 +882,18 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                     </div>
                 </main>
             </section>
+            <Offcanvas show={show} onHide={handleClose} placement="end">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Questions  List</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body className={`${styles.offCanvasBody}`}>
+                    <ul>
+                        <li>Question 1</li>
+                        <li>Question 2</li>
+                    </ul>
+                </Offcanvas.Body>
+            </Offcanvas>
+
         </div>
     );
 };
