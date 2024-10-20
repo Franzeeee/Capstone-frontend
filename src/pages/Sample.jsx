@@ -45,7 +45,7 @@ const Sample = () => {
         if (!isCheckingAuth) {
             if (isAuthenticated === true) {
                 navigate('/dashboard'); // Navigate to dashboard if authenticated
-            } else if (isAuthenticated === false && !!localsStorage.getItem('API_TOKEN')) {
+            } else if (isAuthenticated === false && !!localStorage.getItem('API_TOKEN')) {
                 navigate('/login'); // Navigate to login if not authenticated
             }
         }
