@@ -24,17 +24,18 @@ export const App = () => {
 
         <Route element={<ProtectedRoutes />} >
             <Route path="/playground" element={<CodeEditor />} />
-        </Route>
-            <Route path="/" element={<Sample />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
+            <Route path='/c/:code' element={<Class />} />
+            <Route path='/c/:code/:lesson' element={<ClassLesson />}/>
+            <Route path='/c/:code/a/:assessment' element={<ClassAssessment />} />
+            <Route path='/announcements' element={<Announcement />} />
+        </Route>
+        
+        <Route path="/" element={<Sample />} />
         <Route path="/login" element={<Login />} />
+
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path='/c/:code' element={<Class />} />
-        <Route path='/c/:code/:lesson' element={<ClassLesson />}/>
-        <Route path='/c/:code/a/:assessment' element={<ClassAssessment />} />
-        <Route path='/loader' element={<LoadingPage />}/>
-        <Route path='/announcements' element={<Announcement />} />
         <Route path="*" element={<NotFound/>} />
 
         <Route path='/sample' element={<Sample />}/>

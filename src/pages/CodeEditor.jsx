@@ -668,7 +668,9 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                             </div>
                         </div>
                     <div className={`${mode === 'Assessment' ? styles.aiArea : "d-none"}`}>
-                        <div className={`${styles.assessmentContainer}`}>
+                        {
+                            mode === 'Assessment' && (
+                                <div className={`${styles.assessmentContainer}`}>
                             <div className={`${styles.assessmentHeader}`}>
                                 <button>
                                     Back
@@ -710,6 +712,8 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                 </div>
                             </div>
                         </div>
+                            )
+                        }
                     </div>
                     <div className={`${styles.aiArea} ${mode === "LessonTest" || mode === "Assessment" ? 'd-none' : ''}`}>
                         <div className={`${styles.task}`}>

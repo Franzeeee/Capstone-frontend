@@ -24,14 +24,20 @@ const Sample = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setIsAuthenticated(!!data); // Set authenticated if data is returned
+                    
+                    // Check for the authentication status in the returned data
+                    if (data.status === "Unauthenticated") {
+                        setIsAuthenticated(false); // User is not authenticated
+                    } else {
+                        setIsAuthenticated(true); // User is authenticated
+                    }
                 } else {
-                    setIsAuthenticated(false); // Not authenticated
+                    setIsAuthenticated(false); // Not authenticated if the response is not ok
                 }
             } catch (error) {
                 console.error('Error checking authentication status:', error);
                 setError('Failed to check authentication status.');
-                setIsAuthenticated(false);
+                setIsAuthenticated(false); // Assume not authenticated on error
             } finally {
                 setIsCheckingAuth(false); // Done checking auth
             }
@@ -45,7 +51,7 @@ const Sample = () => {
         if (!isCheckingAuth) {
             if (isAuthenticated === true) {
                 navigate('/dashboard'); // Navigate to dashboard if authenticated
-            } else if (isAuthenticated === false && !!localStorage.getItem('userData')) {
+            } else if (isAuthenticated === false) {
                 navigate('/login'); // Navigate to login if not authenticated
             }
         }

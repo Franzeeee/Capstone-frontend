@@ -21,10 +21,6 @@ export default function ClassContents({ data, code, className }) {
     const [progress, setProgress] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        console.log('Progress:', progress);
-    }, [progress]);
-
     const isLessonUnlocked = (lessonId) => {
         return progress && progress.last_completed_lesson >= lessonId || user.role === 'teacher';
     };
