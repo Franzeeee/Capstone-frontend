@@ -5,6 +5,7 @@ import LoadingPage from './LoadingPage';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Sample = () => {
+    console.log(BASE_URL); // Make sure this logs an HTTPS URL
     const [isAuthenticated, setIsAuthenticated] = useState(null); // Track if authenticated
     const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Track if we're checking auth
     const [error, setError] = useState(null); // Track errors

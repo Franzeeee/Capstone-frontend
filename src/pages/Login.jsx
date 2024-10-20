@@ -54,7 +54,6 @@ export const Login = () => {
                     return response.json();
                 })
             .then(data => {
-                console.log(data.message);
                 setLoader(false);
 
                 if(data.message === 'Invalid Credintials!'){

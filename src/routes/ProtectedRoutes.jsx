@@ -18,7 +18,6 @@ export const ProtectedRoutes = () => {
                 setIsLoggedIn(loggedIn); // Set loggedIn state
                 checkLoggedIn(loggedIn); // Call utility function to check login
             } catch (error) {
-                console.error('Error checking login status:', error);
                 setIsLoggedIn(false); // On error, assume user is not logged in
             } finally {
                 setIsLoading(false);  // Loading complete
