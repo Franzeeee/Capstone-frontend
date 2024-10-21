@@ -1756,11 +1756,19 @@ print(random_float)  # Output: A random float between 0.0 and 1.0
             random.uniform(a, b): Generates a random floating-point number between two values a and b.
             \`\`\`End
     
-            \`\`\`Title
+            \`\`\`Para
             Practical Use Cases for random Module:
-            \`\`\`List
+            \`\`\`End
+
+            \`\`\`Para
             Simulations: When you need to simulate randomness, such as rolling dice, drawing cards, or modeling probabilistic events.
+            \`\`\`Para
+
+            \`\`\`Para
             Games: For example, creating randomness in a game by placing items in random locations or generating random enemy encounters.
+            \`\`\`Para
+
+            \`\`\`Para
             Randomized Algorithms: Used in various algorithms that require random selection, such as Monte Carlo simulations.
             \`\`\`End
         `
