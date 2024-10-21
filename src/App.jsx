@@ -40,7 +40,6 @@ export const App = () => {
         <Route path="*" element={<NotFound/>} />
 
         <Route path='/sample' element={<Sample />}/>
-        <Route path='/token' element={<TokenTest />} />
       </Routes>
     </BrowserRouter>
   )
