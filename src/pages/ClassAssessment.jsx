@@ -84,7 +84,7 @@ export default function ClassAssessment() {
         // Request fullscreen mode
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
-            blockBackNavigation();
+            // blockBackNavigation();
     window.addEventListener('popstate', blockBackNavigation);
         } else if (document.documentElement.webkitRequestFullscreen) { // For Safari
             document.documentElement.webkitRequestFullscreen();

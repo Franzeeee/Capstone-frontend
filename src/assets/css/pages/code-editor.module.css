@@ -806,15 +806,3 @@ main:has(.assessmentContainer) {
 .offCanvasBody {
     padding: 0;
 }
-.offCanvasBody ul {
-    padding: 0;
-}
-.offCanvasBody ul li {
-    padding: 15px;
-    background-color: #ffffff;
-}
-
-.offCanvasBody ul li:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
-}
