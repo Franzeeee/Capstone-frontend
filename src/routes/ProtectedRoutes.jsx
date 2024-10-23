@@ -1,26 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { checkLoggedIn } from '../utils/auth'; // Utility function for logging check
-import customFetch from '../utils/fetchApi';  // Custom fetch function
+import { checkLoggedIn } from '../utils/auth';
+import customFetch from '../utils/fetchApi'
 import LoadingPage from '../pages/LoadingPage';
 
 export const ProtectedRoutes = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(null); // Manage login state
-    const [isLoading, setIsLoading] = useState(true);   // Manage loading state
+    const [isLoggedIn, setIsLoggedIn] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const checkAuth = async () => {
-            try {
-                const response = await customFetch('/authUser'); // Fetch user authentication status
-                
-                // Assuming the response is a boolean indicating logged-in status
-                const loggedIn = response === true; // Check if the response is true or false
-                setIsLoggedIn(loggedIn); // Set loggedIn state
-                checkLoggedIn(loggedIn); // Call utility function to check login
-            } catch (error) {
-                setIsLoggedIn(false); // On error, assume user is not logged in
-            } finally {
-                setIsLoading(false);  // Loading complete
+            // Check if userData is in localStorage
+            const userData = localStorage.getItem('userData');
+
+            if (userData) {
+                try {
+                    const response = await customFetch('/authUser'); // Fetch user authentication status
+                    
+                    // Check if the response indicates that the user is authenticated
+                    const loggedIn = response === true;
+                    
+                    if (loggedIn) {
+                        setIsLoggedIn(true); // User is authenticated
+                    } else {
+                        setIsLoggedIn(false); // User is not authenticated
+                    }
+                    checkLoggedIn(loggedIn); // Call utility function to check login
+                } catch (error) {
+                    setIsLoggedIn(false); // On error, assume user is not logged in
+                } finally {
+                    setIsLoading(false); // Loading complete
+                }
+            } else {
+                setIsLoggedIn(false); // No userData in localStorage means user is not logged in
+                setIsLoading(false); // Loading complete
             }
         };
 
