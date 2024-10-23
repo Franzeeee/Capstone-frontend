@@ -22,7 +22,6 @@ export async function checkLoggedIn() {
             return false; // You can also log the status or message for debugging
         }
     } catch (error) {
-        console.error('Error checking login status:', error);
         return false; // Return false in case of error
     }
 }

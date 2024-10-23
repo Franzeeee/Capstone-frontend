@@ -32,11 +32,9 @@ const Sample = () => {
                         setIsAuthenticated(true); // User is authenticated
                     }
                 } else {
-                    console.error('Error in API response:', response.statusText);
                     setIsAuthenticated(false); // Not authenticated if the response is not ok
                 }
             } catch (error) {
-                console.error('Error checking authentication status:', error);
                 setError('Failed to check authentication status.');
                 setIsAuthenticated(false); // Assume not authenticated on error
             } finally {
