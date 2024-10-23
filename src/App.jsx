@@ -15,7 +15,6 @@ import Announcement from './pages/Announcement'
 import ClassAssessment from './pages/ClassAssessment'
 import NotFound from './pages/NotFound'
 import Sample from './pages/Sample'
-import TokenTest from './pages/TokenTest'
 
 
 export const App = () => {

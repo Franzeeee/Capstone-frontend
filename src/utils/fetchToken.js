@@ -1,32 +1,27 @@
-const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://api.jdoodle.com/v1';
+import { customFetch } from './api'; // Adjust the import based on your file structure
 
-const getAuthToken = async (clientId, clientSecret) => {
-    const data = {
-        clientId: clientId,
-        clientSecret: clientSecret
-    };
+const fetchToken = async () => {
+    const url = '/fetchCompilerToken'; // Replace with your actual endpoint for fetching the token
 
-    return fetch(`${BASE_URL}/auth-token`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
+    try {
+        const response = await customFetch(url, {
+            method: 'GET',
+        });
+
+        // Check if the response is okay
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            const errorText = await response.text(); // Get raw text for error handling
+            console.error('Error fetching token:', errorText); // Log the error response
+            throw new Error('Failed to fetch token');
         }
-        return response.text(); // Extract token from response text
-    })
-    .then(token => {
-        localStorage.setItem('API_TOKEN', token); // Store token in localStorage
-        return token; // Return token for further use if needed
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        throw error;
-    });
+
+        const data = await response.json(); // Parse response as JSON
+        localStorage.setItem('API_TOKEN', data.token); // Store the token in localStorage
+        return data; // Return the token or desired data
+    } catch (error) {
+        console.error('Error getting auth token:', error);
+        throw error; // Rethrow the error for further handling
+    }
 };
 
-export default getAuthToken;
+export default fetchToken;

@@ -13,7 +13,7 @@ import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
-import getAuthToken from '../utils/fetchToken';
+import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
 import practiceTest from '../assets/img/practice-test.png';
 import pythonPng from '../assets/img/Python_logo.png'
@@ -233,8 +233,7 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
     useEffect(() => {
         const fetchAuthToken = async () => {
             try {
-                const data = await getAuthToken();
-                setAuthToken(data);
+                const data = await fetchToken();
             } catch (error) {
                 console.error('Error getting auth token:', error);
             }
