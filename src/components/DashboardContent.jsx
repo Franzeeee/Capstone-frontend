@@ -48,7 +48,6 @@ export const DashboardContent = () => {
                 response.json()
             })
             .then(data => {
-                console.log(data);
                 navigate('/login');
             })
             .catch(error => {

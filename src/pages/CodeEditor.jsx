@@ -13,7 +13,7 @@ import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
-import getAuthToken from '../utils/fetchToken';
+import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
 import practiceTest from '../assets/img/practice-test.png';
 import pythonPng from '../assets/img/Python_logo.png'
@@ -25,6 +25,9 @@ import css3 from '../assets/img/css-3.png'
 import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
 import swap1 from '../assets/img/Swap1.png'
 import swap2 from '../assets/img/swap2.png'
+import TimerComponent from '../components/TimerComponent';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import QuestionList from '../components/QuestionList';
 
 const CodeEditor = ({options = {mode: "playground"}}) => {
     const [code, setCode] = useState('');
@@ -230,8 +233,7 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
     useEffect(() => {
         const fetchAuthToken = async () => {
             try {
-                const data = await getAuthToken();
-                setAuthToken(data);
+                const data = await fetchToken();
             } catch (error) {
                 console.error('Error getting auth token:', error);
             }
@@ -536,6 +538,82 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                 }
         };
 
+
+        // Off canvas
+        const [show, setShow] = useState(false);
+
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+
+        const [assessmentTimer, setAssessmentTimer] = useState(0);
+        const [assessmentData, setAssessmentData] = useState([
+            {
+                id: 0,
+                isActive: true,
+                title: "Print Hello Mars!",
+                description: "Write a code that will print 'Hello Mars!'",
+                testCase: {
+                    input: "",
+                    output: "Hello Mars!"
+                },
+                code: "",
+            },
+            {
+                id: 1,
+                isActive: false,
+                title: "Add two integers",
+                description: "Write a code that will add two integers",
+                testCase: {
+                    input: "Enter num1: 2\nEnter num2: 3",
+                    output: "5"
+                },
+                code: "",
+            },
+            
+        ]);
+
+        const [activeAssessment, setActiveAssessment] = useState(assessmentData.find(assessment => assessment.isActive));
+
+        const handleChangeAssessment = (id) => {
+            if (id >= assessmentData.length) return; // Stop if id is not valid
+            setActiveAssessment(assessmentData.find(assessment => assessment.id === id));
+            setAssessmentData(prevData => 
+                prevData.map(assessment => 
+                    assessment.id === id 
+                    ? { ...assessment, isActive: true } 
+                    : { ...assessment, isActive: false }
+                )
+            );
+
+            setCode(assessmentData.find(assessment => assessment.id === id).code);
+        };
+
+        const handlePreviosAssessment = () => {
+            const index = activeAssessment.id - 1;
+            if (index >= 0) {
+                handleChangeAssessment(index);
+            }
+        }
+
+        const updateCode = (newCode) => {
+            setCode(newCode);
+            
+            if(mode === 'Assessment') {
+                setAssessmentData(prevData => 
+                    prevData.map(assessment => 
+                        assessment.id === activeAssessment.id 
+                        ? { ...assessment, code: newCode } 
+                        : assessment
+                    )
+                );
+            }
+        };
+
+        const finishedAssessmentTimer = () => {
+            setAssessmentTimer(0);
+            alert("Time's up! Please submit your code.");
+        };
+
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
             <nav className={`${styles.nav}`}>
@@ -571,7 +649,11 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
-                    <div className={`${styles.exit} cursor-pointer`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
+                    { mode === 'Assessment' && (
+                        <TimerComponent time={5} finishedTime={finishedAssessmentTimer}/>
+                    )
+                    }
+                    <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
                         <FontAwesomeIcon icon={ mode === 'playground' ? faRightFromBracket : faClose}/>
                     </div>
                 </header>
@@ -594,7 +676,7 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                     }
                                 }}
                                 onBeforeChange={(editor, data, value) => {
-                                    setCode(value);
+                                    updateCode(value);
                                 }}
                                 className={`${styles.codeMirror}`}
                                 
@@ -654,7 +736,72 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                 </div>
                             </div>
                         </div>
-                    <div className={`${styles.aiArea} ${mode === "LessonTest" ? 'd-none' : ''}`}>
+                    <div className={`${mode === 'Assessment' ? styles.aiArea : "d-none"}`}>
+                        {
+                            mode === 'Assessment' && (
+                                <div className={`${styles.assessmentContainer}`}>
+                            <div className={`${styles.assessmentHeader}`}>
+                                <button onClick={() => handlePreviosAssessment()}>
+                                    Back
+                                </button>
+                                <p>
+                                    Lesson Assessment
+                                </p>
+                                <button onClick={() => handleChangeAssessment(activeAssessment.id + 1)}>
+                                    Next
+                                </button>
+                            </div>
+                            { activeAssessment && (
+                                <div className={`${styles.assessmentContent}`}>
+                                <div className={`${styles.problemTitle}`}>
+                                    <p>{activeAssessment.id + 1}. {activeAssessment.title}</p>
+                                    <p>{activeAssessment.description}</p>
+                                </div>
+                                <div className={`${styles.sampleIO}`}>
+                                    
+                                    {
+                                        activeAssessment.testCase.input === "" ? "" : (
+                                            <>
+                                                <p>Sample Input: </p>
+                                                <ul>
+                                                    {activeAssessment.testCase.input.split('\n').map((line, index) => (
+                                                        <li key={index}>{line}</li>
+                                                    ))}
+                                                </ul>
+                                            </>
+                                        )
+                                    }
+                                    <p>Expected Output: </p>
+                                    {
+                                        activeAssessment.testCase.output === "" ? "" : (
+                                            <ul>
+                                                {activeAssessment.testCase.output.split('\n').map((line, index) => (
+                                                    <li key={index}>{line}</li>
+                                                ))}
+                                            </ul>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                            )}
+                            <div className={`${styles.assessmentFooter}`}>
+                                <div className={`${styles.assessmentBtns}`}>
+                                    <button onClick={() => setShow(true)}>
+                                        Questions
+                                    </button>
+                                    <button>
+                                        Test Cases
+                                    </button>
+                                </div>
+                                <div className={`${styles.submitButton}`}>
+                                    Submit
+                                </div>
+                            </div>
+                        </div>
+                            )
+                        }
+                    </div>
+                    <div className={`${styles.aiArea} ${mode === "LessonTest" || mode === "Assessment" ? 'd-none' : ''}`}>
                         <div className={`${styles.task}`}>
                         <div className={`${styles.taskBox} ${testGenLevel !== 0 ? styles.alignStart : ''}`}>
                             {testGenLevel === 0 ? (
@@ -825,6 +972,15 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                     </div>
                 </main>
             </section>
+            <Offcanvas show={show} onHide={handleClose} placement="end">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Questions  List</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body className={`${styles.offCanvasBody}`}>
+                    <QuestionList data={assessmentData} handleChangeAssessment={handleChangeAssessment}/>
+                </Offcanvas.Body>
+            </Offcanvas>
+
         </div>
     );
 };

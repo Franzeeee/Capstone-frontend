@@ -126,7 +126,6 @@ export const Register = () => {
         body: JSON.stringify(formData)
       })
         .then(response => {
-          console.log(response)
           const url = response.url === 'http://localhost:5173/';
           if(response.statusText === 'OK' && url){
             return {"message": "Duplicate"}
@@ -134,7 +133,6 @@ export const Register = () => {
           return response.json();
         })
         .then(data => {
-          console.log(data.message)
           if(data.message === "Duplicate"){
             toast.error("Email already exists!")
             return
@@ -149,7 +147,6 @@ export const Register = () => {
                     return response.json();
                 })
             .then(data => {
-                console.log(data.message);
 
                 if(data.message === 'Invalid Credintials!'){
                     toast.error(data.message)
