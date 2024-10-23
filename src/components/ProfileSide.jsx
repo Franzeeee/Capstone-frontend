@@ -64,7 +64,6 @@ export default function ProfileSide({ info }) {
       </div>
       <div className={`${styles.schedule}`}>
         <p className={`${styles.scheduleText}`}>Tooday's Schedule</p>
-
         <div className={`${styles.activityContainer}`}>
           <div className={`${styles.card}`}>
             <div className={`${styles.activityInfo}`}>
