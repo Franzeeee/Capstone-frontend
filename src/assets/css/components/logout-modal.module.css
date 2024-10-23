@@ -1,0 +1,27 @@
+.logoutContainer {
+  display: inline-block;
+  text-align: center;
+  align-content: center;
+  width: fit-content;
+  left: 38%;
+}
+.Title {
+  font-weight: 600;
+  color: #5d5dd4;
+  padding-top: 10px;
+}
+.Logout {
+  background-color: #5d5dd4;
+  border-radius: 20px;
+  margin: 5px;
+}
+.Logout :hover {
+  background-color: #4a4ac3;
+}
+.Close {
+  border-radius: 20px;
+  margin: 5px;
+}
+.Close:hover {
+  background-color: #424242;
+}
