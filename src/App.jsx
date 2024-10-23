@@ -37,8 +37,6 @@ export const App = () => {
 
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound/>} />
-
-        <Route path='/sample' element={<Sample />}/>
       </Routes>
     </BrowserRouter>
   )
