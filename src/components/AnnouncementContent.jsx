@@ -17,7 +17,6 @@ export default function AnnouncementContent({data}) {
         customFetch(`/announcement/fetch?user_id=${user.id}`)
             .then(data => {
                 setAnnouncements(data);
-                console.log('Data:', data);
             })
             .catch(error => {
                 console.error('Error:', error.message);

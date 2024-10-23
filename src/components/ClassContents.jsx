@@ -35,7 +35,6 @@ export default function ClassContents({ data, code, className }) {
     useEffect(() => {
         customFetch(`/student/progress?student_id=${user.id}`)
             .then(data => {
-                console.log('Fetched Data:', data);
                 setProgress(data.filter(item => item.course_class_id === courseId)[0]);
                 toast.dismiss();
             })
