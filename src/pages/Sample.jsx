@@ -5,7 +5,6 @@ import LoadingPage from './LoadingPage';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Sample = () => {
-    console.log(BASE_URL); // Make sure this logs an HTTPS URL
     const [isAuthenticated, setIsAuthenticated] = useState(null); // Track if authenticated
     const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Track if we're checking auth
     const [error, setError] = useState(null); // Track errors
@@ -33,6 +32,7 @@ const Sample = () => {
                         setIsAuthenticated(true); // User is authenticated
                     }
                 } else {
+                    console.error('Error in API response:', response.statusText);
                     setIsAuthenticated(false); // Not authenticated if the response is not ok
                 }
             } catch (error) {
@@ -61,6 +61,11 @@ const Sample = () => {
     // Show loading page while checking authentication
     if (isCheckingAuth) {
         return <LoadingPage />; // Display loading component
+    }
+
+    // If there is an error, show the error
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return null; // Nothing to display after navigation
