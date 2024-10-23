@@ -1,5 +1,3 @@
-const CryptoJS = require("crypto-js");
-
 // auth.js
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -18,9 +16,6 @@ export async function checkLoggedIn() {
 
         if (response.ok) {
             const data = await response.json(); // Optionally retrieve the data
-            const stringData = JSON.stringify(data);
-            const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
-            localStorage.setItem('userData', hashedData);
             return data; // Return user data or true if you just want a boolean
         } else {
             // User is not logged in or some other error occurred
