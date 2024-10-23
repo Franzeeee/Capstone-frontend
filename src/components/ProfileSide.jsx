@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../assets/css/components/profile-side.module.css";
 import {
   faBell,
@@ -12,25 +12,31 @@ import { Badge } from "primereact/badge";
 import { Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/logout";
+import LogoutConfirmationModal from "./LogoutConfirmationModal";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    const success = await logout();
+  const [showModal, setShowModal] = useState(false);
 
-    if (success) {
-      localStorage.removeItem("userData");
-      navigate("/login");
-    } else {
-      // Handle logout failure if needed
-      console.error("Logout was unsuccessful");
-    }
-  };
+  const handleClose = () => setShowModal(false);
+
+  // const handleLogout = async () => {
+  //   const success = await logout();
+
+  //   if (success) {
+  //     localStorage.removeItem("userData");
+  //     navigate("/login");
+  //   } else {
+  //     // Handle logout failure if needed
+  //     console.error("Logout was unsuccessful");
+  //   }
+  // };
 
   return (
     <>
       <div className={`${styles.profileHeader}`}>
+        <LogoutConfirmationModal show={showModal} handleClose={handleClose}/> 
         <p className={`${styles.profileText}`}>Profile</p>
         <Dropdown>
           <Dropdown.Toggle
@@ -47,7 +53,7 @@ export default function ProfileSide({ info }) {
         </Dropdown>
         <Dropdown>
           <Dropdown.Toggle
-            onClick={handleLogout}
+            onClick={() => setShowModal(true)}
             as="div"
             title="Sign Out"
             className={`${styles.notification} ${styles.customDropdownToggle} pi pi-sign-out`}

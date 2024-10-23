@@ -4,10 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import styles from "../assets/css/components/logout-modal.module.css";
 import { logout } from "../utils/logout";
 
-export default function LogoutConfirmationModal() {
-  const [show, setShow] = useState(true);
-
-  const handleClose = () => setShow(false);
+export default function LogoutConfirmationModal({show, handleClose}) {
 
   const handleLogout = async () => {
     const success = await logout();
