@@ -1,0 +1,63 @@
+.modalContainer {
+    border-radius: 5px !important;
+    padding: 1.5rem !important;
+}
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    text-align: center;
+}
+.modalFooter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+.modalFooter button {
+    padding: 5px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+.modalFooter .Close {
+    background-color: #f73a3ae4 !important;
+    color: white;
+    transition: all .3s ease;
+}
+.modalFooter .Close:hover {
+    background-color: #f31a1a !important;
+}
+.modalFooter .Confirm {
+    background-color: #5D5DD4;
+    color: white;
+    transition: all .3s ease;
+}
+.modalFooter .Confirm:hover {
+    background-color: #4A4AC3;
+}
+
+.icon {
+    color: red;
+    font-size: 1.4rem;
+    margin-bottom: .5rem;
+    background-color: rgba(228, 228, 228, 0.367);
+    border-radius: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    padding: 2px;
+}
+.modalTitle {
+    font-size: .95rem;
+    font-weight: 700 !important;
+    margin-bottom: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+.modalBody {
+    font-size: .9rem;
+    font-family: 'Montserrat', sans-serif;
+}

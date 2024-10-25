@@ -62,15 +62,25 @@
     max-height: 300px !important;
 }
 .accordionBody ul {
-    padding: 0 25px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 .accordionBody ul li {
-    padding: 5px 0;
+    padding: 10px;
     cursor: pointer;
-    list-style: disc;
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    border-radius: 5px;
+    gap: 3px;
+}
+.accordionBody ul .active {
+    background-color: #ebebffb1;
+}
+.accordionBody ul li svg {
+    color: #606060ea;
 }
 .accordion {
     border: none;
