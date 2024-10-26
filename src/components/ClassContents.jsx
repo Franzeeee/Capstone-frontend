@@ -48,7 +48,7 @@ export default function ClassContents({ data, code, className }) {
     return (
         <div className={styles.contentContainer}>
             {
-                progress === null && "No progress data available"
+                progress === null && "Loading..."
             }
             {progress !== null && lessons.map((lesson, index) => (
                 <React.Fragment key={lesson.id}>

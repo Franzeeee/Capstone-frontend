@@ -1,7 +1,7 @@
 .createContainer {
     padding: 5px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 5px;
 }
 .createContainer p {
@@ -12,6 +12,7 @@
     cursor: pointer;
     transition: all .3s ease;
     max-height: 33px;
+    font-size: .8rem !important;
 
 }
 .createContainer p:hover {
@@ -37,4 +38,29 @@
 }
 .Close:hover{
     background-color: #424242;
+}
+.buttonContainer {
+    display: flex;
+    gap: 10px;
+}
+.menuContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.menuContainer ul{
+    display: flex;
+    gap: 5px;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.menuContainer ul li{
+    list-style: none;
+    cursor: pointer;
+    padding-inline: 5px;
+    color: #424242ac;
+}
+.menuContainer ul li.active, .menuContainer ul li:hover{
+    color: #5D5DD4;
+    border-bottom: 2px solid #5D5DD4;
 }

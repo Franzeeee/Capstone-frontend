@@ -28,6 +28,8 @@ export default function Class() {
     const [loading, setLoading] = useState(true);
 
     const api  = import.meta.env.VITE_API_URL;
+
+    const [activePage, setActivePage] = useState("default");
     
     useEffect(() => {
     // Fetch class information by class code
@@ -62,6 +64,9 @@ export default function Class() {
     return <p>Error: {error}</p>;
     }
     
+    const handleActivePage = (page) => {
+        setActivePage(page);
+    }
 
     return (
         <HomeTemplate>
@@ -82,8 +87,20 @@ export default function Class() {
                     {
                         user.role === 'teacher' && <AnnouncementForm />
                     }
-                    <CreateAssessment />
-                    <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
+                    <CreateAssessment handleChangePage={handleActivePage}/>
+                    {
+                        activePage === 'default' && <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
+                    }
+                    {
+                        activePage === 'classwork' && <p>Classwork</p>
+                    }
+                    {
+                        activePage === 'announcement' && <p>Announement</p>
+                    }
+                    {
+                        activePage === 'people' && <p>People</p>
+                    }
+
                 </div>
 
                 <div className={`${styles.profileContainer}`}>
