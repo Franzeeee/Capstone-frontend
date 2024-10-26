@@ -122,7 +122,7 @@ export const Dashboard = () => {
                     section: formData.section,
                     schedule: formData.schedule,
                     room: formData.room,
-                    class_code: {code: data.code}
+                    class_code: data.classCode
                 };
             
                 // Check if the length is 4 or greater
@@ -253,7 +253,7 @@ export const Dashboard = () => {
                                 <div key={index} className={`${styles.courseCard}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
                                     <p>{classItem.name}</p>
                                     <p>{classItem.section} ( {classItem.schedule} {classItem.room} )</p>
-                                    <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "No Code"}</p>
+                                    <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "Refresh Site"}</p>
                                 </div>
                             ))
                         ) : (

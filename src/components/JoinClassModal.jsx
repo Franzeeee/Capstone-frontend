@@ -14,6 +14,7 @@ const JoinClassModal = ({ show, handleClose, handleJoinSuccess, studentID }) => 
         try {
           const response = await fetch(`${api}/class/join`, {  // Replace with your actual API endpoint
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 },

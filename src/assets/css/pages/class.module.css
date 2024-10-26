@@ -13,7 +13,7 @@
     overflow: auto;
 }
 .contentContainer::-webkit-scrollbar {
-    display: none;
+    display: 2px;
 }
 .contentContainer .header {
     width: 100%;

@@ -33,7 +33,9 @@ export default function Class() {
     // Fetch class information by class code
     const fetchClassInfo = async () => {
         try {
-        const response = await fetch(`${api}/class/${code}`);
+        const response = await fetch(`${api}/class/${code}`, {
+            credentials: 'include'
+        });
 
         if (!response.ok) {
             // If the response is not OK, throw an error
@@ -77,7 +79,9 @@ export default function Class() {
                             <p>{classInfo?.name}</p>
                         </div>
                     </div>
-                    <AnnouncementForm />
+                    {
+                        user.role === 'teacher' && <AnnouncementForm />
+                    }
                     <CreateAssessment />
                     <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
                 </div>
