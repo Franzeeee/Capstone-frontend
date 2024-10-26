@@ -10,7 +10,7 @@
     grid-template-rows: auto auto 1fr;
     padding: 0 1rem;
     height: 97svh;
-    overflow: auto;
+    overflow: hidden;
 }
 .contentContainer::-webkit-scrollbar {
     display: 2px;

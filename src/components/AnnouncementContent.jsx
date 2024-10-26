@@ -11,6 +11,8 @@ export default function AnnouncementContent({data}) {
     const userData = localStorage.getItem('userData');
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
 
+    const [announcements, setAnnouncements] = useState([]);
+
     useEffect(() => {
         customFetch(`/announcement/fetch?user_id=${user.id}`)
             .then(data => {

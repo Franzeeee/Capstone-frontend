@@ -70,7 +70,7 @@ export default function CreateAssessment({handleChangePage}) {
                 </ul>
             </div>
             <div className={styles.buttonContainer}>
-                <p onClick={handleConfirmation}>Test</p>
+                <p onClick={handleConfirmation}>Test Modal</p>
                 <p onClick={handleShow}>+ Create Assessment</p>
             </div>
         </div>
