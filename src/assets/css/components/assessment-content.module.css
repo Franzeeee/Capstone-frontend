@@ -4,8 +4,8 @@
     flex-direction: column;
     max-height: 300px;
     position: relative;
-    min-width: 550px;
-    width: 100%;
+    min-width: 500px;
+    width: 70%;
     align-items: start;
     justify-content: center;
     border-radius: 5px;
@@ -107,4 +107,16 @@
     color: #818181 !important;
     cursor: not-allowed !important;
     border: none !important;
+}
+
+.robotContainer {
+    width: 150px;
+    position: absolute;
+    right: -8rem;
+    top: 0;
+    overflow: visible;
+}
+.robotContainer img {
+    width: 100%;
+    aspect-ratio: 1;
 }

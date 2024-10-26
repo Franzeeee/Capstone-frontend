@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../assets/css/components/assessment-content.module.css';
 import questionMark from '../assets/img/assessment-img1.png';
-import happy from '../assets/img/assessment-pass.png';
+import happy from '../assets/img/perfect-assessment-robot.png';
 import sad from '../assets/img/assessment-fail.png';
 
 export default function AssessmentContent({ status = 'pending', startButton }) {
@@ -36,7 +36,7 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
                         </li>
                         <li>
                             <p>Overall Points</p>
-                            <LoadingBar progress={35} status={status} />
+                            <LoadingBar progress={0} status={status} />
                             <p>--/100</p>
                         </li>
                         <li>
@@ -47,7 +47,7 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
                     </ul>
                 </div>
                 <div className={styles.controls}>
-                    <button onClick={handleBtn}>Cancel</button>
+                    <button onClick="">View Ranking</button>
                     <button onClick={handleBtn}>Start Assessment</button>
                 </div>
             </div>
@@ -79,10 +79,14 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
                             <p>12th</p>
                         </li>
                     </ul>
+                    {/* <div className={styles.robotContainer}>
+                        <img src={imageUsed} alt="" />
+                        <p>{phraseUsed}</p>
+                    </div> */}
                 </div>
                 <div className={styles.controls}>
-                    <button onClick={handleBtn}>View Ranking</button>
-                    <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>Start Assessment</button>
+                    <button onClick="">View Ranking</button>
+                    <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>View Feedback</button>
                 </div>
             </div>
             }

@@ -12,10 +12,12 @@ import CodeEditor from './CodeEditor';
 import AssessmentContent from '../components/AssessmentContent';
 import lessons from '../utils/data';
 import ExitScreen from '../components/ExitScreen';
+import perfectRobot from '../assets/img/perfect-assessment-robot.png';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
     const location = useLocation();
+    
     
     const [startAssessment, setStartAssessment] = useState(false);
     const [inFullscreen, setInFullscreen] = useState(false);
@@ -108,7 +110,7 @@ export default function ClassAssessment() {
                 <div className={`${styles.lessons}`}>
                     <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="0" className={styles.accordion}>
-                            <Accordion.Header className={styles.accordionHeader}>Hello World</Accordion.Header>
+                            <Accordion.Header className={styles.accordionHeader}>Default</Accordion.Header>
                             <Accordion.Body className={styles.accordionBody}>
                                 <ul>
                                     {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (
@@ -119,24 +121,10 @@ export default function ClassAssessment() {
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey="1" className={styles.accordion}>
-                            <Accordion.Header className={styles.accordionHeader}>Loops</Accordion.Header>
+                            <Accordion.Header className={styles.accordionHeader}>Classworks</Accordion.Header>
                             <Accordion.Body className={styles.accordionBody}>
-                                <ul>
-                                    <li>While Loop</li>
-                                    <li>Do While Loop</li>
-                                    <li>For Loop</li>
-                                    <li>Foreach Loop</li>
-                                </ul>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        <Accordion.Item eventKey="2" className={styles.accordion}>
-                            <Accordion.Header className={styles.accordionHeader}>Array</Accordion.Header>
-                            <Accordion.Body className={styles.accordionBody}>
-                                <ul>
-                                    <li>Introduction to Arrays</li>
-                                    <li>Array Methods</li>
-                                    <li>Multidimensional Arrays</li>
-                                    <li>Array Iteration</li>
+                                <ul className={styles.classworkContainer}>
+                                    <li>No Classwork Yet.</li>
                                 </ul>
                             </Accordion.Body>
                         </Accordion.Item>
@@ -154,8 +142,12 @@ export default function ClassAssessment() {
                     </ul>
                 </div>
                 <div className={styles.lessonContent}>
-                    <div className={styles.contentContainer}>
-                        <AssessmentContent status='pass' startButton={handleShow}/>
+                    <div className={styles.contentContainer} style={{width: '80%'}}>
+                        <AssessmentContent status='pending' startButton={handleShow}/>
+                        {/* <div className={styles.robotContainer}>
+                            <img src={perfectRobot} alt="" />
+                            <p>Great did an excellent job!</p>
+                        </div> */}
                     </div>
                 </div>
                     <div className={`${styles.control}`}>

@@ -69,6 +69,7 @@ export const Dashboard = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include'
             })
                 .then(response => {
                     if (!response.ok) {
@@ -97,6 +98,7 @@ export const Dashboard = () => {
             headers: {
                 'Content-Type': 'application/json', // Specify the content type
             },
+            credentials: 'include',
             body: JSON.stringify(formData),
         })
         .then( async response => {

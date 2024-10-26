@@ -59,7 +59,7 @@
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
     border: none;
-    max-height: 300px !important;
+    max-height: 350px !important;
 }
 .accordionBody ul {
     padding: 0;
@@ -212,4 +212,42 @@
 
 .dataList li{
     list-style: disc;
+}
+.contentContainer {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.robotContainer {
+    width: 150px;
+}
+.robotContainer img {
+    width: 100%;
+    aspect-ratio: 1;
+}
+.robotContainer p {
+    position: absolute;
+    top: 0;
+    right: -1rem;
+    padding: 10px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px 20px 20px 0px;
+    border: 1.4px solid #9696e7;
+    max-width: 150px;
+    transform: translateY(-25%) translateX(60%);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.classworkContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+.classworkContainer li {
+    grid-template-columns: 1fr !important;
 }
