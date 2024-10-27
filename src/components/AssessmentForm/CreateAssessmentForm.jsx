@@ -9,12 +9,16 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        dueDate: '00:00:00',
-        timeLimit: null,
+        time_limit: '00:00:00',
+        time_limit: null,
+        due_date: null,
+        points: 100,
         coding_problems: [],
     });
 
     const [addingProblem, setAddingProblem] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingIndex, setEditingIndex] = useState(null);
     const [tempProblem, setTempProblem] = useState({
         problem_title: '',
         problem_description: '',
@@ -42,6 +46,7 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
                 problem_description: '',
                 sample_input: '',
                 expected_output: '',
+                points: 100,
             });
             setAddingProblem(false);
         }
@@ -59,6 +64,7 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
 
     const cancelAddingPoblem = () => {
         setAddingProblem(false);
+        setIsEditing(false);
         setTempProblem({
             problem_title: '',
             problem_description: '',
@@ -66,6 +72,40 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
             expected_output: '',
         });
     }
+
+    const handleDeleteProblem = (index) => {
+        const newProblems = formData.coding_problems.filter((problem, i) => i !== index);
+        setFormData((prevData) => ({ ...prevData, coding_problems: newProblems }));
+    };
+
+    const handleEditProblem = (index) => {
+        setIsEditing(true);
+        setTempProblem(formData.coding_problems[index]);
+        setAddingProblem(true);
+        setEditingIndex(index);
+    }
+    const handleUpdateProblem = () => {
+        if (tempProblem.problem_title && tempProblem.problem_description && tempProblem.sample_input && tempProblem.expected_output) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                coding_problems: prevFormData.coding_problems.map((problem, i) =>
+                    i === editingIndex ? { ...tempProblem } : problem
+                ),
+            }));
+    
+            // Reset editing state and clear tempProblem
+            setTempProblem({
+                problem_title: '',
+                problem_description: '',
+                sample_input: '',
+                expected_output: '',
+            });
+    
+            setAddingProblem(false);
+            setIsEditing(false);
+        }
+    };
+    
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -130,13 +170,13 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
                             className={styles.control}
                         />
                     </Form.Group>
-                    <Form.Group className={`${styles.formGroup} mb-2`} controlId="timeLimit">
+                    <Form.Group className={`${styles.formGroup} mb-2`} controlId="time_limit">
                         <Form.Label className={styles.formLabel}>Time Limit (hh:mm:ss)</Form.Label>
                         <Form.Control
                             type="text"
-                            name="timeLimit"
+                            name="time_limit"
                             placeholder="00:00:00"
-                            value={formData.timeLimit}
+                            value={formData.time_limit}
                             onChange={handleChange}
                             className={styles.control}
                         />
@@ -154,9 +194,9 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
                         { formData.coding_problems.length !== 0 && !addingProblem ? (
                             formData.coding_problems.map((problem, index) => (
                                 <Accordion className={styles.accordion}>
-                                    <Accordion.Item eventKey={index}>
+                                    <Accordion.Item eventKey={index} style={{marginBottom: '5px'}}>
                                         <Accordion.Header>{problem.problem_title}</Accordion.Header>
-                                        <Accordion.Body>
+                                        <Accordion.Body className={styles.accordionBody}>
                                             <div className={styles.accordionDescription}>
                                                 <p>Description: </p>
                                                 <p>{problem.problem_description}</p>
@@ -170,8 +210,8 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
                                                 <p>{problem.expected_output}</p>
                                             </div>
                                             <div className={styles.EDBtnContainer}>
-                                                <button className={styles.BTN}><FontAwesomeIcon icon={faPenToSquare} style={{ color: 'blue' }}  /></button>
-                                                <button className={styles.BTN}><FontAwesomeIcon icon={faTrashCan} style={{ color: 'red' }}/></button>
+                                                <button type='button' onClick={() => handleEditProblem(index)} className={styles.BTN}><FontAwesomeIcon icon={faPenToSquare} style={{ color: 'blue' }}  /></button>
+                                                <button type='button' onClick={() => handleDeleteProblem(index)} className={styles.BTN}><FontAwesomeIcon icon={faTrashCan} style={{ color: 'red' }}/></button>
                                             </div>
                                         </Accordion.Body>
                                     </Accordion.Item>
@@ -228,7 +268,8 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
                             </div>
                             <div className={styles.problemButtons}>
                                 <button onClick={cancelAddingPoblem} style={{display: `${formData.coding_problems.length === 0 ? "none" : "block" }`}}>Cancel</button>
-                                <button type="button" onClick={handleAddProblem}>{formData.coding_problems.length === 0 || !addingProblem ? "Add Problem" : "New Problem" }</button>
+                                <button type="button" style={{display: `${!isEditing ? 'block' : 'none'}`}} onClick={handleAddProblem}>{formData.coding_problems.length === 0 || !addingProblem ? "Add Problem" : "New Problem" }</button>
+                                <button type="button" style={{display: `${isEditing ? 'block' : 'none'}`}} className={styles.saveUpdate} onClick={handleUpdateProblem}>Save Update</button>
                             </div>
                         </div>
                         )}

@@ -14,6 +14,9 @@ import LoadingPage from '../LoadingPage';
 import ProfileSide from '../../components/ProfileSide';
 import CreateAssessment from '../../components/CreateAssessment';
 import AnnouncementContent from '../../components/AnnouncementContent';
+import Classwork from '../../components/Classwork';
+
+
 
 
 export default function Class() {
@@ -88,12 +91,12 @@ export default function Class() {
                     {
                         user.role === 'teacher' && <AnnouncementForm />
                     }
-                    <CreateAssessment handleChangePage={handleActivePage}/>
+                    <CreateAssessment classId={classInfo.id} handleChangePage={handleActivePage}/>
                     {
                         activePage === 'default' && <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
                     }
                     {
-                        activePage === 'classwork' && <p>Classwork</p>
+                        activePage === 'classwork' && <Classwork classId={classInfo.id} />
                     }
                     {
                         activePage === 'announcement' && <AnnouncementContent />

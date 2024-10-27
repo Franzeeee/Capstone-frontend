@@ -58,7 +58,7 @@
     
 }
 .accordion h2 button {
-    background: rgb(246, 246, 246) !important;
+    background: rgb(249, 249, 249) !important;
     font-size: .9rem !important;
     font-weight: 600 !important;
     font-family: 'Montserrat', sans-serif !important;
@@ -84,6 +84,10 @@
 }
 .addProblem:hover {
     color: #0000ff;
+}
+.saveUpdate {
+    background-color: #5C5CD1;
+    color: #fff;
 }
 .cancelCanvas {
     border: none;
@@ -115,6 +119,10 @@
   }
 
 .BTN:hover {
-    background-color: rgb(186, 184, 184);
+    background-color: rgba(217, 217, 217, 0.774);
     border-radius:5px;  
   }
+
+.accordionBody {
+    min-height: 180px;
+}
