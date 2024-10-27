@@ -39,6 +39,7 @@ export default function NewEventForm({ open, onClose, onAddEvent }) {
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={modalStyle}>
+        <span>Add Event</span>
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
