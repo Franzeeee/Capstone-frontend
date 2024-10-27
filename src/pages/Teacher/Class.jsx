@@ -26,12 +26,14 @@ export default function Class() {
     const [classInfo, setClassInfo] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const api  = import.meta.env.VITE_API_URL;
     
     useEffect(() => {
     // Fetch class information by class code
     const fetchClassInfo = async () => {
         try {
-        const response = await fetch(`http://127.0.0.1:8000/api/class/${code}`);
+        const response = await fetch(`${api}/class/${code}`);
 
         if (!response.ok) {
             // If the response is not OK, throw an error

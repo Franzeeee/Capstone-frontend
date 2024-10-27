@@ -20,11 +20,12 @@ export default function StudentHome() {
 
     const [showModal, setShowModal] = useState(false);
     const [classData, setClassData] = useState(null);
+    const api = import.meta.env.VITE_API_URL;''
 
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/student/${user.id}/classes`, {  // Replace with your actual API endpoint
+                const response = await fetch(`${api}/student/${user.id}/classes`, {  // Replace with your actual API endpoint
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -44,7 +45,6 @@ export default function StudentHome() {
         };
 
         fetchClasses();
-        console.log(classData)
     }, [user.id]);
 
     const handleJoinSuccess = (data) => {

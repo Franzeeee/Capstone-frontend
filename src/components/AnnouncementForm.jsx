@@ -25,7 +25,7 @@ export default function AnnouncementForm() {
   useEffect(() => {
 
     // Fetch at least 4 latest classes
-    fetch(`http://localhost:8000/api/classes?teacher_id=${user.id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/classes?teacher_id=${user.id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

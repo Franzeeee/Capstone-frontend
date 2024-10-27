@@ -1762,11 +1762,11 @@ print(random_float)  # Output: A random float between 0.0 and 1.0
 
             \`\`\`Para
             Simulations: When you need to simulate randomness, such as rolling dice, drawing cards, or modeling probabilistic events.
-            \`\`\`Para
+            \`\`\`End
 
             \`\`\`Para
             Games: For example, creating randomness in a game by placing items in random locations or generating random enemy encounters.
-            \`\`\`Para
+            \`\`\`End
 
             \`\`\`Para
             Randomized Algorithms: Used in various algorithms that require random selection, such as Monte Carlo simulations.
@@ -1798,11 +1798,19 @@ print(random_float)  # Output: A random float between 0.0 and 1.0
             \`\`\`Para
             'b': Binary mode. It is used to work with binary files like images or executable files.
             \`\`\`End
-            \`\`\`Title
+            \`\`\`Bold
             Steps for File Handling:
-            \`\`\`List
+            \`\`\`End
+
+            \`\`\`Para
             Open the file: You can use the open() function to open a file in a specified mode.
+            \`\`\`End
+
+            \`\`\`Para
             Perform file operations: Read or write content.
+            \`\`\`End
+
+            \`\`\`Para
             Close the file: After completing the operations, it is essential to close the file to free up system resources.
             \`\`\`End
     

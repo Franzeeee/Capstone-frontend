@@ -1,6 +1,8 @@
+const api = import.meta.env.VITE_API_URL;
+
 const compilerToken = async () => {
 
-    return fetch(`http://127.0.0.1:8000/api/fetchCompilerToken`, {
+    return fetch(`${api}/fetchCompilerToken`, {
         method: 'GET',
     })
     .then(response => {

@@ -17,6 +17,7 @@ import LoadingPage from './LoadingPage.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import ClassCardLoader from '../components/ClassCardLoader.jsx';
 import Button from 'react-bootstrap/Button';
+import ProfileSide from '../components/ProfileSide.jsx';
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -58,11 +59,12 @@ export const Dashboard = () => {
     const [show, setShow] = useState(false);
 
     const toggleShow = () => setShow(prevShow => !prevShow);
+    const api = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         if (user.role === 'teacher') {
             // Fetch at least 4 latest classes
-            fetch(`http://localhost:8000/api/classes?teacher_id=${user.id}`, {
+            fetch(`${api}/classes?teacher_id=${user.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +92,7 @@ export const Dashboard = () => {
             toast.error('Please fill in all required fields.');
             return; // Prevent form submission
         }
-        fetch('http://localhost:8000/api/class/create', {
+        fetch(`${api}/class/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Specify the content type
@@ -291,79 +293,7 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className={`${styles.profileContainer}`}>
-                <div className={`${styles.profileHeader}`}>
-                    <p className={`${styles.profileText}`}>Profile</p>
-                </div>
-                <div className={`${styles.userInfo}`}>
-                    <img src={profile} alt="" />
-                    <p className={`${styles.userName}`}>Leonel Abanilla <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon></p>
-                    <p>Teacher</p>
-                </div>
-                <div className={`${styles.schedule}`}>
-                    <p className={`${styles.scheduleText}`}>Tooday's Schedule</p>
-                    
-                    <div className={`${styles.activityContainer}`}>
-                    <div className={`${styles.card}`}>
-                        <div className={`${styles.activityInfo}`}>
-                            <p>Activity 1</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <div className={`${styles.taskInfo}`}>
-                                <p><FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9</p>
-                                <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
-                            </div>
-                            <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.card}`}>
-                        <div className={`${styles.activityInfo}`}>
-                            <p>Activity 1</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <div className={`${styles.taskInfo}`}>
-                                <p><FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9</p>
-                                <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
-                            </div>
-                            <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.card}`}>
-                        <div className={`${styles.activityInfo}`}>
-                            <p>Activity 1</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <div className={`${styles.taskInfo}`}>
-                                <p><FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9</p>
-                                <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
-                            </div>
-                            <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.card}`}>
-                        <div className={`${styles.activityInfo}`}>
-                            <p>Activity 1</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <div className={`${styles.taskInfo}`}>
-                                <p><FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9</p>
-                                <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
-                            </div>
-                            <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-                        </div>
-                    </div>
-                    <div className={`${styles.card}`}>
-                        <div className={`${styles.activityInfo}`}>
-                            <p>Activity 1</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <div className={`${styles.taskInfo}`}>
-                                <p><FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9</p>
-                                <p><FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8</p>
-                            </div>
-                            <FontAwesomeIcon title='Edit Activity' icon={faEdit} className={`${styles.editActivity}`}></FontAwesomeIcon>
-                        </div>
-                    </div>
-                    </div>
-                    
-                </div>
+                <ProfileSide info={user} />
             </div>
         </div>
         </HomeTemplate>

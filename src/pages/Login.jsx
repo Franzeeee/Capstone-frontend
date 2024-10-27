@@ -31,7 +31,7 @@ export const Login = () => {
     const [loader, setLoader] = useState(false);
 
     const moveToLogin = () => {
-      navigate('/register')
+        navigate('/register')
     }
 
     const handleInputChange = (e) => {
@@ -54,7 +54,6 @@ export const Login = () => {
                     return response.json();
                 })
             .then(data => {
-                console.log(data.message);
                 setLoader(false);
 
                 if(data.message === 'Invalid Credintials!'){
@@ -63,7 +62,7 @@ export const Login = () => {
                     const stringData = JSON.stringify(data.message);
                     const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
                     localStorage.setItem('userData', hashedData);
-                    navigate('/dashboard')
+                    navigate('/')
                 }
                 
                 })

@@ -14,21 +14,30 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Accordion } from 'react-bootstrap';
 import CryptoJS from 'crypto-js';
+import LoadingPage from '../pages/LoadingPage';
 
 export const DashboardContent = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const userData = localStorage.getItem('userData');
+    const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
 
-    useEffect(()=> {
-        const checkLoginStatus = async () => {
-          const loggedIn = await checkLoggedIn();
-          if (loggedIn) {
-            
-          } else {
-            navigate('/login')
-          }
+    if (!userData) {
+      return <LoadingPage />; // You can customize this as needed
+    }
+
+    useEffect(() => {
+      const checkLoginStatus = async () => {
+        const loggedIn = await checkLoggedIn();
+        return <LoadingPage />
+        if (!loggedIn) {
+          navigate('/login');
         }
-        checkLoginStatus();
-      },[]);
+      };
+  
+      checkLoginStatus();
+    }, [navigate]);
+
 
     const handleLogout = () => {
         customFetch('/logout', {
@@ -39,7 +48,6 @@ export const DashboardContent = () => {
                 response.json()
             })
             .then(data => {
-                console.log(data);
                 navigate('/login');
             })
             .catch(error => {

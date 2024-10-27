@@ -1,0 +1,68 @@
+.container {
+    padding: 15px 20px;
+    min-width: 50%;
+    background-color: #DBDBFF;
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    position: relative;
+    min-width: 350px;
+    max-width: 350px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.container div {
+    position: relative;
+    height: 85px;
+    width: 100px;
+}
+.container img {
+    position: absolute;
+    top: -70%;
+    width: 200%;
+    left: 0;
+    right: 0;
+    transform: translateX(-25%);
+    margin-top: -30%;
+
+}
+.container .p1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #5D5DD4;
+    margin: 10px 0;
+    text-align: center;
+}
+.pending {
+    border-radius: 100%;
+    border: 10px solid #5D5DD4;
+    background-color: #fff;
+    width: 140% !important;
+    transform: translateX(-10%) !important;
+    margin: 0 !important;
+}
+.container button {
+    padding: 3px 30px;
+    border: none;
+    background: #5D5DD4;
+    border-radius: 20px;
+    color: #ececec;
+    transition: all .3s ease;
+}
+.pass {
+    color: #43de60;
+    font-weight: 600;
+}
+.fail {
+    color: #FF0000;
+    font-weight: 600;
+}
+.resultText {
+    margin-bottom: 10px;
+}
+.container button:hover {
+    background-color: #4040d5;
+    color: #fff;
+}
