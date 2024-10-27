@@ -3,7 +3,8 @@ import { Form, Button, Accordion } from 'react-bootstrap';
 import styles from '../../assets/css/components/create-assessment-form.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
     const [formData, setFormData] = useState({
         title: '',
@@ -167,6 +168,10 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
                                             <div className={styles.accordionDescription}>
                                                 <p>Expected Output: </p>
                                                 <p>{problem.expected_output}</p>
+                                            </div>
+                                            <div className={styles.EDBtnContainer}>
+                                                <button className={styles.BTN}><FontAwesomeIcon icon={faPenToSquare} style={{ color: 'blue' }}  /></button>
+                                                <button className={styles.BTN}><FontAwesomeIcon icon={faTrashCan} style={{ color: 'red' }}/></button>
                                             </div>
                                         </Accordion.Body>
                                     </Accordion.Item>
