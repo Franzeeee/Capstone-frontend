@@ -1,0 +1,104 @@
+.formLabel {
+    font-size: .95rem !important;
+    color: rgb(85, 85, 85) !important;
+    margin: 0 !important;
+}
+.formGroup .control{
+    border-radius: 0 !important;
+    border: 1px solid rgba(73, 73, 73, 0.365) !important;
+}
+.formGroup .control:hover {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.formGroup .control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.problemContainer {
+    width: 100%;
+    padding: 10px;
+    border: 1.5px solid #d0d0d0;
+}
+.problemContainer input, .problemContainer textarea {
+    background-color: #DBDBFF !important;
+    border-radius: 5px !important;
+}
+.problemContainer label {
+    color: rgb(126, 126, 126) !important;
+    font-size: .8rem !important;
+}
+.problemContainer input::placeholder, .problemContainer textarea::placeholder {
+    color: rgb(126, 126, 126) !important;
+    font-size: .9rem !important;
+}
+.problemButtons {
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+    align-items: center;
+}
+.problemButtons button {
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: .9rem;
+
+}
+.problemButtons button:nth-child(even) {
+    background-color: #5C5CD1;
+    color: white;
+}
+.formContainer {
+    width: 100%;
+}
+.accordion {
+    
+}
+.accordion h2 button {
+    background: rgb(246, 246, 246) !important;
+    font-size: .9rem !important;
+    font-weight: 600 !important;
+    font-family: 'Montserrat', sans-serif !important;
+}
+.accordion h2 button:active, .accordion h2 button:focus {
+    box-shadow: none !important;
+    border: none;
+}
+.accordionDescription {
+    padding: 5px;
+    font-size: .8rem;
+    font-weight: 600;
+}
+.accordionDescription p:last-child {
+    font-size: .8rem;
+    font-weight: 500;
+}
+.addProblem {
+    color: #5C5CD1;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+.addProblem:hover {
+    color: #0000ff;
+}
+.cancelCanvas {
+    border: none;
+    background-color: #ff4d4d;
+}
+.cancelCanvas:hover {
+    background-color: #ff0000;
+
+}
+.canvasButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 2rem;
+}
+.canvasButtons button {
+    padding: 5px 1.5rem;
+}

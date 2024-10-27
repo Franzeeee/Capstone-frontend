@@ -12,16 +12,16 @@ export default function ConfirmationModal({ show, handleClose, modalData }) {
                 <Modal centered size='sm' show={show}>
                     <Modal.Body className={styles.modalContainer}>
                         <div className={styles.modalContent}>
-                            <p className={styles.icon}><FontAwesomeIcon icon={faWarning} /></p>
+                            <p className={styles.icon} style={{color: `${modalData?.iconColor || "red"}`}}><FontAwesomeIcon icon={modalData?.icon || faWarning} /></p>
                             <p className={styles.modalTitle}>{modalData.title}</p>
                             <p className={styles.modalBody}>{modalData.body}</p>
                         </div>
                         <div className={styles.modalFooter}>
                             <button className={`${styles.Close}`} onClick={handleClose}>
-                                Cancel
+                                {modalData.cancelText || "Cancel"}
                             </button>
                             <button className={`${styles.Confirm}`} onClick={modalData.action}>
-                                Confirm
+                                {modalData.confirmText || "Confirm"}
                             </button>
                         </div>
                     </Modal.Body>
