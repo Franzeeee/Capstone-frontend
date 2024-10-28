@@ -13,6 +13,10 @@ import ClassContents from '../../components/ClassContents';
 import LoadingPage from '../LoadingPage';
 import ProfileSide from '../../components/ProfileSide';
 import CreateAssessment from '../../components/CreateAssessment';
+import AnnouncementContent from '../../components/AnnouncementContent';
+import Classwork from '../../components/ClassWork';
+
+
 
 
 export default function Class() {
@@ -28,12 +32,16 @@ export default function Class() {
     const [loading, setLoading] = useState(true);
 
     const api  = import.meta.env.VITE_API_URL;
+
+    const [activePage, setActivePage] = useState("default");
     
     useEffect(() => {
     // Fetch class information by class code
     const fetchClassInfo = async () => {
         try {
-        const response = await fetch(`${api}/class/${code}`);
+        const response = await fetch(`${api}/class/${code}`, {
+            credentials: 'include'
+        });
 
         if (!response.ok) {
             // If the response is not OK, throw an error
@@ -60,6 +68,9 @@ export default function Class() {
     return <p>Error: {error}</p>;
     }
     
+    const handleActivePage = (page) => {
+        setActivePage(page);
+    }
 
     return (
         <HomeTemplate>
@@ -77,9 +88,23 @@ export default function Class() {
                             <p>{classInfo?.name}</p>
                         </div>
                     </div>
-                    <AnnouncementForm />
-                    <CreateAssessment />
-                    <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
+                    {
+                        user.role === 'teacher' && <AnnouncementForm />
+                    }
+                    <CreateAssessment classId={classInfo.id} handleChangePage={handleActivePage}/>
+                    {
+                        activePage === 'default' && <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
+                    }
+                    {
+                        activePage === 'classwork' && <Classwork classId={classInfo.id} />
+                    }
+                    {
+                        activePage === 'announcement' && <AnnouncementContent />
+                    }
+                    {
+                        activePage === 'people' && <p>People</p>
+                    }
+
                 </div>
 
                 <div className={`${styles.profileContainer}`}>

@@ -19,7 +19,9 @@ export default function Announcement() {
                         <p>Announcements</p>
                     </div>
                 </div>
-                <AnnouncementForm />
+                {
+                    user.role === 'teacher' && <AnnouncementForm />
+                }
                 <AnnouncementContent />
             </div>
             <div className={`${styles.profileContainer}`}>

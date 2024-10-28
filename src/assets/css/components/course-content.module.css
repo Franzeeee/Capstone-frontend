@@ -8,11 +8,28 @@ p {
     padding: 5px;
     gap: 10px;
     flex-direction: column;
+    overflow: auto;
+    margin-top: 5px;
 
 }
 .contentContainer::-webkit-scrollbar {
-    display: none
+    width: 10px; /* Set the width of the scrollbar */
 }
+
+.contentContainer::-webkit-scrollbar-track {
+    background: #f1f1f11c; /* Set background color of the scrollbar track */
+}
+
+.contentContainer::-webkit-scrollbar-thumb {
+    background-color: #888; /* Set the color of the scrollbar thumb */
+    border-radius: 10px; /* Add rounding to scrollbar thumb */
+    border: 2px solid #f1f1f1; /* Optional: adds space around the thumb */
+}
+
+.contentContainer::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Change thumb color on hover */
+}
+
 .card {
     width: 20%;
     background: #ffffff;

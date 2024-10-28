@@ -38,6 +38,7 @@ export const App = () => {
         <Route path="*" element={<NotFound/>} />
 
         <Route path="/sample" element={<Sample />} />
+
       </Routes>
     </BrowserRouter>
   );

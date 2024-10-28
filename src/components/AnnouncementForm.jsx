@@ -30,6 +30,7 @@ export default function AnnouncementForm() {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     })
         .then(response => {
             if (!response.ok) {

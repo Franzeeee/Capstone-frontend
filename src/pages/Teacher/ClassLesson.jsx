@@ -101,7 +101,7 @@ export default function ClassLesson() {
             <div className={`${styles.lessons}`}>
                 <Accordion defaultActiveKey="0">
                     <Accordion.Item eventKey="0" className={styles.accordion}>
-                        <Accordion.Header className={styles.accordionHeader}>Hello World</Accordion.Header>
+                        <Accordion.Header className={styles.accordionHeader}>Class Lesson</Accordion.Header>
                         <Accordion.Body className={styles.accordionBody}>
                             <ul>
                                 {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (
@@ -110,28 +110,6 @@ export default function ClassLesson() {
                                     </li>
                                 ))
                                 }
-                            </ul>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1" className={styles.accordion}>
-                        <Accordion.Header className={styles.accordionHeader}>Loops</Accordion.Header>
-                        <Accordion.Body className={styles.accordionBody}>
-                            <ul>
-                                <li>While Loop</li>
-                                <li>Do While Loop</li>
-                                <li>For Loop</li>
-                                <li>Foreach Loop</li>
-                            </ul>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="2" className={styles.accordion}>
-                        <Accordion.Header className={styles.accordionHeader}>Array</Accordion.Header>
-                        <Accordion.Body className={styles.accordionBody}>
-                            <ul>
-                                <li>Introduction to Arrays</li>
-                                <li>Array Methods</li>
-                                <li>Multidimensional Arrays</li>
-                                <li>Array Iteration</li>
                             </ul>
                         </Accordion.Body>
                     </Accordion.Item>

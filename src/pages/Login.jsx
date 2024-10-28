@@ -84,11 +84,11 @@ export const Login = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="email">Email address</label>
-                            <input type="email" onChange={handleInputChange} name="email" className="form-control" id="email" placeholder="Enter email" />
+                            <input type="email" autoComplete='email' onChange={handleInputChange} name="email" className="form-control" id="email" placeholder="Enter email" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input type={showPassword ? "text" : "password"}  name="password" onChange={handleInputChange} className="form-control" id="password" placeholder="Password"/>
+                            <input autoComplete='current-password' type={showPassword ? "text" : "password"}  name="password" onChange={handleInputChange} className="form-control" id="password" placeholder="Password"/>
                             <FontAwesomeIcon icon={!showPassword ? faEyeSlash : faEye} className={`${styles.showPassword}`} onClick={handleShowPassword}/>
                         </div>
                         <button type="submit" className="btn btn-primary" disabled={loader}>{ loader ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"}</button>
