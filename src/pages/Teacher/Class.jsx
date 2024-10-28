@@ -14,7 +14,7 @@ import LoadingPage from '../LoadingPage';
 import ProfileSide from '../../components/ProfileSide';
 import CreateAssessment from '../../components/CreateAssessment';
 import AnnouncementContent from '../../components/AnnouncementContent';
-import Classwork from '../../components/Classwork';
+import Classwork from '../../components/ClassWork';
 
 
 

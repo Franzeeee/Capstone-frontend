@@ -9,7 +9,6 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        time_limit: '00:00:00',
         time_limit: null,
         due_date: null,
         points: 100,

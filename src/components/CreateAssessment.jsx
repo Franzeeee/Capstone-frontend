@@ -106,7 +106,7 @@ export default function CreateAssessment({handleChangePage, classId}) {
     return (
         <>
             <Offcanvas show={show} backdrop="static" className={styles.offCanvas} onHide={handleClose} placement="top" style={{ width: '80vw', height: '90vh', margin: 'auto'}}>
-                <Offcanvas.Header className={`${styles.Header}`} >
+                <Offcanvas.Header className={`${styles.Header}`} closeButton>
                     <Offcanvas.Title className={`${styles.Title}`}>Create Assessment</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body className={styles.offcanvasBody}>
