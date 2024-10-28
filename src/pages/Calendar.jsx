@@ -56,7 +56,7 @@ export default function Calendar() {
 
   return (
     <HomeTemplate>
-      <div className={`${styles.container}`}>
+      <div className={`${styles.container}`} style={{gridTemplateColumns: '1fr'}}>
         <div className={`${styles.contentContainer}`}>
           <div className={`${styles.header}`}>
             <div className={`${styles.create}`}>
@@ -77,9 +77,6 @@ export default function Calendar() {
           onClose={() => setOpenModal(false)}
           onAddEvent={handleAddEvent}
         />
-        <div className={`${styles.profileContainer}`}>
-          <ProfileSide info={user} />
-        </div>
       </div>
     </HomeTemplate>
   );

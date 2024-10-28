@@ -29,6 +29,7 @@ export const App = () => {
             <Route path='/c/:code/:lesson' element={<ClassLesson />}/>
             <Route path='/c/:code/a/:assessment' element={<ClassAssessment />} />
             <Route path='/announcements' element={<Announcement />} />
+            <Route path="/calendar" element={<Calendar />} />
         </Route>
         
         <Route path="/" element={<Sample />} />
@@ -36,8 +37,6 @@ export const App = () => {
 
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound/>} />
-
-        <Route path="/sample" element={<Sample />} />
 
       </Routes>
     </BrowserRouter>

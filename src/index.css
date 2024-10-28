@@ -114,7 +114,7 @@ li {
   border: none;
 }
 .sx-react-calendar-wrapper {
-  width: 1200px;
+  width: 100%;
   max-width: 100vw;
   height: 800px;
   max-height: 90vh;
