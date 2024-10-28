@@ -1,0 +1,211 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 350px;
+}
+.contentContainer {
+    display: grid;
+    grid-template-rows: auto auto auto 1fr;
+    padding: 0 1rem;
+    height: 97svh;
+    overflow: auto;
+
+}
+.contentContainer::-webkit-scrollbar {
+    width: 0px; /* Make scrollbar slightly wider for better usability */
+}
+
+.contentContainer::-webkit-scrollbar-thumb {
+    background-color: #a3a3c2; /* Softer, muted color */
+    border-radius: 10px;
+    transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.contentContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #7a7ab8; /* Darker shade on hover */
+}
+
+.contentContainer::-webkit-scrollbar-track {
+    background-color: #f4f4f8; /* Lighter track color for subtle contrast */
+    border-radius: 10px;
+}
+
+
+.contentContainer .header {
+    width: 100%;
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
+.header ul {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0px 0 0 !important;
+    font-size: .9rem;
+    margin: 5px;
+}
+.header ul li {
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+}
+.header ul .active {
+    text-decoration: underline;
+    color: #5D5DD4;
+}
+.contentContainer .header .create p {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.7rem;
+}
+.create div ul {
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: .7rem;
+}
+.create div ul li {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+    cursor: default;
+}
+.create div ul li:not(:nth-child(even)){
+    cursor: pointer;
+}
+.create div ul .active {
+    color: #5D5DD4;
+    text-decoration: none;
+}
+.headerSubTxt {
+    font-family: 'Montserrat', sans-serif;
+    font-size: .95rem;
+    font-weight: 550;
+}
+.headerTxt {
+    font-family: 'Montserrat', sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+    text-align: left;
+    line-height: 1.4em;
+}
+
+.formContainer {
+    width: 100%;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+    padding-block: 10px;
+}
+.formContainer .formTitle {
+    font-size: .95rem;
+    font-family: var(--main-font);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.formGroupContainer {
+    display: grid;
+    gap: .5rem;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 5px;
+}
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+.formGroup label {
+    font-size: .75rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: #72728c;
+    margin-left: 2px;
+}
+.formGroup input {
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    font-size: .9rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    outline: none;
+    background-color: #c1c1d943;
+    width: 100%;
+}
+.formGroup input:focus {
+    border: 1.3px solid #5656d6;
+}
+.formSubmit {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: .9rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    background-color: #5D5DD4;
+    color: white;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: all .3s;
+}
+.formSubmit.disabled {
+    background-color: #5d5dd49b;
+    cursor: not-allowed;
+}
+.formSubmit:not(.disabled):hover {
+    background-color: #3939cd;
+}
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup input[type="file"] {
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+.profileHeader {
+    font-size: 1.1rem;
+    font-family: "Montserrat", sans-serif;
+    padding: 1rem 5px 5px 0;
+    font-weight: 500;
+}
+.userInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.userInfo img {
+    width: 35%;
+    border-radius: 100%;
+    margin-bottom: 5px;
+    border: 3px solid rgb(236, 236, 236);
+    border: 1px solid rgb(153, 153, 153);
+}
+.userInfo p:last-child {
+    font-size: .8rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.9);
+}
+.userInfo .userName {
+    font-size: 1.1rem !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    margin-bottom: -3px;
+    margin-top: 5px;
+}
+.userName svg {
+    font-size: .8rem;
+    cursor: pointer;
+}

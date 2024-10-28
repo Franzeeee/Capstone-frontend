@@ -64,7 +64,7 @@ export default function ProfileSide({ info }) {
         <img src={profile} alt="" />
         <p className={`${styles.userName}`}>
           {info ? info.name : "Undefined User"}{" "}
-          <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
+          <FontAwesomeIcon title="Edit Name" onClick={() => navigate('/profile')} icon={faEdit}></FontAwesomeIcon>
         </p>
         <p className="text-capitalize">{info ? info.role : "Undefined Role"}</p>
       </div>
