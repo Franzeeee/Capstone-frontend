@@ -45,7 +45,6 @@ export default function StudentHome() {
         };
 
         fetchClasses();
-        console.log(classData)
     }, [user.id]);
 
     const handleJoinSuccess = (data) => {

@@ -1,0 +1,10 @@
+.timerContainer {
+    height: 100%;
+    min-width: 60px;
+    background-color: #5C5CD1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    padding-inline: 10px;
+}

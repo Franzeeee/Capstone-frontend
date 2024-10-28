@@ -187,6 +187,7 @@
     width: 100vw !important;  /* Full viewport width */
     height: 100vh !important; /* Full viewport height */
     padding: none;
+    transition: none;
 }
 .fullscreenOffcanvas div:first-child {
     padding: 0;

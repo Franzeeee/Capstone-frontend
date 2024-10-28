@@ -2,6 +2,8 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function checkLoggedIn() {
+
+
     try {
         const response = await fetch(`${BASE_URL}/user`, {
             method: 'GET',
@@ -20,7 +22,6 @@ export async function checkLoggedIn() {
             return false; // You can also log the status or message for debugging
         }
     } catch (error) {
-        console.error('Error checking login status:', error);
         return false; // Return false in case of error
     }
 }
