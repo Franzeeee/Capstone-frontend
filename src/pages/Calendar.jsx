@@ -16,6 +16,7 @@ import { createDragAndDropPlugin } from "@schedule-x/drag-and-drop";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
 import NewEventForm from "../components/NewEventForm";
 import { Button } from "@mui/material";
+import { format } from "date-fns";
 
 export default function Calendar() {
   const userData = localStorage.getItem("userData");
@@ -51,12 +52,20 @@ export default function Calendar() {
   const [openModal, setOpenModal] = useState(false);
 
   const handleAddEvent = (event) => {
-    calendar.eventsService.add(event);
+    const formattedEvent = {
+      ...event,
+      start: format(new Date(event.start), "yyyy-MM-dd HH:mm"),
+      end: format(new Date(event.end), "yyyy-MM-dd HH:mm"),
+    };
+    calendar.eventsService.add(formattedEvent);
   };
 
   return (
     <HomeTemplate>
-      <div className={`${styles.container}`} style={{gridTemplateColumns: '1fr'}}>
+      <div
+        className={`${styles.container}`}
+        style={{ gridTemplateColumns: "1fr" }}
+      >
         <div className={`${styles.contentContainer}`}>
           <div className={`${styles.header}`}>
             <div className={`${styles.create}`}>
