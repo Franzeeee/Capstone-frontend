@@ -209,3 +209,24 @@
     font-size: .8rem;
     cursor: pointer;
 }
+.info {
+    padding: 10px;
+    background: #4f4fbccb;
+    color: rgb(238, 237, 237);
+    font-size: .8rem;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.info span {
+    font-weight: 600;
+} 
+.member {
+    margin-top: 10px;
+    color: #4f4f4f;
+    font-size: .9rem;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+}
+.member span {
+    font-weight: 500;
+}

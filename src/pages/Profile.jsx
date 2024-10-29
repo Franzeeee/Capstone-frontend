@@ -109,8 +109,25 @@ export default function Profile() {
                         </div>
                         <button type='button' className={`${styles.formSubmit} ${updatedPhoto ? "" : styles.disabled}`}>Update Photo</button>
                     </form>
+                    <div className={styles.info}>
+                        <p>Update you profile picture by uploading file on the input. The maximum size of the image is <span>1mb</span></p>
+                    </div>
+                    <p className={styles.member}>Member since <span>{formatDateWithMonthName(user.created_at)}</span></p>
                 </div>
             </div>
         </HomeTemplate>
     )
+}
+
+
+function formatDateWithMonthName(dateStr) {
+    const date = new Date(dateStr);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const monthNames = ["January", "February", "March", "April", "May", "June", 
+                        "July", "August", "September", "October", "November", "December"];
+    const monthName = monthNames[date.getMonth()];
+    const year = String(date.getFullYear());
+
+    return `${monthName} ${day}, ${year}`;
 }
