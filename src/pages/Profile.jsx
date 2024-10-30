@@ -182,7 +182,7 @@ export default function Profile() {
                     localStorage.setItem('profilePicture', photo);
                 })
                 .catch(error => {
-                    console.error('Error:', error.message);
+                    toast.error("Failed to update profile picture");
                 });
         }
     };
