@@ -18,7 +18,10 @@ export default function ProfileSide({ info }) {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(localStorage.getItem("profilePicture") || profile);
+  const [profilePicture, setProfilePicture] = useState(() => {
+    const storedProfilePicture = localStorage.getItem("profilePicture");
+    return storedProfilePicture ? storedProfilePicture : profile;
+  });
 
   const handleClose = () => setShowModal(false);
 
