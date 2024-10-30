@@ -14,7 +14,7 @@ import LoadingPage from '../LoadingPage';
 import ProfileSide from '../../components/ProfileSide';
 import CreateAssessment from '../../components/CreateAssessment';
 import AnnouncementContent from '../../components/AnnouncementContent';
-import Classwork from '../../components/ClassWork';
+// import Classwork from '../../components/ClassWork';
 
 
 
@@ -96,7 +96,7 @@ export default function Class() {
                         activePage === 'default' && <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
                     }
                     {
-                        activePage === 'classwork' && <Classwork classId={classInfo.id} />
+                        activePage === 'classwork' && <p>Classwork</p>
                     }
                     {
                         activePage === 'announcement' && <AnnouncementContent />
