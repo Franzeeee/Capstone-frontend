@@ -8,7 +8,7 @@
     color: #fff !important;
 }
 .content h4 {
-    color: var(--main-color);
+    color: #5D5DD4;
     font-weight: 800;
     margin: 0 !important;
 }
@@ -35,13 +35,13 @@
     padding: 12px;
     border-radius: 0 !important;
     outline: none !important;
-    background: linear-gradient(#f6f7fc, #f7f9ff);
+    background: #DBDBFF;
     border: 1px solid rgba(164, 164, 164, 0.181);
 }
 .form-container form label {
     font-size: .75rem !important;
-    font-weight: 600 !important;
-    color: rgba(255, 255, 255, 0.871);
+    font-weight: 500 !important;
+    color: #282828;
     margin-top: 5px;
 }
 .form-container form input:hover {
@@ -65,7 +65,9 @@
     font-weight: 600;
     background-color: var(--main-color);
 }
-
+.form-container p{
+    color: #5D5DD4;
+}
 .form-container form input:focus {
     box-shadow: none;
     outline: none;
@@ -74,7 +76,7 @@
     font-size: .9rem;
 }
 .form-container form p:last-child span {
-    color: var(--main-color);
+    color: #5D5DD4;
     cursor: pointer;
     transition: all .3s ease;
     font-weight: 600;
