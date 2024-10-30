@@ -611,8 +611,12 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
 
         const finishedAssessmentTimer = () => {
             setAssessmentTimer(0);
+            options.timesup();
             alert("Time's up! Please submit your code.");
+            closeOverlay();
         };
+
+    
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>

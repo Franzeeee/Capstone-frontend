@@ -27,7 +27,12 @@ export default function AnnouncementContent({data}) {
     <div className={`${styles.cardContainer}`}>
 
 
-        {announcements.map((announcement, index) => (
+        { announcements.length === 0 && (
+            <p>No announcements yet</p>
+        )}
+
+        {
+        announcements.map((announcement, index) => (
             <div key={index} className={styles.card}>
                 <div className={styles.info}>
                     <div className={styles.profile}>

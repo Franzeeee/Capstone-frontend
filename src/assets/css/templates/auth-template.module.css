@@ -3,7 +3,8 @@
     margin: 0 !important;
     width: 100% !important;
     max-width: 100%;
-    background: linear-gradient(to right, rgb(0, 0, 0), rgba(0, 0, 0, 0.293)), url('../../img/bg2.jpg');
+    /* background: linear-gradient(to right, rgb(0, 0, 0), rgba(0, 0, 0, 0.293)), url('../../img/bg2.jpg'); */
+    background-color: #161616;
     height: 100svh;
     background-size: cover !important;
     background-position: center !important;
