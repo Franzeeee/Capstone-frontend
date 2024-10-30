@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/components/assessment-content.module.css';
 import questionMark from '../assets/img/assessment-img1.png';
 import happy from '../assets/img/perfect-assessment-robot.png';
-import sad from '../assets/img/assessment-fail.png';
+import sad from '../assets/img/assessment-fail.png'
+import SubmittingModal from './SubmitLoader';
+import ConfirmationModal from './ConfirmationModal';
 
-export default function AssessmentContent({ status = 'pending', startButton }) {
+
+
+
+export default function AssessmentContent({ status = 'pending', startButton, data }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
+
+    const [showSubmitModal, setShowSubmitModal] = useState(false);
 
     const handleBtn = () => { 
         if (status === 'pending') {
@@ -14,30 +21,49 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
         }
     };
 
+    const timeFormatter = (timeInSeconds) => {
+        const hours = Math.floor(timeInSeconds / 3600);
+        const minutes = Math.floor((timeInSeconds % 3600) / 60);
+        const seconds = timeInSeconds % 60;
+    
+        if (hours > 0) {
+            return `${hours.toString().padStart(2, '0')}:${minutes
+                .toString()
+                .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        } else {
+            return `${minutes.toString().padStart(2, '0')}:${seconds
+                .toString()
+                .padStart(2, '0')}`;
+        }
+    };
+
+    
+
 
     return (
         <>
             {status === 'pending' ? 
             <div className={styles.container}>
+                
                 <div className={styles.title}>
-                    <p>Assessment Title Here</p>
+                    <p>{data.title}</p>
                 </div>
                 <div className={styles.content}>
                     <ul>
                         <li>
                             <p>Time Remaining</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>60:00</p>
+                            <p>{timeFormatter(data.time_limit)}</p>
                         </li>
                         <li>
                             <p>Problem Solved</p>
                             <LoadingBar progress={0} status={status} />
-                            <p>0/1</p>
+                            <p>0/{data.coding_problems.length}</p>
                         </li>
                         <li>
                             <p>Overall Points</p>
                             <LoadingBar progress={0} status={status} />
-                            <p>--/100</p>
+                            <p>--/{data.point}</p>
                         </li>
                         <li>
                             <p>Current Rank</p>
@@ -47,7 +73,7 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
                     </ul>
                 </div>
                 <div className={styles.controls}>
-                    <button onClick="">View Ranking</button>
+                    <button>View Ranking</button>
                     <button onClick={handleBtn}>Start Assessment</button>
                 </div>
             </div>
@@ -61,7 +87,7 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
                         <li>
                             <p>Time Remaining</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>60:00</p>
+                            <p>{timeFormatter(0)}</p>
                         </li>
                         <li>
                             <p>Problem Solved</p>
@@ -85,7 +111,7 @@ export default function AssessmentContent({ status = 'pending', startButton }) {
                     </div> */}
                 </div>
                 <div className={styles.controls}>
-                    <button onClick="">View Ranking</button>
+                    <button >View Ranking</button>
                     <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>View Feedback</button>
                 </div>
             </div>
@@ -115,3 +141,4 @@ const LoadingBar = ({ progress }) => {
         </>
     );
 };
+

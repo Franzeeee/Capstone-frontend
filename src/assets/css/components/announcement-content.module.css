@@ -89,3 +89,11 @@
     width: 80px;
     border: 1px solid black;
 } */
+.ellipsisIcon::after {
+    display: none !important;
+}
+.deleteIcon {
+    color: #ff000088 !important;
+    margin-right: 5px;
+    font-size: .9rem;
+}

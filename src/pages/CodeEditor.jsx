@@ -28,8 +28,9 @@ import swap2 from '../assets/img/swap2.png'
 import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
+import ConfirmationModal from '../components/ConfirmationModal';
 
-const CodeEditor = ({options = {mode: "playground"}}) => {
+const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const [code, setCode] = useState('');
     const [inputValues, setInputValues] = useState('');
     const [output, setOutput] = useState();
@@ -544,33 +545,20 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
 
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
+        const [assessmentTimer, setAssessmentTimer] = useState(data.time_limit);
+        const [assessmentData, setAssessmentData] = useState(data.coding_problems.map((problem, index) => ({
+            id: index,
+            title: problem.title,
+            description: problem.description,
+            code: "",
+            isActive: index === 0,
+            testCase: {
+                input: problem.sample_input || "",
+                output: problem.sample_output || ""
+            }
+        })));
 
-        const [assessmentTimer, setAssessmentTimer] = useState(0);
-        const [assessmentData, setAssessmentData] = useState([
-            {
-                id: 0,
-                isActive: true,
-                title: "Print Hello Mars!",
-                description: "Write a code that will print 'Hello Mars!'",
-                testCase: {
-                    input: "",
-                    output: "Hello Mars!"
-                },
-                code: "",
-            },
-            {
-                id: 1,
-                isActive: false,
-                title: "Add two integers",
-                description: "Write a code that will add two integers",
-                testCase: {
-                    input: "Enter num1: 2\nEnter num2: 3",
-                    output: "5"
-                },
-                code: "",
-            },
-            
-        ]);
+
 
         const [activeAssessment, setActiveAssessment] = useState(assessmentData.find(assessment => assessment.isActive));
 
@@ -609,10 +597,28 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
             }
         };
 
+        const [showSubmitModal, setShowSubmitModal] = useState(false);
+
+
+        const openModal = () => {
+            setShowSubmitModal(true);
+        }
+    
+        const handleCloseSubmitModal = () => {
+            setShowSubmitModal(false);
+        }
+
         const finishedAssessmentTimer = () => {
             setAssessmentTimer(0);
             options.timesup();
-            alert("Time's up! Please submit your code.");
+            openModal();
+            // closeOverlay();
+        };
+
+        const submitAssessment = () => {
+            const code = assessmentData.find(assessment => assessment.isActive).code;
+            options.submit(code);
+            openModal();
             closeOverlay();
         };
 
@@ -620,6 +626,18 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
+            <ConfirmationModal show={showSubmitModal} 
+                    handleClose={handleClose} 
+                    modalData={{spin: true, 
+                            confirmText: "View Result", 
+                            icon: faSpinner, 
+                            hideCancel: true, 
+                            iconColor: '#4c00d9', 
+                            title: 'Submitting Code', 
+                            body: "Please wait, submitting code...",
+                            disableConfirm: true
+                            }}
+                    />
             <nav className={`${styles.nav}`}>
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
@@ -759,7 +777,10 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                 <div className={`${styles.assessmentContent}`}>
                                 <div className={`${styles.problemTitle}`}>
                                     <p>{activeAssessment.id + 1}. {activeAssessment.title}</p>
-                                    <p>{activeAssessment.description}</p>
+                                    {/* <p>{activeAssessment.description}</p> */}
+                                    {activeAssessment.description.replace(/\\n/g, '\n').split('\n').map((line, index) => (
+                                        <p key={index}>{line}</p>
+                                    ))}
                                 </div>
                                 <div className={`${styles.sampleIO}`}>
                                     
@@ -797,7 +818,7 @@ const CodeEditor = ({options = {mode: "playground"}}) => {
                                         Test Cases
                                     </button>
                                 </div>
-                                <div className={`${styles.submitButton}`}>
+                                <div onClick={() => submitAssessment} className={`${styles.submitButton}`}>
                                     Submit
                                 </div>
                             </div>
