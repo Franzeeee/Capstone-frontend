@@ -55,13 +55,17 @@ export const Login = () => {
                 })
             .then(data => {
                 setLoader(false);
-
-                if(data.message === 'Invalid Credintials!'){
+                if(data.message === 'Invalid Credentials!'){
                     toast.error(data.message)
                 }else{
                     const stringData = JSON.stringify(data.message);
                     const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
                     localStorage.setItem('userData', hashedData);
+                    console.log(data)
+                    console.log('Test property:', data.test);
+                    fetchProfilePicture()
+                        .then(data => console.log('Profile picture data:', data))
+                        .catch(error => console.error('Error fetching profile picture:', error));
                     navigate('/')
                 }
                 
@@ -99,3 +103,25 @@ export const Login = () => {
         </AuthTemplate>
     );
 };
+
+async function fetchProfilePicture() {
+    const apiURL = import.meta.env.VITE_API_URL;
+    try {
+        const response = await fetch(`${apiURL}/profile/picture/fetch`, {
+            method: 'GET',
+            credentials: 'include', // Include credentials in the request
+        });
+        
+        // Check if the response is OK (status in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json(); // Parse the JSON from the response
+        localStorage.setItem('profilePicture', data.path); // Store the profile picture in local storage
+        return data; // Return the data received from the API
+    } catch (error) {
+        console.error('Error fetching profile picture:', error);
+        throw error; // Rethrow the error for further handling if needed
+    }
+}

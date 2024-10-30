@@ -12,6 +12,7 @@ export default function Profile() {
 
     const userData = localStorage.getItem('userData');
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
+    const profilePicture = localStorage.getItem('profilePicture') || profile;
 
     const [updatedInfo, setUpdatedInfo] = useState(false);
     const [updatedContact, setUpdatedContact] = useState(false);
@@ -29,6 +30,16 @@ export default function Profile() {
         email: user.email,
         phone: user.phone
     });
+
+    const [password, setPassword] = useState({
+        current: '',
+        new: '',
+        confirm: ''
+    });
+    
+    const [photo, setPhoto] = useState(profilePicture || null);
+    const [profilePictureFile, setProfilePictureFile] = useState(null);
+
     const handleTextInput = (e) => {
         const { name, value } = e.target; // Destructure name and value from event target
     
@@ -57,6 +68,25 @@ export default function Profile() {
         setUpdatedContact(true);
     }
 
+    const handlePasswordInput = (e) => {
+        setPassword({
+            ...password,
+            [e.target.name]: e.target.value
+        });
+        if(password.current !== '' && password.new !== '' && password.confirm !== '' && password.new === password.confirm) {
+            setUpdatedPassword(true);
+        } else {
+            setUpdatedPassword(false); 
+        }
+    }
+
+    const handlePhotoInput = (e) => {
+        const file = e.target.files[0]; // Get the file from the input
+        setProfilePictureFile(file); // Set the file to state
+        setPhoto(URL.createObjectURL(file)); // Set the image preview
+        setUpdatedPhoto(true);
+    }
+
     const undo = (formName) => {
         if(formName === 'info') {
             setBasicInformation({
@@ -73,8 +103,6 @@ export default function Profile() {
                 phone: user.phone
             });
             setUpdatedContact(false);
-        } else if(formName === 'password') {
-            setUpdatedPassword(false);
         } else if(formName === 'photo') {
             setUpdatedPhoto(false);
         }
@@ -82,22 +110,84 @@ export default function Profile() {
 
     const handleUpdateInfo = () => {
         if(updatedInfo) {
-        customFetch('/update/basic-info', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: basicInformation.name,
-            })
-        })
-            .then(response => {
-                toast.success(response.message);
-                setUpdatedInfo(false);
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-            });
+            // customFetch('/update/basic-info', {
+            //     method: 'POST',
+            //     body: JSON.stringify({
+            //         name: basicInformation.name,
+            //     })
+            // })
+            //     .then(response => {
+            //         toast.success(response.message);
+            //         setUpdatedInfo(false);
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error.message);
+            //     });
 
         }
     }
+
+    const handleUpdateContact = () => {
+        if(updatedContact) {
+            // customFetch('/update/contact-info', {
+            //     method: 'POST',
+            //     body: JSON.stringify(contactInformation)
+            // })
+            //     .then(response => {
+            //         toast.success(response.message);
+            //         setUpdatedContact(false);
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error.message);
+            //     });
+        }
+    }
+
+    const handleUpdatePassword = () => {
+        if(updatedPassword) {
+            // customFetch('/update/password', {
+            //     method: 'POST',
+            //     body: JSON.stringify({
+            //         current_password: password.current,
+            //         new_password: password.new,
+            //     })
+            // })
+            //     .then(response => {
+            //         toast.success(response.message);
+            //         setUpdatedPassword(false);
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error.message);
+            //     });
+            console.log(password);
+            console.log(user)
+        }
+    }
+
+    const handleUpdatePhoto = () => {
+        if (updatedPhoto && photo) {
+            const formData = new FormData();
+            formData.append('profile_picture', profilePictureFile); // Add the file to FormData
+    
+            customFetch('/upload/profile-picture', {
+                method: 'POST',
+                body: formData, // Use FormData instead of JSON
+                headers: {
+                    'Accept': 'application/json', // Set headers if necessary
+                },
+            })
+                .then(response => {
+                    toast.success("Profile picture updated successfully");
+                    setUpdatedPhoto(false);
+                    localStorage.setItem('profilePicture', photo);
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
+        }
+    };
+
+
 
     return (
         <HomeTemplate>
@@ -160,26 +250,26 @@ export default function Profile() {
                                     <input type="text" name='phone' value={contactInformation.phone} onChange={handleContactInput}/>
                                 </div>
                             </div>
-                            <button type='button' className={`${styles.formSubmit} ${ updatedContact ? "" : styles.disabled}`}>Save Contact</button>
+                            <button onClick={handleUpdateContact} type='button' className={`${styles.formSubmit} ${ updatedContact ? "" : styles.disabled}`}>Save Contact</button>
                             <button title='Undo Changes' type='button' onClick={() => undo("contact")} className={`${styles.undo} ${updatedContact ? "" : styles.disabled}`}><FontAwesomeIcon icon={faRotateLeft} /></button>
                         </form>
                         <form action="">
                             <p className={styles.formTitle}>Security</p>
                             <div className={`${styles.formGroupContainer}`} style={{gridTemplateColumns: '1fr'}}>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="first_name">Current Password</label>
-                                    <input type="password" name='current_password' placeholder='********'/>
+                                    <label htmlFor="current_password">Current Password</label>
+                                    <input type="password" name='current' onChange={handlePasswordInput} value={password.current} placeholder='********'/>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="first_name">New Password</label>
-                                    <input type="text" name='new_password' placeholder='********'/>
+                                    <label htmlFor="new">New Password</label>
+                                    <input type="text" name='new' value={password.new} onChange={handlePasswordInput} placeholder='********'/>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="first_name">Confirm Password</label>
-                                    <input type="text" name='contact_number' placeholder='********'/>
+                                    <label htmlFor="confirm">Confirm Password</label>
+                                    <input type="text" name='confirm' value={password.confirm} onChange={handlePasswordInput} placeholder='********'/>
                                 </div>
                             </div>
-                            <button type='button' className={`${styles.formSubmit} ${updatedPassword ? "" : styles.disabled}`}>Update Password</button>
+                            <button type='button' onClick={handleUpdatePassword} className={`${styles.formSubmit} ${updatedPassword ? "" : styles.disabled}`}>Update Password</button>
                         </form>
                     </div>
                 </div>
@@ -188,16 +278,16 @@ export default function Profile() {
                         <p>Profile Photo</p>
                     </div>
                     <div className={styles.userInfo}>
-                        <img src={profile} alt="profile" />
+                        <img src={photo !== null ? photo : profile} alt="profile" />
                     </div>
                     <form action="">
                         <div className={`${styles.formGroupContainer}`} style={{gridTemplateColumns: '1fr'}}>
                             <div className={styles.formGroup}>
                                 <label htmlFor="first_name">Upload New Photo</label>
-                                <input type="file" name='email' accept="image/png, image/jpeg"/>
+                                <input onChange={handlePhotoInput} value={user.profile_picture} type="file" name='email' accept="image/png, image/jpeg"/>
                             </div>
                         </div>
-                        <button type='button' className={`${styles.formSubmit} ${updatedPhoto ? "" : styles.disabled}`}>Update Photo</button>
+                        <button onClick={handleUpdatePhoto} type='button' className={`${styles.formSubmit} ${updatedPhoto ? "" : styles.disabled}`}>Update Photo</button>
                     </form>
                     <div className={styles.info}>
                         <p>Update you profile picture by uploading file on the input. The maximum size of the image is <span>1mb</span></p>

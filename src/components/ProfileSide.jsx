@@ -18,6 +18,7 @@ export default function ProfileSide({ info }) {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(localStorage.getItem("profilePicture") || profile);
 
   const handleClose = () => setShowModal(false);
 
@@ -61,7 +62,7 @@ export default function ProfileSide({ info }) {
         </Dropdown>
       </div>
       <div className={`${styles.userInfo}`}>
-        <img src={profile} alt="" />
+        <img src={profilePicture} alt="" />
         <p className={`${styles.userName}`}>
           {info ? info.name : "Undefined User"}{" "}
           <FontAwesomeIcon title="Edit Name" onClick={() => navigate('/profile')} icon={faEdit}></FontAwesomeIcon>
