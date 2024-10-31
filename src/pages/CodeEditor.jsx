@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import styles from '../assets/css/pages/code-editor.module.css';
 import axios from 'axios'; // Import Axios for making HTTP requests
-import token from '../utils/token';
 import { useNavigate } from 'react-router-dom'
-import { customFetch } from '../utils/api';
+import customFetch from '../utils/fetchApi';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -29,8 +28,14 @@ import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { toast } from 'react-toastify';
+import CryptoJS from 'crypto-js';
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
+
+    const userData = localStorage.getItem('userData');
+    const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));  
+
     const [code, setCode] = useState('');
     const [inputValues, setInputValues] = useState('');
     const [output, setOutput] = useState();
@@ -545,8 +550,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
-        const [assessmentTimer, setAssessmentTimer] = useState(data.time_limit);
-        const [assessmentData, setAssessmentData] = useState(data.coding_problems.map((problem, index) => ({
+        const [assessmentTimer, setAssessmentTimer] = useState(mode === 'playground' ? 0 : data?.time_limit || 0);
+        const [assessmentData, setAssessmentData] = useState(data?.coding_problems.map((problem, index) => ({
             id: index,
             title: problem.title,
             description: problem.description,
@@ -556,11 +561,13 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 input: problem.sample_input || "",
                 output: problem.sample_output || ""
             }
-        })));
+        })) || null);
 
 
 
-        const [activeAssessment, setActiveAssessment] = useState(assessmentData.find(assessment => assessment.isActive));
+        const [activeAssessment, setActiveAssessment] = useState(
+            mode === 'Assessment' ? assessmentData.find(assessment => assessment.isActive) : null
+        );
 
         const handleChangeAssessment = (id) => {
             if (id >= assessmentData.length) return; // Stop if id is not valid
@@ -615,14 +622,97 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             // closeOverlay();
         };
 
-        const submitAssessment = () => {
-            const code = assessmentData.find(assessment => assessment.isActive).code;
-            options.submit(code);
+        const testSubmit = () => {
             openModal();
-            closeOverlay();
-        };
+        }
 
+        const [pauseTimer, setPauseTimer] = useState(false);
+
+    const [assessmentStats, setAssessmentStats] = useState({
+        problemSolved: 0,
+        OverallPoints: 0,
+        currentRank: 0,
+        timeRemaining: 0,
+    });
+
+    const submitAssessment = async () => {
+        const allProblemsAndCodes = assessmentData.map(assessment => ({
+            codingProblem: assessment.description,
+            code: assessment.code,
+        }));
     
+        setPauseTimer(true);
+        openModal(); // Open the modal before starting submissions
+        let allSuccessful = true; // Track overall success
+        let totalScore = 0; // Accumulate total score
+        const maxScorePerItem = 100; // Maximum score for each item
+        let assessmentCount = allProblemsAndCodes.length; // Number of assessments
+    
+        for (const assessment of allProblemsAndCodes) {
+            const { codingProblem, code } = assessment;
+    
+            try {
+                const response = await customFetch('/submission/autocheck', {
+                    method: 'POST',
+                    body: JSON.stringify({ codingProblem, code })
+                });
+    
+                // Check if the response has the 'message' property
+                if (response && response.message) {
+                    alert(response.message);
+    
+                    // Extract the score from the response message if it's included as "Total Score: X points"
+                    const scoreMatch = response.message.match(/Total Score: (\d+)/);
+                    if (scoreMatch) {
+                        const score = parseInt(scoreMatch[1], 10);
+                        totalScore += score; // Add score to the total
+                    }
+                } else {
+                    allSuccessful = false;
+                    console.error("Unexpected response structure:", response);
+                }
+            } catch (error) {
+                console.error('Error submitting assessment:', error.message);
+                allSuccessful = false;
+            }
+        }
+    
+        // Calculate GWA as a percentage
+        const gwa = (totalScore / (assessmentCount * maxScorePerItem)) * 100;
+        console.log("GWA:", gwa.toFixed(2) + "%");
+        alert(`Your GWA is: ${gwa.toFixed(2)}%`);
+    
+        // Final feedback to the user
+        if (allSuccessful) {
+            toast.success("All submissions were successful.");
+            options.timesup();
+            handleCloseSubmitModal();
+            options.closeEditor();
+
+            customFetch('/submission/create', {
+                method: 'POST',
+                body: JSON.stringify({
+                    activity_id: data.id,
+                    score: parseInt(gwa.toFixed(2), 10),
+                    status: 'graded',
+                }),
+            })
+                .then(response => {
+                    console.log('Response:', response);
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
+
+        } else {
+            console.log("Some submissions failed. Check the console for details.");
+        }
+        
+
+        
+    };
+        
+        
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
@@ -672,7 +762,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         </button>
                     </div>
                     { mode === 'Assessment' && (
-                        <TimerComponent time={5} finishedTime={finishedAssessmentTimer}/>
+                        <TimerComponent 
+                            time={data.time_limit} 
+                            pause={pauseTimer} 
+                            finishedTime={finishedAssessmentTimer}
+                            onPause={(remainingTime) => console.log("Paused at:", remainingTime)}
+                        />
                     )
                     }
                     <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
@@ -818,7 +913,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                         Test Cases
                                     </button>
                                 </div>
-                                <div onClick={() => submitAssessment} className={`${styles.submitButton}`}>
+                                <div onClick={submitAssessment} className={`${styles.submitButton}`}>
                                     Submit
                                 </div>
                             </div>

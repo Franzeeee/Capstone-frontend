@@ -65,6 +65,8 @@ export default function ClassAssessment() {
             .finally(() => {
                 setIsFetching(false);
             });
+
+            
     }, []);
 
     const handleShow = () => {
@@ -182,7 +184,15 @@ export default function ClassAssessment() {
                     </div>
                 <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                     <Offcanvas.Body>
-                        <CodeEditor data={assessmentData}  options={{ mode: 'Assessment', closeOverlay: () => setShow(false), timesup: () => setStartAssessment(false) }}/>
+                    <CodeEditor 
+                        data={assessmentData}  
+                        options={{ 
+                            mode: 'Assessment', 
+                            closeOverlay: () => setShow(false), 
+                            timesup: () => setStartAssessment(false),
+                            closeEditor: () => setShow(false),
+                        }} 
+                    />
                     </Offcanvas.Body>
                 </Offcanvas>
                 <Offcanvas  
