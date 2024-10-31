@@ -31,7 +31,7 @@ export default function TimerComponent({ time = 0, finishedTime, pause, onPause 
     if (pause && timerRef.current) {
       clearInterval(timerRef.current);
       if (onPause) {
-        onPause(formatTime(countdown)); // Callback to send remaining time when paused
+        onPause(countdown); // Callback to send remaining time when paused
       }
     }
   }, [pause, countdown, onPause]);

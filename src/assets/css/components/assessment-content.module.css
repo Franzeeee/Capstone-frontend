@@ -57,6 +57,7 @@
     border-radius: 5px;
     width: 100%;
     position: relative;
+    overflow: hidden;
     padding: 3px;
 }
 .loadingBar {

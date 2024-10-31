@@ -553,6 +553,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         const [assessmentTimer, setAssessmentTimer] = useState(mode === 'playground' ? 0 : data?.time_limit || 0);
         const [assessmentData, setAssessmentData] = useState(data?.coding_problems.map((problem, index) => ({
             id: index,
+            problem_id: problem.id,
             title: problem.title,
             description: problem.description,
             code: "",
@@ -615,16 +616,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             setShowSubmitModal(false);
         }
 
-        const finishedAssessmentTimer = () => {
-            setAssessmentTimer(0);
-            options.timesup();
-            openModal();
-            // closeOverlay();
-        };
-
-        const testSubmit = () => {
-            openModal();
-        }
 
         const [pauseTimer, setPauseTimer] = useState(false);
 
@@ -632,13 +623,25 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         problemSolved: 0,
         OverallPoints: 0,
         currentRank: 0,
-        timeRemaining: 0,
+        timeConsumed: null,
     });
 
+    const handleTimeConsumed = (time) => {
+        if(timeConsumed === null){
+            setAssessmentStats(prevState => ({
+                ...prevState,
+                timeConsumed: time - data.time_limit
+            }));
+            console.log(time)
+        }
+    };
+
     const submitAssessment = async () => {
+        options.timesup();
         const allProblemsAndCodes = assessmentData.map(assessment => ({
             codingProblem: assessment.description,
             code: assessment.code,
+            problem_id: problem.id
         }));
     
         setPauseTimer(true);
@@ -647,8 +650,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         let totalScore = 0; // Accumulate total score
         const maxScorePerItem = 100; // Maximum score for each item
         let assessmentCount = allProblemsAndCodes.length; // Number of assessments
+
+        const updatedAssessmentData = [...assessmentData];
     
-        for (const assessment of allProblemsAndCodes) {
+        for (const [index, assessment] of allProblemsAndCodes.entries()) {
             const { codingProblem, code } = assessment;
     
             try {
@@ -659,13 +664,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
                 // Check if the response has the 'message' property
                 if (response && response.message) {
-                    alert(response.message);
+                    console.log(response.message);
     
                     // Extract the score from the response message if it's included as "Total Score: X points"
                     const scoreMatch = response.message.match(/Total Score: (\d+)/);
                     if (scoreMatch) {
                         const score = parseInt(scoreMatch[1], 10);
-                        totalScore += score; // Add score to the total
+                        totalScore += score; // Add score to the total 
+                        console.log("Score:", score);
+
+                        updatedAssessmentData[index] = { ...updatedAssessmentData[index], score };
                     }
                 } else {
                     allSuccessful = false;
@@ -680,14 +688,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         // Calculate GWA as a percentage
         const gwa = (totalScore / (assessmentCount * maxScorePerItem)) * 100;
         console.log("GWA:", gwa.toFixed(2) + "%");
-        alert(`Your GWA is: ${gwa.toFixed(2)}%`);
     
         // Final feedback to the user
         if (allSuccessful) {
             toast.success("All submissions were successful.");
-            options.timesup();
+            console.log(updatedAssessmentData)
             handleCloseSubmitModal();
-            options.closeEditor();
 
             customFetch('/submission/create', {
                 method: 'POST',
@@ -695,6 +701,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     activity_id: data.id,
                     score: parseInt(gwa.toFixed(2), 10),
                     status: 'graded',
+                    coding_problem_codes: updatedAssessmentData.map(assessment => ({
+                        problem_id: assessment.problem_id,
+                        code: assessment.code,
+                        score: assessment.score
+                    })),
                 }),
             })
                 .then(response => {
@@ -702,14 +713,25 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
+                })
+                .finally(() => {
+                    options.closeEditor();
+                    document.exitFullscreen();
+                    setAssessmentData([]);
                 });
 
         } else {
             console.log("Some submissions failed. Check the console for details.");
         }
         
+    };
 
-        
+    
+    const finishedAssessmentTimer = () => {
+        setAssessmentTimer(0);
+        options.timesup();
+        // closeOverlay();
+        submitAssessment()
     };
         
         
@@ -725,7 +747,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             iconColor: '#4c00d9', 
                             title: 'Submitting Code', 
                             body: "Please wait, submitting code...",
-                            disableConfirm: true
+                            disableConfirm: true,
+                            hideConfirm: true
                             }}
                     />
             <nav className={`${styles.nav}`}>

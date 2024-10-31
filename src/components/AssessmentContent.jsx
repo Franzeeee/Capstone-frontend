@@ -9,14 +9,14 @@ import ConfirmationModal from './ConfirmationModal';
 
 
 
-export default function AssessmentContent({ status = 'pending', startButton, data }) {
+export default function AssessmentContent({ status = false, startButton, data, submission }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
     const [showSubmitModal, setShowSubmitModal] = useState(false);
 
     const handleBtn = () => { 
-        if (status === 'pending') {
+        if (!status) {
             startButton();
         }
     };
@@ -42,7 +42,7 @@ export default function AssessmentContent({ status = 'pending', startButton, dat
 
     return (
         <>
-            {status === 'pending' ? 
+            {!status ? 
             <div className={styles.container}>
                 
                 <div className={styles.title}>
@@ -87,17 +87,17 @@ export default function AssessmentContent({ status = 'pending', startButton, dat
                         <li>
                             <p>Time Remaining</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>{timeFormatter(0)}</p>
+                            <p>--:--</p>
                         </li>
                         <li>
                             <p>Problem Solved</p>
                             <LoadingBar progress={0} status={status} />
-                            <p>0/1</p>
+                            <p>{data.coding_problems.length}/{data.coding_problems.length}</p>
                         </li>
                         <li>
                             <p>Overall Points</p>
-                            <LoadingBar progress={35} status={status} />
-                            <p>35/100</p>
+                            <LoadingBar progress={submission?.score || 0} status={status} />
+                            <p>{submission?.score || 0}/100</p>
                         </li>
                         <li>
                             <p>Current Rank</p>

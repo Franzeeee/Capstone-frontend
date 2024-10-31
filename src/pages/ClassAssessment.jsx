@@ -26,6 +26,9 @@ export default function ClassAssessment() {
     const [assessmentData, setAssessmentData] = useState(null);
     const [isFetching, setIsFetching] = useState(true);
 
+    const [done, setDone] = useState(false);
+    const [submissionData, setSubmissionData] = useState(null);
+
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(
         JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
@@ -62,11 +65,18 @@ export default function ClassAssessment() {
             .catch(error => {
                 navigate('/not-found');
             })
+
+        customFetch(`/submission/${activityId}/${user.id}`, 'GET')
+            .then(data => {
+                setSubmissionData(data.data);
+                setDone(data.exists);
+            })
+            .catch(error => {
+                // navigate('/not-found');
+            })
             .finally(() => {
                 setIsFetching(false);
             });
-
-            
     }, []);
 
     const handleShow = () => {
@@ -117,11 +127,6 @@ export default function ClassAssessment() {
         navigate(newPath);
     };
 
-    const timesup = () => {
-        setStartAssessment(false);
-    };
-
-
     if (isFetching) {
         return <LoadingPage />;
     }
@@ -171,7 +176,7 @@ export default function ClassAssessment() {
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        <AssessmentContent status='pending' data={assessmentData} startButton={handleShow}/>
+                        <AssessmentContent status={done} data={assessmentData} submission={submissionData} startButton={handleShow}/>
                         {/* <div className={styles.robotContainer}>
                             <img src={perfectRobot} alt="" />
                             <p>Great did an excellent job!</p>
