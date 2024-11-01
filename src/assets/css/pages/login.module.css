@@ -82,10 +82,13 @@
     border-radius: 11px;
     font-weight: 600;
 }
-
+.form-container input {
+    transition: all .3s ease;
+}
 .form-container form input:focus {
     box-shadow: none;
     outline: none;
+    background-color: #fffffff4;
 }
 
 .form-container form > * {

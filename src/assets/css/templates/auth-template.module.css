@@ -12,7 +12,9 @@
 }
 .rightPanel {
     color: white;
-    
+    display: flex;
+    align-items: start;
+    justify-content: start;
 }
 .row {
     width: 100% !important;
@@ -22,8 +24,8 @@
     overflow: hidden;
 }
 .loginPic{
-    width: 90%;
-    height: 80%;
+    width: 80%;
+    object-fit: cover;
 }
 
 @media (max-width: 767px) {
