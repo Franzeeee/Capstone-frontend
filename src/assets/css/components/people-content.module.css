@@ -1,0 +1,28 @@
+.container {
+    height: 100%;
+    width: 100%;
+    border: 1px solid black;
+}
+.instructorContainer {
+    padding: 5px 0;
+    border: 1px solid green;
+    font-family: var(--main-font);
+}
+.instructorContainer .instructorHeader {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.itemCard {
+    width: 100%;
+    padding: 5px;
+    border-left: 3px solid blue;
+    display: grid;
+    grid-template-columns: 8% 1fr;
+    align-items: center;
+    gap: 5px;
+}
+.itemCard img {
+    width: 90%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}

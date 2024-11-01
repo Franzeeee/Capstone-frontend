@@ -63,6 +63,8 @@ export default function ClassContents({ data, code, className }) {
             });
     }, [user.id]);
 
+    const [assessmentIndex, setAssessmentIndex] = useState(0);
+
     return (
         <div className={styles.contentContainer}>
             {
@@ -78,12 +80,12 @@ export default function ClassContents({ data, code, className }) {
                             <p className={styles.lessonTitle}>{lesson.title}</p>
                             <p className={styles.lessonDescription}>Sample</p>
                             <div className={`${styles.status} ${isLessonUnlocked(lesson.id) ? styles.lesson : styles.locked} `} onClick={() => isLessonUnlocked(lesson.id) ? navigate(`/c/${code}/${lesson.title}`, { state: { name: className, lesson: lesson.id } }) : ""}>
-                            <p>{isLessonUnlocked(lesson.id) ? "View Lesson" : <><FontAwesomeIcon icon={faLock} />  Locked</>}</p>
+                            <p>{isLessonUnlocked(lesson.id) ? `View Lesson ${lesson.id}` : <><FontAwesomeIcon icon={faLock} />  Locked</>}</p>
                             </div>
                         </div>
                     </div>
                         {
-                        defaultAssessment.length > 0 && index < defaultAssessment.length && (
+                        defaultAssessment.length > 0 && index < defaultAssessment.length && lesson.id === defaultAssessment[index].lessonId && (
                             <div className={styles.card}>
                                 <div className={styles.left}>
                                     <img src={book} alt={defaultAssessment[index].title} />
@@ -99,13 +101,13 @@ export default function ClassContents({ data, code, className }) {
                                         : null
                                     }
                                     >
-                                    <p>{isAssessmentUnlocked(lesson.id) ? "View Quiz" : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
+                                    <p>{isAssessmentUnlocked(lesson.id) ? `View Quiz ${defaultAssessment[index].lessonId}` : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
                                     </div>
                                 </div>
                             </div>
                         )
+                        
                         }
-
                 </React.Fragment>
             ))}
         </div>

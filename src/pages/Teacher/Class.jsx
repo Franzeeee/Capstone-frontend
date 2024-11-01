@@ -15,6 +15,7 @@ import ProfileSide from '../../components/ProfileSide';
 import CreateAssessment from '../../components/CreateAssessment';
 import AnnouncementContent from '../../components/AnnouncementContent';
 import ClassroomWork from '../../components/ClassroomWork';
+import PeopleContents from '../../components/PeopleContents';
 
 
 
@@ -103,7 +104,7 @@ export default function Class() {
                         activePage === 'announcement' && <AnnouncementContent />
                     }
                     {
-                        activePage === 'people' && <p>People</p>
+                        activePage === 'people' && <PeopleContents />
                     }
 
                 </div>
