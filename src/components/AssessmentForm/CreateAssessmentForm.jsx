@@ -419,7 +419,7 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
         <Button className={styles.cancelCanvas} onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className={styles.Submit}>Submit</Button>
       </div>
     </Form>
   );

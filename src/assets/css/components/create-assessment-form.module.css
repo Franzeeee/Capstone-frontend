@@ -139,3 +139,9 @@
   align-items: center;
   width: 100%;
 }
+.Submit{
+  background-color: #5D5DD4;
+}
+.Submit:hover{
+  background-color: #4A4AC3;
+}
