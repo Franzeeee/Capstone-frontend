@@ -104,7 +104,7 @@ export default function Class() {
                         activePage === 'announcement' && <AnnouncementContent />
                     }
                     {
-                        activePage === 'people' && <PeopleContents />
+                        activePage === 'people' && <PeopleContents classInfo={classInfo} classId={classInfo.id} />
                     }
 
                 </div>

@@ -1,29 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../assets/css/components/people-content.module.css'
 import profile from '../assets/img/user.png'
+import customFetch from '../utils/fetchApi'
 
-export default function PeopleContents() {
+export default function PeopleContents({classId, classInfo}) {
 
     const [people, setPeople] = useState({
         instructor: {
-            name: "Teacher Jim"
+            name: classInfo.teacher.name
         },
-        classmates: [
-            {
-                name: "John Doe"
-            },
-            {
-                name: "Jane Doe"
-            },
-            {
-                name: "John Smith"
-            },
-            {
-                name: "Jane Smith"
-            },
-
-        ]
+        classmates: []
     });
+
+    useEffect(() => {
+        console.log(classInfo);
+        customFetch(`/class/${classId}/students`)
+            .then(data => {
+                setPeople({
+                    instructor: {
+                        name: classInfo.teacher.name
+                    },
+                    classmates: data
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -39,7 +42,7 @@ export default function PeopleContents() {
                 {
                     people?.classmates.map((classmate, index) => (
                         <div key={index} className={styles.itemCard}>
-                            <img src={profile} alt="" />
+                            <img src={classmate?.profile_picture || profile} alt="" />
                             <p>{classmate.name}</p>
                         </div>
                     ))

@@ -13,6 +13,7 @@ import { Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/logout";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
+import customFetch from "../utils/fetchApi";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
@@ -22,11 +23,16 @@ export default function ProfileSide({ info }) {
 
   useEffect(() => {
     const storedProfilePicture = localStorage.getItem("profilePicture");
-    if (storedProfilePicture && !storedProfilePicture.includes("http")) {
-      setProfilePicture(profile);
-    } else {
-      setProfilePicture(storedProfilePicture);
-    }
+    
+    customFetch('/profile/picture/fetch')
+      .then(data => {
+          setProfilePicture(data.path);
+          localStorage.setItem("profilePicture", data.path);
+      })
+      .catch(error => {
+          console.error('Error:', error.message);
+      });
+
     
   }, []);
 
@@ -43,6 +49,7 @@ export default function ProfileSide({ info }) {
   //     console.error("Logout was unsuccessful");
   //   }
   // };
+
 
   return (
     <>
@@ -72,7 +79,7 @@ export default function ProfileSide({ info }) {
         </Dropdown>
       </div>
       <div className={`${styles.userInfo}`}>
-        <img src={profilePicture} alt="" />
+        <img src={profilePicture !== null ? profilePicture : profile} alt="Profile Picture" />
         <p className={`${styles.userName}`}>
           {info ? info.name : "Undefined User"}{" "}
           <FontAwesomeIcon title="Edit Name" onClick={() => navigate('/profile')} icon={faEdit}></FontAwesomeIcon>

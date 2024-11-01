@@ -124,10 +124,10 @@ export default function CreateAssessment({handleChangePage, classId}) {
             <div className={`${styles.createContainer}`}>
                 <div className={styles.menuContainer}>
                     <ul>    
-                        <li className={activePage === 'default' && styles.active} onClick={() => handleActivePage("default")}>Default</li>
-                        <li className={activePage === 'classwork' && styles.active} onClick={() => handleActivePage("classwork")}>Classwork</li>
-                        <li className={activePage === 'announcement' && styles.active} onClick={() => handleActivePage("announcement")}>Announcement</li>
-                        <li className={activePage === 'people' && styles.active} onClick={() => handleActivePage("people")}>People</li>
+                        <li className={activePage === 'default' ? styles.active : ''} onClick={() => handleActivePage("default")}>Default</li>
+                        <li className={activePage === 'classwork' ? styles.active : ''} onClick={() => handleActivePage("classwork")}>Classwork</li>
+                        <li className={activePage === 'announcement' ? styles.active : ''} onClick={() => handleActivePage("announcement")}>Announcement</li>
+                        <li className={activePage === 'people' ? styles.active: ''} onClick={() => handleActivePage("people")}>People</li>
                     </ul>
                 </div>
                 <div className={styles.buttonContainer}>
