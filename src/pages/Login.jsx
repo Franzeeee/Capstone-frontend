@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthTemplate } from '../templates/AuthTemplate'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import logoHorizontal from '../assets/img/logo-horizontal.png'
+import logoHorizontal from '../assets/img/logoCodelab.png'
 import { customFetch } from '../utils/api';
 import { toast, ToastContainer } from 'react-toastify'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -83,7 +83,7 @@ export const Login = () => {
                 <div className={`${styles['form-container']}`}>
                     <div className={`text ${styles.headerText}`}>
                         <img src={logoHorizontal} alt="" className={`${styles.logo}`}/>
-                        <p className={` ${styles.tagline} m-0`}>CodeLab: Empowering Students to Learn Python Programming</p>
+                        <p className={` ${styles.tagline} m-0 mt-3`}>CodeLab: Empowering Students to Learn Python Programming</p>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
@@ -95,7 +95,7 @@ export const Login = () => {
                             <input autoComplete='current-password' type={showPassword ? "text" : "password"}  name="password" onChange={handleInputChange} className="form-control" id="password" placeholder="Password"/>
                             <FontAwesomeIcon icon={!showPassword ? faEyeSlash : faEye} className={`${styles.showPassword}`} onClick={handleShowPassword}/>
                         </div>
-                        <button type="submit" className="btn btn-primary" disabled={loader}>{ loader ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"}</button>
+                        <button type="submit" className="btn btn-primary" style={{backgroundColor: '#5D5DD4'}} disabled={loader}>{ loader ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"}</button>
                         <p className='text-center mt-3'>Already have an account? <span onClick={moveToLogin}>Sign up</span></p>
                     </form>
                 </div>
