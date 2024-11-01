@@ -12,6 +12,7 @@ import CodeEditor from '../CodeEditor';
 import TextFormatter from '../../components/TextFormatter';
 import lessonContent from '../../utils/lessons';
 import lessons from '../../utils/data';
+import customFetch from '../../utils/fetchApi';
 
 export default function ClassLesson() {
     const navigate = useNavigate()
@@ -89,6 +90,17 @@ export default function ClassLesson() {
         // Navigate to the new path without the last segment
         navigate(newPath);
     };
+
+    useEffect(() => {
+        customFetch()
+            .then(data => {
+                console.log('Data:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+    });
+
   return (
     <div className={`${styles.container}`}>
         <div className={`${styles.sideNav}`}>
@@ -102,6 +114,32 @@ export default function ClassLesson() {
                 <Accordion defaultActiveKey="0">
                     <Accordion.Item eventKey="0" className={styles.accordion}>
                         <Accordion.Header className={styles.accordionHeader}>Class Lesson</Accordion.Header>
+                        <Accordion.Body className={styles.accordionBody}>
+                            <ul>
+                                {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (
+                                    <li key={index} className={`${lesson ===  currentLesson ? styles.activeLesson : ""}`} onClick={() => setCurrentLesson(lesson)}>
+                                        <FontAwesomeIcon icon={faLock} /> {lesson}
+                                    </li>
+                                ))
+                                }
+                            </ul>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1" className={styles.accordion}>
+                        <Accordion.Header className={styles.accordionHeader}>Class Default Activity</Accordion.Header>
+                        <Accordion.Body className={styles.accordionBody}>
+                            <ul>
+                                {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (
+                                    <li key={index} className={`${lesson ===  currentLesson ? styles.activeLesson : ""}`} onClick={() => setCurrentLesson(lesson)}>
+                                        <FontAwesomeIcon icon={faLock} /> {lesson}
+                                    </li>
+                                ))
+                                }
+                            </ul>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="2" className={styles.accordion}>
+                        <Accordion.Header className={styles.accordionHeader}>Classwork</Accordion.Header>
                         <Accordion.Body className={styles.accordionBody}>
                             <ul>
                                 {lessonTitle.length > 0 && lessonTitle.map((lesson, index) => (

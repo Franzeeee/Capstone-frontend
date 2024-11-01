@@ -31,7 +31,6 @@ export default function ClassContents({ data, code, className }) {
             method: 'GET',
         })
             .then(response => {
-                console.log('Response:', response);
                 setDefaultAssessment(response);
             })
             .catch(error => {
@@ -81,7 +80,7 @@ export default function ClassContents({ data, code, className }) {
                             <p className={styles.lessonDescription}>Sample</p>
                             <div className={`${styles.status} ${isLessonUnlocked(lesson.id) ? styles.lesson : styles.locked}`} 
                                 onClick={() => isLessonUnlocked(lesson.id) ? navigate(`/c/${code}/${lesson.title}`, { state: { name: className, lesson: lesson.id } }) : ""}>
-                                <p>{isLessonUnlocked(lesson.id) ? `View Lesson ${lesson.id}` : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
+                                <p>{isLessonUnlocked(lesson.id) ? `View Lesson` : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
                             </div>
                         </div>
                     </div>
@@ -105,7 +104,7 @@ export default function ClassContents({ data, code, className }) {
                                             : null
                                         }
                                     >
-                                        <p>{isAssessmentUnlocked(lesson.id) ? `View Quiz ${assessment.lessonId}` : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
+                                        <p>{isAssessmentUnlocked(lesson.id) ? `View Quiz` : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
                                     </div>
                                 </div>
                             </div>

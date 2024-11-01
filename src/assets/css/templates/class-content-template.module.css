@@ -1,0 +1,209 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    height: 100svh;
+    gap: 1.5rem;
+}
+.sideNav {
+    display: flex;
+    flex-direction: column;
+}
+.sideNav .logo {
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sideNav .logo img {
+    width: 70%;
+}
+
+.backButton {
+    padding: 5px 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.backButton:hover {
+    color: rgb(89, 94, 99);
+}
+.backButton svg {
+    font-size: .8rem;
+    cursor: pointer;
+}
+
+.lessons {
+    padding: 10px;
+}
+.accordionHeader button {
+    background-color: #DBDBFF !important;
+    border-radius: 5px;
+}
+.accordionHeader button:focus  {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.accordionBody ::-webkit-scrollbar {
+    display: none;
+}
+
+.accordionBody {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    border: none;
+    max-height: 300px !important;
+    padding: 0 !important;
+}
+.accordionBody ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0;
+}
+.accordionBody ul li {
+    padding: 10px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 20px 1fr;
+}
+.accordionBody ul li * {
+    align-self: center;
+}
+.accordionBody ul li svg * {
+    border: 1px solid rgb(255, 255, 255);
+}
+.accordion {
+    border: none;
+    margin-bottom: 10px;
+}
+
+.activeLesson {
+    color: #000000;
+    font-weight: 600;
+    background-color: #f1f1f1 !important;
+    border-radius: 5px;
+}
+.content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px;
+    overflow: auto;
+}
+.content::-webkit-scrollbar {
+    width: 10px; /* Set the width of the scrollbar */
+}
+
+.content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+.content::-webkit-scrollbar-thumb {
+    background-color: #a2a2a2; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded scrollbar thumb */
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #868686; /* Darker color when hovered */
+}
+
+.content .breadcrumbs ul {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0px 0 0 !important;
+    font-size: .9rem;
+    margin: 5px;
+}
+.content .breadcrumbs ul li {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+}
+.content .breadcrumbs ul li:not(.active):nth-child(odd) {
+    text-decoration: underline;
+    color: #5D5DD4;
+    cursor: pointer;
+}
+.lessonContent {
+    padding-bottom: 10px;
+    width: 95%;
+}
+.lessonContent * {
+    margin: 0;
+}
+.lessonTitle h1{
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.para {
+    width: 100%;
+    line-height: 1.6;
+    margin-bottom: 1em;
+    text-align: justify;
+    margin-bottom: 10px !important;
+}
+.codingDesign {
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #1f2335;
+    color: white;
+    margin-bottom: 10px;
+}
+
+
+
+.comment {
+    color: #949494;
+}
+.control {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    position: relative;
+}
+.control button {
+    border: none;
+    padding: 5px 30px;
+    border-radius: 5px;
+}
+.nextButton {
+    border: 1.5px solid #266eff !important;
+}
+.try {
+    background-color: #266eff;
+    color: white;
+}
+.back {
+    border: 1px solid rgb(255, 0, 0) !important;
+}
+.fullscreenOffcanvas {
+    width: 100vw !important;  /* Full viewport width */
+    height: 100vh !important; /* Full viewport height */
+    padding: none;
+}
+.fullscreenOffcanvas div:first-child {
+    padding: 0;
+    overflow: hidden;
+}
+.lessonContent table {
+    width: 100%;
+}
+.bold {
+    font-weight: 700;
+}
+
+.dataList li{
+    list-style: disc;
+}

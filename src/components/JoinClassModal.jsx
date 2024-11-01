@@ -24,7 +24,7 @@ const JoinClassModal = ({ show, handleClose, handleJoinSuccess, studentID }) => 
             const data = await response.json(); // Parse the JSON response
         
             if (response.ok) {
-                handleJoinSuccess(data); // Pass the response to the main page
+                const newLocal = handleJoinSuccess({ ...data, class_code: { code: classCode } });
                 handleClose(); // Close the modal
                 setClassCode("")
             } else {
