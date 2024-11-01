@@ -3,6 +3,7 @@ import styles from '../assets/css/components/course-content.module.css';
 import book from '../assets/img/book.png';
 import { useNavigate } from 'react-router-dom';
 import lessons from '../utils/data';
+import lessonsWeb from '../utils/BASIC_WEB'
 import { toast } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import customFetch from '../utils/fetchApi';
@@ -13,6 +14,8 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 export default function ClassContents({ data, code, className }) {
     const navigate = useNavigate();
     const { courseId } = data;
+
+    const subject = "Web Development";
 
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(

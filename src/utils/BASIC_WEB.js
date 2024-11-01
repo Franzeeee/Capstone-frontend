@@ -1,6 +1,7 @@
-const lessons = [
+const lessonsWeb = [
 {
  title: "Introduction to HTML",
+ id: 0,
  content: `
  \`\`\`Para
 	HTML, or HyperText Markup Language, is the standard language used to create and design web pages. It provides the basic structure of a website, which is enhanced and modified by other technologies like CSS (Cascading Style Sheets) and JavaScript.
@@ -7030,12 +7031,4 @@ In the second example, the container uses overflow: auto. When the content excee
 ]
 
 
-
-
-
-
-
-
-
-
-
+export default lessonsWeb;
