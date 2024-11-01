@@ -131,7 +131,10 @@
     /* Media query for screens smaller than 768px (mobile devices) */
     .content {
         align-content: center !important;
-        justify-content: start !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        height: 500px !important;
+        padding: 1rem !important;
     }
     .tagline {
         display: none;
