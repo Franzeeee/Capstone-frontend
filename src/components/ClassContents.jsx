@@ -37,22 +37,39 @@ export default function ClassContents({ data, code, className }) {
     const [unlockedAssessmentIndex, setUnlockedAssessmentIndex] = useState(progress?.last_completed_quiz + 1 || 0);
 
     const isLessonUnlocked = (lessonId, hasAssessment = true) => {
-        if (progress?.last_completed_lesson === null) {
+        // Allow access to the first lesson (id 0) for all users if there's no progress
+        if (!progress || progress.last_completed_lesson === null) {
             return lessonId === 0 || user.role === 'teacher';
         }
+    
         const baseUnlock = lessonId <= progress.last_completed_lesson + 1;
         const extraUnlock = hasAssessment && lessonId <= progress.last_completed_lesson + 2;
-        return baseUnlock || extraUnlock || (!hasAssessment && lessonId === progress.last_completed_lesson) || user.role === 'teacher';
+    
+        return (
+            baseUnlock ||
+            extraUnlock ||
+            (!hasAssessment && lessonId === progress.last_completed_lesson) ||
+            user.role === 'teacher'
+        );
     };
     
     const isAssessmentUnlocked = (lessonId, hasAssessment = true) => {
-        if (progress?.last_completed_quiz === null) {
+        // Allow access to the first quiz (id 0) for all users if there's no progress
+        if (!progress || progress.last_completed_quiz === null) {
             return lessonId === 0 || user.role === 'teacher';
         }
+    
         const baseUnlock = lessonId <= progress.last_completed_quiz + 1;
         const extraUnlock = hasAssessment && lessonId <= progress.last_completed_quiz + 2;
-        return baseUnlock || extraUnlock || (!hasAssessment && lessonId === progress.last_completed_quiz) || user.role === 'teacher';
+    
+        return (
+            baseUnlock ||
+            extraUnlock ||
+            (!hasAssessment && lessonId === progress.last_completed_quiz) ||
+            user.role === 'teacher'
+        );
     };
+    
 
     useEffect(() => {
         customFetch(`/student/progress?student_id=${user.id}`)
