@@ -277,24 +277,31 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     }
 }
 .Header{
-    background-color: #DBDBFF;
+    background: linear-gradient(110.75deg, #8E8EE9 5.35%, #5D5DD4 72.54%);
 }
 .Title{
     font-weight: 600;
-    color: #5D5DD4;
+    color: #f6eeee;
 }
 .Create{
     background-color: #5D5DD4;
-    border-radius: 20px;
 }
 .Create:hover{
     background-color: #4A4AC3;
 }
 .Close{
-    border-radius: 20px;
-    background-color: #646464;
+    background-color: #f73a3ae4;
     border: none;
 }
 .Close:hover{
-    background-color: #424242;
+    background-color: #df2828e4;
+}
+.label{
+    font-size: .75rem;
+    font-weight: 500;
+}
+.contain{
+    padding: 2%;
+    border: #e1dfdf solid 1px;
+    margin-top: 2%;
 }
