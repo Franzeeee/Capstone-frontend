@@ -82,22 +82,30 @@ export default function ClassContents({ data, code, className }) {
                             </div>
                         </div>
                     </div>
-                    {
-                        defaultAssessment.length > 0 && defaultAssessment[0].lessonId === parseInt(index) && (
+                        {
+                        defaultAssessment.length > 0 && index < defaultAssessment.length && (
                             <div className={styles.card}>
-                            <div className={styles.left}>
-                                <img src={book} alt={lesson.title} />
-                            </div>
-                            <div className={styles.right}>
-                                <p className={styles.lessonTitle}>{defaultAssessment[0].title}</p>
-                                <p className={styles.lessonDescription}>{defaultAssessment[0].description}</p>
-                                <div className={`${styles.status} ${isAssessmentUnlocked(lesson.id) ? styles.viewAssessment : styles.locked}`} onClick={() => isLessonUnlocked(lesson.id) ? navigate(`/c/${code}/a/${defaultAssessment[0].title}`, { state: { name: className, progress: progress, item: defaultAssessment[0] } }) : null}>
-                                    <p>{isAssessmentUnlocked(lesson.id) ? "View Quiz" : <><FontAwesomeIcon icon={faLock} />  Locked</>}</p>
+                                <div className={styles.left}>
+                                    <img src={book} alt={defaultAssessment[index].title} />
+                                </div>
+                                <div className={styles.right}>
+                                    <p className={styles.lessonTitle}>{defaultAssessment[index].title}</p>
+                                    <p className={styles.lessonDescription}>{defaultAssessment[index].description}</p>
+                                    <div
+                                    className={`${styles.status} ${isAssessmentUnlocked(lesson.id) ? styles.viewAssessment : styles.locked}`}
+                                    onClick={() =>
+                                        isLessonUnlocked(lesson.id) ? 
+                                        navigate(`/c/${code}/a/${defaultAssessment[index].title}`, { state: { name: className, progress: progress, item: defaultAssessment[index] } }) 
+                                        : null
+                                    }
+                                    >
+                                    <p>{isAssessmentUnlocked(lesson.id) ? "View Quiz" : <><FontAwesomeIcon icon={faLock} /> Locked</>}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         )
-                    }
+                        }
+
                 </React.Fragment>
             ))}
         </div>
