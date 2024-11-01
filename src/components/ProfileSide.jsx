@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../assets/css/components/profile-side.module.css";
 import {
   faBell,
@@ -18,10 +18,17 @@ export default function ProfileSide({ info }) {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(() => {
+  const [profilePicture, setProfilePicture] = useState(profile);
+
+  useEffect(() => {
     const storedProfilePicture = localStorage.getItem("profilePicture");
-    return storedProfilePicture ? storedProfilePicture : profile;
-  });
+    if (storedProfilePicture && !storedProfilePicture.includes("http")) {
+      setProfilePicture(profile);
+    } else {
+      setProfilePicture(storedProfilePicture);
+    }
+    
+  }, []);
 
   const handleClose = () => setShowModal(false);
 
