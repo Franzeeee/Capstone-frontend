@@ -40,8 +40,8 @@
         border-bottom-left-radius: 70px;
         border-bottom-right-radius: 70px;
         display: none;
-        align-items: center;
-        justify-content: center;
+        align-items: start;
+        justify-content: start;
         color: white;
         padding: 20px;
     }
