@@ -24,6 +24,10 @@ export default function ClassAssessment() {
     const [startAssessment, setStartAssessment] = useState(false);
     const [inFullscreen, setInFullscreen] = useState(false);
     const [assessmentData, setAssessmentData] = useState(null);
+    const [rank, setRank] = useState({
+        rank: 0,
+        total: 0
+    });
     const [isFetching, setIsFetching] = useState(true);
 
     const [done, setDone] = useState(false);
@@ -70,6 +74,10 @@ export default function ClassAssessment() {
             .then(data => {
                 setSubmissionData(data.data);
                 setDone(data.exists);
+                setRank({
+                    rank: data.rank,
+                    total: data.total_submissions
+                });
             })
             .catch(error => {
                 // navigate('/not-found');
@@ -176,7 +184,7 @@ export default function ClassAssessment() {
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        <AssessmentContent status={done} data={assessmentData} submission={submissionData} startButton={handleShow}/>
+                        <AssessmentContent status={done} rank={rank} data={assessmentData} submission={submissionData} startButton={handleShow}/>
                         {/* <div className={styles.robotContainer}>
                             <img src={perfectRobot} alt="" />
                             <p>Great did an excellent job!</p>

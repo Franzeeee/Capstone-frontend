@@ -2,6 +2,7 @@ const lessons = [
     {
         id: 0,
         title: "Variables",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             In Python, variables are used to store information to be referenced and manipulated within a program. They serve as symbolic names (or identifiers) for values. Variables provide a way to label data with a descriptive name, making your code more readable and logical.

@@ -9,7 +9,7 @@ import ConfirmationModal from './ConfirmationModal';
 
 
 
-export default function AssessmentContent({ status = false, startButton, data, submission }) {
+export default function AssessmentContent({ status = false, startButton, data, rank, submission }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
@@ -37,6 +37,9 @@ export default function AssessmentContent({ status = false, startButton, data, s
         }
     };
 
+    useEffect(() => {
+        console.log(submission)
+    });
     
 
 
@@ -86,13 +89,13 @@ export default function AssessmentContent({ status = false, startButton, data, s
                     <ul>
                         <li>
                             <p>Time Remaining</p>
-                            <LoadingBar progress={100} status={status} />
+                            <LoadingBar progress={0} status={status} />
                             <p>--:--</p>
                         </li>
                         <li>
-                            <p>Problem Solved</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>{data.coding_problems.length}/{data.coding_problems.length}</p>
+                            <p>Total Problem</p>
+                            <LoadingBar progress={100} status={status} />
+                            <p>{data.coding_problems.length}</p>
                         </li>
                         <li>
                             <p>Overall Points</p>
@@ -101,8 +104,8 @@ export default function AssessmentContent({ status = false, startButton, data, s
                         </li>
                         <li>
                             <p>Current Rank</p>
-                            <LoadingBar progress={60} status={status} />
-                            <p>12th</p>
+                            <LoadingBar progress={100} status={status} />
+                            <p>{getOrdinalSuffix(rank.rank) ?? '--'}</p>
                         </li>
                     </ul>
                     {/* <div className={styles.robotContainer}>
@@ -142,3 +145,18 @@ const LoadingBar = ({ progress }) => {
     );
 };
 
+
+function getOrdinalSuffix(rank) {
+    const lastDigit = rank % 10;
+    const lastTwoDigits = rank % 100;
+
+    if (lastDigit === 1 && lastTwoDigits !== 11) {
+        return rank + "st";
+    } else if (lastDigit === 2 && lastTwoDigits !== 12) {
+        return rank + "nd";
+    } else if (lastDigit === 3 && lastTwoDigits !== 13) {
+        return rank + "rd";
+    } else {
+        return rank + "th";
+    }
+}

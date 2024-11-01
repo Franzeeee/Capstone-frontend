@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/components/course-content.module.css';
-import book from '../assets/img/book.png';
+import book from '../assets/img/book.png'; 
 import customFetch from '../utils/fetchApi';
+import { toast } from 'react-toastify';
 
 export default function Classwork({ classId }) {
     const [isFetching, setIsFetching] = useState(true);
     const [classwork, setClasswork] = useState([]);
 
+    const [fetchMessage, setFetchMessage] = useState(null);
+
     useEffect(() => {
         customFetch(`/activity/${classId}/all`, 'GET')
             .then(data => {
-                console.log(data);
                 setClasswork(data);
             })
             .catch(error => {

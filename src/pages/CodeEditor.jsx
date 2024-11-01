@@ -691,7 +691,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
         // Final feedback to the user
         if (allSuccessful) {
-            toast.success("All submissions were successful.");
             console.log(updatedAssessmentData)
             handleCloseSubmitModal();
 
