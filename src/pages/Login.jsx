@@ -61,10 +61,8 @@ export const Login = () => {
                     const stringData = JSON.stringify(data.message);
                     const hashedData = CryptoJS.AES.encrypt(stringData, 'capstone');
                     localStorage.setItem('userData', hashedData);
-                    console.log(data)
-                    console.log('Test property:', data.test);
                     fetchProfilePicture()
-                        .then(data => console.log('Profile picture data:', data))
+                        .then(data => localStorage.setItem('profilePicture', data.path))
                         .catch(error => console.error('Error fetching profile picture:', error));
                     navigate('/')
                 }
