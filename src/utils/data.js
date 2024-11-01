@@ -747,6 +747,7 @@ print(number.isdigit())  # Output: True
     {
         id: 7,
         title: "Example of String Manipulation in Python",
+        hasAssessment: false,
         content: `
             \`\`\`Code
             # String creation and basic manipulation
