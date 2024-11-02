@@ -19,6 +19,7 @@ import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
 import Testing from "./pages/Testing";
 import TeacherAssessmentPage from "./pages/TeacherAssessmentPage";
+import ClassDashboard from "./pages/ClassesPage/ClassDashboard";
 
 export const App = () => {
   return (
@@ -34,6 +35,8 @@ export const App = () => {
             <Route path='/announcements' element={<Announcement />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/profile" element={<Profile />}/>
+            <Route path="/teacher/classes" element={<TeacherAssessmentPage />}/>
+            <Route path="/teacher/classes/:code/dashboard" element={<ClassDashboard />} />
         </Route>
         
         <Route path="/" element={<Sample />} />
@@ -41,8 +44,6 @@ export const App = () => {
 
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound/>} />
-
-        <Route path="/teacher/assessments" element={<TeacherAssessmentPage />}/>
 
       </Routes>
     </BrowserRouter>

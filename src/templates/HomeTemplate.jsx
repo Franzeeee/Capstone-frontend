@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBullhorn,
   faCalendarDays,
+  faChalkboardTeacher,
   faCode,
   faHome,
   faStar,
@@ -17,6 +18,7 @@ import { ToastContainer } from "react-toastify";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import CryptoJS from "crypto-js";
 const ErrorContext = createContext();
+
 
 export default function HomeTemplate({ children }) {
   const [error, setError] = useState(null);
@@ -56,7 +58,7 @@ export default function HomeTemplate({ children }) {
                   onClick={() => navigate("/dashboard")}
                   className={`${
                     location.pathname === "/dashboard" ||
-                    location.pathname === "/c/testurl"
+                    location.pathname.includes("/c/")
                       ? styles.active
                       : ""
                   }`}
@@ -95,12 +97,13 @@ export default function HomeTemplate({ children }) {
                     <>
                       <li
                         className={`${
-                          location.pathname === "/assessment"
+                          location.pathname === "/teacher/classes" ||
+                          location.pathname.includes("/teacher/classes/")
                             ? styles.active
                             : ""
                         }`}
-                        onClick={() => navigate('/teacher/assessments')}>
-                        <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Class
+                        onClick={() => navigate('/teacher/classes')}>
+                        <FontAwesomeIcon icon={faChalkboardTeacher}></FontAwesomeIcon> Classes
                       </li>
                       <li onClick={toggleShow}>
                           <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Grades

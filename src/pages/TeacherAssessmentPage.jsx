@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import customFetch from '../utils/fetchApi';
+import LessonCardLoader from '../components/LazyLoaders/LessonCardLoader';
 
 export default function TeacherAssessmentPage() {
     const navigate = useNavigate();
@@ -22,7 +23,6 @@ export default function TeacherAssessmentPage() {
     useEffect(() => {
         customFetch(`/class/all`, 'GET')
             .then(data => {
-                console.log('Data:', data);
                 setClassItems(data);
             })
             .catch(error => {
@@ -42,11 +42,12 @@ export default function TeacherAssessmentPage() {
                 <div className={`${styles.contentContainer}`}>
                     <div className={`${styles.header}`}>
                         <div className={`${styles.create}`}>
-                            <p>Class</p>
+                            <p>Classes</p>
                         </div>
                     </div>
                     <div className={`${styles.cardContainer}`}>
-                        { classItems &&
+                        { classItems ? classItems.length === 0 ? <p className='text-center'>No classes found</p> : null : <LessonCardLoader />}
+                        { classItems && classItems.length > 0 &&    
                             classItems.map((classItem, index) => (
                             <div key={index} className={`${styles.card}`}>
                                 <div className={`${styles.courseImage}`}>
@@ -69,7 +70,7 @@ export default function TeacherAssessmentPage() {
                                         placement="auto" // Adjust placement as needed
                                         overlay={<Tooltip id={`tooltip-${index}`}>Class Dashboard</Tooltip>}
                                     >
-                                    <div className={`${styles.viewButton}`} >
+                                    <div className={`${styles.viewButton}`} onClick={() => navigate(`${classItem.class_code.code}/dashboard`, {state: {verified: true, data: classItem}})} >
                                         <p className='m-0' title='Overview'><FontAwesomeIcon icon={faArrowRight} fade /></p>
                                     </div>
                                     </OverlayTrigger>
