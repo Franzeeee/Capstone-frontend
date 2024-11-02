@@ -43,7 +43,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
 
     return (
         <>
-            <AssessmentRankingModal show={showRanking} handleClose={handleClose} />
+            <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />
             {!status ? 
             <div className={styles.container}>
                 
