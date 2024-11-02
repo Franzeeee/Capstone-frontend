@@ -6,13 +6,15 @@ import sad from '../assets/img/assessment-fail.png'
 import SubmittingModal from './SubmitLoader';
 import ConfirmationModal from './ConfirmationModal';
 import AssessmentRankingModal from './AssessmentRankingModal';
-
+import { getUserData } from '../utils/userInformation';
 
 
 
 export default function AssessmentContent({ status = false, startButton, data, rank, submission }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
+
+    const user = getUserData();
 
     const [showRanking, setShowRanking] = useState(false);
 
@@ -76,7 +78,9 @@ export default function AssessmentContent({ status = false, startButton, data, r
                 </div>
                 <div className={styles.controls}>
                     <button onClick={() => setShowRanking(true)}>View Ranking</button>
-                    <button onClick={handleBtn}>Start Assessment</button>
+                    { user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>
+                        
+                    }
                 </div>
             </div>
             : 

@@ -33,6 +33,8 @@ export default function Class() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const [nullClass, setNullClass] = useState(null);
+
     const api  = import.meta.env.VITE_API_URL;
 
     const [activePage, setActivePage] = useState("default");
@@ -67,12 +69,13 @@ export default function Class() {
     }
 
     if (error) {
-    return <p>Error: {error}</p>;
+    return navigate('/class-not-found');
     }
     
     const handleActivePage = (page) => {
         setActivePage(page);
     }
+    
 
     return (
         <HomeTemplate>

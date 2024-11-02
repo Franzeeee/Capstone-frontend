@@ -18,6 +18,7 @@ import Sample from "./pages/Sample";
 import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
 import Testing from "./pages/Testing";
+import TeacherAssessmentPage from "./pages/TeacherAssessmentPage";
 
 export const App = () => {
   return (
@@ -41,7 +42,7 @@ export const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound/>} />
 
-        <Route path="/testing" element={<Testing />}/>
+        <Route path="/teacher/assessments" element={<TeacherAssessmentPage />}/>
 
       </Routes>
     </BrowserRouter>

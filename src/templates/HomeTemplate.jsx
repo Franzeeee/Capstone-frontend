@@ -15,13 +15,18 @@ import PracticeTest from "../components/PracticeTest";
 import Modal from "react-bootstrap/Modal";
 import { ToastContainer } from "react-toastify";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
-
+import CryptoJS from "crypto-js";
 const ErrorContext = createContext();
 
 export default function HomeTemplate({ children }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const userData = localStorage.getItem('userData');
+  const [user, setUser] = useState(
+      JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
+  );
 
   const [show, setShow] = useState(false);
 
@@ -62,9 +67,6 @@ export default function HomeTemplate({ children }) {
                   <FontAwesomeIcon icon={faCode}></FontAwesomeIcon> Coding
                   Playground
                 </li>
-                <li onClick={toggleShow}>
-                  <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Grades
-                </li>
                 <li
                   onClick={() => navigate("/calendar")}
                   className={`${
@@ -88,6 +90,31 @@ export default function HomeTemplate({ children }) {
                   <FontAwesomeIcon icon={faBullhorn}></FontAwesomeIcon>{" "}
                   Announcements
                 </li>
+                {
+                  user.role === 'teacher' ? (
+                    <>
+                      <li
+                        className={`${
+                          location.pathname === "/assessment"
+                            ? styles.active
+                            : ""
+                        }`}
+                        onClick={() => navigate('/teacher/assessments')}>
+                        <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Class
+                      </li>
+                      <li onClick={toggleShow}>
+                          <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Grades
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li onClick={toggleShow}>
+                        <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Grades
+                      </li>
+                    </>
+                  )
+                }
+                
               </ul>
             </div>
             <PracticeTest />
