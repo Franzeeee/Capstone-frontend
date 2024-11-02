@@ -93,8 +93,8 @@
     position: absolute;
     top: -8%;
     right: -8%;
-    background-color: rgb(252, 252, 46);
-    color: rgb(54, 54, 54);
+    background-color: gold;
+    color: rgb(255, 255, 255);
     padding: 4px 11px;
     border-radius: 100%;
 }
@@ -118,14 +118,13 @@
     width: 100%;
 }
 .topSpot .bgPurple {
-    background-color: #5340f8e4;
+    background-color: silver;
     padding: 4px 9px;
     color: white;
 }
 .topSpot .thirdPlace {
-    background-color: #13ff0be4;
+    background-color: rgba(154, 48, 48, 0.898);
     padding: 4px 9px;
-    color: rgb(83, 83, 83);
 }
 .studentContainer {
     display: flex;
