@@ -13,7 +13,7 @@ export default function PeopleContents({classId, classInfo}) {
     });
 
     useEffect(() => {
-        console.log(classInfo);
+
         customFetch(`/class/${classId}/students`)
             .then(data => {
                 setPeople({

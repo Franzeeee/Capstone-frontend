@@ -130,9 +130,11 @@ export default function CreateAssessment({handleChangePage, classId}) {
                         <li className={activePage === 'people' ? styles.active: ''} onClick={() => handleActivePage("people")}>People</li>
                     </ul>
                 </div>
-                <div className={styles.buttonContainer}>
-                    <p onClick={handleShow}>+ Create Assessment</p>
-                </div>
+                {user.role === 'teacher' && (
+                    <div className={styles.buttonContainer}>
+                        <p onClick={handleShow}>+ Create Assessment</p>
+                    </div>
+                )}
             </div>
         </>
     )

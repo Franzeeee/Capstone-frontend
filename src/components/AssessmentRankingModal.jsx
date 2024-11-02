@@ -61,7 +61,6 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
 
         customFetch(`/activity/${assessmentInfo.id}/rankings`, 'GET')
             .then(data => {
-                console.log('Data:', data);
                 if (data.length >= 4) {
                     // Replace all dummy data if fetched data is more than or equal to 4
                     setStudentData(data.map((student, index) => ({
