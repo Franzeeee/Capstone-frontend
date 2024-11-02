@@ -14,6 +14,7 @@ import {
 import PracticeTest from "../components/PracticeTest";
 import Modal from "react-bootstrap/Modal";
 import { ToastContainer } from "react-toastify";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 
 const ErrorContext = createContext();
 
@@ -73,7 +74,7 @@ export default function HomeTemplate({ children }) {
                       : ""
                   }`}
                 >
-                  <FontAwesomeIcon icon={faBullhorn}></FontAwesomeIcon> Calendar
+                  <FontAwesomeIcon icon={faCalendar} /> Calendar
                 </li>
                 <li
                   onClick={() => navigate("/announcements")}

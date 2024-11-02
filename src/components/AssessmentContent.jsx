@@ -5,6 +5,7 @@ import happy from '../assets/img/perfect-assessment-robot.png';
 import sad from '../assets/img/assessment-fail.png'
 import SubmittingModal from './SubmitLoader';
 import ConfirmationModal from './ConfirmationModal';
+import AssessmentRankingModal from './AssessmentRankingModal';
 
 
 
@@ -13,7 +14,10 @@ export default function AssessmentContent({ status = false, startButton, data, r
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
-    const [showSubmitModal, setShowSubmitModal] = useState(false);
+    const [showRanking, setShowRanking] = useState(false);
+
+    const handleClose = () => setShowRanking(false);
+    const handleShow = () => setShowRanking(true);
 
     const handleBtn = () => { 
         if (!status) {
@@ -37,14 +41,9 @@ export default function AssessmentContent({ status = false, startButton, data, r
         }
     };
 
-    useEffect(() => {
-        console.log(submission)
-    });
-    
-
-
     return (
         <>
+            <AssessmentRankingModal show={showRanking} handleClose={handleClose} />
             {!status ? 
             <div className={styles.container}>
                 
@@ -76,7 +75,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
                     </ul>
                 </div>
                 <div className={styles.controls}>
-                    <button>View Ranking</button>
+                    <button onClick={() => setShowRanking(true)}>View Ranking</button>
                     <button onClick={handleBtn}>Start Assessment</button>
                 </div>
             </div>
@@ -114,7 +113,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
                     </div> */}
                 </div>
                 <div className={styles.controls}>
-                    <button >View Ranking</button>
+                    <button onClick={handleShow}>View Ranking</button>
                     <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>View Feedback</button>
                 </div>
             </div>
