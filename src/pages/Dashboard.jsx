@@ -251,7 +251,7 @@ export const Dashboard = () => {
                         <p>Course <FontAwesomeIcon icon={faPlusCircle} onClick={toggleShow}></FontAwesomeIcon></p>
                     </div>
                     <div className={`${styles.moreCourse}`}>
-                        <p>View More</p>
+                        <p onClick={() => navigate('/teacher/classes')}>View More</p>
                     </div>
                 </div>
                 <div className={`${styles.cardContainer}`}>

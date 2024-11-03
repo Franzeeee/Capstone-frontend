@@ -91,16 +91,6 @@ export default function ClassLesson() {
         navigate(newPath);
     };
 
-    useEffect(() => {
-        customFetch()
-            .then(data => {
-                console.log('Data:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-            });
-    });
-
   return (
     <div className={`${styles.container}`}>
         <div className={`${styles.sideNav}`}>
