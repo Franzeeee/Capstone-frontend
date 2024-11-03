@@ -81,6 +81,69 @@ export default function Submissions() {
                                     <p>Room: <span>{classData?.room}</span></p>
                                 </div>
                             </div>
+                            <div className={`${styles.classAssessments}`}>
+
+                                        <MDBTable striped responsive hover className={styles.table}>
+                                            <MDBTableHead>
+                                                <tr className='table-secondary'>
+                                                    <th scope='col'>#</th>
+                                                    <th scope='col'>Assessment Name</th>
+                                                    <th scope='col'>Total Submission</th>
+                                                    <th scope='col'>Deadline</th>
+                                                    <th scope='col'>Action</th>
+                                                </tr>
+                                            </MDBTableHead>
+                                            <MDBTableBody>
+                                                {/* Dummy assessment data */}
+                                                <tr key={1}>
+                                                    <th scope='row'>1</th>
+                                                    <td>Dummy Assessment</td>
+                                                    <td>0</td>
+                                                    <td>{new Date().toLocaleDateString()}</td> {/* Current date as dummy deadline */}
+                                                    <td style={{ textAlign: 'center' }}>
+                                                        <Dropdown>
+                                                            <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-1`}>
+                                                                <FontAwesomeIcon className={styles.viewMore} icon={faEllipsisVertical} />
+                                                            </Dropdown.Toggle>
+
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item >View Details</Dropdown.Item>
+                                                                <Dropdown.Item >Delete</Dropdown.Item>
+                                                                <Dropdown.Item >
+                                                                    Submissions
+                                                                </Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
+                                                    </td>
+                                                </tr>
+                                            </MDBTableBody>
+                                        </MDBTable>
+                                        <div className={styles.footer}>
+                                            {/* <div className={styles.totalEntry}>
+                                                <p>Showing </p>
+                                                <select name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
+                                                    <option value="10">10</option>
+                                                    <option value="20">20</option>
+                                                    <option value="30">30</option>
+                                                </select>
+                                                <p>of {pagination?.total || 0} entries</p>
+                                            </div> */}
+                                            {/* <div className={styles.pagination}>
+                                                {pagination?.links.map((page, index) => (
+                                                    (page.label.includes("Next") || page.label.includes("Previous")) ? (
+                                                        <button key={index} className={`${page.active ? styles.active : ""}`} onClick={() => handleNextPage(page.label.includes("Next") ? 'Next' : 'Previous')} disabled={page.url === null}>
+                                                            {page.label.includes("Next") ? 'Next' : 'Previous'}
+                                                        </button>
+                                                    ) : (
+                                                        <button key={index} className={`${page.active ? styles.active : ''}`} onClick={() => handleJumpToPage(index)} disabled={page.url === null}>
+                                                            {page.label}
+                                                        </button>
+                                                    )
+                                                ))}
+                                            </div> */}
+                                        </div>
+                            </div>
+
                         </div>
                     </div>
                     <div className={`${styles.profileContainer}`}>

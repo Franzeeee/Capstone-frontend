@@ -23,7 +23,6 @@ export default function ClassDashboard() {
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/\/\d+\/submissions$/, '')
     const classData = location.state?.data;
 
     const [isLoading, setIsLoading] = useState(true);

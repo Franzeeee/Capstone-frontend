@@ -7,7 +7,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import profile from "../assets/img/user.png";
+import profile from "../assets/img/1x1Robot2.png";
 import { Badge } from "primereact/badge";
 import { Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
