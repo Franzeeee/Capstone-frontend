@@ -39,7 +39,7 @@ export default function ClassroomWork({ classId, code, className }) {
                         <div className={styles.right}>
                             <p className={styles.lessonTitle}>{item.title}</p>
                             <p className={styles.lessonDescription}>{item.description}</p>
-                            <div className={styles.status} onClick={() => navigate(`a/${item.title}`, { state: { item, code,name: className } })}>
+                            <div className={styles.status} onClick={() => navigate(`a/${item.title}`, { state: { item: item, code,name: className } })}>
                                 <p>View</p>
                             </div>
                         </div>
