@@ -126,12 +126,12 @@ export default function AssessmentContent({ status = false, startButton, data, r
     );
 }
 
-const LoadingBar = ({ progress }) => {
-    const getColor = (progress) => {
-        if (progress < 50) return 'red';
-        if (progress < 75) return 'yellow';
-        return '#16dd00';
-    };
+    const LoadingBar = ({ progress }) => {
+        const getColor = (progress) => {
+            if (progress < 50) return 'red';
+            if (progress < 75) return 'yellow';
+            return '#16dd00';
+        };
 
     return (
         <>
