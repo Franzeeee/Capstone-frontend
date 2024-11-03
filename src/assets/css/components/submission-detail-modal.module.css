@@ -1,0 +1,118 @@
+.problemContainer {
+    width: 100;
+    padding: 10px;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.header {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.problemDescription {
+    font-size: .9rem;
+    font-weight: 400;
+    padding: 5px 10px;
+}
+
+.codingBox {
+    padding: 15px;
+    background-color: #0B192C;
+    color: aliceblue;
+    border-radius: 5px;
+    max-height: 500px;
+    min-height: 300px;
+    position: relative;
+}
+.codingBox pre {
+    margin: 0 !important;
+}
+.codingStats {
+    font-size: .8rem;
+}
+.scorebox {
+    padding: 0 !important;
+    background-color:transparent;
+}
+.scoreBox form {
+    width: 100%;
+}
+.stats form input[type="number"] {
+    padding: 5px !important;
+    max-width: 10%;
+}
+.stats form {
+    display: flex;
+    gap: 5px;
+    color: #000000 !important;
+    align-items: center;
+
+}
+.stats p:first {
+    color: #000000;
+}
+.max {
+    width: 5.5%;
+    align-items: center;
+    justify-content: center;
+}
+.max::-webkit-outer-spin-button,
+.max::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* CSS to remove arrows in Firefox */
+.max[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-end;
+}
+.copyCode {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .3s ease;
+    color: rgba(240, 248, 255, 0.883);
+}
+.copyCode:hover {
+    color: #ffffff;
+}
+
+.circle {
+    border: 5px solid blue;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    height: 150px;
+    align-self: center;
+}
+.circleContainer {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.circle p:first-child {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.circle p:last-child {
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}

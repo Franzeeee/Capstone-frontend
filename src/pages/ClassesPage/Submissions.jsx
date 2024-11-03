@@ -15,6 +15,7 @@ import { Dropdown } from 'react-bootstrap';
 
 import { Offcanvas } from 'react-bootstrap';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import SubmissionDetailModal from '../../components/SubmissionDetailModal';
 
 export default function Submissions() {
     const navigate = useNavigate();
@@ -24,6 +25,8 @@ export default function Submissions() {
     const user = getUserData();
     const [isLoading, setIsLoading] = useState(true);
     const [noData, setNoData] = useState(false);
+
+    const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
     const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -96,9 +99,19 @@ export default function Submissions() {
 
     const handleShowAdditionalInfo = () => setShowAdditionalInfo(!showAdditionalInfo);
 
+    const handleSubmissionDetailShow = (id) => {
+        setShowSubmissionModal(true);
+        setItemId(id);
+    }
+    const handleSubmissionDetailClose = () => setShowSubmissionModal(false);
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
+                <SubmissionDetailModal
+                    show={showSubmissionModal}
+                    handleClose={handleSubmissionDetailClose}
+                />
                 <ConfirmationModal
                     show={showDeleteConfirmation}
                     handleClose={handleCloseDeleteConfirmation}
@@ -188,7 +201,7 @@ export default function Submissions() {
                                                                     </Dropdown.Toggle>
 
                                                                     <Dropdown.Menu>
-                                                                        <Dropdown.Item onClick={() => handleShow(submission.id - 1)}>View Details</Dropdown.Item>
+                                                                        <Dropdown.Item onClick={() => handleSubmissionDetailShow(submission.id)}>View Details</Dropdown.Item>
                                                                         <Dropdown.Item onClick={() => handleShowDeleteConfirmation(submission.id)}>Delete</Dropdown.Item>
                                                                     </Dropdown.Menu>
                                                                 </Dropdown>
