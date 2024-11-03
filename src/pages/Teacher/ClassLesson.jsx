@@ -13,6 +13,8 @@ import TextFormatter from '../../components/TextFormatter';
 import lessonContent from '../../utils/lessons';
 import lessons from '../../utils/data';
 import customFetch from '../../utils/fetchApi';
+import HomeTemplate from '../../templates/HomeTemplate';
+
 
 export default function ClassLesson() {
     const navigate = useNavigate()
@@ -92,8 +94,9 @@ export default function ClassLesson() {
     };
 
   return (
+    <HomeTemplate>
     <div className={`${styles.container}`}>
-        <div className={`${styles.sideNav}`}>
+        {/* <div className={`${styles.sideNav}`}>
             <div className={`${styles.logo}`}>
                 <img src={logo} alt="" />
             </div>
@@ -143,7 +146,7 @@ export default function ClassLesson() {
                     </Accordion.Item>
                 </Accordion>
             </div>
-        </div>
+        </div> */}
         <div className={`${styles.content}`}>
             <div className={styles.breadcrumbs}>
                 <ul>
@@ -160,9 +163,9 @@ export default function ClassLesson() {
                 </div>
             </div>
                 <div className={`${styles.control}`}>
-                    <button className={`${styles.back}`}>Back</button>
+                    {/* <button className={`${styles.back}`}>Back</button> */}
                     <button onClick={handleShow} className={`${styles.try}`}>Try on Editor</button>
-                    <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button>
+                    {/* <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button> */}
                 </div>
             <Offcanvas show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                 <Offcanvas.Body>
@@ -171,5 +174,6 @@ export default function ClassLesson() {
             </Offcanvas>
         </div>
     </div>
+    </HomeTemplate>
   )
 }

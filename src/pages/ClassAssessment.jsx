@@ -15,6 +15,7 @@ import ExitScreen from '../components/ExitScreen';
 import perfectRobot from '../assets/img/perfect-assessment-robot.png';
 import customFetch from '../utils/fetchApi';
 import LoadingPage from './LoadingPage';
+import HomeTemplate from '../templates/HomeTemplate';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
@@ -140,8 +141,9 @@ export default function ClassAssessment() {
     }
 
     return (
+        <HomeTemplate>
         <div className={`${styles.container}`}>
-            <div className={`${styles.sideNav}`}>
+            {/* <div className={`${styles.sideNav}`}>
                 <div className={`${styles.logo}`}>
                     <img src={logo} alt="" />
                 </div>
@@ -171,7 +173,7 @@ export default function ClassAssessment() {
                         </Accordion.Item>
                     </Accordion>
                 </div>
-            </div>
+            </div> */}
             <div className={`${styles.content}`}>
                 <div className={styles.breadcrumbs}>
                     <ul>
@@ -191,10 +193,10 @@ export default function ClassAssessment() {
                         </div> */}
                     </div>
                 </div>
-                    <div className={`${styles.control}`}>
+                    {/* <div className={`${styles.control}`}>
                         <button className={`${styles.back}`}>Back</button>
                         <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button>
-                    </div>
+                    </div> */}
                 <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                     <Offcanvas.Body>
                     <CodeEditor 
@@ -217,6 +219,7 @@ export default function ClassAssessment() {
                 </Offcanvas>
             </div>
         </div>
+        </HomeTemplate>
     )
 }
 
