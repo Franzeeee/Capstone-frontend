@@ -15,6 +15,7 @@ import { Dropdown } from 'react-bootstrap';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import { Offcanvas } from 'react-bootstrap';
 import CreateAssessmentForm from '../../components/AssessmentForm/CreateAssessmentForm';
+import SubmissionDetailModal from '../../components/SubmissionDetailModal';
 
 
 
@@ -184,9 +185,21 @@ export default function ClassDashboard() {
         }
     };
 
+    const [showMod, setShowMod] = useState(false);
+
+    const closeShowMod = () => {
+        setShowMod(false);
+    }
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
+
+                <SubmissionDetailModal
+                    show={showMod}
+                    handleClose={closeShowMod}
+                />
+
                 <ConfirmationModal
                     show={showDeleteConfirmation}
                     handleClose={handleCloseDeleteConfirmation}
@@ -232,7 +245,7 @@ export default function ClassDashboard() {
                                     <li className={`${styles.active}`}>{classData?.name || "Class 404"}</li>
                                 </ul>
                             </div>
-                            <p>{classData?.name || "Class 404"}</p>
+                            <p onClick={() => setShowMod(true)}>{classData?.name || "Class 404"}</p>
                         </div>
                     </div>
                     <div className={`${styles.content}`}>
