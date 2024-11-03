@@ -75,6 +75,7 @@ export default function CreateAssessment({handleChangePage, classId}) {
 
             data.course_class_id = classId;
             data.user_id = user.id;
+            data.points = 100;
 
             data.coding_problems = data.coding_problems.map(problem => ({
                 title: problem.problem_title,       // Change key to title
