@@ -12,19 +12,32 @@ import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import customFetch from '../../utils/fetchApi';
 import { Dropdown } from 'react-bootstrap';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import { Offcanvas } from 'react-bootstrap';
+import CreateAssessmentForm from '../../components/AssessmentForm/CreateAssessmentForm';
+
 
 
 export default function ClassDashboard() {
     const user = getUserData();
     const navigate = useNavigate();
     const location = useLocation();
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/\/\d+\/submissions$/, '')
     const classData = location.state?.data;
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
     const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [pagination, setPagination] = useState(null);
+
+
+    const [itemId, setItemId] = useState(null);
+    const [show, setShow] = useState(false);
+    const [activeForm, setActiveForm] = useState('logic');
 
     useEffect(() => {
         if (!location.state?.verified || !classData) {
@@ -71,9 +84,145 @@ export default function ClassDashboard() {
         return null; // Prevents rendering before navigation
     }
 
+    const handleCloseDeleteConfirmation = () => {
+        setShowDeleteConfirmation(false);
+    }
+
+    const handleShowDeleteConfirmation = (id) => {
+        setItemId(id);
+        setShowDeleteConfirmation(true);
+    }
+
+    const handleDeleteAssessment = () => {
+        customFetch(`/activity/${itemId}/delete`, 'GET')
+            .then(data => {
+                toast.success('Assessment deleted successfully');
+                setPagination((prevPagination) => ({
+                    ...prevPagination,
+                    data: prevPagination.data.filter((assessment) => assessment.id !== itemId),
+                }));
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                toast.error('Failed to delete assessment');
+            });
+        
+        setShowDeleteConfirmation(false);
+    }
+
+    const handleClose = () => setShow(false);
+    const handleShow = (id) => {
+        setItemId(id);
+        setActiveForm(pagination.data[id]?.coding_problems?.length > 0 ? 'coding' : 'logic');
+        setShow(true);
+    }
+
+    const handleActiveForm = (text) => {
+        setActiveForm(text);
+    }
+
+    const onSubmit = async (data) => {
+        const errors = [];
+    
+        // Validate required fields
+        if (!data.title || data.title.trim() === "") {
+            errors.push("Title is required");
+        }
+        if (!data.description || data.description.trim() === "") {
+            errors.push("Description is required");
+        }
+        if (!data.coding_problems || data.coding_problems.length === 0) {
+            errors.push("At least one question is required");
+        }
+        if (!user.id) {
+            errors.push("User ID is required");
+        }
+        if (!classData.id) {
+            errors.push("Course Class ID is required");
+        }
+    
+        // Time limit validation
+        // const timeLimitPattern = /^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+        // if (data.timeLimit && !timeLimitPattern.test(data.timeLimit)) {
+        //     errors.push("Time limit must be in the format hh:mm:ss");
+        // } else if (data.timeLimit === "00:00:00") {
+        //     errors.push("Time limit must be at least 1 second (00:00:01 or greater)");
+        // }
+    
+        // Display errors if any
+        if (errors.length > 0) {
+            errors.forEach(error => toast.error(error));
+            return;
+        }
+    
+        try {
+
+            data.course_class_id = classData.id;
+            data.user_id = user.id;
+
+            data.coding_problems = data.coding_problems.map(problem => ({
+                title: problem.problem_title,       // Change key to title
+                description: problem.problem_description, // Change key to description
+                sample_input: problem.sample_input,
+                expected_output: problem.expected_output
+            }));
+
+            const response = await customFetch(`/activity/${data.id}/update`, {
+                method: 'PUT',
+                body: JSON.stringify(data),
+            });
+    
+            toast.success("Activity updated successfully");
+            setPagination((prevPagination) => {
+                const updatedData = [...prevPagination.data];
+                updatedData[itemId] = data;
+                return { ...prevPagination, data: updatedData };
+            });
+            handleClose();
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            toast.error("Failed to update assessment");
+        }
+    };
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
+                <ConfirmationModal
+                    show={showDeleteConfirmation}
+                    handleClose={handleCloseDeleteConfirmation}
+                    modalData={{
+                        title: "Delete Assessment?", 
+                        body: "Are you sure you want to delete this assessment?", 
+                        action: () => handleDeleteAssessment()
+                    }}
+                />
+                <Offcanvas show={show} backdrop="static" className={styles.offCanvas} onHide={handleClose} placement="top" style={{ width: '80vw', height: '90vh', margin: 'auto'}}>
+                    <Offcanvas.Header className={`${styles.Header}`} closeButton>
+                        <Offcanvas.Title className={`${styles.Title}`}>Create Assessment</Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body className={styles.offcanvasBody}>
+                    <div className={styles.assessmentOptions}>
+                        {activeForm === 'logic' && (
+                            <div className={styles.active} onClick={() => handleActiveForm("logic")}>
+                                <p>Logic</p>
+                            </div>
+                        )}
+                        {activeForm === 'coding' && (
+                            <div className={styles.active} onClick={() => handleActiveForm("coding")}>
+                                <p>Coding</p>
+                            </div>
+                        )}
+                    </div>
+
+                        <CreateAssessmentForm 
+                            activeForm={activeForm} 
+                            handleClose={handleClose} 
+                            onSubmit={onSubmit} 
+                            editMode={ {active: true, data: pagination?.data[itemId]} }
+                        />
+                    </Offcanvas.Body>
+                </Offcanvas>
                 <div className={`${styles.contentContainer}`}>
                     <div className={`${styles.header}`}>
                         <div className={`${styles.create}`}>
@@ -152,9 +301,11 @@ export default function ClassDashboard() {
                                                                 </Dropdown.Toggle>
 
                                                                 <Dropdown.Menu>
-                                                                    <Dropdown.Item>View Details</Dropdown.Item>
-                                                                    <Dropdown.Item>Delete</Dropdown.Item>
-                                                                    <Dropdown.Item>Submissions</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => handleShow(assessment.id - 1)}>View Details</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => handleShowDeleteConfirmation(assessment.id)}>Delete</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => navigate(`${assessment.id}/submissions`, { state: { classData: classData, assessmentData: { name: assessment.title, }, previousPath: currentPath } })}>
+                                                                        Submissions
+                                                                    </Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>

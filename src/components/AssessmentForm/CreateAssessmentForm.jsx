@@ -1,21 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Accordion } from "react-bootstrap";
 import styles from "../../assets/css/components/create-assessment-form.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
+
+const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {active: false, data: {}}  }) => {
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    time_limit: null,
+    time_limit: 0,
     due_date: null,
     points: 100,
-    coding_problems: [],
+    coding_problems: editMode.active ? editMode.data.coding_problems : [],
   });
+  
+  useEffect(() => {
+    if (editMode.active) {
+      const newFormat = {
+        ...editMode.data,
+        coding_problems: editMode.data.coding_problems.map(problem => ({
+          ...problem,
+          problem_title: problem.title,
+          problem_description: problem.description,
+        })),
+      };
+      setFormData(newFormat);
+    }
+  }, [editMode]);
 
-  const [addingProblem, setAddingProblem] = useState(true);
+  const [addingProblem, setAddingProblem] = useState(!editMode.active ? true : false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [tempProblem, setTempProblem] = useState({
@@ -58,11 +74,19 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData); // Send data to parent
+    const formattedData = {
+      ...formData,
+      coding_problems: formData.coding_problems.map(problem => ({
+        ...problem,
+        title: problem.title, // Keep title
+        description: problem.description, // Keep description
+      })),
+    };
+    onSubmit(editMode ? formattedData : formData); // Send formatted data to parent
   };
+  
 
   const addProblem = () => {
     setAddingProblem(true);
@@ -236,6 +260,7 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
               formData.coding_problems.map((problem, index) => (
                 <Accordion className={styles.accordion}>
                   <Accordion.Item
+                    key={index}
                     eventKey={index}
                     style={{ marginBottom: "5px" }}
                   >
@@ -419,7 +444,7 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose }) => {
         <Button className={styles.cancelCanvas} onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button type="submit" className={styles.Submit}>Submit</Button>
+        <Button type="submit" className={styles.Submit}>{editMode.active ? "Save" : "Submit"}</Button>
       </div>
     </Form>
   );
