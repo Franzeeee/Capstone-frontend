@@ -12,9 +12,9 @@ import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import customFetch from '../../utils/fetchApi';
 import { Dropdown } from 'react-bootstrap';
-import ConfirmationModal from '../../components/ConfirmationModal';
+
 import { Offcanvas } from 'react-bootstrap';
-import CreateAssessmentForm from '../../components/AssessmentForm/CreateAssessmentForm';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 export default function Submissions() {
     const navigate = useNavigate();
@@ -22,14 +22,92 @@ export default function Submissions() {
     const backUrl = location.pathname.split('/').slice(0, -2).join('/');
     const { classData, assessmentData, previousPath } = location?.state;
     const user = getUserData();
+    const [isLoading, setIsLoading] = useState(true);
+    const [noData, setNoData] = useState(false);
 
     const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pagination, setPagination] = useState(null);
+
+
+    const [itemId, setItemId] = useState(null);
+    const [show, setShow] = useState(false);
+    const [activeForm, setActiveForm] = useState('logic');
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+    useEffect(() => {
+        fetchSubmissions(currentPage);
+        setIsLoading(false)
+    }, [currentPage]);
+
+
+    const fetchSubmissions = async (page) => {
+        try {
+            const data = await customFetch(`/${assessmentData.id}/submissions/all?page=${page}`, 'GET');
+            setPagination(data);
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+        finally {
+            if (pagination === null) {
+                setNoData(true);
+            }
+        }
+    };
+
+    const handleNextPage = (direction) => {
+        if (direction === 'Next' && currentPage < pagination.last_page) {
+            setCurrentPage(currentPage + 1);
+        } else if (direction === 'Previous' && currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleJumpToPage = (page) => {
+        setCurrentPage(page);
+    };
+
+    
+    const handleCloseDeleteConfirmation = () => {
+        setShowDeleteConfirmation(false);
+    }
+
+    const handleShowDeleteConfirmation = (id) => {
+        setItemId(id);
+        setShowDeleteConfirmation(true);
+    }
+
+    const handleDeleteSubmission = () => {
+        customFetch(`/activity/submission/${itemId}/delete`, { method: 'DELETE' })
+            .then(data => {
+                toast.success('Assessment deleted successfully');
+                setPagination((prevPagination) => ({
+                    ...prevPagination,
+                    data: prevPagination.data.filter((submission) => submission.id !== itemId),
+                }));
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                toast.error('Failed to delete assessment');
+            });
+        
+        setShowDeleteConfirmation(false);
+    }
 
     const handleShowAdditionalInfo = () => setShowAdditionalInfo(!showAdditionalInfo);
 
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
+                <ConfirmationModal
+                    show={showDeleteConfirmation}
+                    handleClose={handleCloseDeleteConfirmation}
+                    modalData={{
+                        title: "Delete Submission?", 
+                        body: "Are you sure you want to delete this submission?", 
+                        action: () => handleDeleteSubmission()
+                    }}
+                />
                     <div className={`${styles.contentContainer}`}>
                         <div className={`${styles.header}`}>
                             <div className={`${styles.create}`}>
@@ -37,12 +115,12 @@ export default function Submissions() {
                                     <ul>
                                         <li onClick={() => navigate('/teacher/classes')}>Classes</li>
                                         <li>/</li>
-                                        <li onClick={() => navigate(previousPath, { state: {verified: true, data: classData} })}>{assessmentData?.name || "Class 404"}</li>
+                                        <li onClick={() => navigate(previousPath, { state: {verified: true, data: classData} })}>{classData?.name || "Class 404"}</li>
                                         <li>/</li>
                                         <li className={`${styles.active}`}>Submissions</li>
                                     </ul>
                                 </div>
-                                <p>{assessmentData?.name|| "Class 404"}</p>
+                                <p>{assessmentData?.title|| "Class 404"}</p>
                             </div>
                         </div>
                         <div className={`${styles.content}`}>
@@ -82,66 +160,71 @@ export default function Submissions() {
                                 </div>
                             </div>
                             <div className={`${styles.classAssessments}`}>
+                                {
+                                    
+                                    pagination && pagination.data.length > 0 && pagination !== null?
+                                        (
+                                            <><MDBTable striped responsive hover className={styles.table}>
+                                                <MDBTableHead>
+                                                    <tr className='table-secondary'>
+                                                        <th scope='col'>#</th>
+                                                        <th scope='col'>Student Name</th>
+                                                        <th scope='col'>Points</th>
+                                                        <th scope='col'>Date Submitted</th>
+                                                        <th scope='col'>Action</th>
+                                                    </tr>
+                                                </MDBTableHead>
+                                                <MDBTableBody>
+                                                    {pagination?.data.map((submission, index) => (
+                                                        <tr key={submission.id}>
+                                                            <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
+                                                            <td>{submission.name}</td>
+                                                            <td>{submission?.score}</td>
+                                                            <td>{new Date(submission.created_at).toLocaleDateString() || 'N/A'}</td>
+                                                            <td style={{ textAlign: 'center' }}>
+                                                                <Dropdown>
+                                                                    <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-${submission.id}`}>
+                                                                        <FontAwesomeIcon className={styles.viewMore} icon={faEllipsisVertical} />
+                                                                    </Dropdown.Toggle>
 
-                                        <MDBTable striped responsive hover className={styles.table}>
-                                            <MDBTableHead>
-                                                <tr className='table-secondary'>
-                                                    <th scope='col'>#</th>
-                                                    <th scope='col'>Assessment Name</th>
-                                                    <th scope='col'>Total Submission</th>
-                                                    <th scope='col'>Deadline</th>
-                                                    <th scope='col'>Action</th>
-                                                </tr>
-                                            </MDBTableHead>
-                                            <MDBTableBody>
-                                                {/* Dummy assessment data */}
-                                                <tr key={1}>
-                                                    <th scope='row'>1</th>
-                                                    <td>Dummy Assessment</td>
-                                                    <td>0</td>
-                                                    <td>{new Date().toLocaleDateString()}</td> {/* Current date as dummy deadline */}
-                                                    <td style={{ textAlign: 'center' }}>
-                                                        <Dropdown>
-                                                            <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-1`}>
-                                                                <FontAwesomeIcon className={styles.viewMore} icon={faEllipsisVertical} />
-                                                            </Dropdown.Toggle>
-
-                                                            <Dropdown.Menu>
-                                                                <Dropdown.Item >View Details</Dropdown.Item>
-                                                                <Dropdown.Item >Delete</Dropdown.Item>
-                                                                <Dropdown.Item >
-                                                                    Submissions
-                                                                </Dropdown.Item>
-                                                            </Dropdown.Menu>
-                                                        </Dropdown>
-                                                    </td>
-                                                </tr>
-                                            </MDBTableBody>
-                                        </MDBTable>
-                                        <div className={styles.footer}>
-                                            {/* <div className={styles.totalEntry}>
-                                                <p>Showing </p>
-                                                <select name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
-                                                    <option value="10">10</option>
-                                                    <option value="20">20</option>
-                                                    <option value="30">30</option>
-                                                </select>
-                                                <p>of {pagination?.total || 0} entries</p>
-                                            </div> */}
-                                            {/* <div className={styles.pagination}>
-                                                {pagination?.links.map((page, index) => (
-                                                    (page.label.includes("Next") || page.label.includes("Previous")) ? (
-                                                        <button key={index} className={`${page.active ? styles.active : ""}`} onClick={() => handleNextPage(page.label.includes("Next") ? 'Next' : 'Previous')} disabled={page.url === null}>
-                                                            {page.label.includes("Next") ? 'Next' : 'Previous'}
-                                                        </button>
-                                                    ) : (
-                                                        <button key={index} className={`${page.active ? styles.active : ''}`} onClick={() => handleJumpToPage(index)} disabled={page.url === null}>
-                                                            {page.label}
-                                                        </button>
-                                                    )
-                                                ))}
-                                            </div> */}
-                                        </div>
+                                                                    <Dropdown.Menu>
+                                                                        <Dropdown.Item onClick={() => handleShow(submission.id - 1)}>View Details</Dropdown.Item>
+                                                                        <Dropdown.Item onClick={() => handleShowDeleteConfirmation(submission.id)}>Delete</Dropdown.Item>
+                                                                    </Dropdown.Menu>
+                                                                </Dropdown>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </MDBTableBody>
+                                            </MDBTable><div className={styles.footer}>
+                                                    <div className={styles.totalEntry}>
+                                                        <p>Showing </p>
+                                                        <select name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
+                                                            <option value="10">10</option>
+                                                            <option value="20">20</option>
+                                                            <option value="30">30</option>
+                                                        </select>
+                                                        <p>of {pagination?.total || 0} entries</p>
+                                                    </div>
+                                                    <div className={styles.pagination}>
+                                                        {pagination?.links.map((page, index) => (
+                                                            (page.label.includes("Next") || page.label.includes("Previous")) ? (
+                                                                <button key={index} className={`${page.active ? styles.active : ""}`} onClick={() => handleNextPage(page.label.includes("Next") ? 'Next' : 'Previous')} disabled={page.url === null}>
+                                                                    {page.label.includes("Next") ? 'Next' : 'Previous'}
+                                                                </button>
+                                                            ) : (
+                                                                <button key={index} className={`${page.active ? styles.active : ''}`} onClick={() => handleJumpToPage(index)} disabled={page.url === null}>
+                                                                    {page.label}
+                                                                </button>
+                                                            )
+                                                        ))}
+                                                    </div>
+                                                </div></>
+                                        )
+                                        :
+                                        isLoading ? <p>Loading...</p> : noData ? <p>No submissions found</p> : <p>Loading...</p>
+                                }
+                                
                             </div>
 
                         </div>

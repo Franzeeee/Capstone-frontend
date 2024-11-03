@@ -256,7 +256,7 @@ export default function ClassDashboard() {
                                     <p className={`${styles.icon} ${styles.studentCount}`}><FontAwesomeIcon icon={faUsers} /></p>
                                     <div className={`${styles.text}`}>
                                         <p>No. of Students</p>
-                                        <p>20</p>
+                                        <p>{'0' + classData?.students_count || 0}</p>
                                     </div>
                                 </div>
                                 <OverlayTrigger
@@ -291,7 +291,7 @@ export default function ClassDashboard() {
                                                     <tr key={assessment.id}>
                                                         <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
                                                         <td>{assessment.title}</td>
-                                                        <td>{assessment.totalSubmissions || 0}</td>
+                                                        <td style={{textAlign: 'center'}}>{assessment.total_submissions || 0}</td>
                                                         <td>{new Date(assessment.start_date).toLocaleDateString() || 'N/A'}</td>
                                                         <td style={{ textAlign: 'center' }}>
                                                             <Dropdown>
@@ -302,7 +302,7 @@ export default function ClassDashboard() {
                                                                 <Dropdown.Menu>
                                                                     <Dropdown.Item onClick={() => handleShow(assessment.id - 1)}>View Details</Dropdown.Item>
                                                                     <Dropdown.Item onClick={() => handleShowDeleteConfirmation(assessment.id)}>Delete</Dropdown.Item>
-                                                                    <Dropdown.Item onClick={() => navigate(`${assessment.id}/submissions`, { state: { classData: classData, assessmentData: { name: assessment.title, }, previousPath: currentPath } })}>
+                                                                    <Dropdown.Item onClick={() => navigate(`${assessment.id}/submissions`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })}>
                                                                         Submissions
                                                                     </Dropdown.Item>
                                                                 </Dropdown.Menu>
