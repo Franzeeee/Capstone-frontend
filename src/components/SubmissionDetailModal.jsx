@@ -81,24 +81,58 @@ export default function SubmissionDetailModal({ show, handleClose }) {
                         </Tab>
                         <Tab eventKey="overall" title="Overall Score">
                             <div className={styles.problemContainer}>
+                            <div className={styles.feedbackContainer}>
+                                <Button className={styles.feedback}>Feedback</Button>
+                            </div>
                                 <div className={styles.circleContainer}>
                                     <div className={styles.circle}>
                                         <p>80 / 100</p>
                                         <p>Overall Score</p>
                                     </div>
                                 </div>
-
-                                
-
+                            <div className={styles.dataContainer}>
+                            <div className={styles.content}>
+                                <ul>
+                                    <li>
+                                        <p>Time Remaining</p>
+                                        <div className={styles.loadingBarContainer}>
+                                        <div className={styles.loadingBar}></div>
+                                        <p>1st</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>Problem Solved</p>
+                                        <div className={styles.loadingBarContainer}>
+                                        <div className={styles.loadingBar}></div>
+                                        <p>1st</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>Overall Points</p>
+                                        <div className={styles.loadingBarContainer}>
+                                        <div className={styles.loadingBar}></div>
+                                        <p>1st</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>Current Rank</p>
+                                        <div className={styles.loadingBarContainer}>
+                                        <div className={styles.loadingBar}></div>
+                                        <p>1st</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            </div>
                             </div>
                         </Tab>
                     </Tabs>
                 <div className={styles.footer}>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose} className={styles.Close}>
                         Close
                     </Button>
-                    <Button variant="primary">
-                        Save Changes
+                    <Button variant="primary" className={styles.Update}>
+                        Update
                     </Button>
                 </div>
                 </Modal.Body>
