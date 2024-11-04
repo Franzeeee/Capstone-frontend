@@ -60,7 +60,7 @@ export default function ClassAssessment() {
 
     useEffect(() => {
         
-        const activityId = location.state?.item?.id;
+        const activityId = location.state?.item?.id || 0;
 
         // Call customFetch directly here
         customFetch(`/activity/${activityId}/auth`, 'GET')
