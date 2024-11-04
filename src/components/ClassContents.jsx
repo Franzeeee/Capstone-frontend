@@ -54,7 +54,6 @@ export default function ClassContents({ data, code, className }) {
     };
     
     const isAssessmentUnlocked = (lessonId, hasAssessment = true) => {
-        console.log(progress);
         // Allow access to the first quiz (id 0) for all users if there's no progress
         if (!progress || progress.last_completed_quiz === null) {
             return lessonId === 0 || user.role === 'teacher';
