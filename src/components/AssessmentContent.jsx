@@ -50,7 +50,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
             <div className={styles.container}>
                 
                 <div className={styles.title}>
-                    <p>{data.title}</p>
+                    <p>{data?.title || "Null"}</p>
                 </div>
                 <div className={styles.content}>
                     <ul>
