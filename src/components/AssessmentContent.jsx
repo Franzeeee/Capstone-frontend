@@ -57,17 +57,17 @@ export default function AssessmentContent({ status = false, startButton, data, r
                         <li>
                             <p>Time Remaining</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>{timeFormatter(data.time_limit)}</p>
+                            <p>{timeFormatter(data?.time_limit)}</p>
                         </li>
                         <li>
                             <p>Problem Solved</p>
                             <LoadingBar progress={0} status={status} />
-                            <p>0/{data.coding_problems.length}</p>
+                            <p>0/{data?.coding_problems.length}</p>
                         </li>
                         <li>
                             <p>Overall Points</p>
                             <LoadingBar progress={0} status={status} />
-                            <p>--/{data.point}</p>
+                            <p>--/{data?.point}</p>
                         </li>
                         <li>
                             <p>Current Rank</p>
@@ -98,7 +98,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
                         <li>
                             <p>Total Problem</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>{data.coding_problems.length}</p>
+                            <p>{data?.coding_problems.length}</p>
                         </li>
                         <li>
                             <p>Overall Points</p>
@@ -108,7 +108,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
                         <li>
                             <p>Current Rank</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>{getOrdinalSuffix(rank.rank) ?? '--'}</p>
+                            <p>{getOrdinalSuffix(rank?.rank) ?? '--'}</p>
                         </li>
                     </ul>
                     {/* <div className={styles.robotContainer}>
