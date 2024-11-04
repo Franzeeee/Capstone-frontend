@@ -57,7 +57,7 @@ export default function AssessmentContent({ status = false, startButton, data, r
                         <li>
                             <p>Time Remaining</p>
                             <LoadingBar progress={100} status={status} />
-                            <p>{timeFormatter(data?.time_limit)}</p>
+                            <p>{timeFormatter(data?.time_limit || 1)}</p>
                         </li>
                         <li>
                             <p>Problem Solved</p>
