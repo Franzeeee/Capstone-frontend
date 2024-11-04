@@ -47,7 +47,7 @@ export default function ClassAssessment() {
         return lessons[lessonIndex].title || "Variables";
     });
 
-    const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+    // const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     const [show, setShow] = useState(false);
 
     const getNextLesson = () => {
@@ -181,7 +181,7 @@ export default function ClassAssessment() {
                         <li>/</li>
                         <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
                         <li>/</li>
-                        <li className={`${styles.active}`}>{assessmentData?.title }</li>
+                        <li className={`${styles.active}`}>{assessmentData?.title || "Nothing"}</li>
                     </ul>
                 </div>
                 <div className={styles.lessonContent}>
