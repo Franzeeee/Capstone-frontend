@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Form, Button, Accordion } from "react-bootstrap";
 import styles from "../../assets/css/components/create-assessment-form.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faFile, faFileAlt, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileWord, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import customFetch from "../../utils/fetchApi"
+import { toast } from "react-toastify";
 
-const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {active: false, data: {}}  }) => {
+const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, editMode = {active: false, data: {}}  }) => {
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -15,7 +19,12 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {a
     due_date: null,
     points: 100,
     coding_problems: editMode.active ? editMode.data.coding_problems : [],
+    files: [],
   });
+  
+  const inputRef = useRef(null);
+
+  const [file, setFile] = useState([]);
   
   useEffect(() => {
     if (editMode.active) {
@@ -76,7 +85,8 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {a
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formattedData = {
+    if (activeForm === "coding") {
+      const formattedData = {
       ...formData,
       coding_problems: formData.coding_problems.map(problem => ({
         ...problem,
@@ -85,6 +95,43 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {a
       })),
     };
     onSubmit(editMode ? formattedData : formData); // Send formatted data to parent
+    } else {
+
+      const data = new FormData();
+
+    // Ensure all fields are properly populated
+      data.append("course_class_id", Number(classId)); // Convert to a number
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("time_limit", formData.time_limit);
+      data.append("due_date", formData.due_date); // Send as undefined if null
+      data.append("points", formData.points);
+
+      // Append files and log them
+      file.forEach((f, index) => {
+          data.append(`files[${index}]`, f);
+          console.log(`files[${index}]:`, f); // Log file object to ensure it's attached
+      });
+
+      // Log the entire FormData for inspection
+      for (const [key, value] of data.entries()) {
+          console.log(`${key}:`, value);
+      }
+
+      // Send the request
+      fetch(`${BASE_URL}/activity/logic/upload`, {
+          method: 'POST',
+          body: data,
+      })
+      .then(data => {
+        toast.success("Assessment created successfully");
+        handleClose();
+      })
+      .catch(err => console.log("Error:", err));
+
+
+
+      }
   };
   
 
@@ -143,8 +190,50 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {a
     }
   };
 
+
+
+
+  const handleDragOver = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.dataTransfer.dropEffect = 'copy';
+  };
+
+  const handleDrop = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+          inputRef.current.files = event.dataTransfer.files;
+          console.log("Files dropped:", event.dataTransfer.files);
+      }
+  };
+
+  const handleFileChange = (event) => {
+      if (event.target.files && event.target.files.length > 0) {
+          setFile(prev => [...prev, ...event.target.files])
+      }
+  }
+
+  const handleRemoveFile = (index) => {
+      setFile(prev => prev.filter((_, i) => i !== index
+      ))
+  }
+
+  const handleLogicSubmit = (e) => {
+    e.preventDefault();
+    console.log("formData", formData);
+    console.log("file", file);
+  }
+
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      files: file,
+    }))
+  }, [file])
+
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form encType="multipart/form-data" onSubmit={handleSubmit}>
       {activeForm === "logic" ? (
         <>
           <Form.Group className={`${styles.formGroup}`} controlId="title">
@@ -177,6 +266,42 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {a
               className={styles.control}
             />
           </Form.Group>
+
+          <Form.Group
+            className={`${styles.formGroup} mb-3`}
+            controlId="fileUpload"
+          >
+            <div className={styles.uploadingArea}>
+              <div className={styles.uploadBox} onDrop={handleDrop} onDragOver={handleDragOver} onClick={() => inputRef.current && inputRef.current.click()}>
+                <FontAwesomeIcon className={styles.uploadIcon} icon={faUpload} />
+                <p>Click or Drag and drop file here</p>
+                <input 
+                  type="file" 
+                  ref={inputRef}
+                  onChange={(e) => handleFileChange(e)}
+                  accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .gif, .bmp"
+                  multiple
+                />
+              </div>
+              <div className={styles.fileArea}>
+                {
+                  file && file.map((f, i) => (
+                    <div className={styles.fileCard} key={i}>
+                      <div>
+                        <FontAwesomeIcon className={styles.fileIcon} icon={getFileIcon(f.name)} />
+                        <div className={styles.fileInfo}>
+                          <p>{f.name}</p>
+                          <p>{(f.size / (1024 * 1024)).toFixed(2)} MB</p>
+                        </div>
+                      </div>
+                      <button onClick={() => handleRemoveFile(i)} type="button"><FontAwesomeIcon icon={faTrashAlt} /></button>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </Form.Group>
+
           <Form.Group
             className={`${styles.formGroup} mb-3`}
             controlId="dueDate"
@@ -184,12 +309,13 @@ const CreateAssessmentForm = ({ activeForm, onSubmit, handleClose, editMode = {a
             <Form.Label className={styles.formLabel}>Due Date</Form.Label>
             <Form.Control
               type="date"
-              name="dueDate"
-              value={formData.dueDate}
+              name="due_date"
+              value={formData.due_date}
               onChange={handleChange}
               className={styles.control}
             />
           </Form.Group>
+
         </>
       ) : (
         <>
@@ -464,4 +590,34 @@ const SwitchComponent = ({ label, checked, onChange }) => {
       />
     </Form.Group>
   );
+};
+
+const getFileExtension = (fileName) => {
+  return fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2).toLowerCase();
+};
+const getFileIcon = (fileName) => {
+  const extension = getFileExtension(fileName);
+
+  // Define icon mapping based on file extension
+  switch (extension) {
+      case "pdf":
+          return faFilePdf;
+      case "doc":
+      case "docx":
+          return faFileWord;
+      case "xls":
+      case "xlsx":
+          return faFileExcel;
+      case "ppt":
+      case "pptx":
+          return faFilePowerpoint;
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+      case "bmp":
+          return faFileImage;
+      default:
+          return faFileAlt; // Generic icon for other files
+  }
 };

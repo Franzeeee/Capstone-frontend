@@ -95,8 +95,8 @@ export default function CreateAssessment({handleChangePage, classId}) {
             }
     
             const result = await response.json();
-            console.log("Form data is valid:", result);
             toast.success("Assessment created successfully");
+            handleClose();
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             toast.error("Failed to create assessment");
@@ -119,7 +119,7 @@ export default function CreateAssessment({handleChangePage, classId}) {
                             <p>Coding</p>
                         </div>
                     </div>
-                    <CreateAssessmentForm activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
+                    <CreateAssessmentForm classId={classId} activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
                 </Offcanvas.Body>
             </Offcanvas>
             <div className={`${styles.createContainer}`}>

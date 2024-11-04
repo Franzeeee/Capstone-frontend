@@ -16,6 +16,7 @@ import perfectRobot from '../assets/img/perfect-assessment-robot.png';
 import customFetch from '../utils/fetchApi';
 import LoadingPage from './LoadingPage';
 import HomeTemplate from '../templates/HomeTemplate';
+import LogicAssessmentPage from './AssessmentPage/LogicAssessmentPage';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
@@ -138,6 +139,10 @@ export default function ClassAssessment() {
 
     if (isFetching) {
         return <LoadingPage />;
+    }
+
+    if(!isFetching && assessmentData.coding_problems.length === 0) {
+        return <LogicAssessmentPage assessmentData={assessmentData} />
     }
 
     return (

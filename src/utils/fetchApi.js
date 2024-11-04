@@ -5,7 +5,6 @@ const customFetch = async (url, options = {}) => {
     return fetch(`${BASE_URL}${url}`, {
         ...options,
         headers: {
-            'Content-Type': 'application/json',  // Default content type
             ...options.headers,  // Merge any additional headers passed in options
         },
         credentials: 'include',  // Ensure credentials like cookies are included

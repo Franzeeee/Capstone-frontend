@@ -145,3 +145,108 @@
 .Submit:hover{
   background-color: #4A4AC3;
 }
+
+
+/* Logic upload area css */
+.uploadingArea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  display: flex;
+  gap: 10px;
+  max-height: 200px;
+}
+.uploadIcon {
+  font-size: 2rem;
+  color: #d0d0d0;
+}
+.uploadBox {
+  flex: .7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px dashed #8e8e8e;
+  padding: 2rem;
+  position: relative;
+}
+.uploadBox p {
+  font-size: .8rem;
+  margin-top: 5px;
+}
+.uploadBox input[type="file"] {
+display: none;
+}
+.fileArea {
+  flex: .3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  flex-grow: 1;
+  overflow: auto;
+  position: relative;
+  max-width: 60%;
+  /* border: 1px solid #d0d0d0; */
+}
+.fileArea::-webkit-scrollbar {
+  width: 0;
+}
+.fileArea::-webkit-scrollbar-thumb {
+  background-color: #d0d0d0;
+  border-radius: 5px;
+}
+.fileArea::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.fileCard {
+  padding: 5px;
+  border: 1px solid #d0d0d0;
+  border-radius: 5px;
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  grid-template-columns: 1fr 30px;
+}
+.fileCard div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+.fileIcon {
+  font-size: 1.2rem;
+  color: #4000ff;
+  background-color: #f2f2f2;
+  padding: 7px 9px;
+  border-radius: 100%;
+}
+.fileCard button {
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0;
+  color: #ff4949;
+  transition: all 0.3s ease;
+}
+.fileCard button:hover {
+  color: #ff1212;
+}
+.fileInfo {
+  flex-direction: column;
+  font-size: .7rem;
+  gap: 0 !important;
+  line-height: 1.1;
+  align-items: flex-start !important;
+}
+.fileInfo p:first-child {
+  font-weight: 600;
+  font-size: .75rem;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
