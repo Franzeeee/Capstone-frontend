@@ -22,6 +22,10 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
 
     const [assessmentFile, setAssessmentFile] = useState([]); // State to store assessment file
 
+    const [submitted, setSubmitted] = useState(false);
+    const [submittedFiles, setSubmittedFiles] = useState([]);
+    const [isUnsubmitted, setIsUnsubmitted] = useState(false);
+
     useEffect(() => {
         // Fetch assessment data
         customFetch(`/activity/logic/${assessmentData.id}/files`)
@@ -56,27 +60,64 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
     };
 
     const handleSubmission = () => {
-        const formData = new FormData();
+        if(!submitted) {
+            const formData = new FormData();
 
-        formData.append('student_id', userData.id);
+            formData.append('student_id', userData.id);
+    
+            files.forEach((f, index) => {
+                formData.append(`files[${index}]`, f);
+            });
+    
+            if(files.length !== 0) {
+                fetch(`${BASE_URL}/activity/logic/${assessmentData.id}/submit`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    toast.success("Submission Successful");
+                    setSubmitted(true);
+                })
+            }
+        } else {
+            if (isUnsubmitted) {
+                setIsUnsubmitted(false);
+                alert("You have already unsubmitted this assessment");
+            } else {
+                alert("Are you sure you want to unsubmit this assessment?");
+                setIsUnsubmitted(true);
+            }
+        }
+    }
 
-        files.forEach((f, index) => {
-            formData.append(`files[${index}]`, f);
-            console.log(`files[${index}]:`, f); // Log file object to ensure it's attached
-        });
+    // Use effect for checking submission status
+    useEffect(() => {
+        customFetch(`/activity/logic/${assessmentData.id}/check`)
+    .then(data => {
+        setSubmitted(data.submitted);
+        setSubmittedFiles(data.submission);
+    })
+    .catch(error => {
+        console.error('Error:', error.message);
+    });
+    }, []);
 
-        if(files.length !== 0) {
-            fetch(`${BASE_URL}/activity/logic/${assessmentData.id}/submit`, {
-                method: 'POST',
+    const deleteSubmittedFile = (fileId) => {
+        if(submittedFiles.files.length > 0 && fileId !== null && isUnsubmitted) {
+            customFetch(`/activity/logic/${fileId}/delete`, {
+                method: 'DELETE',
                 credentials: 'include',
-                body: formData,
             })
             .then(response => response.json())
             .then(data => {
-                toast.success("Submission Successful");
+                toast.success("File Deleted Successfully");
+                setSubmittedFiles(prevFiles => prevFiles.filter(file => file.id !== fileId));
             })
+        }else{
+            alert("Nice Try");
         }
-
     }
 
     return (
@@ -134,7 +175,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                                     >
                                                         <p>{file.name}</p>
                                                     </OverlayTrigger>
-                                                    <p>{(file.size / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
+                                                    <p>{(file.file / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
                                                 </div>
                                                 <FontAwesomeIcon 
                                                     icon={faClose} 
@@ -143,6 +184,26 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                                 />
                                             </div>
                                         ))}
+                                        { submitted && files.length === 0 && submittedFiles.files.length !== 0 && 
+                                            submittedFiles.files.map((file, index) => (
+                                                <div key={index} className={styles.uploadCard}>
+                                                    <div className={styles.fileUploadInfo}>
+                                                        <OverlayTrigger
+                                                            placement="bottom"
+                                                            overlay={<Tooltip id={`tooltip-test`}>{file.file_name}</Tooltip>}
+                                                        >
+                                                            <p>{file.file_name}</p>
+                                                        </OverlayTrigger>
+                                                        <p>{(file.file_size / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
+                                                    </div>
+                                                    <FontAwesomeIcon 
+                                                        icon={faClose} 
+                                                        className={styles.close} 
+                                                        onClick={() => deleteSubmittedFile(file.id)} 
+                                                    />
+                                                </div>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                                 <div className={styles.robot}>
@@ -150,7 +211,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                         <img src={bot} alt="" />
                                         <p>You can upload your files here!</p>
                                     </div>
-                                    <button disabled={files.length === 0} onClick={handleSubmission}>Submit</button>
+                                    <button disabled={files.length === 0 && !submitted} onClick={handleSubmission}>{submitted && !isUnsubmitted ? "Unsubmit" : "Submit"}</button>
                                 </div>
                             </div>
                         </div>
