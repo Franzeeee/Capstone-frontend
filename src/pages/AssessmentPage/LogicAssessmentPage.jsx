@@ -9,6 +9,9 @@ import { faClose } from '@fortawesome/free-solid-svg-icons'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {getUserData} from '../../utils/userInformation'
 import { toast } from 'react-toastify'
+import DocViewer from 'react-doc-viewer'
+import { Modal, ModalBody } from 'react-bootstrap'
+import test from '../../assets/img/Swap1.png'
 
 export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const [files, setFiles] = useState([]); // State to store selected files
@@ -25,6 +28,18 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const [submitted, setSubmitted] = useState(false);
     const [submittedFiles, setSubmittedFiles] = useState([]);
     const [isUnsubmitted, setIsUnsubmitted] = useState(false);
+
+    // For File Preview
+    const [showFilePreview, setShowFilePreview] = useState(false);
+
+    const handleFilePreview = () => {
+        setShowFilePreview(true);
+    }
+
+    const handleCloseFilePreview = () => {
+        setShowFilePreview(false);
+    }
+    // End for File Preview
 
     useEffect(() => {
         // Fetch assessment data
@@ -83,10 +98,28 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
             }
         } else {
             if (isUnsubmitted) {
-                setIsUnsubmitted(false);
-                alert("You have already unsubmitted this assessment");
+                const formData = new FormData();
+
+                formData.append('student_id', userData.id);
+        
+                files.forEach((f, index) => {
+                    formData.append(`files[${index}]`, f);
+                });
+        
+                if(files.length !== 0) {
+                    fetch(`${BASE_URL}/activity/logic/${submittedFiles.id}/resubmit`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        toast.success("Submission Successful");
+                        setSubmitted(true);
+                        setIsUnsubmitted(false);
+                    })
+                }
             } else {
-                alert("Are you sure you want to unsubmit this assessment?");
                 setIsUnsubmitted(true);
             }
         }
@@ -110,13 +143,13 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                 method: 'DELETE',
                 credentials: 'include',
             })
-            .then(response => response.json())
-            .then(data => {
+            .then(() => {
                 toast.success("File Deleted Successfully");
-                setSubmittedFiles(prevFiles => prevFiles.filter(file => file.id !== fileId));
+                setSubmittedFiles(prev => ({
+                    ...prev,
+                    files: prev.files.filter(file => file.id !== fileId)
+                }));
             })
-        }else{
-            alert("Nice Try");
         }
     }
 
@@ -158,6 +191,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                             ref={fileInputRef} 
                                             onChange={handleFileChange} 
                                             style={{ display: 'none' }} // Hide the input
+                                            disabled={submitted && !isUnsubmitted}
                                         />
                                         <button type="button" onClick={handleChooseFile}>Choose File</button>
                                         <div className={styles.fileInfo}>
@@ -175,7 +209,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                                     >
                                                         <p>{file.name}</p>
                                                     </OverlayTrigger>
-                                                    <p>{(file.file / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
+                                                    <p>{(file.size / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
                                                 </div>
                                                 <FontAwesomeIcon 
                                                     icon={faClose} 
@@ -187,7 +221,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                         { submitted && files.length === 0 && submittedFiles.files.length !== 0 && 
                                             submittedFiles.files.map((file, index) => (
                                                 <div key={index} className={styles.uploadCard}>
-                                                    <div className={styles.fileUploadInfo}>
+                                                    <div className={styles.fileUploadInfo} onClick={handleFilePreview}>
                                                         <OverlayTrigger
                                                             placement="bottom"
                                                             overlay={<Tooltip id={`tooltip-test`}>{file.file_name}</Tooltip>}
@@ -217,6 +251,13 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                         </div>
                     </div>
                 </div>
+                <Modal show={showFilePreview} size='lg' onHide={handleCloseFilePreview}>
+                    <ModalBody>
+                        <DocViewer documents={[{
+                            uri: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+                        }]} />
+                    </ModalBody>
+                </Modal>
             </div>
         </HomeTemplate>
     )
