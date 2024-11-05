@@ -64,7 +64,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                             <p className={styles.title}>{assessmentData?.title || "Fetching Assessment Failed"}</p>
                             <div className={styles.assessmentInfo}>
                                 <p>Deadline: <span>{new Date(assessmentData?.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></p>
-                                <p>Points: <span>{assessmentData?.point}</span></p>
+                                <p>Score: <span>{assessmentData?.point}</span></p>
                             </div>
                             <div className={styles.description}>
                                 <p>
