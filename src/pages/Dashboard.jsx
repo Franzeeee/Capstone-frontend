@@ -124,8 +124,10 @@ export const Dashboard = () => {
                     section: formData.section,
                     schedule: formData.schedule,
                     room: formData.room,
-                    class_code: data.classCode
+                    class_code: {code: data.classCode}
                 };
+
+                console.log(newClass);
             
                 // Check if the length is 4 or greater
                 if (prev.length >= 4) {
@@ -172,63 +174,68 @@ export const Dashboard = () => {
                 onHide={toggleShow}
                 backdrop="static"
                 keyboard={false}
+                size='lg'
             >
                 <Modal.Header closeButton className={`${styles.Header}`}>
                 <Modal.Title className={`${styles.Title}`}>Create Class</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>  
                         <div className="form-group">
-                            <label htmlFor="className">Class Name</label>
+                            <label htmlFor="className"className={`${styles.label}`}>Class Name</label>
                             <input type="text" className="form-control" id="className" placeholder="Enter class name" 
                             value={formData.className}
                             onChange={handleChange}/>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="description">Description (Optional)</label>
+                            <label htmlFor="description" className={`${styles.label}`}>Description (Optional)</label>
                             <textarea className="form-control" id="description" placeholder="Enter class description (optional)"
                             value={formData.description}
                             onChange={handleChange} />
                         </div>
+                        <div className={`${styles.contain}`}>
                         <div className="form-group">
-                            <label htmlFor="section">Section</label>
+                            <label htmlFor="section" className={`${styles.label}`}>Section</label>
                             <input type="text" className="form-control" id="section" placeholder="Enter section" 
                             value={formData.section}
                             onChange={handleChange}/>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="schedule">Schedule</label>
+                            <label htmlFor="schedule"className={`${styles.label}`}>Schedule</label>
                             <input type="text" className="form-control" id="schedule" placeholder="Enter semester" 
                             value={formData.schedule}
-                            onChange={handleChange}/>
+                            onChange={handleChange}
+                            />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="room">Room</label>
+                            <label htmlFor="room"className={`${styles.label}`}>Room</label>
                             <input type="text" className="form-control" id="room" placeholder="Enter room" 
                             value={formData.room}
-                            onChange={handleChange}/>
+                            onChange={handleChange}
+                            />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="exampleSelect">Subject</label>
+                            <label htmlFor="exampleSelect"className={`${styles.label}`}>Subject</label>
                             <select className="form-control" id="subject" 
                             value={formData.subject}
                             onChange={handleChange}>
-                                <option value="">Select a subject</option>
+                                <option value=""className={`${styles.label}`}>Select a subject</option>
                                 <option value={"Python"}>Python</option>
                                 <option value={"Web Development"}>Web Development</option>
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="startDate">Start Date</label>
+                            <label htmlFor="startDate"className={`${styles.label}`}>Start Date</label>
                             <input type="date" className="form-control" id="startDate" 
                             value={formData.startDate}
                             onChange={handleChange}/>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="endDate">End Date</label>
+                            <label htmlFor="endDate"className={`${styles.label}`}>End Date</label>
                             <input type="date" className="form-control" id="endDate" 
                             value={formData.endDate}
                             onChange={handleChange}/>
+                        </div>
                         </div>
                     </form>
                 </Modal.Body>
@@ -244,7 +251,7 @@ export const Dashboard = () => {
                         <p>Course <FontAwesomeIcon icon={faPlusCircle} onClick={toggleShow}></FontAwesomeIcon></p>
                     </div>
                     <div className={`${styles.moreCourse}`}>
-                        <p>View More</p>
+                        <p onClick={() => navigate('/teacher/classes')}>View More</p>
                     </div>
                 </div>
                 <div className={`${styles.cardContainer}`}>
@@ -255,7 +262,7 @@ export const Dashboard = () => {
                                 <div key={index} className={`${styles.courseCard}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
                                     <p>{classItem.name}</p>
                                     <p>{classItem.section} ( {classItem.schedule} {classItem.room} )</p>
-                                    <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "Refresh Site"}</p>
+                                    <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "Code Generation Error"}</p>
                                 </div>
                             ))
                         ) : (

@@ -299,7 +299,7 @@ export const Register = () => {
                   </ul>
                 </div>
               )}
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button type="submit" className="btn btn-primary " disabled={loading}style={{backgroundColor: '#5D5DD4'}}>
               {
                 loading ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"
               }

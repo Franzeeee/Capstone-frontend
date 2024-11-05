@@ -13,14 +13,27 @@ import AssessmentContent from '../components/AssessmentContent';
 import lessons from '../utils/data';
 import ExitScreen from '../components/ExitScreen';
 import perfectRobot from '../assets/img/perfect-assessment-robot.png';
+import customFetch from '../utils/fetchApi';
+import LoadingPage from './LoadingPage';
+import HomeTemplate from '../templates/HomeTemplate';
+import LogicAssessmentPage from './AssessmentPage/LogicAssessmentPage';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
     const location = useLocation();
     
-    
+    const [assessment, setAssessment] = useState(location.state?.item || {});
     const [startAssessment, setStartAssessment] = useState(false);
     const [inFullscreen, setInFullscreen] = useState(false);
+    const [assessmentData, setAssessmentData] = useState(null);
+    const [rank, setRank] = useState({
+        rank: 0,
+        total: 0
+    });
+    const [isFetching, setIsFetching] = useState(true);
+
+    const [done, setDone] = useState(false);
+    const [submissionData, setSubmissionData] = useState(null);
 
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(
@@ -35,7 +48,7 @@ export default function ClassAssessment() {
         return lessons[lessonIndex].title || "Variables";
     });
 
-    const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+    // const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     const [show, setShow] = useState(false);
 
     const getNextLesson = () => {
@@ -45,6 +58,36 @@ export default function ClassAssessment() {
     const handleClose = () => {
         setShow(false);
     };
+
+    useEffect(() => {
+        
+        const activityId = location.state?.item?.id;
+
+        // Call customFetch directly here
+        customFetch(`/activity/${activityId}/auth`, 'GET')
+            .then(data => {
+                setAssessmentData(data);
+            })
+            .catch(error => {
+                navigate('/not-found');
+            })
+
+        customFetch(`/submission/${activityId}/${user.id}`, 'GET')
+            .then(data => {
+                setSubmissionData(data.data);
+                setDone(data.exists);
+                setRank({
+                    rank: data.rank,
+                    total: data.total_submissions
+                });
+            })
+            .catch(error => {
+                // navigate('/not-found');
+            })
+            .finally(() => {
+                setIsFetching(false);
+            });
+    }, []);
 
     const handleShow = () => {
         setShow(true);
@@ -94,13 +137,18 @@ export default function ClassAssessment() {
         navigate(newPath);
     };
 
-    const timesup = () => {
-        setStartAssessment(false);
-    };
+    if (isFetching) {
+        return <LoadingPage />;
+    }
+
+    if(!isFetching && assessmentData.coding_problems.length === 0) {
+        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
+    }
 
     return (
+        <HomeTemplate>
         <div className={`${styles.container}`}>
-            <div className={`${styles.sideNav}`}>
+            {/* <div className={`${styles.sideNav}`}>
                 <div className={`${styles.logo}`}>
                     <img src={logo} alt="" />
                 </div>
@@ -130,7 +178,7 @@ export default function ClassAssessment() {
                         </Accordion.Item>
                     </Accordion>
                 </div>
-            </div>
+            </div> */}
             <div className={`${styles.content}`}>
                 <div className={styles.breadcrumbs}>
                     <ul>
@@ -138,25 +186,33 @@ export default function ClassAssessment() {
                         <li>/</li>
                         <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
                         <li>/</li>
-                        <li className={`${styles.active}`}>{currentLesson} (Assessment)</li>
+                        <li className={`${styles.active}`}>{assessmentData?.title || "Nothing"}</li>
                     </ul>
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        <AssessmentContent status='pending' startButton={handleShow}/>
+                        <AssessmentContent status={done} rank={rank} data={assessmentData} submission={submissionData} startButton={handleShow}/>
                         {/* <div className={styles.robotContainer}>
                             <img src={perfectRobot} alt="" />
                             <p>Great did an excellent job!</p>
                         </div> */}
                     </div>
                 </div>
-                    <div className={`${styles.control}`}>
+                    {/* <div className={`${styles.control}`}>
                         <button className={`${styles.back}`}>Back</button>
                         <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button>
-                    </div>
+                    </div> */}
                 <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                     <Offcanvas.Body>
-                        <CodeEditor options={{ mode: 'Assessment', closeOverlay: () => setShow(false), timesup: () => setStartAssessment(false) }} />
+                    <CodeEditor 
+                        data={assessmentData}  
+                        options={{ 
+                            mode: 'Assessment', 
+                            closeOverlay: () => setShow(false), 
+                            timesup: () => setStartAssessment(false),
+                            closeEditor: () => setShow(false),
+                        }} 
+                    />
                     </Offcanvas.Body>
                 </Offcanvas>
                 <Offcanvas  
@@ -168,6 +224,7 @@ export default function ClassAssessment() {
                 </Offcanvas>
             </div>
         </div>
+        </HomeTemplate>
     )
 }
 
@@ -182,3 +239,4 @@ const canvasStyle = {
     transition: 'none'     // Disable transition for immediate pop-up
     
 }
+

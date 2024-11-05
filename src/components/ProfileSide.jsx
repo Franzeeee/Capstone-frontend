@@ -1,24 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../assets/css/components/profile-side.module.css";
 import {
   faBell,
   faCheckSquare,
   faClock,
   faEdit,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import profile from "../assets/img/user.png";
+import profile from "../assets/img/1x1Robot2.png";
 import { Badge } from "primereact/badge";
 import { Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/logout";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
+import customFetch from "../utils/fetchApi";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(localStorage.getItem("profilePicture") || profile);
+  const [profilePicture, setProfilePicture] = useState(profile);
+
+  useEffect(() => {
+    const storedProfilePicture = localStorage.getItem("profilePicture");
+    
+    customFetch('/profile/picture/fetch')
+      .then(data => {
+          setProfilePicture(data.path);
+          localStorage.setItem("profilePicture", data.path);
+      })
+      .catch(error => {
+          console.error('Error:', error.message);
+      });
+
+    
+  }, []);
 
   const handleClose = () => setShowModal(false);
 
@@ -33,6 +50,7 @@ export default function ProfileSide({ info }) {
   //     console.error("Logout was unsuccessful");
   //   }
   // };
+
 
   return (
     <>
@@ -62,7 +80,7 @@ export default function ProfileSide({ info }) {
         </Dropdown>
       </div>
       <div className={`${styles.userInfo}`}>
-        <img src={profilePicture} alt="" />
+        <img src={profilePicture !== null ? profilePicture : profile} alt="Profile Picture" />
         <p className={`${styles.userName}`}>
           {info ? info.name : "Undefined User"}{" "}
           <FontAwesomeIcon title="Edit Name" onClick={() => navigate('/profile')} icon={faEdit}></FontAwesomeIcon>
@@ -70,7 +88,7 @@ export default function ProfileSide({ info }) {
         <p className="text-capitalize">{info ? info.role : "Undefined Role"}</p>
       </div>
       <div className={`${styles.schedule}`}>
-        <p className={`${styles.scheduleText}`}>Tooday's Schedule</p>
+        <p className={`${styles.scheduleText}`}>To-do Scheduler <FontAwesomeIcon style={{fontSize: '.8rem', marginLeft: '3px', cursor: 'pointer'}} icon={faPlus} /></p>
         <div className={`${styles.activityContainer}`}>
           <div className={`${styles.card}`}>
             <div className={`${styles.activityInfo}`}>

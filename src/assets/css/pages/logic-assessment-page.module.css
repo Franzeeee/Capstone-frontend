@@ -1,0 +1,335 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    height: 100svh;
+    gap: 1.5rem;
+}
+.sideNav {
+    display: flex;
+    flex-direction: column;
+}
+.sideNav .logo {
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sideNav .logo img {
+    width: 70%;
+}
+
+.backButton {
+    padding: 5px 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.backButton:hover {
+    color: rgb(89, 94, 99);
+}
+.backButton svg {
+    font-size: .8rem;
+    cursor: pointer;
+}
+
+.lessons {
+    padding: 10px;
+}
+.accordionHeader button {
+    background-color: #DBDBFF !important;
+    border-radius: 5px;
+}
+.accordionHeader button:focus  {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.accordionBody ::-webkit-scrollbar {
+    display: none;
+}
+
+.accordionBody {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    border: none;
+    max-height: 350px !important;
+}
+.accordionBody ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.accordionBody ul li {
+    padding: 10px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    border-radius: 5px;
+    gap: 3px;
+}
+.accordionBody ul .active {
+    background-color: #ebebffb1;
+}
+.accordionBody ul li svg {
+    color: #606060ea;
+}
+.accordion {
+    border: none;
+    margin-bottom: 10px;
+}
+
+.activeLesson {
+    color: #000000;
+    font-weight: 600;
+}
+
+.content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.content::-webkit-scrollbar {
+    width: 10px; /* Set the width of the scrollbar */
+}
+
+.content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+.content::-webkit-scrollbar-thumb {
+    background-color: #a2a2a2; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded scrollbar thumb */
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #868686; /* Darker color when hovered */
+}
+
+.content .breadcrumbs ul {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0px 0 0 !important;
+    font-size: .9rem;
+    margin: 5px;
+}
+.content .breadcrumbs ul li {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+}
+.content .breadcrumbs ul li:not(.active):nth-child(odd) {
+    text-decoration: underline;
+    color: #5D5DD4;
+    cursor: pointer;
+}
+.lessonContent {
+    padding-bottom: 10px;
+    width: 95%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.lessonContent * {
+    margin: 0;
+}
+.lessonTitle h1{
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.contentContainer {
+    width: 100%;
+}
+.assessmentInfo {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    font-size: .8rem;
+    color: #5f5f5f;
+    padding-bottom: 10px;
+}
+.assessmentInfo span {
+    font-weight: 600;
+    color: #313131;
+}
+.title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+.description {
+    font-size: .9rem;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    color: #5f5f5f;
+    border-top: 1.5px solid #d2d2d2;
+    border-bottom: 1.5px solid #d2d2d2;
+    padding: 15px 0;
+}
+.assessmentSubHead {
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    color: #1e1e1e;
+    padding: 10px 0;
+}
+.submissionBox {
+    width: 100%;
+    min-height: 300px;
+    padding: 10px;
+    border: 1.5px solid #4732ff;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    position: relative;
+    background-color: #DBDBFF;
+}
+.robotContainer img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+.robotContainer {
+    position: absolute;
+    top: 15%;
+    right: 20px;
+}
+.robotContainer p {
+    position: inherit;
+    top: 0;
+    left: -115%;
+    padding: 20px;
+    background: white;
+    border-radius: 25px 25px 0 25px;
+    box-shadow: -3px 4px 5px 1px #dbdbdb;
+}
+.formAndFiles {
+    display: grid;
+    gap: 10px;
+    grid-template-rows: .6fr 1fr;
+}
+.formAndFiles div {
+    padding-top: 10px;
+}
+.formAndFiles div:first-child {
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 5px;
+}
+.file {
+    display: none;
+}
+.formAndFiles button {
+    border: none !important;
+    padding: 8px 25px;
+    background-color: #5D5DD4;
+    color: white;
+    border-radius: 10px;
+}
+.fileInfo {
+    padding: 0 !important;
+    font-size: .7rem;
+    border: none !important;
+}
+.fileInfo span {
+    font-weight: 600;
+    color: #3d3d3d;
+}
+.uploadContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-height: 170px;
+    overflow-y: auto;
+    padding: 0 !important;
+}
+.uploadContainer::-webkit-scrollbar {
+    width: 7px; /* Set the width of the scrollbar */
+}
+.uploadContainer::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+}
+.uploadContainer::-webkit-scrollbar-thumb {
+    background-color: #a2a2a2; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded scrollbar thumb */
+}
+.uploadCard {
+    padding: 5px;
+    border: 1px solid #1405e3;
+    background-color: white;
+    border-radius: 5px;
+    flex: 0 1 calc(50% - 16px);
+    padding: 10px !important;
+    max-height: 50%;
+    display: grid !important;
+    grid-template-columns: 1fr 35px;
+    gap: 5px;
+}
+.fileUploadInfo {
+    padding: 10px !important;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: .7rem;
+    gap: 0 !important;
+}
+.fileUploadInfo p:first-child {
+    font-weight: 600;
+    font-size: .85rem;
+    max-width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+}
+.close {
+    padding: 10px 12px;
+    border: 1px solid rgb(108, 108, 108);
+    border-radius: 100%;
+    align-self: center;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+.close:hover {
+    background-color: #ff4949;
+    color: white;
+}
+
+.robot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+.robot button {
+    padding: 5px 25px;
+    background-color: #5D5DD4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .3s ease;
+    margin-left: 20%;
+}
+.robot button:hover {
+    background-color: #4732ff;
+}
+.robot button:disabled {
+    background-color: #a2a2a2;
+    cursor: not-allowed;
+}

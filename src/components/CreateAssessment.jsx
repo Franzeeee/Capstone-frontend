@@ -75,6 +75,7 @@ export default function CreateAssessment({handleChangePage, classId}) {
 
             data.course_class_id = classId;
             data.user_id = user.id;
+            data.points = 100;
 
             data.coding_problems = data.coding_problems.map(problem => ({
                 title: problem.problem_title,       // Change key to title
@@ -94,8 +95,8 @@ export default function CreateAssessment({handleChangePage, classId}) {
             }
     
             const result = await response.json();
-            console.log("Form data is valid:", result);
             toast.success("Assessment created successfully");
+            handleClose();
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             toast.error("Failed to create assessment");
@@ -118,21 +119,23 @@ export default function CreateAssessment({handleChangePage, classId}) {
                             <p>Coding</p>
                         </div>
                     </div>
-                    <CreateAssessmentForm activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
+                    <CreateAssessmentForm classId={classId} activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
                 </Offcanvas.Body>
             </Offcanvas>
             <div className={`${styles.createContainer}`}>
                 <div className={styles.menuContainer}>
                     <ul>    
-                        <li className={activePage === 'default' && styles.active} onClick={() => handleActivePage("default")}>Default</li>
-                        <li className={activePage === 'classwork' && styles.active} onClick={() => handleActivePage("classwork")}>Classwork</li>
-                        <li className={activePage === 'announcement' && styles.active} onClick={() => handleActivePage("announcement")}>Announcement</li>
-                        <li className={activePage === 'people' && styles.active} onClick={() => handleActivePage("people")}>People</li>
+                        <li className={activePage === 'default' ? styles.active : ''} onClick={() => handleActivePage("default")}>Default</li>
+                        <li className={activePage === 'classwork' ? styles.active : ''} onClick={() => handleActivePage("classwork")}>Classwork</li>
+                        <li className={activePage === 'announcement' ? styles.active : ''} onClick={() => handleActivePage("announcement")}>Announcement</li>
+                        <li className={activePage === 'people' ? styles.active: ''} onClick={() => handleActivePage("people")}>People</li>
                     </ul>
                 </div>
-                <div className={styles.buttonContainer}>
-                    <p onClick={handleShow}>+ Create Assessment</p>
-                </div>
+                {user.role === 'teacher' && (
+                    <div className={styles.buttonContainer}>
+                        <p onClick={handleShow}>+ Create Assessment</p>
+                    </div>
+                )}
             </div>
         </>
     )

@@ -10,7 +10,7 @@ export default function Announcement() {
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
 
-  return (
+    return (
     <HomeTemplate>
         <div className={`${styles.container}`}>
             <div className={`${styles.contentContainer}`}>
@@ -29,5 +29,5 @@ export default function Announcement() {
             </div>
         </div>
     </HomeTemplate>
-  )
+    )
 }

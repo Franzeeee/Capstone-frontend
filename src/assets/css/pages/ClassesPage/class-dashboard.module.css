@@ -1,0 +1,341 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 350px;
+}
+.contentContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 0 1rem;
+    height: 97svh;
+    overflow: hidden;
+}
+.contentContainer::-webkit-scrollbar {
+    display: 2px;
+}
+.contentContainer .header {
+    width: 100%;
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+.header ul {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0px 0 0 !important;
+    font-size: .9rem;
+    margin: 5px;
+}
+.header ul li {
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+}
+.header ul .active {
+    text-decoration: underline;
+    color: #5D5DD4;
+}
+.contentContainer .header .create p {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.7rem;
+}
+.create div ul {
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: .7rem;
+}
+.create div ul li {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #8C8CAB;
+    cursor: default;
+}
+.create div ul li:not(:nth-child(even)){
+    cursor: pointer;
+}
+.create div ul .active {
+    color: #5D5DD4;
+    text-decoration: none;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+.content div {
+    height: auto;
+}
+.classInfo {
+    color: rgb(238, 238, 238);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background: linear-gradient(90deg, #8585E5 0%, #5E5ED5 100%);
+}
+.classInfoHeader {
+    display: flex;
+    padding: 1rem 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    position: relative;
+}
+.classInfoHeader .headerItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.headerItem .icon {
+    font-size: 150%; /* Controls icon size */
+    width: 50px; /* Set the width to be equal to the height for a perfect circle */
+    height: 50px;
+    border-radius: 50%; /* Makes the icon circular */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #000; /* Icon color */
+    background-color: #f0f0f0; /* Background inside the circle, optional */
+}
+
+.headerItem .language {
+    color: #FFD43B;
+    background-color: #4B8BBE;
+}
+
+.headerItem .classIcon {
+    color: #00f715;
+    background-color: #fff;
+}
+
+.headerItem .studentCount {
+    color: #ffffff;
+    background-color: #fbb800;
+}
+
+
+.text {
+    line-height: 1;
+}
+.text p:first-child {
+    font-size: .8rem;
+    font-weight: 500;
+    margin: 0;
+}
+.text p:last-child {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.exclamation {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: .8rem;
+    border: 1px solid rgb(255, 255, 255);
+    padding: 0 8px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.exclamation:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+}
+
+.additionalInfo {
+    display: none;
+    padding: 10px;
+    width: 100%;
+    background-color: #f8f8f8;
+    color: #000;
+}
+.additionalInfo p {
+    font-size: .8rem;
+    margin: 0;
+    font-weight: 500;
+}
+.additionalInfo p span {
+    font-weight: 600;
+    font-size: .85rem;
+    margin-right: 4px;
+}
+.copy {
+    color: #6b6b83;
+    transition: all .3s ease;
+}
+.copy:hover {
+    color: #5E5ED5;
+    cursor: pointer;
+}
+
+
+.classAssessments {
+    flex-grow: 1;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+.tableTitle {
+    font-size: 1.1rem;
+    color: #000;
+    font-weight: 500;
+    background-color: #cbcdd032;
+    padding: 5px;
+}
+.classDashboard div:has(.table) {
+    flex-grow: 1;
+    font-size: .9rem;
+    overflow: auto !important;
+}
+
+.classDashboard div:has(.table)::-webkit-scrollbar {
+    width: 0;
+}
+
+.classDashboard div:has(.table) td, 
+.classDashboard div:has(.table) th {
+    padding: 15px;
+}
+
+.classDashboard div:has(.table) td ::after {
+    display: none !important;
+}
+.table {
+    width: 100%;
+}
+
+.classAssessments:has(.table-responsive) {
+    color: red !important;
+}
+
+.footer {
+    padding: 5px 10px;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #bebebe;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.footer div {
+    padding: 5px;
+    font-size: .9rem;
+}
+.footer .totalEntry {
+    display: flex;
+    gap: 5px;
+}
+.footer .pagination {
+    display: flex;
+    gap: 5px;
+}
+.footer div button {
+    padding: 5px 10px;
+    border: 0;
+    border-top: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.footer div button:hover {
+    background-color: #f8f8f8;
+}
+.footer div button:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    color: #bebebe;
+}
+.footer div button.active {
+    background-color: #5d5dd4e4;
+    color: #fff;
+}
+.viewMore svg::after {
+    display: none !important;
+}
+
+
+.offcanvasBody::-webkit-scrollbar {
+    width: 0;
+}
+.offcanvasBody::-webkit-scrollbar-thumb {
+    background-color: #b9b9b9;
+}
+.offcanvasBody::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+.offcanvasBody{
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 2.2rem 4rem;
+}
+.assessmentOptions {
+    display: flex;
+}
+.assessmentOptions div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: 5px;
+    border: 1.5px solid #5D5DD4;
+    transition: all .3s ease;
+}
+.assessmentOptions div p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #5D5DD4;
+    transition: all .3s ease;
+    user-select: none;
+}
+.assessmentOptions div:hover {
+    background-color: #e6e6e644;
+    cursor: pointer;
+}
+.assessmentOptions div:hover p {
+    color: #0000ef;
+}
+.assessmentOptions .active {
+    background-color: #5D5DD4;
+}
+.assessmentOptions .active p {
+    color: #fff;
+}
+.assessmentOptions .active:hover {
+    background-color: #5D5DD4;
+    cursor: default;
+}
+.assessmentOptions .active:hover p {
+    color: #fff;
+}
+.offCanvas {
+    border-radius: 10px !important;
+    box-shadow: 0px 0px 10px 0px #00000033;
+    max-width: 900px;
+}
+
+.Header{
+    background: linear-gradient(110.75deg, #8E8EE9 5.35%, #5D5DD4 72.54%);
+    padding: 10px !important;
+}
+.Header *{
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+}
+.Title{
+    font-weight: 600;
+    color: #fff;
+}

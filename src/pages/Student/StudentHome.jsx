@@ -48,10 +48,21 @@ export default function StudentHome() {
         fetchClasses();
     }, [user.id]);
 
-    const handleJoinSuccess = (data) => {
-        setClassData(data);
-        toast.success(data.message, {autoClose: 5000})
+    const handleJoinSuccess = (newClass) => {
+        // Update classData to include the newly joined class
+        setClassData((prevClassData) => {
+            // Check if the class already exists
+            const classExists = prevClassData.some(classItem => classItem.class_code.code === newClass.class_code.code);
+
+            if (!classExists) {
+                return [...prevClassData, {...newClass.class, class_code: newClass.class_code}]; // Add the new class to the existing classes
+            }
+            return prevClassData; // Return the existing classes if it already exists
+        });
+        console.log(newClass);
+        toast.success('Class joined successfully!', { autoClose: 5000 });
     };
+    
 
     return (
     <HomeTemplate>

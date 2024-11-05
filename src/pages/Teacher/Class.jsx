@@ -15,6 +15,7 @@ import ProfileSide from '../../components/ProfileSide';
 import CreateAssessment from '../../components/CreateAssessment';
 import AnnouncementContent from '../../components/AnnouncementContent';
 import ClassroomWork from '../../components/ClassroomWork';
+import PeopleContents from '../../components/PeopleContents';
 
 
 
@@ -31,6 +32,8 @@ export default function Class() {
     const [classInfo, setClassInfo] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const [nullClass, setNullClass] = useState(null);
 
     const api  = import.meta.env.VITE_API_URL;
 
@@ -66,12 +69,13 @@ export default function Class() {
     }
 
     if (error) {
-    return <p>Error: {error}</p>;
+    return navigate('/class-not-found');
     }
     
     const handleActivePage = (page) => {
         setActivePage(page);
     }
+    
 
     return (
         <HomeTemplate>
@@ -97,13 +101,13 @@ export default function Class() {
                         activePage === 'default' && <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
                     }
                     {
-                        activePage === 'classwork' && <ClassroomWork classId={classInfo.id} />
+                        activePage === 'classwork' && <ClassroomWork classId={classInfo.id} className={classInfo?.name} code={code} />
                     }
                     {
                         activePage === 'announcement' && <AnnouncementContent />
                     }
                     {
-                        activePage === 'people' && <p>People</p>
+                        activePage === 'people' && <PeopleContents classInfo={classInfo} classId={classInfo.id} />
                     }
 
                 </div>

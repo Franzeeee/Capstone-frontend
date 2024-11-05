@@ -10,7 +10,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 export default function AnnouncementForm() {
 
   const userData = localStorage.getItem('userData');
-    const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
+  const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
   
   const [clicked, setClicked] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);

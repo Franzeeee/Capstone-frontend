@@ -4,7 +4,7 @@
 
 :root {
   --main-color: #0066f5;
-  --main-font: "Poppins", sans-serif;
+  --main-font: "Montserrat", "Poppins", sans-serif;
 }
 body {
   font-family: var(--main-font) !important;
