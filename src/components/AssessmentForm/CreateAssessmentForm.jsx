@@ -121,6 +121,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
       // Send the request
       fetch(`${BASE_URL}/activity/logic/upload`, {
           method: 'POST',
+          credentials: 'include',
           body: data,
       })
       .then(data => {
@@ -221,16 +222,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
 
   const handleLogicSubmit = (e) => {
     e.preventDefault();
-    console.log("formData", formData);
-    console.log("file", file);
   }
-
-  useEffect(() => {
-    setFormData(prev => ({
-      ...prev,
-      files: file,
-    }))
-  }, [file])
 
   return (
     <Form encType="multipart/form-data" onSubmit={handleSubmit}>

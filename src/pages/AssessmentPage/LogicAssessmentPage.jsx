@@ -7,17 +7,26 @@ import bot from '../../assets/img/assessmentBot.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import {getUserData} from '../../utils/userInformation'
+import { toast } from 'react-toastify'
 
 export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const [files, setFiles] = useState([]); // State to store selected files
     const fileInputRef = useRef(null); // Reference to the file input
     const navigate = useNavigate();
 
+    const userData = getUserData();
+
+    const BASE_URL = import.meta.env.VITE_API_URL;
+
+
+    const [assessmentFile, setAssessmentFile] = useState([]); // State to store assessment file
+
     useEffect(() => {
         // Fetch assessment data
         customFetch(`/activity/logic/${assessmentData.id}/files`)
             .then(data => {
-                console.log('Data:', data);
+                setAssessmentFile(data);
             })
             .catch(error => {
                 console.error('Error:', error.message);
@@ -45,6 +54,30 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const handleRemoveFile = (index) => {
         setFiles(prevFiles => prevFiles.filter((_, i) => i !== index)); // Remove file at the index
     };
+
+    const handleSubmission = () => {
+        const formData = new FormData();
+
+        formData.append('student_id', userData.id);
+
+        files.forEach((f, index) => {
+            formData.append(`files[${index}]`, f);
+            console.log(`files[${index}]:`, f); // Log file object to ensure it's attached
+        });
+
+        if(files.length !== 0) {
+            fetch(`${BASE_URL}/activity/logic/${assessmentData.id}/submit`, {
+                method: 'POST',
+                credentials: 'include',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                toast.success("Submission Successful");
+            })
+        }
+
+    }
 
     return (
         <HomeTemplate>
@@ -117,6 +150,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                         <img src={bot} alt="" />
                                         <p>You can upload your files here!</p>
                                     </div>
+                                    <button disabled={files.length === 0} onClick={handleSubmission}>Submit</button>
                                 </div>
                             </div>
                         </div>
