@@ -189,11 +189,12 @@
     width: 100%;
     min-height: 300px;
     padding: 10px;
-    border: 1.5px solid #d0d0d0;
+    border: 1.5px solid #4732ff;
     border-radius: 10px;
     display: grid;
     grid-template-columns: 1fr 250px;
     position: relative;
+    background-color: #DBDBFF;
 }
 .robotContainer img {
     width: 100%;
