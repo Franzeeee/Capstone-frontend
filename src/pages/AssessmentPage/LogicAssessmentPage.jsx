@@ -202,7 +202,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                     <div className={styles.uploadContainer}>
                                         {files && files.map((file, index) => (
                                             <div key={index} className={styles.uploadCard}>
-                                                <div className={styles.fileUploadInfo}>
+                                                <div className={styles.fileUploadInfo} onClick={handleFilePreview}>
                                                     <OverlayTrigger
                                                         placement="bottom"
                                                         overlay={<Tooltip id={`tooltip-test`}>{file.name}</Tooltip>}
