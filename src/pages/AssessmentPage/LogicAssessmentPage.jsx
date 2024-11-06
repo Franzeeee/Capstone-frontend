@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import DocViewer from 'react-doc-viewer'
 import { Modal, ModalBody } from 'react-bootstrap'
 import test from '../../assets/img/Swap1.png'
+import { DocViewerRenderers } from 'react-doc-viewer'
 
 export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const [files, setFiles] = useState([]); // State to store selected files
@@ -26,8 +27,9 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const [assessmentFile, setAssessmentFile] = useState([]); // State to store assessment file
 
     const [submitted, setSubmitted] = useState(false);
-    const [submittedFiles, setSubmittedFiles] = useState([]);
+    const [submittedFiles, setSubmittedFiles] = useState(null);
     const [isUnsubmitted, setIsUnsubmitted] = useState(false);
+    const [docFiles, setDocFiles] = useState([]);
 
     // For File Preview
     const [showFilePreview, setShowFilePreview] = useState(false);
@@ -50,6 +52,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
             .catch(error => {
                 console.error('Error:', error.message);
             });
+
     }, [assessmentData]);
 
     const handleBack = () => {
@@ -137,6 +140,18 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
     });
     }, []);
 
+    useEffect(() => {
+        if( submittedFiles && submittedFiles !== null && submittedFiles.files.length > 0) {
+            setDocFiles(submittedFiles.files.map(file => {
+                return {
+                    uri: file.file_path,
+                    fileType: file.file_type,
+                    fileName: file.file_name
+                }
+            }));
+        }
+    }, [submittedFiles]);
+
     const deleteSubmittedFile = (fileId) => {
         if(submittedFiles.files.length > 0 && fileId !== null && isUnsubmitted) {
             customFetch(`/activity/logic/${fileId}/delete`, {
@@ -152,6 +167,10 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
             })
         }
     }
+
+    useEffect(() => {
+        console.log("docFiles", docFiles);
+    }, [docFiles]);
 
     return (
         <HomeTemplate>
@@ -251,11 +270,14 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                         </div>
                     </div>
                 </div>
-                <Modal show={showFilePreview} size='lg' onHide={handleCloseFilePreview}>
-                    <ModalBody>
-                        <DocViewer documents={[{
-                            uri: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
-                        }]} />
+                <Modal style={{background: 'transparent !important'}} show={showFilePreview} size='lg' onHide={handleCloseFilePreview}>
+                    <ModalBody className={styles.modalBody}>
+                        <DocViewer 
+                            documents={docFiles} 
+                            pluginRenderers={DocViewerRenderers} 
+                            preFetchMethod="GET"
+                            style={{width: '100%', height: '100%'}}
+                        />
                     </ModalBody>
                 </Modal>
             </div>

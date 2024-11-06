@@ -6,21 +6,20 @@ import ProfileSide from '../components/ProfileSide';
 import { getUserData } from '../utils/userInformation';
 import book from '../assets/img/book.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faCog, faCopy, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCog, faCopy, faEye, faUserGraduate } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import customFetch from '../utils/fetchApi';
 import LessonCardLoader from '../components/LazyLoaders/LessonCardLoader';
-import ConfirmationTextModal from '../components/Modals/ConfirmationTextModal';
+import faFinalGrade from '../assets/img/finalGrade-logo.png';
 
-export default function TeacherAssessmentPage() {
+export default function ClassGradeList() {
     const navigate = useNavigate();
     const user = getUserData();
 
     // Example array of class items
     const [classItems, setClassItems] = useState(null);
-    const [selectedClass, setSelectedClass] = useState(null);
 
     useEffect(() => {
         customFetch(`/class/all`, 'GET')
@@ -38,40 +37,9 @@ export default function TeacherAssessmentPage() {
         toast.success('Class code copied to clipboard');
     }
 
-    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const showDeleteConfirmationModal = (id) => {
-        setSelectedClass(id);
-        setShowDeleteConfirmation(true);
-    }
-    const deleteClass = (id) => {
-        // Delete class logic here
-        setShowDeleteConfirmation(false);
-        customFetch(`/class/${selectedClass}/delete`, {
-            method: 'DELETE',
-        })
-            .then(data => {
-                toast.success('Class deleted successfully');
-                setClassItems(classItems.filter(item => item.id !== selectedClass));
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-            });
-    }
-
     return (
         <HomeTemplate>
             <div className={`${styles.container}`}>
-                <ConfirmationTextModal 
-                    show={showDeleteConfirmation} 
-                    handleClose={() => deleteClass()} 
-                    modalData={{
-                        title: 'Delete Class',
-                        inputMessage: 'delete class',
-                        action: () => deleteClass(),
-                        confirmText: 'Delete',
-                        cancelText: 'Cancel',
-                    }}
-                />
                 <div className={`${styles.contentContainer}`}>
                     <div className={`${styles.header}`}>
                         <div className={`${styles.create}`}>
@@ -91,28 +59,12 @@ export default function TeacherAssessmentPage() {
                                     <p className={`${styles.classCode}`}>Class Code: <span>{classItem.class_code.code}</span> <FontAwesomeIcon onClick={() => copyCode(classItem.class_code.code)} icon={faCopy} /></p>
                                 </div>
                                 <div className={`${styles.goTo}`}>
-                                <OverlayTrigger
-                                        placement="auto" // Adjust placement as needed
-                                        overlay={<Tooltip id={`tooltip-${index}`}>Delete Class</Tooltip>}
-                                    >
-                                        <div className={`${styles.viewButton} ${styles.deleteClass}`} onClick={() => showDeleteConfirmationModal(classItem.id)}>
-                                            <p className='m-0'><FontAwesomeIcon icon={faTrashAlt} /></p>
-                                        </div>
-                                    </OverlayTrigger>
                                     <OverlayTrigger
                                         placement="auto" // Adjust placement as needed
-                                        overlay={<Tooltip id={`tooltip-${index}`}>Preview Class</Tooltip>}
+                                        overlay={<Tooltip id={`tooltip-${index}`}>Manage Final Grades</Tooltip>}
                                     >
-                                        <div className={`${styles.viewButton}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
-                                            <p className='m-0'><FontAwesomeIcon icon={faEye} /></p>
-                                        </div>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger
-                                        placement="auto" // Adjust placement as needed
-                                        overlay={<Tooltip id={`tooltip-${index}`}>Class Dashboard</Tooltip>}
-                                    >
-                                    <div className={`${styles.viewButton}`} onClick={() => navigate(`${classItem.class_code.code}/dashboard`, {state: {verified: true, data: classItem}})} >
-                                        <p className='m-0' title='Overview'><FontAwesomeIcon icon={faArrowRight} fade /></p>
+                                    <div className={`${styles.viewButton}`} onClick={() => navigate(`${classItem.class_code.code}/dashboard`)} >
+                                        <p className='m-0' title='Overview'><FontAwesomeIcon icon={faUserGraduate} fade /></p>
                                     </div>
                                     </OverlayTrigger>
                                 </div>
