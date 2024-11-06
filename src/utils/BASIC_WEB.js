@@ -4076,7 +4076,7 @@ Rounded Border Box: The third box has a solid red border with very rounded corne
 },
 
 {
-title: "CSS",
+title: "CSS Margins",
  content: `
 \`\`\`Para
 CSS margins are used to create space around elements, separating them from other elements on the page. They are crucial for layout control and visual aesthetics, helping to ensure that elements are not too close to one another.
@@ -4228,7 +4228,7 @@ Button: The button has a top margin of 20 pixels to create space between it and 
 },
 
 {
-title: "CSS",
+title: "CSS Padding",
  content: `
 \`\`\`Para
 CSS padding is the space between the content of an element and its border. It is crucial for controlling the inner spacing within elements, which affects the overall layout and readability of a webpage. Padding can help create a more aesthetically pleasing design by ensuring that text and other content do not touch the edges of their containers.
@@ -4713,7 +4713,7 @@ By using box-sizing: border-box;, the total width of the box becomes 300px, whic
 },
 
 {
-title: "CSS",
+title: "CSS Outlines",
  content: `
 \`\`\`Para
 CSS outlines are a way to create a line around an element that is similar to borders but with some key differences. Outlines are primarily used for accessibility and visual emphasis, helping to highlight elements without affecting the layout.
@@ -6883,7 +6883,7 @@ title: "CSS Overflow",
 \`\`\`Para
 The CSS overflow property controls what happens to content that exceeds the bounds of an element's box. It is particularly useful for managing layout and ensuring that overflowing content is handled in a way that maintains usability and aesthetics.
 \`\`\`End
-
+git 
 \`\`\`Bold
 Overflow Property Values
 \`\`\`End
