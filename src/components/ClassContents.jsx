@@ -65,7 +65,7 @@ export default function ClassContents({ data, code, className }) {
         }
     
         const baseUnlock = lessonId <= progress.last_completed_quiz + 1;
-        const extraUnlock = hasAssessment && lessonId <= progress.last_completed_quiz + 2;
+        const extraUnlock = hasAssessment && lessonId <= progress.last_completed_quiz + 1;
     
         return (
             baseUnlock ||
@@ -129,7 +129,7 @@ export default function ClassContents({ data, code, className }) {
                                 >
                                     <p>
                                         {isLessonUnlocked(lesson.id, lesson.hasAssessment) ? (
-                                            `View Lesson`
+                                            `View Lesson ${lesson.id}`
                                         ) : (
                                             <>
                                                 <FontAwesomeIcon icon={faLock} /> Locked
@@ -161,7 +161,7 @@ export default function ClassContents({ data, code, className }) {
                                         }
                                     >
                                         <p>
-                                            {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `View Quiz` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
+                                            {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `View Quiz ${assessment.id}` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
                                         </p>
                                     </div>
                                 </div>
