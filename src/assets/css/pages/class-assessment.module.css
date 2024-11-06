@@ -96,7 +96,6 @@
     padding: 10px;
     display: flex;
     flex-direction: column;
-    padding-top: 50px;
     overflow: auto;
 }
 .content::-webkit-scrollbar {

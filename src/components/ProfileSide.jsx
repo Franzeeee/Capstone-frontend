@@ -5,6 +5,7 @@ import {
   faCheckSquare,
   faClock,
   faEdit,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import profile from "../assets/img/1x1Robot2.png";
@@ -87,7 +88,7 @@ export default function ProfileSide({ info }) {
         <p className="text-capitalize">{info ? info.role : "Undefined Role"}</p>
       </div>
       <div className={`${styles.schedule}`}>
-        <p className={`${styles.scheduleText}`}>Tooday's Schedule</p>
+        <p className={`${styles.scheduleText}`}>To-do Scheduler <FontAwesomeIcon style={{fontSize: '.8rem', marginLeft: '3px', cursor: 'pointer'}} icon={faPlus} /></p>
         <div className={`${styles.activityContainer}`}>
           <div className={`${styles.card}`}>
             <div className={`${styles.activityInfo}`}>

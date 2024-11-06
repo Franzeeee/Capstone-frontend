@@ -560,7 +560,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             isActive: index === 0,
             testCase: {
                 input: problem.sample_input || "",
-                output: problem.sample_output || ""
+                output: problem.expected_output || ""
             }
         })) || null);
 
@@ -655,11 +655,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
         for (const [index, assessment] of allProblemsAndCodes.entries()) {
             const { codingProblem, code } = assessment;
+
+            const formData = new FormData();
+            formData.append('codingProblem', codingProblem);
+            formData.append('code', code);
     
             try {
                 const response = await customFetch('/submission/autocheck', {
                     method: 'POST',
-                    body: JSON.stringify({ codingProblem, code })
+                    body: formData,
                 });
     
                 // Check if the response has the 'message' property
@@ -691,11 +695,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
         // Final feedback to the user
         if (allSuccessful) {
-            console.log(updatedAssessmentData)
+            
             handleCloseSubmitModal();
 
             customFetch('/submission/create', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     activity_id: data.id,
                     score: parseInt(gwa.toFixed(2), 10),
@@ -732,6 +739,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         // closeOverlay();
         submitAssessment()
     };
+
+    const [showWebSample, setShowWebSample] = useState(false);
+
+    const handleShowWebSample = () => {
+        setShowWebSample(true);
+    };
+
+    const handleCloseWebSample = () => {
+        setShowWebSample(false);
+    };
         
         
 
@@ -750,6 +767,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             hideConfirm: true
                             }}
                     />
+            <Offcanvas show={showWebSample} onHide={handleCloseWebSample} placement="end" className={`${styles.offcanvas}`}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Questions</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    Test
+                </Offcanvas.Body>
+            </Offcanvas>
             <nav className={`${styles.nav}`}>
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
@@ -917,9 +942,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                     {
                                         activeAssessment.testCase.output === "" ? "" : (
                                             <ul>
-                                                {activeAssessment.testCase.output.split('\n').map((line, index) => (
-                                                    <li key={index}>{line}</li>
-                                                ))}
+                                                {
+                                                    activeAssessment.testCase.output.includes("DOCTYPE") ? (
+                                                        <button onClick={handleShowWebSample}>View Sample</button>
+                                                    ) : (
+                                                        activeAssessment.testCase.output.split('\n').map((line, index) => (
+                                                            <li key={index}>{line}</li>
+                                                        ))
+                                                    )
+                                                }
                                             </ul>
                                         )
                                     }

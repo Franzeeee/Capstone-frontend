@@ -5,18 +5,16 @@ const customFetch = async (url, options = {}) => {
     return fetch(`${BASE_URL}${url}`, {
         ...options,
         headers: {
-            'Content-Type': 'application/json',  // Default content type
-            ...options.headers,  // Merge any additional headers passed in options
+            ...options.headers,
         },
         credentials: 'include',  // Ensure credentials like cookies are included
         ...options,  // Spread the other options (e.g., method, body)
     })
-    .then(response => {
+    .then(async response => {
         // Check if the response is not ok, reject it as an error
         if (!response.ok) {
-            return response.json().then(errorData => {
-                return Promise.reject(new Error(errorData.message || `HTTP Error: ${response.status}`));
-            });
+            const errorData = await response.json();
+            return await Promise.reject(new Error(errorData.message || `HTTP Error: ${response.status}`));
         }
         // Return the response as JSON if successful
         return response.json();

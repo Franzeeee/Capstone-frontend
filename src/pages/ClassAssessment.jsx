@@ -16,6 +16,7 @@ import perfectRobot from '../assets/img/perfect-assessment-robot.png';
 import customFetch from '../utils/fetchApi';
 import LoadingPage from './LoadingPage';
 import HomeTemplate from '../templates/HomeTemplate';
+import LogicAssessmentPage from './AssessmentPage/LogicAssessmentPage';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
@@ -47,7 +48,7 @@ export default function ClassAssessment() {
         return lessons[lessonIndex].title || "Variables";
     });
 
-    const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+    // const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     const [show, setShow] = useState(false);
 
     const getNextLesson = () => {
@@ -140,6 +141,10 @@ export default function ClassAssessment() {
         return <LoadingPage />;
     }
 
+    if(!isFetching && assessmentData.coding_problems.length === 0) {
+        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
+    }
+
     return (
         <HomeTemplate>
         <div className={`${styles.container}`}>
@@ -181,7 +186,7 @@ export default function ClassAssessment() {
                         <li>/</li>
                         <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
                         <li>/</li>
-                        <li className={`${styles.active}`}>{assessmentData?.title }</li>
+                        <li className={`${styles.active}`}>{assessmentData?.title || "Nothing"}</li>
                     </ul>
                 </div>
                 <div className={styles.lessonContent}>
