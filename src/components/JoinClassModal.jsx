@@ -71,11 +71,11 @@ const JoinClassModal = ({ show, handleClose, handleJoinSuccess, studentID }) => 
                 {error && <p className="text-danger m-0">{error}</p>}
             </Form.Group>
             <div className="text-end" >
-            <Button variant="primary" onClick={handleJoinClass} className={`${styles.BtnJoin}`}>
-            Join Class
-            </Button>
             <Button variant="secondary" onClick={handleClose} className={`${styles.BtnClose}`}>
             Close
+            </Button>
+            <Button variant="primary" onClick={handleJoinClass} className={`${styles.BtnJoin}`}>
+            Join Class
             </Button>
             </div>
             </Form>

@@ -6,7 +6,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-
+import Feedback from '../components/FeedbackModal.jsx';
 export default function SubmissionDetailModal({ show, handleClose }) {
     const [key, setKey] = useState('home');
 
@@ -82,7 +82,7 @@ export default function SubmissionDetailModal({ show, handleClose }) {
                         <Tab eventKey="overall" title="Overall Score">
                             <div className={styles.problemContainer}>
                             <div className={styles.feedbackContainer}>
-                                <Button className={styles.feedback}>Feedback</Button>
+                                <Feedback/>
                             </div>
                                 <div className={styles.circleContainer}>
                                     <div className={styles.circle}>
@@ -95,30 +95,39 @@ export default function SubmissionDetailModal({ show, handleClose }) {
                                 <ul>
                                     <li>
                                         <p>Time Remaining</p>
+                                        <div className={styles.Contain}>
                                         <div className={styles.loadingBarContainer}>
                                         <div className={styles.loadingBar}></div>
-                                        <p>1st</p>
                                         </div>
+                                        <p className={styles.details}>1st</p>                                            
+                                        </div>
+
                                     </li>
                                     <li>
                                         <p>Problem Solved</p>
+                                        <div className={styles.Contain}>
                                         <div className={styles.loadingBarContainer}>
                                         <div className={styles.loadingBar}></div>
-                                        <p>1st</p>
+                                        </div>
+                                        <p className={styles.details}>1st</p>                                            
                                         </div>
                                     </li>
                                     <li>
                                         <p>Overall Points</p>
+                                        <div className={styles.Contain}>
                                         <div className={styles.loadingBarContainer}>
                                         <div className={styles.loadingBar}></div>
-                                        <p>1st</p>
+                                        </div>
+                                        <p className={styles.details}>1st</p>                                            
                                         </div>
                                     </li>
                                     <li>
                                         <p>Current Rank</p>
+                                        <div className={styles.Contain}>
                                         <div className={styles.loadingBarContainer}>
                                         <div className={styles.loadingBar}></div>
-                                        <p>1st</p>
+                                        </div>
+                                        <p className={styles.details}>1st</p>                                            
                                         </div>
                                     </li>
                                 </ul>

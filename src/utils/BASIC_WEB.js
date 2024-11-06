@@ -1898,8 +1898,9 @@ User-Friendly: Lists make information easier to digest and can improve the overa
 `
 },
 {
-title: "HTML Heading",
+title: "HTML Block and Inline",
 id: 15,
+
  content: `
 \`\`\`Para
 In HTML, elements can be categorized as either block-level or inline elements. Understanding the difference between these two types is crucial for controlling the layout and flow of content on a web page.
@@ -2600,8 +2601,10 @@ Performance: Loading multiple iframes can affect the performance of your page, e
 },
 
 {
-title: "HTML Heading",
-id: 20,
+
+title: "HTML Javascript",
+  id: 20,
+
  content: `
 \`\`\`Para
 HTML and JavaScript work together to create dynamic and interactive web pages. HTML provides the structure of the page, while JavaScript adds functionality and interactivity. By using JavaScript, you can manipulate HTML elements, respond to user actions, and create a more engaging experience.
@@ -3543,7 +3546,9 @@ Temporarily Disabled Styles: The comment before the footer styles indicates that
 },
 
 {
-title: "CSS",
+
+
+title: "CSS Colors",
 id: 26,
 css: true,
  content: `
@@ -4114,7 +4119,8 @@ Rounded Border Box: The third box has a solid red border with very rounded corne
 },
 
 {
-title: "CSS",
+
+title: "CSS Margins",
 id: 29,
 css: true,
  content: `
@@ -4268,7 +4274,9 @@ Button: The button has a top margin of 20 pixels to create space between it and 
 },
 
 {
-title: "CSS",
+
+
+title: "CSS Padding",
 id: 30,
 css: true,
  content: `
@@ -4759,7 +4767,8 @@ By using box-sizing: border-box;, the total width of the box becomes 300px, whic
 },
 
 {
-title: "CSS",
+
+title: "CSS Outlines",
 id: 33,
 css: true,
  content: `
@@ -6953,7 +6962,7 @@ css: true,
 \`\`\`Para
 The CSS overflow property controls what happens to content that exceeds the bounds of an element's box. It is particularly useful for managing layout and ensuring that overflowing content is handled in a way that maintains usability and aesthetics.
 \`\`\`End
-
+git 
 \`\`\`Bold
 Overflow Property Values
 \`\`\`End
