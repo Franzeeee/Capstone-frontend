@@ -655,11 +655,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
         for (const [index, assessment] of allProblemsAndCodes.entries()) {
             const { codingProblem, code } = assessment;
+
+            const formData = new FormData();
+            formData.append('codingProblem', codingProblem);
+            formData.append('code', code);
     
             try {
                 const response = await customFetch('/submission/autocheck', {
                     method: 'POST',
-                    body: JSON.stringify({ codingProblem, code })
+                    body: formData,
                 });
     
                 // Check if the response has the 'message' property
@@ -691,11 +695,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
         // Final feedback to the user
         if (allSuccessful) {
-            console.log(updatedAssessmentData)
+            
             handleCloseSubmitModal();
 
             customFetch('/submission/create', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     activity_id: data.id,
                     score: parseInt(gwa.toFixed(2), 10),

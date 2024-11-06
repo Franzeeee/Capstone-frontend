@@ -65,7 +65,6 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
     if (
       tempProblem.problem_title &&
       tempProblem.problem_description &&
-      tempProblem.sample_input &&
       tempProblem.expected_output
     ) {
       setFormData((prevData) => ({

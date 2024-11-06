@@ -63,7 +63,7 @@ export default function ClassGradeList() {
                                         placement="auto" // Adjust placement as needed
                                         overlay={<Tooltip id={`tooltip-${index}`}>Manage Final Grades</Tooltip>}
                                     >
-                                    <div className={`${styles.viewButton}`} onClick={() => navigate(`${classItem.class_code.code}/dashboard`)} >
+                                    <div className={`${styles.viewButton}`}  onClick={() => navigate(`/teacher/grades/class/${classItem.class_code.code}/final-grades`, {state: {verified: true, data: classItem}})} >
                                         <p className='m-0' title='Overview'><FontAwesomeIcon icon={faUserGraduate} fade /></p>
                                     </div>
                                     </OverlayTrigger>

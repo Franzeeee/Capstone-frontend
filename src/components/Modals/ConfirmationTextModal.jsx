@@ -18,7 +18,7 @@ export default function ConfirmationTextModal({ show, handleClose, modalData }) 
         if(modalData.inputMessage === inputValue) {
             setLoading(true);
             modalData.action();
-            setInputValue('');
+            setInputValue(''); 
             setLoading(false);
         }
     }
