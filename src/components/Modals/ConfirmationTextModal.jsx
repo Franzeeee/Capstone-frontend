@@ -15,10 +15,12 @@ export default function ConfirmationTextModal({ show, handleClose, modalData }) 
     }
 
     const runAction = () => {
-        setLoading(true);
-        modalData.action();
-        setInputValue('');
-        setLoading(false);
+        if(modalData.inputMessage === inputValue) {
+            setLoading(true);
+            modalData.action();
+            setInputValue('');
+            setLoading(false);
+        }
     }
 
     const handleCancel = () => {
