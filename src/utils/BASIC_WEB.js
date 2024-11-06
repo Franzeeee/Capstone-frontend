@@ -1882,7 +1882,7 @@ User-Friendly: Lists make information easier to digest and can improve the overa
 `
 },
 {
-title: "HTML Heading",
+title: "HTML Block and Inline",
  content: `
 \`\`\`Para
 In HTML, elements can be categorized as either block-level or inline elements. Understanding the difference between these two types is crucial for controlling the layout and flow of content on a web page.
@@ -2579,7 +2579,7 @@ Performance: Loading multiple iframes can affect the performance of your page, e
 },
 
 {
-title: "HTML Heading",
+title: "HTML Javascript",
  content: `
 \`\`\`Para
 HTML and JavaScript work together to create dynamic and interactive web pages. HTML provides the structure of the page, while JavaScript adds functionality and interactivity. By using JavaScript, you can manipulate HTML elements, respond to user actions, and create a more engaging experience.
@@ -3511,7 +3511,7 @@ Temporarily Disabled Styles: The comment before the footer styles indicates that
 },
 
 {
-title: "CSS",
+title: "CSS Colors",
  content: `
 \`\`\`Para
 CSS colors are essential for defining the visual appearance of elements on a web page. Colors can be specified in various formats, allowing for flexibility in design. Understanding how to use colors effectively enhances the user experience and contributes to the overall aesthetic of a website.
