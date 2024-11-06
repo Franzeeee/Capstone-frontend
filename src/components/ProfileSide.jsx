@@ -115,7 +115,7 @@ export default function ProfileSide({ info }) {
 
           <div className={`${styles.card}`}>
             <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
+              <p>Activity 2</p>
               <p>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry.
@@ -136,73 +136,6 @@ export default function ProfileSide({ info }) {
             </div>
           </div>
 
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
-
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
         </div>
       </div>
     </>

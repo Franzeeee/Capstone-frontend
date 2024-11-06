@@ -161,7 +161,7 @@
     height: 10px;
     background-color: #4caf50;
     border-radius: 5px;
-    animation: loading 3s ease-in-out infinite;
+    animation: loading 3s ease-in-out forwards;
   }
   
   @keyframes loading {
