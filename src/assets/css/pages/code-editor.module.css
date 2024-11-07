@@ -206,7 +206,9 @@
 .outputArea textarea::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-
+.controls {
+    min-height: 41.5px !important;
+}
 .controls button{
     background-color: #5C5CD1;
     border: none;
@@ -805,4 +807,25 @@ main:has(.assessmentContainer) {
 }
 .offCanvasBody {
     padding: 0;
+}
+
+.webSample  {
+    height: 80% !important;
+    width: 70% !important;
+    margin: 10px auto;
+    border: 2px solid rgb(227, 227, 227);
+}
+.webButton {
+    border: none;
+    padding: 10px 15px;
+    background-color: #5C5CD1;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.webButton:hover {
+    background-color: #3b3bd5;
+    filter: brightness(1.1);
 }

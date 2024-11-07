@@ -30,6 +30,7 @@ import QuestionList from '../components/QuestionList';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { toast } from 'react-toastify';
 import CryptoJS from 'crypto-js';
+import WebAssessmentSample from '../components/Modals/WebAssessmentSample';
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -382,19 +383,19 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             compileCode(code, inputValues)
             return;
         }
-        const fetchAuthToken = async () => {
-            try {
-                const clientId = '80d7f4c9e24d6d17354e31f6301d1203';
-                const clientSecret = 'fe056deb985c4743825673d246460922f68d5bcfa3eb935955618127527d92bf';
+        // const fetchAuthToken = async () => {
+        //     try {
+        //         const clientId = '80d7f4c9e24d6d17354e31f6301d1203';
+        //         const clientSecret = 'fe056deb985c4743825673d246460922f68d5bcfa3eb935955618127527d92bf';
                 
-                const data = await getAuthToken(clientId, clientSecret);
-                setAuthToken(data);
-            } catch (error) {
-                console.error('Error getting auth token:', error);
-            }
-        }; 
+        //         const data = await getAuthToken(clientId, clientSecret);
+        //         setAuthToken(data);
+        //     } catch (error) {
+        //         console.error('Error getting auth token:', error);
+        //     }
+        // }; 
 
-        fetchAuthToken();
+        // fetchAuthToken();
 
         setExecute(true);
         setOutput("")
@@ -565,10 +566,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         })) || null);
 
 
-
         const [activeAssessment, setActiveAssessment] = useState(
             mode === 'Assessment' ? assessmentData.find(assessment => assessment.isActive) : null
         );
+
+        
+        useEffect(() => {
+            if (mode === 'Assessment') {
+                const isWeb = activeAssessment?.testCase.output.includes('<!DOCTYPE');
+
+                setIde(isWeb ? 1 : 0);
+            }
+        }, [activeAssessment]);
 
         const handleChangeAssessment = (id) => {
             if (id >= assessmentData.length) return; // Stop if id is not valid
@@ -767,15 +776,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             hideConfirm: true
                             }}
                     />
-            <Offcanvas show={showWebSample} onHide={handleCloseWebSample} placement="end" className={`${styles.offcanvas}`}>
+            <Offcanvas show={showWebSample} onHide={handleCloseWebSample} placement="top" className={`${styles.offcanvas} ${styles.webSample}`}>
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Questions</Offcanvas.Title>
+                    <Offcanvas.Title>Sample Output</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    Test
+                    <WebAssessmentSample webCode={activeAssessment?.testCase?.output} />
                 </Offcanvas.Body>
             </Offcanvas>
-            <nav className={`${styles.nav}`}>
+            <nav className={`${styles.nav} ${mode !== "playground" ? 'd-none' : ""}`}>
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
@@ -804,7 +813,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         </div> */}
                     </div>
                     <div className={`${styles.controls}`}>
-                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute}`}>
+                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute} ${ide !== 1 ? '' : 'd-none'}`}>
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
@@ -938,20 +947,23 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                             </>
                                         )
                                     }
-                                    <p>Expected Output: </p>
+                                    
                                     {
                                         activeAssessment.testCase.output === "" ? "" : (
-                                            <ul>
-                                                {
-                                                    activeAssessment.testCase.output.includes("DOCTYPE") ? (
-                                                        <button onClick={handleShowWebSample}>View Sample</button>
-                                                    ) : (
-                                                        activeAssessment.testCase.output.split('\n').map((line, index) => (
-                                                            <li key={index}>{line}</li>
-                                                        ))
-                                                    )
-                                                }
-                                            </ul>
+                                            <>
+                                            <p>Expected Output: </p>
+                                                <ul>
+                                                    {
+                                                        activeAssessment.testCase.output.includes("DOCTYPE") ? (
+                                                            <button className={styles.webButton} onClick={handleShowWebSample}>View Web Output</button>
+                                                        ) : (
+                                                            activeAssessment.testCase.output.split('\n').map((line, index) => (
+                                                                <li key={index}>{line}</li>
+                                                            ))
+                                                        )
+                                                    }
+                                                </ul>
+                                            </>
                                         )
                                     }
                                 </div>
@@ -960,10 +972,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             <div className={`${styles.assessmentFooter}`}>
                                 <div className={`${styles.assessmentBtns}`}>
                                     <button onClick={() => setShow(true)}>
-                                        Questions
-                                    </button>
-                                    <button>
-                                        Test Cases
+                                        Problems ({assessmentData.length})
                                     </button>
                                 </div>
                                 <div onClick={submitAssessment} className={`${styles.submitButton}`}>
