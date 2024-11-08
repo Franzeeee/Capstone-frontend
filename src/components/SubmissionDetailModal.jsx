@@ -82,7 +82,7 @@ export default function SubmissionDetailModal({ show, handleClose }) {
                         <Tab eventKey="overall" title="Overall Score">
                             <div className={styles.problemContainer}>
                             <div className={styles.feedbackContainer}>
-                                <Feedback/>
+                            <Feedback />
                             </div>
                                 <div className={styles.circleContainer}>
                                     <div className={styles.circle}>
