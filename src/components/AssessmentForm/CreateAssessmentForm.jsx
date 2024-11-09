@@ -17,10 +17,25 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
     description: "",
     time_limit: 0,
     due_date: null,
-    points: 100,
-    coding_problems: editMode.active ? editMode.data.coding_problems : [],
+    points: 0,
+    final_assessment: false,
+    manual_checking: false,
+    coding_problems: editMode.active ? editMode?.data?.coding_problems : [],
     files: [],
   });
+  const [timeError, setTimeError] = useState("");
+  const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+
+  const handleTimeChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({ ...prevData, time_limit: value }));
+
+    if (!timeRegex.test(value)) {
+      setTimeError("Invalid time format. Please use hh:mm:ss.");
+    } else {
+      setTimeError("");
+    }
+  };
   
   const inputRef = useRef(null);
 
@@ -30,6 +45,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
     if (editMode.active) {
       const newFormat = {
         ...editMode.data,
+        time_limit: secondsToTime(editMode.data.time_limit),
         coding_problems: editMode.data.coding_problems.map(problem => ({
           ...problem,
           problem_title: problem.title,
@@ -82,11 +98,37 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
     }
   };
 
+  const handleFinalAssessment = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      final_assessment: e.target.checked,
+    }));
+  };
+
+  const handleManualChecking = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      manual_checking: e.target.checked,
+    }));
+  };
+
+  const handleGraded = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      points: e.target.checked ? 100 : 0,
+    }));
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     if (activeForm === "coding") {
+      if (timeError) {
+        toast.error("Please correct the time limit before submitting.");
+        return;
+      }
       const formattedData = {
       ...formData,
+      time_limit: timeToSeconds(formData.time_limit),
       coding_problems: formData.coding_problems.map(problem => ({
         ...problem,
         title: problem.title, // Keep title
@@ -109,13 +151,13 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
       // Append files and log them
       file.forEach((f, index) => {
           data.append(`files[${index}]`, f);
-          console.log(`files[${index}]:`, f); // Log file object to ensure it's attached
+          // console.log(`files[${index}]:`, f); // Log file object to ensure it's attached
       });
 
-      // Log the entire FormData for inspection
-      for (const [key, value] of data.entries()) {
-          console.log(`${key}:`, value);
-      }
+      // // Log the entire FormData for inspection
+      // for (const [key, value] of data.entries()) {
+      //     console.log(`${key}:`, value);
+      // }
 
       // Send the request
       fetch(`${BASE_URL}/activity/logic/upload`, {
@@ -204,7 +246,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
       event.stopPropagation();
       if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
           inputRef.current.files = event.dataTransfer.files;
-          console.log("Files dropped:", event.dataTransfer.files);
+          // console.log("Files dropped:", event.dataTransfer.files);
       }
   };
 
@@ -352,9 +394,11 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
               name="time_limit"
               placeholder="00:00:00"
               value={formData.time_limit}
-              onChange={handleChange}
+              onChange={handleTimeChange}
               className={styles.control}
+              isInvalid={!!timeError}
             />
+            <Form.Control.Feedback type="invalid">{timeError}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group
             className={`${styles.formGroup} mb-3`}
@@ -532,12 +576,14 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
                 id="custom-switch-1"
                 type="switch"
                 label="Final Assessment"
+                onChange={handleFinalAssessment}
               />
               <Form.Check
                 className="switch-left"
                 id="custom-switch-2"
                 type="switch"
                 label="Manual Checking"
+                onChange={handleManualChecking}
               />
             </div>
             <div className="d-flex flex-column">
@@ -546,12 +592,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
                 id="custom-switch-3"
                 type="switch"
                 label="Graded"
-              />
-              <Form.Check
-                className="switch-right"
-                id="custom-switch-4"
-                type="switch"
-                label="Manual Checking"
+                onChange={handleGraded}
               />
             </div>
           </Form.Group>
@@ -612,3 +653,28 @@ const getFileIcon = (fileName) => {
           return faFileAlt; // Generic icon for other files
   }
 };
+
+function timeToSeconds(time) {
+  const parts = time.split(":").map(Number); // Split time and convert to numbers
+  if (parts.length === 3) {
+      // If format is HH:MM:SS
+      const [hours, minutes, seconds] = parts;
+      return hours * 3600 + minutes * 60 + seconds;
+  } else if (parts.length === 2) {
+      // If format is MM:SS
+      const [minutes, seconds] = parts;
+      return minutes * 60 + seconds;
+  } else {
+      throw new Error("Invalid time format");
+  }
+}
+
+function secondsToTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+
+
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+
+}

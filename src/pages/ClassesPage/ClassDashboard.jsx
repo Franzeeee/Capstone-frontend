@@ -169,6 +169,9 @@ export default function ClassDashboard() {
 
             const response = await customFetch(`/activity/${data.id}/update`, {
                 method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(data),
             });
     
@@ -313,7 +316,7 @@ export default function ClassDashboard() {
                                                                 </Dropdown.Toggle>
 
                                                                 <Dropdown.Menu>
-                                                                    <Dropdown.Item onClick={() => handleShow(assessment.id - 1)}>View Details</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => handleShow(index)}>View Details</Dropdown.Item>
                                                                     <Dropdown.Item onClick={() => handleShowDeleteConfirmation(assessment.id)}>Delete</Dropdown.Item>
                                                                     <Dropdown.Item onClick={() => navigate(`${assessment.id}/submissions`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })}>
                                                                         Submissions

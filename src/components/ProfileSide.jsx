@@ -25,7 +25,9 @@ export default function ProfileSide({ info }) {
   useEffect(() => {
     const storedProfilePicture = localStorage.getItem("profilePicture");
     
-    customFetch('/profile/picture/fetch')
+    if(!storedProfilePicture) {
+
+      customFetch('/profile/picture/fetch')
       .then(data => {
           setProfilePicture(data.path);
           localStorage.setItem("profilePicture", data.path);
@@ -33,6 +35,9 @@ export default function ProfileSide({ info }) {
       .catch(error => {
           console.error('Error:', error.message);
       });
+    } else {
+      setProfilePicture(storedProfilePicture);
+    }
 
     
   }, []);

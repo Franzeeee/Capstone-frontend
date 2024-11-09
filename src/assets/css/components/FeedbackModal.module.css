@@ -15,9 +15,7 @@
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    position: relative;
-    top: 100px; 
-    left: 25px;    
+    position: relative;  
 }
 .BtnUpdate{
     background-color: #5C5CD1;

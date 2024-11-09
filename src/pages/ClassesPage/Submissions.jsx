@@ -111,6 +111,7 @@ export default function Submissions() {
                 <SubmissionDetailModal
                     show={showSubmissionModal}
                     handleClose={handleSubmissionDetailClose}
+                    submissionData={pagination?.data[itemId]}
                 />
                 <ConfirmationModal
                     show={showDeleteConfirmation}
@@ -201,7 +202,7 @@ export default function Submissions() {
                                                                     </Dropdown.Toggle>
 
                                                                     <Dropdown.Menu>
-                                                                        <Dropdown.Item onClick={() => handleSubmissionDetailShow(submission.id)}>View Details</Dropdown.Item>
+                                                                        <Dropdown.Item onClick={() => handleSubmissionDetailShow(index)}>View Details</Dropdown.Item>
                                                                         <Dropdown.Item onClick={() => handleShowDeleteConfirmation(submission.id)}>Delete</Dropdown.Item>
                                                                     </Dropdown.Menu>
                                                                 </Dropdown>

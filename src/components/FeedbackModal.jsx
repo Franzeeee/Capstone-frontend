@@ -2,21 +2,38 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from "../assets/css/components/FeedbackModal.module.css"
 import '../index.css'
-const FeedbackModal = () => {
+const FeedbackModal = ({sendFeedback}) => {
+    const [feedback, setFeedback] = useState('');
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const handleChange = (e) => {
+        setFeedback(e.target.value);
+    }
+
+    const handleSubmit = () => {
+        sendFeedback(feedback);
+        handleClose();
+    }
+
     return (
         <div className='feedbackModal'>
             <Button variant="primary" className={styles.MainBtn} onClick={handleShow}>Feedback</Button>
-            <Modal show={show} onHide={handleClose} className={styles.container}>
+            <Modal show={show} centered onHide={handleClose} className={styles.container}>
                 <Modal.Body className={styles.modalContent} >
-                  <Modal.Title className={styles.Title}>Feedback</Modal.Title>
-                    <textarea rows="5" className={styles.textArea}  placeholder="Write your feedback here..."/>
+                    <Modal.Title className={styles.Title}>Feedback</Modal.Title>
+                    <textarea 
+                        rows="5" 
+                        className={styles.textArea}  
+                        placeholder="Write your feedback here..."
+                        value={feedback}
+                        onChange={handleChange}
+                    />
                     <div className="text-end" >
                     <Button variant="secondary" onClick={handleClose} className={styles.BtnClose}>Close</Button>
-                    <Button variant="primary"className={styles.BtnUpdate}>Update</Button>
+                    <Button variant="primary" onClick={handleSubmit} className={styles.BtnUpdate}>Update</Button>
                     </div>
                 </Modal.Body>
             </Modal>

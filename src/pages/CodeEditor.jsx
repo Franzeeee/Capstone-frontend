@@ -660,6 +660,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         const maxScorePerItem = 100; // Maximum score for each item
         let assessmentCount = allProblemsAndCodes.length; // Number of assessments
 
+        const [submissioinFeedback, setSubmissionFeedback] = useState([]);
+
         const updatedAssessmentData = [...assessmentData];
     
         for (const [index, assessment] of allProblemsAndCodes.entries()) {
@@ -681,10 +683,13 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     
                     // Extract the score from the response message if it's included as "Total Score: X points"
                     const scoreMatch = response.message.match(/Total Score: (\d+)/);
+                    const feedback = response.message.match(/Feedback: (.+)/);
                     if (scoreMatch) {
                         const score = parseInt(scoreMatch[1], 10);
                         totalScore += score; // Add score to the total 
+                        setSubmissionFeedback(prevFeedback => [...prevFeedback, feedback[1]]);
                         console.log("Score:", score);
+                        console.log("Feedback:", feedback[1]);
 
                         updatedAssessmentData[index] = { ...updatedAssessmentData[index], score };
                     }
@@ -716,10 +721,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     activity_id: data.id,
                     score: parseInt(gwa.toFixed(2), 10),
                     status: 'graded',
+                    feedback: submissioinFeedback,
                     coding_problem_codes: updatedAssessmentData.map(assessment => ({
                         problem_id: assessment.problem_id,
                         code: assessment.code,
-                        score: assessment.score
+                        score: assessment.score,
                     })),
                 }),
             })

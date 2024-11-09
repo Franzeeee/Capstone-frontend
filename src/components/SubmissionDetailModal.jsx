@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import styles from '../assets/css/components/submission-detail-modal.module.css';
 import Tab from 'react-bootstrap/Tab';
@@ -7,10 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Feedback from '../components/FeedbackModal.jsx';
-export default function SubmissionDetailModal({ show, handleClose }) {
-    const [key, setKey] = useState('home');
+import customFetch from '../utils/fetchApi.js';
+import { toast } from 'react-toastify';
+export default function SubmissionDetailModal({ show, handleClose, submissionData }) {
+    const [key, setKey] = useState("Problem 1");
 
-    const limitInput = (e) => {
+    const [data, setData] = useState(submissionData);
+    const [feedback, setFeedback] = useState('');
+
+    const limitInput = (e, index) => {
         // Ensure the input value doesn't exceed 100
         if (e.target.value > 100) {
             e.target.value = 100;
@@ -19,7 +24,64 @@ export default function SubmissionDetailModal({ show, handleClose }) {
         if (e.target.value.length > 3) {
             e.target.value = e.target.value.slice(0, 3);
         }
+
+        // Update the score in the state
+        setData({
+            ...data,
+            coding_problem_submissions: data.coding_problem_submissions.map((submission, i) => {
+                if (i === index) {
+                    return {
+                        ...submission,
+                        score: e.target.value
+                    };
+                }
+                return submission;
+            })
+        });
+
     };
+
+    useEffect(() => {
+        console.log(data);
+        setData(submissionData);
+    }, [submissionData]);
+
+    const handleUpdate = () => {
+        
+        const updateData = new FormData();
+        updateData.append('submission_id', data.id);
+        updateData.append('score', data.score);
+        updateData.append('status', data.status);
+        
+        if(feedback !== '') {
+            updateData.append('feedback', feedback);
+        }
+
+        data.coding_problem_submissions.forEach((submission, index) => {
+            updateData.append(`coding_problem_submissions[${index}][id]`, submission.id);
+            updateData.append(`coding_problem_submissions[${index}][score]`, submission.score);
+            updateData.append(`coding_problem_submissions[${index}][problem_id]`, submission.problem_id);
+        });
+
+        
+
+        customFetch('/submission/update', {
+            method: 'POST',
+            contentType: 'application/json',
+            body: updateData
+        })
+        .then(res => {
+            // setData('');
+            handleClose();
+            toast.success('Submission updated successfully');
+        })
+        
+    };
+
+    useEffect(() => {
+        console.log(feedback);
+    }, [feedback]);
+
 
     return (
         <>
@@ -31,62 +93,65 @@ export default function SubmissionDetailModal({ show, handleClose }) {
                         activeKey={key}
                         onSelect={(k) => setKey(k)}
                     >
-                        <Tab eventKey="home" title="Home">
-                            <div className={styles.problemContainer}>
-                                <div className={styles.heading}>
-                                    <p className={styles.header}>Problem Title</p>
-                                    <div className={styles.problemDescription}>
-                                        <p>
-                                            A problem is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className={styles.heading}>
-                                    <p className={styles.header}>Submitted Answer</p>
-                                    <div className={`${styles.problemDescription} ${styles.codingBox}`}>
-                                        <pre>
-                                            fdf
-                                        </pre>
-                                        <OverlayTrigger
-                                            placement="bottom"
-                                            overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}
-                                        >
-                                            <p className={styles.copyCode}><FontAwesomeIcon icon={faCopy} /></p>
-                                        </OverlayTrigger>
-                                    </div>
-                                </div>
-
-                                <div className={styles.heading}>
-                                    <p className={`${styles.header} ${styles.codingStats}`}>Score</p>
-                                    <div className={`${styles.problemDescription} ${styles.scorebox}`}>
-                                        <div className={styles.stats}>
-                                            <form action="">
-                                                <input
-                                                    className='p-2'
-                                                    type="number"
-                                                    max={100}
-                                                    min={0}
-                                                    defaultValue={100}
-                                                    onInput={limitInput} // Call the function here
-                                                />
-                                                <p>/</p>
-                                                <input disabled={true} className={`${styles.max} p-2`} type="number" value={100} />
-                                            </form>
+                        { data && data?.coding_problem_submissions.map((submission, index) => (
+                            <Tab eventKey={`Problem ${index + 1}`} title={`Problem ${index + 1}`}>
+                                <div className={styles.problemContainer}>
+                                    <div className={styles.heading}>
+                                        <p className={styles.header}>{data?.activity?.coding_problems[index]?.title}</p>
+                                        <div className={styles.problemDescription}>
+                                            <p>
+                                            {data?.activity?.coding_problems[index]?.description}
+                                            </p>
                                         </div>
                                     </div>
-                                </div>
 
-                            </div>
-                        </Tab>
+                                    <div className={styles.heading}>
+                                        <p className={styles.header}>Submitted Answer</p>
+                                        <div className={`${styles.problemDescription} ${styles.codingBox}`}>
+                                            <pre>
+                                                {submission?.code}
+                                            </pre>
+                                            <OverlayTrigger
+                                                placement="bottom"
+                                                overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}
+                                            >
+                                                <p className={styles.copyCode}><FontAwesomeIcon icon={faCopy} /></p>
+                                            </OverlayTrigger>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.heading}>
+                                        <p className={`${styles.header} ${styles.codingStats}`}>Score</p>
+                                        <div className={`${styles.problemDescription} ${styles.scorebox}`}>
+                                            <div className={styles.stats}>
+                                                <form action="">
+                                                    <input
+                                                        className='p-2'
+                                                        type="number"
+                                                        max={100}
+                                                        min={0}
+                                                        value={submission?.score}
+                                                        onInput={(e) => limitInput(e, index)} // Call the function here
+                                                    />
+                                                    <p>/</p>
+                                                    <input disabled={true} className={`${styles.max} p-2`} type="number" value={100} />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </Tab>
+                        ))
+                        }
                         <Tab eventKey="overall" title="Overall Score">
                             <div className={styles.problemContainer}>
                             <div className={styles.feedbackContainer}>
-                            <Feedback />
+                            <Feedback sendFeedback={(text) => setFeedback(text)} />
                             </div>
                                 <div className={styles.circleContainer}>
                                     <div className={styles.circle}>
-                                        <p>80 / 100</p>
+                                        <p>{data?.score} / 100</p>
                                         <p>Overall Score</p>
                                     </div>
                                 </div>
@@ -140,7 +205,7 @@ export default function SubmissionDetailModal({ show, handleClose }) {
                     <Button variant="secondary" onClick={handleClose} className={styles.Close}>
                         Close
                     </Button>
-                    <Button variant="primary" className={styles.Update}>
+                    <Button onClick={handleUpdate} variant="primary" className={styles.Update}>
                         Update
                     </Button>
                 </div>
