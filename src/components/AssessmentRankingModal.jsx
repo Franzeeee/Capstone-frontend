@@ -66,7 +66,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                     setStudentData(data.map((student, index) => ({
                         ...student,
                         rank: index + 1,
-                        profile_path: student.profile_path || userImage,
+                        profile_path: student?.profile_path || userImage,
                         time: "00:00:00"
                     })));
                 } else {
@@ -111,40 +111,40 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                         <img src={studentData[1]?.profile_path || userImage} alt="" />
                                         <p className={`${styles.rankingLabel} ${styles.bgPurple}`}>2</p>
                                     </div>
-                                    <p className={styles.name}>{studentData[1].name}</p>
-                                    <p>{studentData[1].score}</p>
-                                    <p>{studentData[1].time}</p>
+                                    <p className={styles.name}>{studentData[1]?.name}</p>
+                                    <p>{studentData[1]?.score}</p>
+                                    <p>{studentData[1]?.time}</p>
                                 </div>
                                 <div className={`${styles.topSpot} ${styles.firstSpot}`}>
                                     <div className={styles.imageContainer}>
                                         <img src={studentData[0]?.profile_path || userImage} alt="" />
                                         <p className={`${styles.rankingLabel}`}>1</p>
                                     </div>
-                                    <p className={styles.name}>{studentData[0].name}</p>
-                                    <p>{studentData[0].score}</p>
-                                    <p>{studentData[0].time}</p>
+                                    <p className={styles.name}>{studentData[0]?.name}</p>
+                                    <p>{studentData[0]?.score}</p>
+                                    <p>{studentData[0]?.time}</p>
                                 </div>
                                 <div className={styles.topSpot}>
                                     <div className={styles.imageContainer}>
                                         <img src={studentData[2]?.profile_path || userImage} alt="" />
                                         <p className={`${styles.rankingLabel} ${styles.thirdPlace}`}>3</p>
                                     </div>
-                                    <p className={styles.name}>{studentData[2].name}</p>
-                                    <p>{studentData[2].score}</p>
-                                    <p>{studentData[2].time}</p>
+                                    <p className={styles.name}>{studentData[2]?.name}</p>
+                                    <p>{studentData[2]?.score}</p>
+                                    <p>{studentData[2]?.time}</p>
                                 </div>
                             </div>
                             <div className={styles.studentContainer}>
                                 {studentData.slice(3).map((student, index) => (
                                     <div key={index} className={`${styles.card} ${user.id === student.id ? styles.active : ""}`}>
                                         <div className={styles.imageContainer}>
-                                            <p>{student.rank}</p>
-                                            <img src={student.profile_path || userImage} alt="student" />
+                                            <p>{student?.rank}</p>
+                                            <img src={student?.profile_path || userImage} alt="student" />
                                         </div>
-                                        <p className={styles.name}>{student.name}</p>
+                                        <p className={styles.name}>{student?.name}</p>
                                         <div className={styles.info}>
-                                            <p><FontAwesomeIcon icon={faStar} /> {student.score}</p>
-                                            <p><FontAwesomeIcon icon={faClock} /> {student.time}</p>
+                                            <p><FontAwesomeIcon icon={faStar} /> {student?.score}</p>
+                                            <p><FontAwesomeIcon icon={faClock} /> {student?.time}</p>
                                         </div>
                                     </div>
                                 ))}

@@ -141,7 +141,7 @@ export default function ClassAssessment() {
         return <LoadingPage />;
     }
 
-    if(!isFetching && assessmentData.coding_problems.length === 0) {
+    if(!isFetching && assessmentData?.coding_problems.length === 0) {
         return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
     }
 

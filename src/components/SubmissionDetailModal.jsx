@@ -9,11 +9,11 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Feedback from '../components/FeedbackModal.jsx';
 import customFetch from '../utils/fetchApi.js';
 import { toast } from 'react-toastify';
-export default function SubmissionDetailModal({ show, handleClose, submissionData }) {
+export default function SubmissionDetailModal({ show, handleClose, submissionData, updateSubmission }) {
     const [key, setKey] = useState("Problem 1");
 
     const [data, setData] = useState(submissionData);
-    const [feedback, setFeedback] = useState('');
+    const [feedback, setFeedback] = useState(submissionData?.feedback?.feedback);
 
     const limitInput = (e, index) => {
         // Ensure the input value doesn't exceed 100
@@ -41,9 +41,14 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
 
     };
 
+    const updateFeedback = (text) => {
+        setFeedback(text);
+        submissionData.feedback.feedback = text;
+    };
+
     useEffect(() => {
-        console.log(data);
         setData(submissionData);
+        setFeedback(submissionData?.feedback);
     }, [submissionData]);
 
     const handleUpdate = () => {
@@ -52,10 +57,7 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
         updateData.append('submission_id', data.id);
         updateData.append('score', data.score);
         updateData.append('status', data.status);
-        
-        if(feedback !== '') {
-            updateData.append('feedback', feedback);
-        }
+        updateData.append('feedback', feedback);
 
         data.coding_problem_submissions.forEach((submission, index) => {
             updateData.append(`coding_problem_submissions[${index}][id]`, submission.id);
@@ -74,12 +76,13 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
             // setData('');
             handleClose();
             toast.success('Submission updated successfully');
+            updateSubmission();
         })
         
     };
 
     useEffect(() => {
-        console.log(feedback);
+        console.log(feedback?.feedback);
     }, [feedback]);
 
 
@@ -147,7 +150,7 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                         <Tab eventKey="overall" title="Overall Score">
                             <div className={styles.problemContainer}>
                             <div className={styles.feedbackContainer}>
-                            <Feedback sendFeedback={(text) => setFeedback(text)} />
+                            <Feedback feedbackData={feedback?.feedback} sendFeedback={(text) => updateFeedback(text)} />
                             </div>
                                 <div className={styles.circleContainer}>
                                     <div className={styles.circle}>

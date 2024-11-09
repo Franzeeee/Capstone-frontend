@@ -112,6 +112,7 @@ export default function Submissions() {
                     show={showSubmissionModal}
                     handleClose={handleSubmissionDetailClose}
                     submissionData={pagination?.data[itemId]}
+                    updateSubmission={fetchSubmissions}
                 />
                 <ConfirmationModal
                     show={showDeleteConfirmation}

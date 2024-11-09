@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from "../assets/css/components/FeedbackModal.module.css"
 import '../index.css'
-const FeedbackModal = ({sendFeedback}) => {
-    const [feedback, setFeedback] = useState('');
+const FeedbackModal = ({feedbackData, sendFeedback}) => {
+    const [feedback, setFeedback] = useState(feedbackData?.feedback || '');
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -18,6 +18,11 @@ const FeedbackModal = ({sendFeedback}) => {
         handleClose();
     }
 
+    useEffect(() => {
+        setFeedback(feedbackData);
+        console.log(feedbackData);
+    }, [feedbackData]);
+
     return (
         <div className='feedbackModal'>
             <Button variant="primary" className={styles.MainBtn} onClick={handleShow}>Feedback</Button>
@@ -28,6 +33,7 @@ const FeedbackModal = ({sendFeedback}) => {
                         rows="5" 
                         className={styles.textArea}  
                         placeholder="Write your feedback here..."
+                        name='feedback'
                         value={feedback}
                         onChange={handleChange}
                     />
