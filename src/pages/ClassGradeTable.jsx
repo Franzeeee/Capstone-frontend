@@ -37,9 +37,12 @@ export default function ClassGradeTable() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pagination, setPagination] = useState(null);
+    const [studentId, setStudentId] = useState(null);
 
     // Variables for modals
     const [showDistributionMod, setShowDistributionMod] = useState(false);
+    const [showStudentGrade, setShowStudentGrade] = useState(false);
+    const [studentSubmission, setStudentSubmission] = useState(null);
 
 
     // handlers for modals
@@ -152,6 +155,24 @@ export default function ClassGradeTable() {
         })
     }
 
+    const closeShowStudentGrade = () => {
+        setShowStudentGrade(false);
+    }
+
+    const openShowStudentGrade = (id) => {
+        setShowStudentGrade(true);
+        customFetch(`/grades/${classData.id}/student/${id}/scores`,{
+            method: 'GET'
+        })
+        .then(data => {
+            setStudentSubmission(data); 
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        })
+    }
+
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
@@ -181,6 +202,14 @@ export default function ClassGradeTable() {
                             <Form.Label>Remaining: {remainingPercentage}%</Form.Label>
                         </Form>
                         <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right'}}>Save</Button>
+                    </Modal.Body>
+                </Modal>
+                <Modal show={showStudentGrade}>
+                    <Modal.Header closeButton onClick={closeShowStudentGrade}>
+                        <Modal.Title>Modal title</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Modal body text goes here.</p>
                     </Modal.Body>
                 </Modal>
                 <div className={`${styles.contentContainer}`}>
@@ -264,7 +293,7 @@ export default function ClassGradeTable() {
                                                             placement="bottom"
                                                             overlay={<Tooltip id={`tooltip-test`}>Final Grade</Tooltip>}
                                                         >
-                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} /></p>
+                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} onClick={() => openShowStudentGrade(grade.id)} /></p>
                                                         </OverlayTrigger>
                                                         </td>
                                                     </tr>
