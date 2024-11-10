@@ -54,7 +54,7 @@ export default function ClassGradeTable() {
 
     const fetchAssessments = async (page) => {
         try {
-            const data = await customFetch(`/activity/${classData.id}/fetch?page=${page}`, 'GET');
+            const data = await customFetch(`/grades/${classData.id}/fetch?page=${page}`, 'GET');
             setPagination(data);
         } catch (error) {
             console.error('Error:', error.message);
@@ -297,27 +297,27 @@ export default function ClassGradeTable() {
                                                     <th scope='col'>#</th>
                                                     <th scope='col'>Student Name</th>
                                                     <th scope='col'>Final Grade</th>
-                                                    <th scope='col'>Deadline</th>
+                                                    <th scope='col'>Remark</th>
                                                     <th scope='col'>Action</th>
                                                 </tr>
                                             </MDBTableHead>
                                             <MDBTableBody>
-                                                {pagination?.data.map((assessment, index) => (
-                                                    <tr key={assessment.id}>
+                                                {pagination?.data.map((grade, index) => (
+                                                    <tr key={grade.id}>
                                                         <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
-                                                        <td>{assessment.title}</td>
-                                                        <td style={{textAlign: 'center'}}>{assessment.total_submissions || 0}</td>
-                                                        <td>{new Date(assessment.start_date).toLocaleDateString() || 'N/A'}</td>
+                                                        <td>{grade.student.name}</td>
+                                                        <td style={{textAlign: 'center'}}>{grade?.final_grade}</td>
+                                                        <td>{grade?.remarks}</td>
                                                         <td style={{ textAlign: 'center' }}>
                                                             <Dropdown>
-                                                                <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-${assessment.id}`}>
+                                                                <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-${grade.id}`}>
                                                                     <FontAwesomeIcon className={styles.viewMore} icon={faEllipsisVertical} />
                                                                 </Dropdown.Toggle>
 
                                                                 <Dropdown.Menu>
-                                                                    <Dropdown.Item onClick={() => handleShow(assessment.id - 1)}>View Details</Dropdown.Item>
-                                                                    <Dropdown.Item onClick={() => handleShowDeleteConfirmation(assessment.id)}>Delete</Dropdown.Item>
-                                                                    <Dropdown.Item onClick={() => navigate(`${assessment.id}/submissions`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })}>
+                                                                    <Dropdown.Item onClick={() => handleShow(grade.id - 1)}>View Details</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => handleShowDeleteConfirmation(grade.id)}>Delete</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => navigate(`${grade.id}/submissions`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })}>
                                                                         Submissions
                                                                     </Dropdown.Item>
                                                                 </Dropdown.Menu>

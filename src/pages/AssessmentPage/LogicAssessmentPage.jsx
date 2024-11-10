@@ -197,7 +197,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                             <div className={styles.assessmentInfo}>
                                 <p>Deadline: <span>{new Date(assessmentData?.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></p>
                                 <p>Activity Points: <span>{assessmentData?.point}</span></p>
-                                <p>Score: ---</p>
+                                <p>Grade: <span>{submittedFiles?.score || "---"} / {assessmentData.point}</span></p>
                             </div>
                             <div className={styles.description}>
                                 <p>
