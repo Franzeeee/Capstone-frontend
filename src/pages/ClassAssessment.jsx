@@ -77,7 +77,7 @@ export default function ClassAssessment() {
         customFetch(`/submission/${activityId}/${user.id}`, 'GET')
             .then(data => {
                 setSubmissionData(data.data);
-                setTimeTaken(prev => prev + data.data.time_taken);
+                setTimeTaken(prev => prev + data?.data?.time_taken);
                 setDone(data.exists);
                 setRank({
                     rank: data.rank,
