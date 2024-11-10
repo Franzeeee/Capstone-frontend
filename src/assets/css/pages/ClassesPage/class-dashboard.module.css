@@ -367,3 +367,10 @@
     align-items: center;
     justify-content: flex-end;
 }
+.finalGradeBtn {
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.finalGradeBtn:hover {
+    color: #293af0e1;
+}

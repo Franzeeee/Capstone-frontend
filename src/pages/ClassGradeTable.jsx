@@ -6,7 +6,7 @@ import { getUserData } from '../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faScaleBalanced, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faChartBar, faCopy, faEllipsisVertical, faExclamation, faScaleBalanced, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -314,16 +314,12 @@ export default function ClassGradeTable() {
                                                         <td style={{textAlign: 'center'}}>{grade?.final_grade}</td>
                                                         <td>{grade?.remarks}</td>
                                                         <td style={{ textAlign: 'center' }}>
-                                                            <Dropdown>
-                                                                <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-${grade.id}`}>
-                                                                    <FontAwesomeIcon className={styles.viewMore} icon={faEllipsisVertical} />
-                                                                </Dropdown.Toggle>
-
-                                                                <Dropdown.Menu>
-                                                                    <Dropdown.Item onClick={() => handleShow(grade.id - 1)}>View Details</Dropdown.Item>
-                                                                    <Dropdown.Item onClick={() => handleShowDeleteConfirmation(grade.id)}>Delete</Dropdown.Item>
-                                                                </Dropdown.Menu>
-                                                            </Dropdown>
+                                                        <OverlayTrigger
+                                                            placement="bottom"
+                                                            overlay={<Tooltip id={`tooltip-test`}>Final Grade</Tooltip>}
+                                                        >
+                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} /></p>
+                                                        </OverlayTrigger>
                                                         </td>
                                                     </tr>
                                                 ))}
