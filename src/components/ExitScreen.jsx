@@ -3,7 +3,7 @@ import styles from '../assets/css/components/exit-screen.module.css'
 import logo from '../assets/img/logoCodelab.png'
 import img from '../assets/img/exit-robot.png'
 
-export default function ExitScreen({handleFullscreen}) {
+export default function ExitScreen({handleFullscreen, focus}) {
     return (
         <div className={styles.container}>
         <div className={styles.head}>
@@ -13,7 +13,8 @@ export default function ExitScreen({handleFullscreen}) {
             <img src={img} alt="" />
             <div className={styles.text}>
                 <h4>Whoopps...</h4>
-                <p>Go back to fullscreen mode to continue the assessment.</p>
+                <p>Go back to {focus ? "fullscreen mode" : "the assessment tab"} to continue the assessment.</p>
+                <p>This action is monitored and being recorded by your teacher.</p>
                 <button onClick={handleFullscreen}>Go Back</button>
             </div>  
         </div>

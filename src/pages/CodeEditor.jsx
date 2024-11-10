@@ -645,6 +645,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         }
     };
 
+    const [submissionTime, setSubmissionTime] = useState(null);
+    const submissionTimeRef = useRef(null)
+
+    const handleSubmissionTime = (time) => {
+        if(submissionTime === null){
+            setSubmissionTime(time);
+            submissionTimeRef.current = time;
+        }
+    };
+
     const submitAssessment = async () => {
         options.timesup();
         const allProblemsAndCodes = assessmentData.map(assessment => ({
@@ -654,13 +664,13 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         }));
     
         setPauseTimer(true);
-        openModal(); // Open the modal before starting submissions
-        let allSuccessful = true; // Track overall success
-        let totalScore = 0; // Accumulate total score
-        const maxScorePerItem = 100; // Maximum score for each item
-        let assessmentCount = allProblemsAndCodes.length; // Number of assessments
+        openModal();
+        let allSuccessful = true;
+        let totalScore = 0;
+        const maxScorePerItem = 100;
+        let assessmentCount = allProblemsAndCodes.length;
 
-        const [submissioinFeedback, setSubmissionFeedback] = useState([]);
+        let submissionFeedback = "";
 
         const updatedAssessmentData = [...assessmentData];
     
@@ -677,9 +687,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     body: formData,
                 });
     
-                // Check if the response has the 'message' property
                 if (response && response.message) {
-                    console.log(response.message);
     
                     // Extract the score from the response message if it's included as "Total Score: X points"
                     const scoreMatch = response.message.match(/Total Score: (\d+)/);
@@ -687,9 +695,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     if (scoreMatch) {
                         const score = parseInt(scoreMatch[1], 10);
                         totalScore += score; // Add score to the total 
-                        setSubmissionFeedback(prevFeedback => [...prevFeedback, feedback[1]]);
-                        console.log("Score:", score);
-                        console.log("Feedback:", feedback[1]);
+                        submissionFeedback += feedback[1];
 
                         updatedAssessmentData[index] = { ...updatedAssessmentData[index], score };
                     }
@@ -699,17 +705,17 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 }
             } catch (error) {
                 console.error('Error submitting assessment:', error.message);
-                allSuccessful = false;
+                allSuccessful = true;
             }
         }
     
         // Calculate GWA as a percentage
         const gwa = (totalScore / (assessmentCount * maxScorePerItem)) * 100;
-        console.log("GWA:", gwa.toFixed(2) + "%");
     
         // Final feedback to the user
-        if (allSuccessful) {
-            
+        if(allSuccessful) {
+
+            const timeConsumed = data.time_limit - submissionTimeRef.current; // Access the time from ref
             handleCloseSubmitModal();
 
             customFetch('/submission/create', {
@@ -721,7 +727,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     activity_id: data.id,
                     score: parseInt(gwa.toFixed(2), 10),
                     status: 'graded',
-                    feedback: submissioinFeedback,
+                    time_taken: timeConsumed,
+                    feedback: submissionFeedback,
                     coding_problem_codes: updatedAssessmentData.map(assessment => ({
                         problem_id: assessment.problem_id,
                         code: assessment.code,
@@ -828,7 +835,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             time={data.time_limit} 
                             pause={pauseTimer} 
                             finishedTime={finishedAssessmentTimer}
-                            onPause={(remainingTime) => console.log("Paused at:", remainingTime)}
+                            onPause={(remainingTime) => handleSubmissionTime(remainingTime)}
                         />
                     )
                     }

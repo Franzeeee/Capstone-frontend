@@ -25,6 +25,7 @@ export default function ClassAssessment() {
     const [assessment, setAssessment] = useState(location.state?.item || {});
     const [startAssessment, setStartAssessment] = useState(false);
     const [inFullscreen, setInFullscreen] = useState(false);
+    const [focused, setFocused] = useState(false);
     const [assessmentData, setAssessmentData] = useState(null);
     const [rank, setRank] = useState({
         rank: 0,
@@ -103,9 +104,12 @@ export default function ClassAssessment() {
             document.documentElement.msRequestFullscreen();
         }
     };
+    
 
     const returnFullscreen = () => {
         setInFullscreen(true);
+        setFocused(true);
+        clearClipboard();
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
         } else if (document.documentElement.webkitRequestFullscreen) {
@@ -124,12 +128,22 @@ export default function ClassAssessment() {
 
         // Add event listener for fullscreen change
         document.addEventListener("fullscreenchange", handleFullscreenChange);
+        window.addEventListener("focus", setFocused(true));
 
         // Cleanup event listener on component unmount
         return () => {
             document.removeEventListener("fullscreenchange", handleFullscreenChange);
         };
     }, [startAssessment]);
+    
+
+    useEffect(() => {
+        window.addEventListener("focus", setFocused(true));
+    }, [focused]);
+
+    window.addEventListener("blur", () => {
+        setFocused(false);
+    });
 
     const handleBack = () => {
         const currentPath = location.pathname;
@@ -145,6 +159,12 @@ export default function ClassAssessment() {
         return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
     }
 
+    document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        // If the page is in fullscreen mode, attempt to clear the clipboard
+        clearClipboard();
+    }
+});
     return (
         <HomeTemplate>
         <div className={`${styles.container}`}>
@@ -217,9 +237,9 @@ export default function ClassAssessment() {
                 </Offcanvas>
                 <Offcanvas  
                 style={canvasStyle}
-                backdrop="static" keyboard={false} show={startAssessment && !inFullscreen} onHide={handleClose} >
+                backdrop="static" keyboard={false} show={startAssessment && !inFullscreen || startAssessment && !focused} onHide={handleClose} >
                 <Offcanvas.Body>
-                        <ExitScreen handleFullscreen={returnFullscreen}/>
+                        <ExitScreen handleFullscreen={returnFullscreen} focus={focused}/>
                 </Offcanvas.Body>
                 </Offcanvas>
             </div>
@@ -240,3 +260,11 @@ const canvasStyle = {
     
 }
 
+
+async function clearClipboard() {
+    try {
+        await navigator.clipboard.writeText('');
+    } catch (err) {
+        console.error('Failed to clear clipboard:', err);
+    }
+}
