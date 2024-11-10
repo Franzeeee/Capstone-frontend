@@ -89,7 +89,7 @@ export default function ProfileSide({ info }) {
             }
               <div className={styles.notificationCard}>
                 <p className="text-success"></p>
-                <p>No Notification</p>
+                <p className="text-center">No Notification</p>
               </div>
           </Dropdown.Menu>
         </Dropdown>
