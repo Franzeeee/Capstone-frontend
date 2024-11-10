@@ -10,7 +10,7 @@ import { getUserData } from '../utils/userInformation';
 
 
 
-export default function AssessmentContent({ status = false, startButton, data, rank, submission }) {
+export default function AssessmentContent({ status = false, startButton, data, time, rank, submission }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
@@ -86,23 +86,23 @@ export default function AssessmentContent({ status = false, startButton, data, r
             : 
             <div className={styles.container}>
                 <div className={styles.title}>
-                    <p>Assessment Title Here</p>
+                    <p>{data.title || "Assessment Title"}</p>
                 </div>
                 <div className={styles.content}>
                     <ul>
                         <li>
                             <p>Time Remaining</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>--:--</p>
+                            <LoadingBar progress={((data.time_limit - time) / data.time_limit) * 100} />
+                            <p>{formatTime(time)}</p>
                         </li>
                         <li>
                             <p>Total Problem</p>
-                            <LoadingBar progress={100} status={status} />
+                            <LoadingBar progress={100} />
                             <p>{data?.coding_problems.length}</p>
                         </li>
                         <li>
                             <p>Overall Points</p>
-                            <LoadingBar progress={submission?.score || 0} status={status} />
+                            <LoadingBar progress={submission?.score || 0}/>
                             <p>{submission?.score || 0}/100</p>
                         </li>
                         <li>
@@ -162,4 +162,22 @@ function getOrdinalSuffix(rank) {
     } else {
         return rank + "th";
     }
+}
+
+
+// Format seconds into MM:SS
+const formatTime = (seconds) => {
+if (isNaN(seconds) || seconds < 0) {
+    return '00:00';
+}
+const minutes = Math.floor(seconds / 60);
+const remainingSeconds = seconds % 60;
+return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+};
+
+function calculateRemainingPercentage(totalTime, pausedTime) {
+    const elapsedTime = totalTime - pausedTime;  // Time elapsed
+    const elapsedPercentage = (elapsedTime / totalTime) * 100;  // Percentage of time passed
+    const remainingPercentage = 100 - elapsedPercentage;  // Remaining time as a percentage
+    return remainingPercentage;
 }

@@ -738,6 +738,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             })
                 .then(response => {
                     console.log('Response:', response);
+                    options.setRank({rank: response.rank});
+                    options.setSubmissionData(response.submission);
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
@@ -746,6 +748,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     options.closeEditor();
                     document.exitFullscreen();
                     setAssessmentData([]);
+                    options.finished()
+                    options.setTimeTaken(timeConsumed)
                 });
 
         } else {
