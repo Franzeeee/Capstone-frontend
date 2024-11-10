@@ -20,6 +20,7 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
     const [data, setData] = useState(submissionData);
     const [feedback, setFeedback] = useState(submissionData?.feedback?.feedback);
     const [docFiles, setDocFiles] = useState([]);
+    const [logicGrade, setLogicGrade] = useState(0);
 
      // For File Preview
     const [showFilePreview, setShowFilePreview] = useState(false);
@@ -68,33 +69,60 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
         setFeedback(submissionData?.feedback);
     }, [submissionData]);
 
+    const handleLogicGrade = (e) => {
+        setLogicGrade(e.target.value);
+    }
+
     const handleUpdate = () => {
         
-        const updateData = new FormData();
-        updateData.append('submission_id', data.id);
-        updateData.append('score', data.score);
-        updateData.append('status', data.status);
-        updateData.append('feedback', feedback);
+        if(data?.coding_problem_submissions.length > 0) {
+            const updateData = new FormData();
+            updateData.append('submission_id', data.id);
+            updateData.append('score', data.score);
+            updateData.append('status', data.status);
+            updateData.append('feedback', feedback);
 
-        data.coding_problem_submissions.forEach((submission, index) => {
-            updateData.append(`coding_problem_submissions[${index}][id]`, submission.id);
-            updateData.append(`coding_problem_submissions[${index}][score]`, submission.score);
-            updateData.append(`coding_problem_submissions[${index}][problem_id]`, submission.problem_id);
-        });
+            data.coding_problem_submissions.forEach((submission, index) => {
+                updateData.append(`coding_problem_submissions[${index}][id]`, submission.id);
+                updateData.append(`coding_problem_submissions[${index}][score]`, submission.score);
+                updateData.append(`coding_problem_submissions[${index}][problem_id]`, submission.problem_id);
+            });
 
-        
+            
 
-        customFetch('/submission/update', {
-            method: 'POST',
-            contentType: 'application/json',
-            body: updateData
-        })
-        .then(res => {
-            // setData('');
-            handleClose();
-            toast.success('Submission updated successfully');
-            updateSubmission();
-        })
+            customFetch('/submission/update', {
+                method: 'POST',
+                contentType: 'application/json',
+                body: updateData
+            })
+            .then(res => {
+                // setData('');
+                handleClose();
+                toast.success('Submission updated successfully');
+                updateSubmission();
+            })
+        } else {
+            const gradeData = new FormData();
+            gradeData.append('submission_id', data.id);
+            gradeData.append('score', logicGrade);
+            gradeData.append('status', 'graded');
+            gradeData.append('feedback', feedback);
+
+            customFetch('/submission/logic/grade', {
+                method: 'POST',
+                contentType: 'application/json',
+                body: gradeData
+            })
+            .then(res => {
+                // setData('');
+                handleClose();
+                toast.success('Submission graded successfully');
+                updateSubmission();
+            })
+            .catch(error => {
+                toast.error('An error occurred while grading the submission');
+            });
+        }
         
     };
 
@@ -241,7 +269,7 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                     <div className={styles.uploadContainer}>
 
                                             {data?.submission_files && data?.submission_files.length > 0 && data?.submission_files.map((file, index) => (
-                                                <div className={styles.uploadCard} onClick={handleFilePreview}>
+                                                <div key={index} className={styles.uploadCard} onClick={handleFilePreview}>
                                                     <div className={styles.fileUploadInfo}>
                                                         <OverlayTrigger
                                                             placement="bottom"
@@ -251,14 +279,16 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                                         </OverlayTrigger>
                                                         <p>{(1000 / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
                                                     </div>
-                                                    <FontAwesomeIcon 
-                                                        icon={faClose} 
-                                                        className={styles.close} 
-                                                        onClick={() => handleRemoveFile(index)} 
-                                                    />
                                                 </div>
                                                 ))  
                                             }
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor="score">Grade</label>
+                                        <div>
+                                            <input type="number" onChange={handleLogicGrade} />
+                                            <p> / 100</p>
+                                        </div>
                                     </div>
                                 </Tab>
                             )
@@ -269,7 +299,7 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                         Close
                     </Button>
                     <Button onClick={handleUpdate} variant="primary" className={styles.Update}>
-                        Update
+                        {data?.status === 'graded' ? 'Update' : 'Grade'}
                     </Button>
                 </div>
                 </Modal.Body>
