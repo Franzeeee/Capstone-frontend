@@ -67,6 +67,17 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
             const newFiles = [...prev, ...selectedFiles]; // Combine old files with new files
             return newFiles;
         }); // Update state with selected files
+        console.log("files", files);
+        setDocFiles(prev => {
+            const newFiles = [...prev, ...selectedFiles.map(file => {
+                return {
+                    uri: URL.createObjectURL(file),
+                    fileType: file.type,
+                    fileName: file.name
+                }
+            })]; // Combine old files with new files
+            return newFiles;
+        }); // Update state with selected files
     };
 
     const handleChooseFile = () => {
@@ -167,11 +178,6 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
             })
         }
     }
-
-    useEffect(() => {
-        console.log("docFiles", docFiles);
-    }, [docFiles]);
-
     return (
         <HomeTemplate>
             <div className={`${styles.container}`}>
@@ -190,7 +196,8 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                             <p className={styles.title}>{assessmentData?.title || "Fetching Assessment Failed"}</p>
                             <div className={styles.assessmentInfo}>
                                 <p>Deadline: <span>{new Date(assessmentData?.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></p>
-                                <p>Score: <span>{assessmentData?.point}</span></p>
+                                <p>Activity Points: <span>{assessmentData?.point}</span></p>
+                                <p>Score: ---</p>
                             </div>
                             <div className={styles.description}>
                                 <p>
@@ -237,17 +244,17 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                                 />
                                             </div>
                                         ))}
-                                        { submitted && files.length === 0 && submittedFiles.files.length !== 0 && 
-                                            submittedFiles.files.map((file, index) => (
+                                        { submitted && files.length === 0 && submittedFiles?.files.length !== 0 && 
+                                            submittedFiles?.files.map((file, index) => (
                                                 <div key={index} className={styles.uploadCard}>
                                                     <div className={styles.fileUploadInfo} onClick={handleFilePreview}>
                                                         <OverlayTrigger
                                                             placement="bottom"
-                                                            overlay={<Tooltip id={`tooltip-test`}>{file.file_name}</Tooltip>}
+                                                            overlay={<Tooltip id={`tooltip-test`}>{file?.file_name}</Tooltip>}
                                                         >
-                                                            <p>{file.file_name}</p>
+                                                            <p>{file?.file_name}</p>
                                                         </OverlayTrigger>
-                                                        <p>{(file.file_size / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
+                                                        <p>{(file?.file_size / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
                                                     </div>
                                                     <FontAwesomeIcon 
                                                         icon={faClose} 
@@ -273,7 +280,12 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                 <Modal style={{background: 'transparent !important'}} show={showFilePreview} size='lg' onHide={handleCloseFilePreview}>
                     <ModalBody className={styles.modalBody}>
                         <DocViewer 
-                            documents={docFiles} 
+                            documents={docFiles}
+                            config={{
+                                header: {
+                                    disableFileName: true,
+                                }
+                            }}
                             pluginRenderers={DocViewerRenderers} 
                             preFetchMethod="GET"
                             style={{width: '100%', height: '100%'}}

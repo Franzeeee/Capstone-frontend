@@ -161,7 +161,7 @@ export default function ClassContents({ data, code, className }) {
                                         }
                                     >
                                         <p>
-                                            {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? lesson.id <= progress.last_completed_lesson ? 'View Result' : `View Quiz` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
+                                            {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? lesson.id <= progress?.last_completed_lesson && user.role != 'teacher' ? 'View Result' : `View Quiz` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
                                         </p>
                                     </div>
                                 </div>

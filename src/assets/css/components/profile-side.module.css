@@ -128,8 +128,61 @@
 .activityContainer::-webkit-scrollbar {
     display: none;
 }
+.notifMemu {
+    max-width: 100px !important;
+}
 
+.notificationCard {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+}
+.notificationCard p:first-child {
+    font-size: .85rem;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+}
+.notificationCard p {
+    text-wrap: wrap;
+}
+.notificationCard p:last-child {
+    font-size: .8rem;
+    font-weight: 400;
+    font-family: "Montserrat", sans-serif;
+    color: #646464;
 
+}
+
+.notifContainer {
+    padding: 10px !important;
+    border: none !important;
+    max-height: 300px !important;
+    overflow: auto !important;
+    min-width: 300px;
+    font-size: .9rem;
+    user-select: none;
+}
+.notifContainer a {
+    border-top: 1px solid rgb(200, 200, 200);
+}
+.notifContainer::-webkit-scrollbar {
+    display: none;
+}
+.notifContainer a:first-child {
+    border-top: none !important;
+}
+.notifContainer a:hover {
+    background-color: #bfb9ff7c !important;
+}
+.notifContainer a:hover p:not(p:first-child) {
+    color: #3a3a3a !important;
+}
+.bell {
+    margin-right: 3px;
+}
 
 @media screen and (min-height: 700px) {
     .activityContainer {

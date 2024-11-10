@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, ModalBody } from 'react-bootstrap';
 import styles from '../assets/css/components/submission-detail-modal.module.css';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -9,11 +9,28 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Feedback from '../components/FeedbackModal.jsx';
 import customFetch from '../utils/fetchApi.js';
 import { toast } from 'react-toastify';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import DocViewer from 'react-doc-viewer';
+import { DocViewerRenderers } from 'react-doc-viewer'
+
+
 export default function SubmissionDetailModal({ show, handleClose, submissionData, updateSubmission }) {
     const [key, setKey] = useState("Problem 1");
 
     const [data, setData] = useState(submissionData);
     const [feedback, setFeedback] = useState(submissionData?.feedback?.feedback);
+    const [docFiles, setDocFiles] = useState([]);
+
+     // For File Preview
+    const [showFilePreview, setShowFilePreview] = useState(false);
+
+    const handleFilePreview = () => {
+        setShowFilePreview(true);
+    }
+
+    const handleCloseFilePreview = () => {
+        setShowFilePreview(false);
+    }
 
     const limitInput = (e, index) => {
         // Ensure the input value doesn't exceed 100
@@ -82,7 +99,14 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
     };
 
     useEffect(() => {
-        console.log(feedback?.feedback);
+        setKey(data?.coding_problem_submissions.length > 0 ? 'Problem 1' : 'logicSubmission');
+        setDocFiles(data?.submission_files.map(file => {
+            return {
+                uri: `https://codelabbucket.s3.amazonaws.com/${file?.file_path}`,
+                fileType: file?.file_type,
+                fileName: file?.file_name
+            }
+        }));
     }, [feedback]);
 
 
@@ -147,62 +171,98 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                             </Tab>
                         ))
                         }
-                        <Tab eventKey="overall" title="Overall Score">
-                            <div className={styles.problemContainer}>
-                            <div className={styles.feedbackContainer}>
-                            <Feedback feedbackData={feedback?.feedback} sendFeedback={(text) => updateFeedback(text)} />
-                            </div>
-                                <div className={styles.circleContainer}>
-                                    <div className={styles.circle}>
-                                        <p>{data?.score} / 100</p>
-                                        <p>Overall Score</p>
+                        {
+                            data?.coding_problem_submissions.length > 0 ? (
+                                <Tab eventKey="overall" title="Overall Score">
+                                    <div className={styles.problemContainer}>
+                                    <div className={styles.feedbackContainer}>
+                                    {
+                                        submissionData?.coding_problem_submissions > 0 && (
+                                            <Feedback feedbackData={feedback?.feedback} sendFeedback={(text) => updateFeedback(text)} />
+                                        )
+                                    }
                                     </div>
-                                </div>
-                            <div className={styles.dataContainer}>
-                            <div className={styles.content}>
-                                <ul>
-                                    <li>
-                                        <p>Time Remaining</p>
-                                        <div className={styles.Contain}>
-                                        <div className={styles.loadingBarContainer}>
-                                        <div className={styles.loadingBar}></div>
+                                        <div className={styles.circleContainer}>
+                                            <div className={styles.circle}>
+                                                <p>{data?.score} / 100</p>
+                                                <p>Overall Score</p>
+                                            </div>
                                         </div>
-                                        <p className={styles.details}>1st</p>                                            
-                                        </div>
+                                    <div className={styles.dataContainer}>
+                                    <div className={styles.content}>
+                                        <ul>
+                                            <li>
+                                                <p>Time Remaining</p>
+                                                <div className={styles.Contain}>
+                                                <div className={styles.loadingBarContainer}>
+                                                <div className={styles.loadingBar}></div>
+                                                </div>
+                                                <p className={styles.details}>1st</p>                                            
+                                                </div>
 
-                                    </li>
-                                    <li>
-                                        <p>Problem Solved</p>
-                                        <div className={styles.Contain}>
-                                        <div className={styles.loadingBarContainer}>
-                                        <div className={styles.loadingBar}></div>
-                                        </div>
-                                        <p className={styles.details}>1st</p>                                            
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>Overall Points</p>
-                                        <div className={styles.Contain}>
-                                        <div className={styles.loadingBarContainer}>
-                                        <div className={styles.loadingBar}></div>
-                                        </div>
-                                        <p className={styles.details}>1st</p>                                            
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>Current Rank</p>
-                                        <div className={styles.Contain}>
-                                        <div className={styles.loadingBarContainer}>
-                                        <div className={styles.loadingBar}></div>
-                                        </div>
-                                        <p className={styles.details}>1st</p>                                            
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            </div>
-                            </div>
-                        </Tab>
+                                            </li>
+                                            <li>
+                                                <p>Problem Solved</p>
+                                                <div className={styles.Contain}>
+                                                <div className={styles.loadingBarContainer}>
+                                                <div className={styles.loadingBar}></div>
+                                                </div>
+                                                <p className={styles.details}>1st</p>                                            
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>Overall Points</p>
+                                                <div className={styles.Contain}>
+                                                <div className={styles.loadingBarContainer}>
+                                                <div className={styles.loadingBar}></div>
+                                                </div>
+                                                <p className={styles.details}>1st</p>                                            
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>Current Rank</p>
+                                                <div className={styles.Contain}>
+                                                <div className={styles.loadingBarContainer}>
+                                                <div className={styles.loadingBar}></div>
+                                                </div>
+                                                <p className={styles.details}>1st</p>                                            
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    </div>
+                                    </div>
+                                </Tab>
+                            ) : (
+                                <Tab eventKey="logicSubmission" title="Submission">
+                                    <div className={styles.problemContainer}>
+                                        <p>Student Name: <span>{data?.name}</span> </p>
+                                    </div>
+                                    <div className={styles.uploadContainer}>
+
+                                            {data?.submission_files && data?.submission_files.length > 0 && data?.submission_files.map((file, index) => (
+                                                <div className={styles.uploadCard} onClick={handleFilePreview}>
+                                                    <div className={styles.fileUploadInfo}>
+                                                        <OverlayTrigger
+                                                            placement="bottom"
+                                                            overlay={<Tooltip id={`tooltip-test`}>{file.file_name}</Tooltip>}
+                                                        >
+                                                            <p>{file.file_name}</p>
+                                                        </OverlayTrigger>
+                                                        <p>{(1000 / 1024).toFixed(2)} KB</p> {/* Convert bytes to KB */}
+                                                    </div>
+                                                    <FontAwesomeIcon 
+                                                        icon={faClose} 
+                                                        className={styles.close} 
+                                                        onClick={() => handleRemoveFile(index)} 
+                                                    />
+                                                </div>
+                                                ))  
+                                            }
+                                    </div>
+                                </Tab>
+                            )
+                        }
                     </Tabs>
                 <div className={styles.footer}>
                     <Button variant="secondary" onClick={handleClose} className={styles.Close}>
@@ -214,6 +274,21 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                 </div>
                 </Modal.Body>
             </Modal>
+            <Modal style={{background: 'transparent !important'}} show={showFilePreview} size='lg' onHide={handleCloseFilePreview}>
+                    <ModalBody className={styles.modalBody}>
+                        <DocViewer 
+                            documents={docFiles}
+                            config={{
+                                header: {
+                                    disableFileName: true,
+                                }
+                            }}
+                            pluginRenderers={DocViewerRenderers} 
+                            preFetchMethod="GET"
+                            style={{width: '100%', height: '100%'}}
+                        />
+                    </ModalBody>
+                </Modal>
         </>
     );
 }

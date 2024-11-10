@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/logout";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
 import customFetch from "../utils/fetchApi";
+import { getUserData } from "../utils/userInformation";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
@@ -22,8 +23,13 @@ export default function ProfileSide({ info }) {
   const [showModal, setShowModal] = useState(false);
   const [profilePicture, setProfilePicture] = useState(profile);
 
+  const [notification, setNotification] = useState([]);
+
+  const user = getUserData();
+
   useEffect(() => {
     const storedProfilePicture = localStorage.getItem("profilePicture");
+    
     
     if(!storedProfilePicture) {
 
@@ -67,12 +73,24 @@ export default function ProfileSide({ info }) {
             as="div"
             className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
           >
-            <Badge severity="danger" style={{ display: "none !important" }} />
+            {notification.length > 0 || !user?.verified &&
+              <Badge value={notification.length} severity="danger"></Badge>
+            }
           </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Notification 1</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Notification 2</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Notification 3</Dropdown.Item>
+          <Dropdown.Menu className={styles.notifContainer}>
+            <p className="mb-1"><FontAwesomeIcon className={styles.bell} icon={faBell} /> Notification</p>
+            { user && !user?.verified &&
+              <Dropdown.Item href="#/action-1">
+                <div className={styles.notificationCard}>
+                  <p className="text-danger">Email Verification</p>
+                  <p>Your account email is not verified. You need to verify to recieve email reminders. Verification sent on your email.</p>
+                </div>
+              </Dropdown.Item>
+            }
+              <div className={styles.notificationCard}>
+                <p className="text-success"></p>
+                <p>No Notification</p>
+              </div>
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
