@@ -6,7 +6,7 @@ import { getUserData } from '../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faScaleBalanced, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -274,19 +274,24 @@ export default function ClassGradeTable() {
                                         <p>{'0' + classData?.students_count || 0}</p>
                                     </div>
                                 </div>
-                                <OverlayTrigger
-                                    placement="bottom"
-                                    overlay={<Tooltip id={`tooltip-test`}>View Class Information</Tooltip>}
-                                >
-                                    <p onClick={handleShowAdditionalInfo} className={styles.exclamation}><FontAwesomeIcon icon={faExclamation} /></p>
-                                </OverlayTrigger>
-                            </div>
-                            <div className={styles.additionalInfo} style={{ display: showAdditionalInfo ? 'block' : 'none' }}>
-                                <p>Code: <span>{classData?.class_code?.code}</span> <FontAwesomeIcon icon={faCopy} className={styles.copy} onClick={() => copyCode(classData?.class_code.code)} /></p>
-                                <p>Room: <span>{classData?.room}</span></p>
+
                             </div>
                         </div>
                         <div className={`${styles.classAssessments}`}>
+                            <div className={styles.gradeControls}>
+                                <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={<Tooltip id={`tooltip-test`}>View Grade Calculation</Tooltip>}
+                                    >
+                                <p className={styles.gradeDistribution}><FontAwesomeIcon icon={faScaleBalanced} /></p>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>Issue Completion Certificates</Tooltip>}
+                                >
+                                    <p className={styles.gradeDistribution}><FontAwesomeIcon icon={faUserGraduate} /></p>
+                                </OverlayTrigger>
+                            </div>
                             {
                                 
                                 pagination && pagination.data.length > 0 && pagination !== null?
@@ -297,7 +302,7 @@ export default function ClassGradeTable() {
                                                     <th scope='col'>#</th>
                                                     <th scope='col'>Student Name</th>
                                                     <th scope='col'>Final Grade</th>
-                                                    <th scope='col'>Remark</th>
+                                                    <th scope='col'>Remarks</th>
                                                     <th scope='col'>Action</th>
                                                 </tr>
                                             </MDBTableHead>
@@ -317,15 +322,13 @@ export default function ClassGradeTable() {
                                                                 <Dropdown.Menu>
                                                                     <Dropdown.Item onClick={() => handleShow(grade.id - 1)}>View Details</Dropdown.Item>
                                                                     <Dropdown.Item onClick={() => handleShowDeleteConfirmation(grade.id)}>Delete</Dropdown.Item>
-                                                                    <Dropdown.Item onClick={() => navigate(`${grade.id}/submissions`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })}>
-                                                                        Submissions
-                                                                    </Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>
                                                     </tr>
                                                 ))}
                                             </MDBTableBody>
+                                            
                                         </MDBTable><div className={styles.footer}>
                                                 <div className={styles.totalEntry}>
                                                     <p>Showing </p>
