@@ -74,7 +74,7 @@ export default function ClassAssessment() {
                 navigate('/not-found');
             })
 
-        customFetch(`/submission/${activityId}/${user.id}`, 'GET')
+        customFetch(`/submission/${activityId}/${user?.id}`, 'GET')
             .then(data => {
                 setSubmissionData(data.data);
                 setTimeTaken(prev => prev + data?.data?.time_taken);
