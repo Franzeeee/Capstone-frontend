@@ -158,10 +158,9 @@ export default function ClassAssessment() {
         return <LoadingPage />;
     }
 
-    if (assessmentData && assessmentData.coding_problems && assessmentData.coding_problems.length === 0) {
-        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />;
+    if(!isFetching && assessmentData?.coding_problems.length === 0) {
+        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
     }
-    
 
     document.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement) {
