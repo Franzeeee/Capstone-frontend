@@ -87,8 +87,8 @@ export default function ClassAssessment() {
                 setTimeTaken(prev => prev + data?.data?.time_taken);
                 setDone(data.exists);
                 setRank({
-                    rank: data.rank,
-                    total: data.total_submissions
+                    rank: data?.rank,
+                    total: data?.total_submissions
                 });
             })
             .catch(error => {
