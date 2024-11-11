@@ -39,7 +39,7 @@ export default function ClassAssessment() {
     const [submissionData, setSubmissionData] = useState(null);
 
     const user = getUserData();
-    
+
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
     const [currentLesson, setCurrentLesson] = useState(() => {
         if (user.role === 'teacher') {
@@ -62,16 +62,13 @@ export default function ClassAssessment() {
     useEffect(() => {
         
         const activityId = location.state?.item?.id;
-
-        if (!activityId) {
-            navigate('/not-found'); // Navigate away if `activityId` is null
-            return;
-        }
+        console.log("activityId:", activityId);
 
         // Call customFetch directly here
         customFetch(`/activity/${activityId}/auth`, 'GET')
             .then(data => {
                 setAssessmentData(data);
+                setAssessmentData("Assessment Data: ", data);
             })
             .catch(error => {
                 navigate('/not-found');
@@ -79,6 +76,7 @@ export default function ClassAssessment() {
 
         customFetch(`/submission/${activityId}/${user?.id}`, 'GET')
             .then(data => {
+                console.log("Fetched submission data:", data);
                 setSubmissionData(data.data);
                 setTimeTaken(prev => prev + data?.data?.time_taken);
                 setDone(data.exists);
@@ -160,9 +158,10 @@ export default function ClassAssessment() {
         return <LoadingPage />;
     }
 
-    if(!isFetching && assessmentData?.coding_problems.length === 0) {
-        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
+    if (assessmentData && assessmentData.coding_problems && assessmentData.coding_problems.length === 0) {
+        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />;
     }
+    
 
     document.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement) {

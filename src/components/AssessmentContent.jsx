@@ -81,7 +81,7 @@ export default function AssessmentContent({ status = false, startButton, data, t
                     }
                 </div>
             </div>
-            :
+            : 
             <div className={styles.container}>
                 <div className={styles.title}>
                     <p>{data?.title || "Assessment Title"}</p>
@@ -172,3 +172,10 @@ const minutes = Math.floor(seconds / 60);
 const remainingSeconds = seconds % 60;
 return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 };
+
+function calculateRemainingPercentage(totalTime, pausedTime) {
+    const elapsedTime = totalTime - pausedTime;  // Time elapsed
+    const elapsedPercentage = (elapsedTime / totalTime) * 100;  // Percentage of time passed
+    const remainingPercentage = 100 - elapsedPercentage;  // Remaining time as a percentage
+    return remainingPercentage;
+}
