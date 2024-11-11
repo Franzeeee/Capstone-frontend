@@ -19,6 +19,7 @@
   width: 100%;
   padding: 10px;
   border: 1.5px solid #d0d0d0;
+  position: relative;
 }
 .problemContainer input,
 .problemContainer textarea {
@@ -54,6 +55,19 @@
 }
 .formContainer {
   width: 100%;
+}
+
+.isGenerting::after {
+  content: "Generatng Problem..";
+  background-color: rgba(239, 239, 239, 0.681);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .accordion h2 button {
@@ -249,4 +263,18 @@ display: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.generateAssessmentBtn {
+  background-color: #6a6ad6;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  margin-left: 1rem;
+  margin-bottom: 5px;
+}
+.generateAssessmentBtn:hover {
+  background-color: #4c4cc1;
 }

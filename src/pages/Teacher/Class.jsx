@@ -54,6 +54,7 @@ export default function Class() {
 
         const data = await response.json();
         setClassInfo(data);
+        console.log(data);
         } catch (error) {
         setError(error.message);
         } finally {
@@ -96,7 +97,7 @@ export default function Class() {
                     {
                         user.role === 'teacher' && <AnnouncementForm />
                     }
-                    <CreateAssessment classId={classInfo.id} handleChangePage={handleActivePage}/>
+                    <CreateAssessment subject={classInfo?.subject} classId={classInfo.id} handleChangePage={handleActivePage}/>
                     {
                         activePage === 'default' && <ClassContents data={{courseId: classInfo.id, subject: classInfo.subject}} code={code} className={classInfo?.name}/>
                     }

@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { customFetch } from '../utils/api';
 import CryptoJS from 'crypto-js';
 
-export default function CreateAssessment({handleChangePage, classId}) {
+export default function CreateAssessment({handleChangePage, subject,classId}) {
     const [show, setShow] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     
@@ -119,7 +119,7 @@ export default function CreateAssessment({handleChangePage, classId}) {
                             <p>Coding</p>
                         </div>
                     </div>
-                    <CreateAssessmentForm classId={classId} activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
+                    <CreateAssessmentForm subject={subject} classId={classId} activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
                 </Offcanvas.Body>
             </Offcanvas>
             <div className={`${styles.createContainer}`}>
