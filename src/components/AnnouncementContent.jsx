@@ -17,7 +17,7 @@ export default function AnnouncementContent({ data }) {
     const [announcements, setAnnouncements] = useState([]);
 
     useEffect(() => {
-        customFetch(`/announcement/fetch?user_id=${user.id}`)
+        customFetch(`/announcement/fetch?user_id=${user?.id}`)
             .then(data => {
                 setAnnouncements(data);
             })

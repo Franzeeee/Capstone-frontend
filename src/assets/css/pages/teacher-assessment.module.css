@@ -153,3 +153,13 @@
     cursor: pointer;
     color: black;
 }
+.deleteClass {
+    background-color: rgb(255, 68, 68);
+    transition: all .3s ease;
+    border: 1.5px solid rgb(255, 68, 68);
+}
+.deleteClass:hover {
+    background-color: rgba(255, 255, 255, 0.237) !important;
+    border: 1.5px solid red !important;
+    color: red !important;
+}

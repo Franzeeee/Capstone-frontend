@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/components/course-content.module.css';
 import book from '../assets/img/book.png';
 import { useNavigate } from 'react-router-dom';
-import lessons from '../utils/data';
+import pythonLesson from '../utils/data';
+import webLesson from '../utils/BASIC_WEB'
 import { toast } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import customFetch from '../utils/fetchApi';
@@ -12,6 +13,8 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 export default function ClassContents({ data, code, className }) {
     const navigate = useNavigate();
     const { courseId } = data;
+
+    const lessons = data.subject === 'Python' ? pythonLesson : webLesson;
     const [defaultAssessment, setDefaultAssessment] = useState([]);
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(
@@ -21,7 +24,9 @@ export default function ClassContents({ data, code, className }) {
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState("all"); // "all" for lessons & quizzes, "quizzes" for only quizzes, "lessons" for only lessons
 
+
     useEffect(() => {
+        
         customFetch(`/activity/default/${data.courseId}`, {
             method: 'GET',
         })
@@ -60,7 +65,7 @@ export default function ClassContents({ data, code, className }) {
         }
     
         const baseUnlock = lessonId <= progress.last_completed_quiz + 1;
-        const extraUnlock = hasAssessment && lessonId <= progress.last_completed_quiz + 2;
+        const extraUnlock = hasAssessment && lessonId <= progress.last_completed_quiz + 1;
     
         return (
             baseUnlock ||
@@ -72,7 +77,7 @@ export default function ClassContents({ data, code, className }) {
     
 
     useEffect(() => {
-        customFetch(`/student/progress?student_id=${user.id}`)
+        customFetch(`/student/${courseId}/progress?student_id=${user.id}`)
             .then(data => {
                 setProgress(data.filter(item => item.course_class_id === courseId)[0]);
                 toast.dismiss();
@@ -118,7 +123,7 @@ export default function ClassContents({ data, code, className }) {
                                     className={`${styles.status} ${isLessonUnlocked(lesson.id, lesson.hasAssessment) ? styles.lesson : styles.locked}`}
                                     onClick={() => {
                                         if (isLessonUnlocked(lesson.id, lesson.hasAssessment)) {
-                                            navigate(`/c/${code}/${lesson.title}`, { state: { name: className, lesson: lesson.id } });
+                                            navigate(`/c/${code}/${lesson.title}`, { state: { name: className, lesson: lesson.id, subject: data.subject} });
                                         }
                                     }}
                                 >
@@ -137,7 +142,7 @@ export default function ClassContents({ data, code, className }) {
                     )}
 
                     {/* Filter and display quizzes based on viewMode */}
-                    {(viewMode === "all" || viewMode === "quizzes") && defaultAssessment
+                    {(viewMode === "all" || viewMode === "quizzes") && defaultAssessment.length > 0 && defaultAssessment
                         .filter(assessment => assessment.lessonId === lesson.id)
                         .map((assessment) => (
                             <div className={styles.card} key={assessment.id}>

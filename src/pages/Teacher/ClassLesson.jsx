@@ -10,16 +10,19 @@ import { faSquare as regularSquare } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import CodeEditor from '../CodeEditor';
 import TextFormatter from '../../components/TextFormatter';
-import lessonContent from '../../utils/lessons';
-import lessons from '../../utils/data';
+import PythonLesson from '../../utils/data';
+import webLessons from '../../utils/BASIC_WEB';
 import customFetch from '../../utils/fetchApi';
 import HomeTemplate from '../../templates/HomeTemplate';
 
 
 export default function ClassLesson() {
     const navigate = useNavigate()
-
     const location = useLocation();
+
+    const lessons = location.state?.subject === 'Python' ? PythonLesson : webLessons;
+
+    console.log(location.state?.lesson);
 
     const lessonIndex = location.state?.lesson|| 0;
 

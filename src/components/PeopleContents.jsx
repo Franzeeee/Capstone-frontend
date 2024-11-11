@@ -42,7 +42,7 @@ export default function PeopleContents({classId, classInfo}) {
                 {
                     people?.classmates.map((classmate, index) => (
                         <div key={index} className={styles.itemCard}>
-                            <img src={classmate?.profile_picture || profile} alt="" />
+                            <img src={`https://codelabbucket.s3.us-east-1.amazonaws.com/${classmate?.profile.profile_path}` || profile} alt="" />
                             <p>{classmate.name}</p>
                         </div>
                     ))

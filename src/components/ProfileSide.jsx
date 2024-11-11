@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/logout";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
 import customFetch from "../utils/fetchApi";
+import { getUserData } from "../utils/userInformation";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
@@ -22,10 +23,17 @@ export default function ProfileSide({ info }) {
   const [showModal, setShowModal] = useState(false);
   const [profilePicture, setProfilePicture] = useState(profile);
 
+  const [notification, setNotification] = useState([]);
+
+  const user = getUserData();
+
   useEffect(() => {
     const storedProfilePicture = localStorage.getItem("profilePicture");
     
-    customFetch('/profile/picture/fetch')
+    
+    if(!storedProfilePicture) {
+
+      customFetch('/profile/picture/fetch')
       .then(data => {
           setProfilePicture(data.path);
           localStorage.setItem("profilePicture", data.path);
@@ -33,6 +41,9 @@ export default function ProfileSide({ info }) {
       .catch(error => {
           console.error('Error:', error.message);
       });
+    } else {
+      setProfilePicture(storedProfilePicture);
+    }
 
     
   }, []);
@@ -62,12 +73,28 @@ export default function ProfileSide({ info }) {
             as="div"
             className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
           >
-            <Badge severity="danger" style={{ display: "none !important" }} />
+            {notification.length > 0 || !user?.verified &&
+              <Badge severity="danger" style={{ display: "none !important" }} />
+            }
           </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Notification 1</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Notification 2</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Notification 3</Dropdown.Item>
+          <Dropdown.Menu className={styles.notifContainer}>
+            <p className="mb-1"><FontAwesomeIcon className={styles.bell} icon={faBell} /> Notification</p>
+            { user && !user?.verified &&
+              <Dropdown.Item href="#/action-1">
+                <div className={styles.notificationCard}>
+                  <p className="text-danger">Email Verification</p>
+                  <p>Your account email is not verified. You need to verify to recieve email reminders. Verification sent on your email.</p>
+                </div>
+              </Dropdown.Item>
+            }
+            {
+              user?.verified && (
+                <div className={styles.notificationCard}>
+                  <p className="text-success"></p>
+                  <p className="text-center">No Notification</p>
+                </div>
+              )
+            }
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
@@ -115,7 +142,7 @@ export default function ProfileSide({ info }) {
 
           <div className={`${styles.card}`}>
             <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
+              <p>Activity 2</p>
               <p>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry.
@@ -136,73 +163,6 @@ export default function ProfileSide({ info }) {
             </div>
           </div>
 
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
-
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
         </div>
       </div>
     </>

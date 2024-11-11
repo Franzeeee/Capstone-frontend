@@ -21,6 +21,9 @@ import Testing from "./pages/Testing";
 import TeacherAssessmentPage from "./pages/TeacherAssessmentPage";
 import ClassDashboard from "./pages/ClassesPage/ClassDashboard";
 import Submissions from "./pages/ClassesPage/Submissions";
+import ClassGradeList from "./pages/ClassGradeList";
+import ClassGradeTable from "./pages/ClassGradeTable";
+import RefetchUser from "./components/RefetchUser";
 
 export const App = () => {
   return (
@@ -39,6 +42,9 @@ export const App = () => {
             <Route path="/teacher/classes" element={<TeacherAssessmentPage />}/>
             <Route path="/teacher/classes/:code/dashboard" element={<ClassDashboard />} />
             <Route path="/teacher/classes/:code/dashboard/:activity/submissions" element={<Submissions />} />
+            <Route path="/teacher/grades/class" element={<ClassGradeList />}/>
+            <Route path="/teacher/grades/class/:code/final-grades" element={<ClassGradeTable />}/>
+            <Route path="/verify-email" element={<RefetchUser />} />
         </Route>
         
         <Route path="/" element={<Sample />} />

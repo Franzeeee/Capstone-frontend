@@ -1,3 +1,5 @@
+import { css } from "@emotion/react";
+
 const lessonsWeb = [
 {
  title: "Introduction to HTML",
@@ -106,6 +108,7 @@ Example of a Simple HTML Document
 },
 {
  title: "HTML Elements",
+id: 1,
  content: `
 \`\`\`Para
 HTML (Hypertext Markup Language) is the standard language used to create web pages. It consists of various elements, which are the building blocks of web content. Each element typically includes a start tag, content, and an end tag. Here’s an overview of some common HTML elements:
@@ -222,6 +225,7 @@ Copy code
 },
 {
  title: "HTML Attributes",
+ id: 2,
  content: `
 \`\`\`Para
 HTML attributes provide additional information about HTML elements. They are always specified in the opening tag and usually come in name/value pairs, like name="value". Here are some common attributes:
@@ -361,6 +365,7 @@ Attributes enhance the functionality and accessibility of HTML elements, making 
 },
 {
  title: "HTML Heading",
+ id: 3,
  content: `
 \`\`\`End
 HTML headings are used to define the structure and hierarchy of content on a web page. They range from <h1> to <h6>, with <h1> being the highest level (most important) and <h6> the lowest. Proper use of headings improves readability, SEO, and accessibility.
@@ -463,6 +468,7 @@ Using headings effectively not only helps with organization but also enhances us
 },
 {
 title: "HTML Paragraph",
+id: 4,
  content: `
 \`\`\`Para
 HTML paragraphs are used to structure blocks of text on a web page. The <p> element defines a paragraph, and it automatically adds space (margin) above and below the content, making it easier to read.
@@ -546,6 +552,7 @@ Overall, the <p> element is essential for creating structured, readable text on 
 },
 {
 title: "HTML Styles",
+id: 5,
  content: `
 \`\`\`Para
 HTML styles control the presentation of HTML elements on a web page. While HTML is primarily used for structuring content, styles are applied using CSS (Cascading Style Sheets) to enhance the visual appearance. You can apply styles in three main ways: inline, internal, and external.
@@ -672,6 +679,7 @@ Using CSS effectively enhances the design and usability of web pages, making the
 },
 {
 title: "HTML Formatting",
+id: 6,
  content: `
 \`\`\`Para
 HTML formatting refers to the use of various HTML elements to change the appearance of text and content on a web page. This includes elements that can modify font styles, sizes, colors, and other visual aspects. HTML provides several tags for formatting, allowing for emphasis and structure.
@@ -851,6 +859,7 @@ Using HTML formatting effectively enhances the presentation of text on web pages
 },
 {
 title: "HTML Quotations",
+id: 7,
  content: `
 \`\`\`Para
 HTML provides specific elements for quoting text, which helps convey that the text is a quotation or a reference to someone else's words. This not only aids in organization and clarity but also enhances the semantic structure of the document.
@@ -976,6 +985,7 @@ Overall, using HTML quotations effectively contributes to a well-structured and 
 },
 {
 title: "HTML Comments",
+id: 8,
  content: `
 \`\`\`Para
 HTML comments are used to insert notes or annotations in the HTML code that are not displayed in the browser. They are helpful for developers to leave reminders, explanations, or to temporarily disable parts of the code without deleting them.
@@ -1082,6 +1092,7 @@ Maintenance: Comments provide a way to leave notes for future reference, helping
 },
 {
 title: "HTML CSS",
+id: 9,
  content: `
 \`\`\`Para
 HTML and CSS are two foundational technologies used in web development. While HTML (Hypertext Markup Language) is used for structuring content on the web, CSS (Cascading Style Sheets) is used for styling that content. Together, they enable developers to create visually appealing and well-structured web pages.
@@ -1237,6 +1248,7 @@ Responsive Design: CSS can be used to create layouts that adapt to different scr
 },
 {
 title: "HTML Heading",
+id: 10,
  content: `
 \`\`\`Para
 HTML links are created using the <a> (anchor) tag and are essential for navigating between pages and resources on the web. Links can connect to external websites, internal pages, downloadable files, or specific sections within the same page.
@@ -1383,6 +1395,7 @@ SEO: Properly structured links can improve a website's search engine ranking and
 },
 {
 title: "HTML Images",
+id: 11,
  content: `
 \`\`\`Para
 HTML images are used to embed pictures, graphics, and other visual content in web pages. Images enhance the user experience by making content more engaging and informative. The primary HTML element for including images is the <img> tag.
@@ -1501,6 +1514,7 @@ Accessibility: Alt text helps ensure that all users, including those with disabi
 },
 {
 title: "HTML Page Title",
+id: 12,
  content: `
 \`\`\`Para
 The HTML page title is defined using the <title> tag and is an important part of any web page. It specifies the title of the document and is displayed in the browser's title bar or tab. Additionally, the title is used by search engines as the main headline in search results and is critical for SEO (Search Engine Optimization).
@@ -1589,6 +1603,7 @@ Avoid Keyword Stuffing: Use keywords naturally; avoid cramming too many into the
 },
 {
 title: "HTML Tables",
+id: 13,
  content: `
 \`\`\`Para
 HTML tables are used to present data in a structured format using rows and columns. Tables are particularly useful for displaying tabular data, such as schedules, financial reports, and comparisons.
@@ -1740,6 +1755,7 @@ Data Presentation: Tables are ideal for displaying related data in a cohesive ma
 },
 {
 title: "HTML Lists",
+id: 14,
  content: `
 \`\`\`Para
 HTML lists are used to group and organize related items in a structured format. They enhance readability and help present information in a clear manner. There are three main types of lists in HTML: unordered lists, ordered lists, and description lists.
@@ -1882,7 +1898,9 @@ User-Friendly: Lists make information easier to digest and can improve the overa
 `
 },
 {
-title: "HTML Heading",
+title: "HTML Block and Inline",
+id: 15,
+
  content: `
 \`\`\`Para
 In HTML, elements can be categorized as either block-level or inline elements. Understanding the difference between these two types is crucial for controlling the layout and flow of content on a web page.
@@ -2044,6 +2062,7 @@ Inline elements are typically used for styling or linking parts of text within t
 },
 {
 title: "HTML Div",
+id: 16,
  content: `
 
 \`\`\`Para
@@ -2167,6 +2186,7 @@ Responsive Design: When combined with CSS frameworks and techniques (like Flexbo
 
 {
 title: "HTML Classes",
+id: 17,
  content: `
 
 \`\`\`Para
@@ -2299,6 +2319,7 @@ JavaScript Interaction: Classes can be used to easily select and manipulate elem
 
 {
 title: "HTML Id",
+id: 18,
  content: `
 \`\`\`Para
 In HTML, the id attribute is used to uniquely identify an element within a document. Each id must be unique within a page, meaning no two elements should have the same id. This uniqueness allows for precise styling and manipulation of specific elements using CSS and JavaScript.
@@ -2428,6 +2449,7 @@ CSS Specificity: Styles applied via an id are more specific than those applied v
 
 {
 title: "HTML Iframe",
+id: 19,
  content: `
 \`\`\`Para
 HTML <iframe> (inline frame) is used to embed another document within the current HTML document. This allows you to display content from external sources, such as another webpage, a video, a map, or an advertisement, without having to navigate away from the current page.
@@ -2579,7 +2601,10 @@ Performance: Loading multiple iframes can affect the performance of your page, e
 },
 
 {
-title: "HTML Heading",
+
+title: "HTML Javascript",
+  id: 20,
+
  content: `
 \`\`\`Para
 HTML and JavaScript work together to create dynamic and interactive web pages. HTML provides the structure of the page, while JavaScript adds functionality and interactivity. By using JavaScript, you can manipulate HTML elements, respond to user actions, and create a more engaging experience.
@@ -2719,6 +2744,8 @@ Security: Be cautious with user inputs and external scripts to avoid security vu
 
 {
 title: "CSS Introduction",
+id: 21,
+css: true,
  content: `
 \`\`\`Para
 CSS (Cascading Style Sheets) is a stylesheet language used to describe the presentation and layout of HTML documents. It allows web developers to control the visual appearance of web pages, enabling them to separate content from design. With CSS, you can set styles for elements, including colors, fonts, spacing, positioning, and responsiveness.
@@ -2862,6 +2889,8 @@ Responsive Design: CSS techniques allow developers to create layouts that adapt 
 
 {
 title: "CSS Syntax",
+id: 22,
+css: true,
  content: `
 \`\`\`Para
 CSS (Cascading Style Sheets) syntax is the set of rules used to define how HTML elements should be displayed on a webpage. Understanding CSS syntax is essential for effectively styling web pages. Here’s a breakdown of the key components of CSS syntax:
@@ -3001,6 +3030,8 @@ Cross-Browser Compatibility: Understanding CSS syntax helps ensure that your sty
 
 {
 title: "CSS Selectors",
+id: 23,
+css: true,
  content: `
 \`\`\`Para
 CSS selectors are patterns used to select the elements you want to style in your HTML documents. They play a crucial role in determining which elements are affected by specific CSS rules. Understanding different types of selectors allows you to write more efficient and organized styles.
@@ -3254,6 +3285,8 @@ Responsive Design: Understanding selectors helps in creating responsive designs,
 
 {
 title: "How to add CSS",
+id: 24,
+css: true,
  content: `
 \`\`\`Para
 Adding CSS (Cascading Style Sheets) to your HTML documents can be done in several ways, each serving different purposes depending on the project. Here’s an overview of the methods for adding CSS, along with examples for each.
@@ -3399,6 +3432,8 @@ Improved Load Times: Browsers cache external CSS files, which can speed up page 
 
 {
 title: "CSS Comment",
+id: 25,
+css: true,
  content: `
 \`\`\`Para
 CSS comments are annotations in your stylesheets that are ignored by the browser. They are useful for documenting your code, explaining styles, or temporarily disabling certain CSS rules during development. Comments improve the readability and maintainability of your stylesheets, especially in complex projects.
@@ -3511,7 +3546,11 @@ Temporarily Disabled Styles: The comment before the footer styles indicates that
 },
 
 {
-title: "CSS",
+
+
+title: "CSS Colors",
+id: 26,
+css: true,
  content: `
 \`\`\`Para
 CSS colors are essential for defining the visual appearance of elements on a web page. Colors can be specified in various formats, allowing for flexibility in design. Understanding how to use colors effectively enhances the user experience and contributes to the overall aesthetic of a website.
@@ -3700,6 +3739,8 @@ HSLA Color: The footer uses a semi-transparent blue background defined by HSLA.
 
 {
 title: "CSS Background",
+id: 27,
+css: true,
  content: `
 \`\`\`Para
 CSS backgrounds are essential for enhancing the visual appearance of web elements. You can use backgrounds to add color, images, gradients, and patterns to HTML elements. Understanding how to effectively use CSS background properties allows for more dynamic and engaging designs.
@@ -3901,6 +3942,8 @@ Footer Background: The footer has a dark background color, enhancing readability
 
 {
 title: "CSS Border",
+id: 28,
+css: true,
  content: `
 \`\`\`Para
 CSS borders are a fundamental property used to create visual separation and definition for HTML elements. Borders can enhance the overall design of a webpage by adding structure and style to elements such as divs, images, buttons, and more.
@@ -4076,7 +4119,10 @@ Rounded Border Box: The third box has a solid red border with very rounded corne
 },
 
 {
-title: "CSS",
+
+title: "CSS Margins",
+id: 29,
+css: true,
  content: `
 \`\`\`Para
 CSS margins are used to create space around elements, separating them from other elements on the page. They are crucial for layout control and visual aesthetics, helping to ensure that elements are not too close to one another.
@@ -4228,7 +4274,11 @@ Button: The button has a top margin of 20 pixels to create space between it and 
 },
 
 {
-title: "CSS",
+
+
+title: "CSS Padding",
+id: 30,
+css: true,
  content: `
 \`\`\`Para
 CSS padding is the space between the content of an element and its border. It is crucial for controlling the inner spacing within elements, which affects the overall layout and readability of a webpage. Padding can help create a more aesthetically pleasing design by ensuring that text and other content do not touch the edges of their containers.
@@ -4385,6 +4435,8 @@ Button: The button has padding of 10 pixels vertically and 20 pixels horizontall
 
 {
 title: "CSS Height/Width",
+id: 31,
+css: true,
  content: `
 \`\`\`Para
 CSS height and width properties are fundamental for controlling the size of elements on a webpage. They allow you to define how tall and wide elements will be, contributing to layout and design.
@@ -4569,6 +4621,8 @@ Responsive Width Box: The .responsive-box class has a width set to 80% of its pa
 
 {
 title: "CSS Box Model",
+id: 32,
+css: true,
  content: `
 \`\`\`Para
 The CSS box model is a fundamental concept that describes how elements on a web page are structured and how their dimensions are calculated. Understanding the box model is crucial for effective layout design and spacing control.
@@ -4713,7 +4767,10 @@ By using box-sizing: border-box;, the total width of the box becomes 300px, whic
 },
 
 {
-title: "CSS",
+
+title: "CSS Outlines",
+id: 33,
+css: true,
  content: `
 \`\`\`Para
 CSS outlines are a way to create a line around an element that is similar to borders but with some key differences. Outlines are primarily used for accessibility and visual emphasis, helping to highlight elements without affecting the layout.
@@ -4853,6 +4910,8 @@ The outline property is set with a dashed style for the box, and when the button
 
 {
 title: "CSS Text",
+id: 34,
+css: true,
  content: `
 \`\`\`Para
 CSS text properties are essential for controlling the appearance and formatting of text on a webpage. These properties allow you to adjust various aspects of text, including its size, color, alignment, spacing, and decoration. Understanding how to use these properties effectively can significantly enhance the readability and aesthetics of your content.
@@ -5060,6 +5119,8 @@ Highlighting: The .highlight class applies a yellow background color to emphasiz
 
 {
 title: "CSS Fonts",
+id: 35,
+css: true,
  content: `
 \`\`\`Para
 CSS fonts are essential for defining the typography of a webpage. They determine the appearance of text, influencing both aesthetics and readability. Understanding how to use font properties effectively can significantly enhance the design of your site.
@@ -5269,6 +5330,8 @@ Highlighted Text: The .highlight class is used to style specific text with bold 
 
 {
 title: "CSS Icons",
+id: 36,
+css: true,
  content: `
 \`\`\`Para
 CSS icons are graphical representations used to enhance user interfaces, often serving as visual indicators or buttons for actions. They can be created using various methods, including image files, font icons, or CSS-only techniques. Understanding how to implement and style icons effectively can significantly improve the usability and aesthetics of a webpage.
@@ -5440,6 +5503,8 @@ The styles define sizes, colors, and spacing for both font and image icons to en
 
 {
 title: "CSS Links",
+id: 37,
+css: true,
  content: `
 \`\`\`Para
 CSS links are essential for styling anchor elements (<a> tags) on a webpage, allowing you to control their appearance and behavior. Links can be styled in various ways to enhance usability and improve the visual design of your website.
@@ -5635,6 +5700,8 @@ The example includes two links pointing to example websites, demonstrating how t
 
 {
 title: "CSS Lists",
+id: 38,
+css: true,
  content: `
 \`\`\`Para
 CSS lists are used to style HTML lists, which can be either ordered (<ol>) or unordered (<ul>). Lists are essential for organizing content in a clear and structured way, and CSS allows you to customize their appearance, including the bullet style, spacing, and overall layout.
@@ -5834,6 +5901,8 @@ Each list item (<li>) has a small margin to provide space between items, improvi
 
 {
 title: "CSS Tables",
+id: 39,
+css: true,
  content: `
 \`\`\`Para
 CSS tables are used to style HTML table elements, which present data in a structured format. Tables are particularly useful for displaying tabular data, such as schedules, comparisons, or statistics. By using CSS, you can customize the appearance of tables, making them more visually appealing and easier to read.
@@ -6091,6 +6160,8 @@ The table is responsive and styled to be full-width, making it adaptable to diff
 
 {
 title: "CSS Display",
+id: 40,
+css: true,
  content: `
 \`\`\`Para
 The CSS display property is fundamental in controlling how elements are rendered on the webpage. It determines the layout behavior of an element and affects its box model characteristics, positioning, and overall interaction with surrounding elements.
@@ -6321,6 +6392,8 @@ The flex container displays its items in a flexible layout, with space evenly di
 },
 {
 title: "CSS Position",
+id: 41,
+css: true,
  content: `
 \`\`\`Para
 The CSS position property is crucial for controlling the placement of elements on a webpage. It determines how an element is positioned in relation to its normal flow, its parent, or the viewport. Understanding the various positioning methods is essential for creating responsive and well-structured layouts.
@@ -6548,6 +6621,8 @@ The fixed element stays in the bottom-right corner of the viewport, even when th
 
 {
 title: "CSS Z-index",
+id: 42,
+css: true,
  content: `
 \`\`\`Para
 The CSS z-index property controls the stacking order of elements that overlap. It is especially useful when dealing with positioned elements (those with position values of relative, absolute, fixed, or sticky). The z-index determines which element appears on top of others when they overlap.
@@ -6700,6 +6775,8 @@ When rendered, Box 3 will appear on top, followed by Box 1, and then Box 2 at th
 },
 {
 title: "CSS Align",
+id: 43,
+css: true,
  content: `
 \`\`\`Para
 The CSS align property is often used in conjunction with flexbox and grid layouts to control the alignment of elements within their containers. While there isn’t a single align property in CSS, alignment can be achieved through several related properties, primarily align-items, align-self, and justify-content in flexbox and grid contexts.
@@ -6879,11 +6956,13 @@ In the second container, Item B uses align-self: flex-start, which overrides the
 },
 {
 title: "CSS Overflow",
+id: 44,
+css: true,
  content: `
 \`\`\`Para
 The CSS overflow property controls what happens to content that exceeds the bounds of an element's box. It is particularly useful for managing layout and ensuring that overflowing content is handled in a way that maintains usability and aesthetics.
 \`\`\`End
-
+git 
 \`\`\`Bold
 Overflow Property Values
 \`\`\`End

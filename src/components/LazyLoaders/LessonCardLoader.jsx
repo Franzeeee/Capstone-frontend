@@ -21,7 +21,6 @@ export default function LessonCardLoader() {
             <div className={`${styles.goTo}`}>
                 <div
                 className={`${styles.viewButton}`}
-                onClick={() => navigate('/c/testurl')}
                 >
                 <p className='m-0'>
                     <FontAwesomeIcon icon={faArrowRight} />

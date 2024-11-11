@@ -98,7 +98,7 @@ export default function Class() {
                     }
                     <CreateAssessment classId={classInfo.id} handleChangePage={handleActivePage}/>
                     {
-                        activePage === 'default' && <ClassContents data={{courseId: classInfo.id}} code={code} className={classInfo?.name}/>
+                        activePage === 'default' && <ClassContents data={{courseId: classInfo.id, subject: classInfo.subject}} code={code} className={classInfo?.name}/>
                     }
                     {
                         activePage === 'classwork' && <ClassroomWork classId={classInfo.id} className={classInfo?.name} code={code} />

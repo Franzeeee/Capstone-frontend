@@ -17,6 +17,7 @@ import customFetch from '../utils/fetchApi';
 import LoadingPage from './LoadingPage';
 import HomeTemplate from '../templates/HomeTemplate';
 import LogicAssessmentPage from './AssessmentPage/LogicAssessmentPage';
+import { getUserData } from '../utils/userInformation';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
@@ -25,21 +26,19 @@ export default function ClassAssessment() {
     const [assessment, setAssessment] = useState(location.state?.item || {});
     const [startAssessment, setStartAssessment] = useState(false);
     const [inFullscreen, setInFullscreen] = useState(false);
+    const [focused, setFocused] = useState(false);
     const [assessmentData, setAssessmentData] = useState(null);
     const [rank, setRank] = useState({
         rank: 0,
         total: 0
     });
+    const [timeTaken, setTimeTaken] = useState(0);
     const [isFetching, setIsFetching] = useState(true);
 
-    const [done, setDone] = useState(false);
+    const [done, setDone] = useState(null);
     const [submissionData, setSubmissionData] = useState(null);
 
-    const userData = localStorage.getItem('userData');
-    const [user, setUser] = useState(
-        JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
-    );
-
+    const user = getUserData();
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
     const [currentLesson, setCurrentLesson] = useState(() => {
         if (user.role === 'teacher') {
@@ -59,26 +58,38 @@ export default function ClassAssessment() {
         setShow(false);
     };
 
+    const [activityId, setActivityId] = useState(location.state?.item?.id);
+
     useEffect(() => {
-        
-        const activityId = location.state?.item?.id;
+
+        setActivityId(location.state?.item?.id);
+    
+        console.log("Activity ID: ", activityId);
+
+        if (!activityId) {
+            navigate('/not-found'); // Navigate away if `activityId` is null
+            return;
+        }
 
         // Call customFetch directly here
         customFetch(`/activity/${activityId}/auth`, 'GET')
             .then(data => {
                 setAssessmentData(data);
+                console.log("Assessment Data: ", data);
             })
             .catch(error => {
                 navigate('/not-found');
             })
 
-        customFetch(`/submission/${activityId}/${user.id}`, 'GET')
+        customFetch(`/submission/${activityId}/${user?.id}`, 'GET')
             .then(data => {
+                console.log("Submission Data: ", data);
                 setSubmissionData(data.data);
+                setTimeTaken(prev => prev + data?.data?.time_taken);
                 setDone(data.exists);
                 setRank({
-                    rank: data.rank,
-                    total: data.total_submissions
+                    rank: data?.rank,
+                    total: data?.total_submissions
                 });
             })
             .catch(error => {
@@ -87,7 +98,7 @@ export default function ClassAssessment() {
             .finally(() => {
                 setIsFetching(false);
             });
-    }, []);
+    }, [activityId]);
 
     const handleShow = () => {
         setShow(true);
@@ -103,9 +114,12 @@ export default function ClassAssessment() {
             document.documentElement.msRequestFullscreen();
         }
     };
+    
 
     const returnFullscreen = () => {
         setInFullscreen(true);
+        setFocused(true);
+        clearClipboard();
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
         } else if (document.documentElement.webkitRequestFullscreen) {
@@ -124,12 +138,22 @@ export default function ClassAssessment() {
 
         // Add event listener for fullscreen change
         document.addEventListener("fullscreenchange", handleFullscreenChange);
+        window.addEventListener("focus", setFocused(true));
 
         // Cleanup event listener on component unmount
         return () => {
             document.removeEventListener("fullscreenchange", handleFullscreenChange);
         };
     }, [startAssessment]);
+    
+
+    useEffect(() => {
+        window.addEventListener("focus", setFocused(true));
+    }, [focused]);
+
+    window.addEventListener("blur", () => {
+        setFocused(false);
+    });
 
     const handleBack = () => {
         const currentPath = location.pathname;
@@ -141,10 +165,16 @@ export default function ClassAssessment() {
         return <LoadingPage />;
     }
 
-    if(!isFetching && assessmentData.coding_problems.length === 0) {
+    if(!isFetching && assessmentData?.coding_problems.length === 0) {
         return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
     }
 
+    document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        // If the page is in fullscreen mode, attempt to clear the clipboard
+        clearClipboard();
+    }
+});
     return (
         <HomeTemplate>
         <div className={`${styles.container}`}>
@@ -186,12 +216,15 @@ export default function ClassAssessment() {
                         <li>/</li>
                         <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
                         <li>/</li>
-                        <li className={`${styles.active}`}>{assessmentData?.title || "Nothing"}</li>
+                        <li className={`${styles.active}`}>{assessmentData?.title || "Assessment Title"}</li>
                     </ul>
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        <AssessmentContent status={done} rank={rank} data={assessmentData} submission={submissionData} startButton={handleShow}/>
+                        { activityId && assessmentData !== null && (
+                            <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
+                            )
+                        }
                         {/* <div className={styles.robotContainer}>
                             <img src={perfectRobot} alt="" />
                             <p>Great did an excellent job!</p>
@@ -202,26 +235,36 @@ export default function ClassAssessment() {
                         <button className={`${styles.back}`}>Back</button>
                         <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button>
                     </div> */}
-                <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
-                    <Offcanvas.Body>
-                    <CodeEditor 
-                        data={assessmentData}  
-                        options={{ 
-                            mode: 'Assessment', 
-                            closeOverlay: () => setShow(false), 
-                            timesup: () => setStartAssessment(false),
-                            closeEditor: () => setShow(false),
-                        }} 
-                    />
-                    </Offcanvas.Body>
-                </Offcanvas>
-                <Offcanvas  
-                style={canvasStyle}
-                backdrop="static" keyboard={false} show={startAssessment && !inFullscreen} onHide={handleClose} >
-                <Offcanvas.Body>
-                        <ExitScreen handleFullscreen={returnFullscreen}/>
-                </Offcanvas.Body>
-                </Offcanvas>
+                { done !== null && !done && (
+                    <>
+                        <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
+                            <Offcanvas.Body>
+                            <CodeEditor 
+                                data={assessmentData}  
+                                options={{ 
+                                    mode: 'Assessment', 
+                                    closeOverlay: () => setShow(false), 
+                                    timesup: () => setStartAssessment(false),
+                                    closeEditor: () => setShow(false),
+                                    finished: () => setDone(true),
+                                    setRank: (rank) => setRank(rank),
+                                    setSubmissionData: (data) => setSubmissionData(data),
+                                    setTimeTaken: (time) => setTimeTaken(time),
+                                }} 
+                            />
+                            </Offcanvas.Body>
+                        </Offcanvas>
+                        <Offcanvas  
+                        style={canvasStyle}
+                        backdrop="static" keyboard={false} show={startAssessment && !inFullscreen || startAssessment && !focused} onHide={handleClose} >
+                        <Offcanvas.Body>
+                                <ExitScreen handleFullscreen={returnFullscreen} focus={focused}/>
+                        </Offcanvas.Body>
+                        </Offcanvas>
+                    </>
+                )
+
+                }
             </div>
         </div>
         </HomeTemplate>
@@ -238,5 +281,14 @@ const canvasStyle = {
     zIndex: 1050,          // Ensure it is above other content
     transition: 'none'     // Disable transition for immediate pop-up
     
+}
+
+
+async function clearClipboard() {
+    try {
+        await navigator.clipboard.writeText('');
+    } catch (err) {
+        console.error('Failed to clear clipboard:', err);
+    }
 }
 

@@ -30,6 +30,7 @@ import QuestionList from '../components/QuestionList';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { toast } from 'react-toastify';
 import CryptoJS from 'crypto-js';
+import WebAssessmentSample from '../components/Modals/WebAssessmentSample';
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -382,19 +383,19 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             compileCode(code, inputValues)
             return;
         }
-        const fetchAuthToken = async () => {
-            try {
-                const clientId = '80d7f4c9e24d6d17354e31f6301d1203';
-                const clientSecret = 'fe056deb985c4743825673d246460922f68d5bcfa3eb935955618127527d92bf';
+        // const fetchAuthToken = async () => {
+        //     try {
+        //         const clientId = '80d7f4c9e24d6d17354e31f6301d1203';
+        //         const clientSecret = 'fe056deb985c4743825673d246460922f68d5bcfa3eb935955618127527d92bf';
                 
-                const data = await getAuthToken(clientId, clientSecret);
-                setAuthToken(data);
-            } catch (error) {
-                console.error('Error getting auth token:', error);
-            }
-        }; 
+        //         const data = await getAuthToken(clientId, clientSecret);
+        //         setAuthToken(data);
+        //     } catch (error) {
+        //         console.error('Error getting auth token:', error);
+        //     }
+        // }; 
 
-        fetchAuthToken();
+        // fetchAuthToken();
 
         setExecute(true);
         setOutput("")
@@ -560,15 +561,23 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             isActive: index === 0,
             testCase: {
                 input: problem.sample_input || "",
-                output: problem.sample_output || ""
+                output: problem.expected_output || ""
             }
         })) || null);
-
 
 
         const [activeAssessment, setActiveAssessment] = useState(
             mode === 'Assessment' ? assessmentData.find(assessment => assessment.isActive) : null
         );
+
+        
+        useEffect(() => {
+            if (mode === 'Assessment') {
+                const isWeb = activeAssessment?.testCase.output.includes('<!DOCTYPE');
+
+                setIde(isWeb ? 1 : 0);
+            }
+        }, [activeAssessment]);
 
         const handleChangeAssessment = (id) => {
             if (id >= assessmentData.length) return; // Stop if id is not valid
@@ -636,6 +645,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         }
     };
 
+    const [submissionTime, setSubmissionTime] = useState(null);
+    const submissionTimeRef = useRef(null)
+
+    const handleSubmissionTime = (time) => {
+        if(submissionTime === null){
+            setSubmissionTime(time);
+            submissionTimeRef.current = time;
+        }
+    };
+
     const submitAssessment = async () => {
         options.timesup();
         const allProblemsAndCodes = assessmentData.map(assessment => ({
@@ -645,33 +664,38 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         }));
     
         setPauseTimer(true);
-        openModal(); // Open the modal before starting submissions
-        let allSuccessful = true; // Track overall success
-        let totalScore = 0; // Accumulate total score
-        const maxScorePerItem = 100; // Maximum score for each item
-        let assessmentCount = allProblemsAndCodes.length; // Number of assessments
+        openModal();
+        let allSuccessful = true;
+        let totalScore = 0;
+        const maxScorePerItem = 100;
+        let assessmentCount = allProblemsAndCodes.length;
+
+        let submissionFeedback = "";
 
         const updatedAssessmentData = [...assessmentData];
     
         for (const [index, assessment] of allProblemsAndCodes.entries()) {
             const { codingProblem, code } = assessment;
+
+            const formData = new FormData();
+            formData.append('codingProblem', codingProblem);
+            formData.append('code', code);
     
             try {
                 const response = await customFetch('/submission/autocheck', {
                     method: 'POST',
-                    body: JSON.stringify({ codingProblem, code })
+                    body: formData,
                 });
     
-                // Check if the response has the 'message' property
                 if (response && response.message) {
-                    console.log(response.message);
     
                     // Extract the score from the response message if it's included as "Total Score: X points"
                     const scoreMatch = response.message.match(/Total Score: (\d+)/);
+                    const feedback = response.message.match(/Feedback: (.+)/);
                     if (scoreMatch) {
                         const score = parseInt(scoreMatch[1], 10);
                         totalScore += score; // Add score to the total 
-                        console.log("Score:", score);
+                        submissionFeedback += feedback[1];
 
                         updatedAssessmentData[index] = { ...updatedAssessmentData[index], score };
                     }
@@ -681,34 +705,41 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 }
             } catch (error) {
                 console.error('Error submitting assessment:', error.message);
-                allSuccessful = false;
+                allSuccessful = true;
             }
         }
     
         // Calculate GWA as a percentage
         const gwa = (totalScore / (assessmentCount * maxScorePerItem)) * 100;
-        console.log("GWA:", gwa.toFixed(2) + "%");
     
         // Final feedback to the user
-        if (allSuccessful) {
-            console.log(updatedAssessmentData)
+        if(allSuccessful) {
+
+            const timeConsumed = data.time_limit - submissionTimeRef.current; // Access the time from ref
             handleCloseSubmitModal();
 
             customFetch('/submission/create', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     activity_id: data.id,
                     score: parseInt(gwa.toFixed(2), 10),
                     status: 'graded',
+                    time_taken: timeConsumed,
+                    feedback: submissionFeedback,
                     coding_problem_codes: updatedAssessmentData.map(assessment => ({
                         problem_id: assessment.problem_id,
                         code: assessment.code,
-                        score: assessment.score
+                        score: assessment.score,
                     })),
                 }),
             })
                 .then(response => {
                     console.log('Response:', response);
+                    options.setRank({rank: response.rank});
+                    options.setSubmissionData(response.submission);
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
@@ -717,6 +748,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     options.closeEditor();
                     document.exitFullscreen();
                     setAssessmentData([]);
+                    options.finished()
+                    options.setTimeTaken(timeConsumed)
                 });
 
         } else {
@@ -731,6 +764,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         options.timesup();
         // closeOverlay();
         submitAssessment()
+    };
+
+    const [showWebSample, setShowWebSample] = useState(false);
+
+    const handleShowWebSample = () => {
+        setShowWebSample(true);
+    };
+
+    const handleCloseWebSample = () => {
+        setShowWebSample(false);
     };
         
         
@@ -750,7 +793,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             hideConfirm: true
                             }}
                     />
-            <nav className={`${styles.nav}`}>
+            <Offcanvas show={showWebSample} onHide={handleCloseWebSample} placement="top" className={`${styles.offcanvas} ${styles.webSample}`}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Sample Output</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <WebAssessmentSample webCode={activeAssessment?.testCase?.output} />
+                </Offcanvas.Body>
+            </Offcanvas>
+            <nav className={`${styles.nav} ${mode !== "playground" ? 'd-none' : ""}`}>
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
@@ -779,7 +830,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         </div> */}
                     </div>
                     <div className={`${styles.controls}`}>
-                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute}`}>
+                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute} ${ide !== 1 ? '' : 'd-none'}`}>
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
@@ -788,7 +839,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             time={data.time_limit} 
                             pause={pauseTimer} 
                             finishedTime={finishedAssessmentTimer}
-                            onPause={(remainingTime) => console.log("Paused at:", remainingTime)}
+                            onPause={(remainingTime) => handleSubmissionTime(remainingTime)}
                         />
                     )
                     }
@@ -913,14 +964,23 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                             </>
                                         )
                                     }
-                                    <p>Expected Output: </p>
+                                    
                                     {
                                         activeAssessment.testCase.output === "" ? "" : (
-                                            <ul>
-                                                {activeAssessment.testCase.output.split('\n').map((line, index) => (
-                                                    <li key={index}>{line}</li>
-                                                ))}
-                                            </ul>
+                                            <>
+                                            <p>Expected Output: </p>
+                                                <ul>
+                                                    {
+                                                        activeAssessment.testCase.output.includes("DOCTYPE") ? (
+                                                            <button className={styles.webButton} onClick={handleShowWebSample}>View Web Output</button>
+                                                        ) : (
+                                                            activeAssessment.testCase.output.split('\n').map((line, index) => (
+                                                                <li key={index}>{line}</li>
+                                                            ))
+                                                        )
+                                                    }
+                                                </ul>
+                                            </>
                                         )
                                     }
                                 </div>
@@ -929,10 +989,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             <div className={`${styles.assessmentFooter}`}>
                                 <div className={`${styles.assessmentBtns}`}>
                                     <button onClick={() => setShow(true)}>
-                                        Questions
-                                    </button>
-                                    <button>
-                                        Test Cases
+                                        Problems ({assessmentData.length})
                                     </button>
                                 </div>
                                 <div onClick={submitAssessment} className={`${styles.submitButton}`}>
