@@ -17,7 +17,8 @@ import { Offcanvas } from 'react-bootstrap';
 import CreateAssessmentForm from '../components/AssessmentForm/CreateAssessmentForm';
 import SubmissionDetailModal from '../components/SubmissionDetailModal';
 import { Form, FormGroup, Button } from 'react-bootstrap';
-
+import { Tab, Tabs } from 'react-bootstrap';
+import profile from '../assets/img/1x1Robot2.png';
 
 
 
@@ -43,6 +44,9 @@ export default function ClassGradeTable() {
     const [showDistributionMod, setShowDistributionMod] = useState(false);
     const [showStudentGrade, setShowStudentGrade] = useState(false);
     const [studentSubmission, setStudentSubmission] = useState(null);
+
+    const [studentInfo, setStudentInfo] = useState(null);
+    const [studentScores, setStudentScores] = useState(null);
 
 
     // handlers for modals
@@ -160,17 +164,25 @@ export default function ClassGradeTable() {
     }
 
     const openShowStudentGrade = (id) => {
+        console.log(id)
         setShowStudentGrade(true);
         customFetch(`/grades/${classData.id}/student/${id}/scores`,{
             method: 'GET'
         })
         .then(data => {
             setStudentSubmission(data); 
+            setStudentInfo({
+                name: data[0]?.student_name,
+                email: data[0]?.student_email
+            })
+            setStudentScores(data);
         })
         .catch(error => {
             console.error('Error:', error.message);
         })
     }
+
+    const [key, setKey] = useState('Final Grade');
 
 
     return (
@@ -204,12 +216,59 @@ export default function ClassGradeTable() {
                         <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right'}}>Save</Button>
                     </Modal.Body>
                 </Modal>
-                <Modal show={showStudentGrade}>
+                <Modal size='lg' static show={showStudentGrade}>
                     <Modal.Header closeButton onClick={closeShowStudentGrade}>
-                        <Modal.Title>Modal title</Modal.Title>
+                        <Modal.Title>Upload Final Grade</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Modal body text goes here.</p>
+                    <Tabs
+                        id="controlled-tab-example"
+                        activeKey={key}
+                        onSelect={(k) => setKey(k)}
+                        className="mb-3"
+                    >
+                        <Tab eventKey="Assessments Scores" title="Assessment Scores">
+                            <div className={styles.studentProfile}>
+                                <div className={styles.profilePic}>
+                                    <img src={profile} alt="" />
+                                </div>
+                                <div className={styles.userInfo}>
+                                    <p>{studentInfo && studentInfo?.name || "Loading Student Name..."}</p>
+                                    <p>{studentInfo && studentInfo?.email || "Loading Email..."}</p>
+                                </div>
+                            </div>
+                            <div className={styles.header}>
+                                <div>
+                                    <p>Assessment Title</p>
+                                </div>
+                                <div>
+                                    <p>Due Date</p>
+                                </div>
+                                <div>
+                                    <p>Final Score</p>
+                                </div>
+                            </div>
+                            <div className={styles.userScoresContainer}>
+                                { studentScores !== null && studentScores.length > 0 && studentScores.map((score, index) => (
+                                    <div key={score.id} className={styles.assessmentCard}>
+                                        <div>
+                                            <p>{score?.activity_title || "Assessment Title"}</p>
+                                        </div>
+                                        <div>
+                                            <p>{score?.end_date === null ? "No Due Date" : formatDate(score?.end_date)}</p>
+                                        </div>
+                                        <div>
+                                            <p><span style={{fontWeight: '600', color: 'black'}}>{score?.submission_score}</span> / 100</p>
+                                        </div>
+                                    </div>    
+                                ))}
+                            </div>
+                        </Tab>
+                        <Tab eventKey="Final Grade" title="Final Grade">
+                            <div className={styles.finalGradeContainer}>
+                            </div>
+                        </Tab>
+                        </Tabs>
                     </Modal.Body>
                 </Modal>
                 <div className={`${styles.contentContainer}`}>
@@ -288,12 +347,12 @@ export default function ClassGradeTable() {
                                                         <td>{grade.student.name}</td>
                                                         <td style={{textAlign: 'center'}}>{grade?.final_grade}</td>
                                                         <td>{grade?.remarks}</td>
-                                                        <td style={{ textAlign: 'center' }}>
+                                                        <td style={{ textAlign: 'center' }} onClick={() => openShowStudentGrade(grade?.student?.id)}>
                                                         <OverlayTrigger
                                                             placement="bottom"
                                                             overlay={<Tooltip id={`tooltip-test`}>Final Grade</Tooltip>}
                                                         >
-                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} onClick={() => openShowStudentGrade(grade.id)} /></p>
+                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} /></p>
                                                         </OverlayTrigger>
                                                         </td>
                                                     </tr>
@@ -337,4 +396,13 @@ export default function ClassGradeTable() {
             </div>
         </HomeTemplate>
     );
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        month: 'short', // Abbreviated month, e.g., "Jul"
+        day: 'numeric', // Numeric day, e.g., "2"
+        year: 'numeric' // Full year, e.g., "2003"
+    });
 }
