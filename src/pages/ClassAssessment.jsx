@@ -218,7 +218,7 @@ export default function ClassAssessment() {
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        { activityId && assessmentData && (
+                        { activityId && assessmentData !== null && (
                             <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
                             )
                         }
