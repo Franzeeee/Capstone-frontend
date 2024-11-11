@@ -58,9 +58,12 @@ export default function ClassAssessment() {
         setShow(false);
     };
 
+    const [activityId, setActivityId] = useState(location.state?.item?.id);
+
     useEffect(() => {
-        
-        const activityId = location.state?.item?.id;
+
+        setActivityId(location.state?.item?.id);
+    
         console.log("Activity ID: ", activityId);
 
         if (!activityId) {
@@ -95,7 +98,7 @@ export default function ClassAssessment() {
             .finally(() => {
                 setIsFetching(false);
             });
-    }, []);
+    }, [activityId]);
 
     const handleShow = () => {
         setShow(true);
