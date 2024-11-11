@@ -71,10 +71,10 @@ export default function ProfileSide({ info }) {
         <Dropdown>
           <Dropdown.Toggle
             as="div"
-            className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell`}
+            className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
           >
             {notification.length > 0 || !user?.verified &&
-              <Badge value={notification.length} severity="danger"></Badge>
+              <Badge severity="danger" style={{ display: "none !important" }} />
             }
           </Dropdown.Toggle>
           <Dropdown.Menu className={styles.notifContainer}>
@@ -87,10 +87,14 @@ export default function ProfileSide({ info }) {
                 </div>
               </Dropdown.Item>
             }
-              <div className={styles.notificationCard}>
-                <p className="text-success"></p>
-                <p className="text-center">No Notification</p>
-              </div>
+            {
+              user?.verified && (
+                <div className={styles.notificationCard}>
+                  <p className="text-success"></p>
+                  <p className="text-center">No Notification</p>
+                </div>
+              )
+            }
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
