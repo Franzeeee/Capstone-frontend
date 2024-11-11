@@ -62,6 +62,12 @@ export default function ProfileSide({ info }) {
   //   }
   // };
 
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'userData') {
+      user.verified = 'true';
+    }
+  });
+
 
   return (
     <>

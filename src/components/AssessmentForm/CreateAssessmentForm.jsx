@@ -12,8 +12,6 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
-  console.log(subject)
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -276,6 +274,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
       const problemForm = new FormData();
       problemForm.append("title", formData.title);
       problemForm.append("description", formData.description);
+      problemForm.append('subject', subject);
       customFetch(`/assessment/coding/generate`,{
         method: 'POST',
         contentType: 'application/json',
@@ -454,7 +453,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 className={styles.addProblem}
                 icon={faCirclePlus}
               />
-              <button type="button" onClick={!generating ? generateProblem : ""} disabled={generating} className={styles.generateAssessmentBtn}>Generate Assessment Problems</button>
+              <button type="button" onClick={!generating ? generateProblem : ""} disabled={generating} className={`${styles.generateAssessmentBtn} ${addingProblem ? '' : 'd-none'}`}>Generate Assessment Problems</button>
             </Form.Label>
             {formData.coding_problems.length !== 0 && !addingProblem ? (
               formData.coding_problems.map((problem, index) => (
@@ -630,7 +629,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 className="switch-right"
                 id="custom-switch-3"
                 type="switch"
-                label="Graded"
+                label="Graded Assessment"
                 onChange={handleGraded}
               />
             </div>
