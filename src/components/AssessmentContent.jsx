@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/components/assessment-content.module.css';
 import questionMark from '../assets/img/assessment-img1.png';
 import happy from '../assets/img/perfect-assessment-robot.png';
-import sad from '../assets/img/assessment-fail.png';
+import sad from '../assets/img/assessment-fail.png'
 import SubmittingModal from './SubmitLoader';
 import ConfirmationModal from './ConfirmationModal';
 import AssessmentRankingModal from './AssessmentRankingModal';
 import { getUserData } from '../utils/userInformation';
 
-export default function AssessmentContent({ status = false, startButton, data = null, time, rank = null, submission = null }) {
+
+
+export default function AssessmentContent({ status = false, startButton, data, time, rank, submission }) {
 
     const user = getUserData();
+
     const [showRanking, setShowRanking] = useState(false);
 
     const handleClose = () => setShowRanking(false);
     const handleShow = () => setShowRanking(true);
 
-    const handleBtn = () => {
+    const handleBtn = () => { 
         if (!status) {
             startButton();
         }
@@ -26,23 +29,24 @@ export default function AssessmentContent({ status = false, startButton, data = 
         const hours = Math.floor(timeInSeconds / 3600);
         const minutes = Math.floor((timeInSeconds % 3600) / 60);
         const seconds = timeInSeconds % 60;
-
+    
         if (hours > 0) {
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            return `${hours.toString().padStart(2, '0')}:${minutes
+                .toString()
+                .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         } else {
-            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            return `${minutes.toString().padStart(2, '0')}:${seconds
+                .toString()
+                .padStart(2, '0')}`;
         }
     };
-
-    if (!data || !submission || !rank) {
-        return <p>Loading...</p>;
-    }
 
     return (
         <>
             <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />
-            {!status ?
+            {!status ? 
             <div className={styles.container}>
+                
                 <div className={styles.title}>
                     <p>{data?.title || "Null"}</p>
                 </div>
@@ -72,7 +76,9 @@ export default function AssessmentContent({ status = false, startButton, data = 
                 </div>
                 <div className={styles.controls}>
                     <button onClick={() => setShowRanking(true)}>View Ranking</button>
-                    {user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>}
+                    { user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>
+                        
+                    }
                 </div>
             </div>
             :
@@ -103,6 +109,10 @@ export default function AssessmentContent({ status = false, startButton, data = 
                             <p>{getOrdinalSuffix(rank?.rank) ?? '--'}</p>
                         </li>
                     </ul>
+                    {/* <div className={styles.robotContainer}>
+                        <img src={imageUsed} alt="" />
+                        <p>{phraseUsed}</p>
+                    </div> */}
                 </div>
                 <div className={styles.controls}>
                     <button onClick={handleShow}>View Ranking</button>
@@ -114,14 +124,15 @@ export default function AssessmentContent({ status = false, startButton, data = 
     );
 }
 
-const LoadingBar = ({ progress }) => {
-    const getColor = (progress) => {
-        if (progress < 50) return 'red';
-        if (progress < 75) return 'yellow';
-        return '#16dd00';
-    };
+    const LoadingBar = ({ progress }) => {
+        const getColor = (progress) => {
+            if (progress < 50) return 'red';
+            if (progress < 75) return 'yellow';
+            return '#16dd00';
+        };
 
     return (
+        <>
         <div className={styles.loadingBarContainer}>
             <div
                 className={styles.loadingBar}
@@ -131,8 +142,10 @@ const LoadingBar = ({ progress }) => {
                 }}
             ></div>
         </div>
+        </>
     );
 };
+
 
 function getOrdinalSuffix(rank) {
     const lastDigit = rank % 10;
@@ -149,17 +162,13 @@ function getOrdinalSuffix(rank) {
     }
 }
 
-const formatTime = (seconds) => {
-    if (isNaN(seconds) || seconds < 0) {
-        return '00:00';
-    }
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-};
 
-function calculateRemainingPercentage(totalTime, pausedTime) {
-    const elapsedTime = totalTime - pausedTime;
-    const elapsedPercentage = (elapsedTime / totalTime) * 100;
-    return 100 - elapsedPercentage;
+// Format seconds into MM:SS
+const formatTime = (seconds) => {
+if (isNaN(seconds) || seconds < 0) {
+    return '00:00';
 }
+const minutes = Math.floor(seconds / 60);
+const remainingSeconds = seconds % 60;
+return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+};

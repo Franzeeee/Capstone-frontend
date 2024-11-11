@@ -17,6 +17,7 @@ import customFetch from '../utils/fetchApi';
 import LoadingPage from './LoadingPage';
 import HomeTemplate from '../templates/HomeTemplate';
 import LogicAssessmentPage from './AssessmentPage/LogicAssessmentPage';
+import { getUserData } from '../utils/userInformation';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
@@ -37,13 +38,8 @@ export default function ClassAssessment() {
     const [done, setDone] = useState(null);
     const [submissionData, setSubmissionData] = useState(null);
 
-    const userData = localStorage.getItem('userData');
-    const [user, setUser] = useState(
-        userData
-            ? JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
-            : null
-    );
-
+    const user = getUserData();
+    
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
     const [currentLesson, setCurrentLesson] = useState(() => {
         if (user.role === 'teacher') {
