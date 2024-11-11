@@ -71,7 +71,7 @@ export default function ProfileSide({ info }) {
         <Dropdown>
           <Dropdown.Toggle
             as="div"
-            className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
+            className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell`}
           >
             {notification.length > 0 || !user?.verified &&
               <Badge value={notification.length} severity="danger"></Badge>
