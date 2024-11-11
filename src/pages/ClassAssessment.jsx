@@ -34,7 +34,7 @@ export default function ClassAssessment() {
     const [timeTaken, setTimeTaken] = useState(0);
     const [isFetching, setIsFetching] = useState(true);
 
-    const [done, setDone] = useState(false);
+    const [done, setDone] = useState(null);
     const [submissionData, setSubmissionData] = useState(null);
 
     const userData = localStorage.getItem('userData');
@@ -220,7 +220,7 @@ export default function ClassAssessment() {
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        {/* <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/> */}
+                        <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
                         {/* <div className={styles.robotContainer}>
                             <img src={perfectRobot} alt="" />
                             <p>Great did an excellent job!</p>
@@ -231,30 +231,36 @@ export default function ClassAssessment() {
                         <button className={`${styles.back}`}>Back</button>
                         <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button>
                     </div> */}
-                <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
-                    <Offcanvas.Body>
-                    <CodeEditor 
-                        data={assessmentData}  
-                        options={{ 
-                            mode: 'Assessment', 
-                            closeOverlay: () => setShow(false), 
-                            timesup: () => setStartAssessment(false),
-                            closeEditor: () => setShow(false),
-                            finished: () => setDone(true),
-                            setRank: (rank) => setRank(rank),
-                            setSubmissionData: (data) => setSubmissionData(data),
-                            setTimeTaken: (time) => setTimeTaken(time),
-                        }} 
-                    />
-                    </Offcanvas.Body>
-                </Offcanvas>
-                <Offcanvas  
-                style={canvasStyle}
-                backdrop="static" keyboard={false} show={startAssessment && !inFullscreen || startAssessment && !focused} onHide={handleClose} >
-                <Offcanvas.Body>
-                        <ExitScreen handleFullscreen={returnFullscreen} focus={focused}/>
-                </Offcanvas.Body>
-                </Offcanvas>
+                { done !== null && !done && (
+                    <>
+                        <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
+                            <Offcanvas.Body>
+                            <CodeEditor 
+                                data={assessmentData}  
+                                options={{ 
+                                    mode: 'Assessment', 
+                                    closeOverlay: () => setShow(false), 
+                                    timesup: () => setStartAssessment(false),
+                                    closeEditor: () => setShow(false),
+                                    finished: () => setDone(true),
+                                    setRank: (rank) => setRank(rank),
+                                    setSubmissionData: (data) => setSubmissionData(data),
+                                    setTimeTaken: (time) => setTimeTaken(time),
+                                }} 
+                            />
+                            </Offcanvas.Body>
+                        </Offcanvas>
+                        <Offcanvas  
+                        style={canvasStyle}
+                        backdrop="static" keyboard={false} show={startAssessment && !inFullscreen || startAssessment && !focused} onHide={handleClose} >
+                        <Offcanvas.Body>
+                                <ExitScreen handleFullscreen={returnFullscreen} focus={focused}/>
+                        </Offcanvas.Body>
+                        </Offcanvas>
+                    </>
+                )
+
+                }
             </div>
         </div>
         </HomeTemplate>
