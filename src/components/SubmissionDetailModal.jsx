@@ -254,6 +254,12 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                                 <p className={styles.details}>{getOrdinalSuffix(data?.rank)}</p>                                            
                                                 </div>
                                             </li>
+                                            <li>
+                                                <p>Exit Full Screen: <span>{data?.cheating_record !== null ? data?.cheating_record.exit_fullscreen : 0}</span></p>
+                                            </li>
+                                            <li>
+                                                <p>Change Tab: <span>{data?.cheating_record !== null ? data?.cheating_record.change_tab : 0}</span></p>
+                                            </li>
                                         </ul>
                                     </div>
                                     </div>
