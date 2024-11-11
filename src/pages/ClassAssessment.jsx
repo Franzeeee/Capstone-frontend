@@ -68,7 +68,7 @@ export default function ClassAssessment() {
         customFetch(`/activity/${activityId}/auth`, 'GET')
             .then(data => {
                 setAssessmentData(data);
-                setAssessmentData("Assessment Data: ", data);
+                setAssessmentData("Fetched Assessment Data: ", data);
             })
             .catch(error => {
                 navigate('/not-found');
