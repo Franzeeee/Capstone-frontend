@@ -91,7 +91,7 @@ export default function AssessmentContent({ status = false, startButton, data, t
                 <div className={styles.content}>
                     <ul>
                         <li>
-                            <p>Time Remaining</p>
+                            <p>Time Taken</p>
                             <LoadingBar progress={((data?.time_limit - time) / data?.time_limit) * 100} />
                             <p>{formatTime(time)}</p>
                         </li>
