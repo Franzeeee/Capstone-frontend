@@ -82,50 +82,43 @@ export default function AssessmentContent({ status = false, startButton, data, t
                 </div>
             </div>
             :
-            // <>
-            //     { submission && status && 
-            //         (
-            //             <div className={styles.container}>
-            //                 <div className={styles.title}>
-            //                     <p>{data?.title || "Assessment Title"}</p>
-            //                 </div>
-            //                 <div className={styles.content}>
-            //                     <ul>
-            //                         <li>
-            //                             <p>Time Taken</p>
-            //                             <LoadingBar progress={((data?.time_limit - time) / data?.time_limit) * 100} />
-            //                             <p>{formatTime(time)}</p>
-            //                         </li>
-            //                         <li>
-            //                             <p>Total Problem</p>
-            //                             <LoadingBar progress={100} />
-            //                             <p>{data?.coding_problems.length}</p>
-            //                         </li>
-            //                         <li>
-            //                             <p>Overall Points</p>
-            //                             <LoadingBar progress={submission?.score || 0}/>
-            //                             <p>{submission?.score || 0}/100</p>
-            //                         </li>
-            //                         <li>
-            //                             <p>Current Rank</p>
-            //                             <LoadingBar progress={100} status={status} />
-            //                             <p>{getOrdinalSuffix(rank?.rank) ?? '--'}</p>
-            //                         </li>
-            //                     </ul>
-            //                     {/* <div className={styles.robotContainer}>
-            //                         <img src={imageUsed} alt="" />
-            //                         <p>{phraseUsed}</p>
-            //                     </div> */}
-            //                 </div>
-            //                 <div className={styles.controls}>
-            //                     <button onClick={handleShow}>View Ranking</button>
-            //                     <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>View Feedback</button>
-            //                 </div>
-            //             </div>
-            //         )
-            //     }
-            // </>
-            "test"
+            <div className={styles.container}>
+                <div className={styles.title}>
+                    <p>{data?.title || "Assessment Title"}</p>
+                </div>
+                <div className={styles.content}>
+                    <ul>
+                        <li>
+                            <p>Time Taken</p>
+                            <LoadingBar progress={((data?.time_limit - time) / data?.time_limit) * 100} />
+                            <p>{formatTime(time)}</p>
+                        </li>
+                        <li>
+                            <p>Total Problem</p>
+                            <LoadingBar progress={100} />
+                            <p>{data?.coding_problems.length}</p>
+                        </li>
+                        <li>
+                            <p>Overall Points</p>
+                            <LoadingBar progress={submission?.score || 0}/>
+                            <p>{submission?.score || 0}/100</p>
+                        </li>
+                        <li>
+                            <p>Current Rank</p>
+                            <LoadingBar progress={100} status={status} />
+                            <p>{getOrdinalSuffix(rank?.rank) ?? '--'}</p>
+                        </li>
+                    </ul>
+                    {/* <div className={styles.robotContainer}>
+                        <img src={imageUsed} alt="" />
+                        <p>{phraseUsed}</p>
+                    </div> */}
+                </div>
+                <div className={styles.controls}>
+                    <button onClick={handleShow}>View Ranking</button>
+                    <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>View Feedback</button>
+                </div>
+            </div>
             }
         </>
     );

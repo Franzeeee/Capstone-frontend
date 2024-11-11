@@ -220,7 +220,7 @@ export default function ClassAssessment() {
                 </div>
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
-                        <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
+                        {/* <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/> */}
                         {/* <div className={styles.robotContainer}>
                             <img src={perfectRobot} alt="" />
                             <p>Great did an excellent job!</p>
