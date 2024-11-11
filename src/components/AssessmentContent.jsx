@@ -86,7 +86,7 @@ export default function AssessmentContent({ status = false, startButton, data, t
             : 
             <div className={styles.container}>
                 <div className={styles.title}>
-                    <p>{data.title || "Assessment Title"}</p>
+                    <p>{data?.title || "Assessment Title"}</p>
                 </div>
                 <div className={styles.content}>
                     <ul>

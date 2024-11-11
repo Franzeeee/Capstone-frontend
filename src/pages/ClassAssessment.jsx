@@ -39,7 +39,9 @@ export default function ClassAssessment() {
 
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(
-        JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
+        userData
+            ? JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
+            : null
     );
 
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
@@ -64,6 +66,11 @@ export default function ClassAssessment() {
     useEffect(() => {
         
         const activityId = location.state?.item?.id;
+
+        if (!activityId) {
+            navigate('/not-found'); // Navigate away if `activityId` is null
+            return;
+        }
 
         // Call customFetch directly here
         customFetch(`/activity/${activityId}/auth`, 'GET')
@@ -208,7 +215,7 @@ export default function ClassAssessment() {
                         <li>/</li>
                         <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
                         <li>/</li>
-                        <li className={`${styles.active}`}>{assessmentData?.title || "Nothing"}</li>
+                        <li className={`${styles.active}`}>{assessmentData?.title || "Assessment Title"}</li>
                     </ul>
                 </div>
                 <div className={styles.lessonContent}>
