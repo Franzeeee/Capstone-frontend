@@ -11,6 +11,8 @@ import { getUserData } from '../utils/userInformation';
 
 
 export default function AssessmentContent({ status = false, startButton, data, time, rank, submission }) {
+    const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
+    const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
     const user = getUserData();
 

@@ -39,7 +39,6 @@ export default function ClassAssessment() {
     const [submissionData, setSubmissionData] = useState(null);
 
     const user = getUserData();
-
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
     const [currentLesson, setCurrentLesson] = useState(() => {
         if (user.role === 'teacher') {
@@ -62,13 +61,18 @@ export default function ClassAssessment() {
     useEffect(() => {
         
         const activityId = location.state?.item?.id;
-        console.log("activityId:", activityId);
+        console.log("Activity ID: ", activityId);
+
+        if (!activityId) {
+            navigate('/not-found'); // Navigate away if `activityId` is null
+            return;
+        }
 
         // Call customFetch directly here
         customFetch(`/activity/${activityId}/auth`, 'GET')
             .then(data => {
                 setAssessmentData(data);
-                setAssessmentData("Fetched Assessment Data: ", data);
+                console.log("Assessment Data: ", data);
             })
             .catch(error => {
                 navigate('/not-found');
@@ -76,7 +80,7 @@ export default function ClassAssessment() {
 
         customFetch(`/submission/${activityId}/${user?.id}`, 'GET')
             .then(data => {
-                console.log("Fetched submission data:", data);
+                console.log("Submission Data: ", data);
                 setSubmissionData(data.data);
                 setTimeTaken(prev => prev + data?.data?.time_taken);
                 setDone(data.exists);
