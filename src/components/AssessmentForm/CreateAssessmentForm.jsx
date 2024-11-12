@@ -137,9 +137,9 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
         description: problem.description, // Keep description
       })),
     };
+    toast.loading("Creating assessment...");
     onSubmit(editMode ? formattedData : formData); // Send formatted data to parent
     } else {
-
       toast.loading("Creating assessment...");
       const data = new FormData();
 
