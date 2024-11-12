@@ -27,23 +27,26 @@ export default function ClassDashboard() {
 
     const { code } = useParams();
     
-    const classData = location.state?.data;
+    const [classData, setClassData] = useState(location.state?.data || null);
 
     useEffect(() => {
-        if(!classData) {
+        if (!classData) {
             customFetch(`/class/${code}`, {
-                method: 'GET'
+                method: 'GET',
             })
             .then(data => {
-                if(data) {
-                    navigate(`/${code}/dashboard`, { state: { verified: true, data: data } });
+                if (data) {
+                    setClassData(data);
+                } else {
+                    navigate('/not-found');
                 }
             })
             .catch(error => {
+                console.error("Error fetching class data:", error);
                 navigate('/not-found');
             });
         }
-    }, [classData]);
+    }, [code, navigate, classData]);
 
     console.log(classData);
 
