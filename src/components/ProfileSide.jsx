@@ -6,6 +6,7 @@ import {
   faClock,
   faEdit,
   faPlus,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import profile from "../assets/img/1x1Robot2.png";
@@ -17,6 +18,8 @@ import LogoutConfirmationModal from "./LogoutConfirmationModal";
 import customFetch from "../utils/fetchApi";
 import { getUserData } from "../utils/userInformation";
 import { format } from "date-fns";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
@@ -24,6 +27,7 @@ export default function ProfileSide({ info }) {
   const [showModal, setShowModal] = useState(false);
   const [profilePicture, setProfilePicture] = useState(profile);
 
+  const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState([]);
 
   const user = getUserData();
@@ -72,14 +76,32 @@ export default function ProfileSide({ info }) {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     customFetch('/events/fetch')
     .then(data => {
       setEvents(data);
     })
     .catch(error => {
       console.error('Error:', error.message);
+    })
+    .finally(() => {
+      setLoading(false);
     });
   }, []);
+
+  const handleDeleteEvent = (id) => {
+    customFetch(`/events/${id}/delete`, {
+      method: "DELETE"
+    })
+    .then(data => {
+      console.log(data);
+      setEvents(events.filter(event => event.id !== id));
+      toast.success("Event deleted successfully");
+    })
+    .catch(error => {
+      console.error('Error:', error.message);
+    });
+  };
 
 
   return (
@@ -134,31 +156,41 @@ export default function ProfileSide({ info }) {
         <p className="text-capitalize">{info ? info.role : "Undefined Role"}</p>
       </div>
       <div className={`${styles.schedule}`}>
-        <p className={`${styles.scheduleText}`}>To-do Scheduler <FontAwesomeIcon style={{fontSize: '.8rem', marginLeft: '3px', cursor: 'pointer'}} icon={faPlus} /></p>
+        <p className={`${styles.scheduleText}`}>To-do Schedule <FontAwesomeIcon style={{fontSize: '.8rem', marginLeft: '3px', cursor: 'pointer'}} icon={faPlus} onClick={() => navigate('/calendar')} /></p>
         <div className={`${styles.activityContainer}`}>
 
-          {
-            events.length > 0 ? events.map((event, index) => {
-              return (
-                <div className={`${styles.card}`}>
+        {loading ? (
+            <p>Loading...</p>
+          ) : (
+            events.length > 0 ? (
+              events.map((event, index) => (
+                <div key={index} className={`${styles.card}`}>
                   <div className={`${styles.activityInfo}`}>
                     <p>{event.title}</p>
                     <p>{event.description}</p>
                     <div className={`${styles.taskInfo}`}>
                       <p>
-                        <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> {formatDate(event.start_date)} - {formatDate(event.end_date)}
+                        <FontAwesomeIcon icon={faClock} /> {formatDate(event.start_date)} - {formatDate(event.end_date)}
                       </p>
                     </div>
-                    <FontAwesomeIcon
-                      title="Edit Activity"
-                      icon={faEdit}
-                      className={`${styles.editActivity}`}
-                    ></FontAwesomeIcon>
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={<Tooltip id={`tooltip-test`}>Delete</Tooltip>}
+                    >
+                        <FontAwesomeIcon
+                          icon={faTrashAlt}
+                          className={`${styles.editActivity}`}
+                          onClick={() => handleDeleteEvent(event.id)}
+                        />
+                    </OverlayTrigger>
                   </div>
                 </div>
-              )
-            }) : "No To-do Activity"
-          }
+              ))
+            ) : (
+              <p>No To-do Activity</p>
+            )
+          )
+        }
 
         </div>
       </div>
