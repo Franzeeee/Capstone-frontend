@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Form, Button, Accordion } from "react-bootstrap";
 import styles from "../../assets/css/components/create-assessment-form.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faFile, faFileAlt, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileWord, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faFile, faFileAlt, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileWord, faSpinner, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import customFetch from "../../utils/fetchApi"
@@ -12,6 +12,8 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
+
+  const [processing, setProcessing] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -135,9 +137,10 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
         description: problem.description, // Keep description
       })),
     };
+    toast.loading("Creating assessment...");
     onSubmit(editMode ? formattedData : formData); // Send formatted data to parent
     } else {
-
+      toast.loading("Creating assessment...");
       const data = new FormData();
 
     // Ensure all fields are properly populated
@@ -166,12 +169,14 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
           body: data,
       })
       .then(data => {
+        toast.dismiss();
         toast.success("Assessment created successfully");
         handleClose();
       })
-      .catch(err => console.log("Error:", err));
-
-
+      .catch(err => {
+        toast.dismiss();
+        toast.error("Failed to create assessment");
+      })
 
       }
   };
@@ -640,7 +645,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
         <Button className={styles.cancelCanvas} onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button type="submit" className={styles.Submit}>{editMode.active ? "Save" : "Submit"}</Button>
+        <Button type="submit" disabled={processing} className={styles.Submit}>{processing ? <FontAwesomeIcon icon={faSpinner} spin /> : editMode.active ? "Save" : "Submit"}</Button>
       </div>
     </Form>
   );

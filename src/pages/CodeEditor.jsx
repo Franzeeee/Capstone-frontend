@@ -51,11 +51,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const [testGenLevel, setTestGenLevel] = useState(0);
 
     const [cheatingData, setCheatingData] = useState({
-        exit_fullscreen: options.cheatingData[0],
-        change_tab: options.cheatingData[1],
+        exit_fullscreen: 0,
+        change_tab: 0,
     });
+    
     useEffect(() => {
-        if (options && options.cheatingData) {
+        if ( mode === "Assessment" && options && options.cheatingData !== null || options.cheatingData !== undefined) {
             setCheatingData({
                 exit_fullscreen: options.cheatingData[0],
                 change_tab: options.cheatingData[1],
