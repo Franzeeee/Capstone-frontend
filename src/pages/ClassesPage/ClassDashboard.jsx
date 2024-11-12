@@ -3,7 +3,7 @@ import HomeTemplate from '../../templates/HomeTemplate';
 import styles from '../../assets/css/pages/ClassesPage/class-dashboard.module.css';
 import ProfileSide from '../../components/ProfileSide';
 import { getUserData } from '../../utils/userInformation';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
 import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,28 @@ export default function ClassDashboard() {
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = window.location.pathname;
+
+    const { code } = useParams();
+    
     const classData = location.state?.data;
+
+    useEffect(() => {
+        if(!classData) {
+            customFetch(`/class/${code}`, {
+                method: 'GET'
+            })
+            .then(data => {
+                if(data) {
+                    navigate(`/${code}/dashboard`, { state: { verified: true, data: data } });
+                }
+            })
+            .catch(error => {
+                navigate('/not-found');
+            });
+        }
+    }, [classData]);
+
+    console.log(classData);
 
     const [isLoading, setIsLoading] = useState(true);
 

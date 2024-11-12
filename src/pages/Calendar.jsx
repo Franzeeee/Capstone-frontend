@@ -50,7 +50,6 @@ export default function Calendar() {
   useEffect(() => {
     customFetch('/events/fetch')
       .then(data => {
-        console.log('Data:', data);
 
         const formattedEvents = data.map(event => {
           const startDateTime = `${event.start_date}T${event.start_time}`;
