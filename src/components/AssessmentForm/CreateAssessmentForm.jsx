@@ -8,7 +8,7 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import customFetch from "../../utils/fetchApi"
 import { toast } from "react-toastify";
 
-const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, editMode = {active: false, data: {}}  }) => {
+const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleClose, editMode = {active: false, data: {}}  }) => {
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -265,6 +265,43 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
     e.preventDefault();
   }
 
+  const [generating, setGenerating] = useState(false);
+
+  
+  const generateProblem = () => {
+    if(formData.title !== "" || formData.description !== "") {
+      setGenerating(true);
+      const problemForm = new FormData();
+      problemForm.append("title", formData.title);
+      problemForm.append("description", formData.description);
+      problemForm.append('subject', subject);
+      customFetch(`/assessment/coding/generate`,{
+        method: 'POST',
+        contentType: 'application/json',
+        body: problemForm
+      })
+      .then(data => {
+        console.log(convertToProblemObject(data.result));
+        const generatedProblem = convertToProblemObject(data.result);
+        setTempProblem({
+          problem_title: generatedProblem.problemName,
+          problem_description: generatedProblem.problemDescription,
+          sample_input: generatedProblem.sampleInput,
+          expected_output: generatedProblem.sampleOutput,
+        })
+      })
+      .catch(error => {
+        console.error('Error:', error.message);
+      })
+      .finally(() => {
+        setGenerating(false);
+      }); 
+    } else {
+      toast.error("Please fill in the title and description first");
+    }
+    
+  }
+
   return (
     <Form encType="multipart/form-data" onSubmit={handleSubmit}>
       {activeForm === "logic" ? (
@@ -416,6 +453,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
                 className={styles.addProblem}
                 icon={faCirclePlus}
               />
+              <button type="button" onClick={!generating ? generateProblem : ""} disabled={generating} className={`${styles.generateAssessmentBtn} ${addingProblem ? '' : 'd-none'}`}>Generate Assessment Problems</button>
             </Form.Label>
             {formData.coding_problems.length !== 0 && !addingProblem ? (
               formData.coding_problems.map((problem, index) => (
@@ -466,7 +504,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
                 </Accordion>
               ))
             ) : (
-              <div className={styles.problemContainer}>
+              <div className={`${styles.problemContainer} ${generating ? styles.isGenerting : ""}`}>
                 <div className={styles.formContainer}>
                   <Form.Group
                     className={`${styles.formGroup} mb-2`}
@@ -591,7 +629,7 @@ const CreateAssessmentForm = ({ activeForm, classId, onSubmit, handleClose, edit
                 className="switch-right"
                 id="custom-switch-3"
                 type="switch"
-                label="Graded"
+                label="Graded Assessment"
                 onChange={handleGraded}
               />
             </div>
@@ -677,4 +715,22 @@ function secondsToTime(seconds) {
 
       return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 
+}
+function convertToProblemObject(input) {
+  // Define the object to hold the structured data
+  let problemObject = {};
+
+  // Use regular expressions to match each section (ProblemName, ProblemDescription, etc.)
+  const problemNameMatch = input.match(/ProblemName:\s*([^\n]+)/);
+  const problemDescriptionMatch = input.match(/ProblemDescription:\s*([^\n]+(?:\n.+)*)\nSampleInput:/);
+  const sampleInputMatch = input.match(/SampleInput:\s*([^\n]+(?:\n.+)*)\nSampleOutput:/);
+  const sampleOutputMatch = input.match(/SampleOutput:\s*(.*)/);
+
+  // Assign the matched content to the object if found, else assign empty string
+  problemObject.problemName = problemNameMatch ? problemNameMatch[1].trim() : '';
+  problemObject.problemDescription = problemDescriptionMatch ? problemDescriptionMatch[1].trim() : '';
+  problemObject.sampleInput = sampleInputMatch ? sampleInputMatch[1].trim() : '';
+  problemObject.sampleOutput = sampleOutputMatch ? sampleOutputMatch[1].trim() : '';
+
+  return problemObject;
 }

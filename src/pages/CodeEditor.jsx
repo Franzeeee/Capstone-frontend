@@ -50,6 +50,21 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const [testGenLevel, setTestGenLevel] = useState(0);
 
+    const [cheatingData, setCheatingData] = useState({
+        exit_fullscreen: options.cheatingData[0],
+        change_tab: options.cheatingData[1],
+    });
+    useEffect(() => {
+        if (options && options.cheatingData) {
+            setCheatingData({
+                exit_fullscreen: options.cheatingData[0],
+                change_tab: options.cheatingData[1],
+            });
+        };
+        console.log(cheatingData)
+    }, [options, options.cheatingData]);
+
+
 
     // Codes for the modes
     // Code Editor, LessonTest, Lesson Assessments
@@ -692,10 +707,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     // Extract the score from the response message if it's included as "Total Score: X points"
                     const scoreMatch = response.message.match(/Total Score: (\d+)/);
                     const feedback = response.message.match(/Feedback: (.+)/);
+                    const feedback2 = parseFeedback(response.message);
+                    
+                    const fb = feedback2.feedback;
+                    
                     if (scoreMatch) {
                         const score = parseInt(scoreMatch[1], 10);
                         totalScore += score; // Add score to the total 
-                        submissionFeedback += feedback[1];
+                        submissionFeedback += fb;
 
                         updatedAssessmentData[index] = { ...updatedAssessmentData[index], score };
                     }
@@ -729,6 +748,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     status: 'graded',
                     time_taken: timeConsumed,
                     feedback: submissionFeedback,
+                    exit_fullscreen: cheatingData.exit_fullscreen,
+                    change_tab: cheatingData.change_tab,
                     coding_problem_codes: updatedAssessmentData.map(assessment => ({
                         problem_id: assessment.problem_id,
                         code: assessment.code,
@@ -740,6 +761,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     console.log('Response:', response);
                     options.setRank({rank: response.rank});
                     options.setSubmissionData(response.submission);
+                    options.setFeedback({feedback: submissionFeedback});
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
@@ -1185,3 +1207,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 };
 
 export default CodeEditor;
+
+function parseFeedback(input) {
+    // Define the object to hold the structured data
+    let feedbackObject = {};
+  
+    // Use regular expressions to extract Score and Feedback
+    const scoreMatch = input.match(/Score:\s*(\d+)/);  // Extracts the score as a number
+    const feedbackMatch = input.match(/Feedback:\s*(.*)/);  // Extracts the feedback text
+  
+    // Assign the matched content to the object if found, else assign empty string
+    feedbackObject.score = scoreMatch ? parseInt(scoreMatch[1].trim()) : 0;  // Default to 0 if no score
+    feedbackObject.feedback = feedbackMatch ? feedbackMatch[1].trim() : '';
+  
+    return feedbackObject;
+  }

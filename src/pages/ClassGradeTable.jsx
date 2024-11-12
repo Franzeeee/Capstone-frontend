@@ -17,7 +17,8 @@ import { Offcanvas } from 'react-bootstrap';
 import CreateAssessmentForm from '../components/AssessmentForm/CreateAssessmentForm';
 import SubmissionDetailModal from '../components/SubmissionDetailModal';
 import { Form, FormGroup, Button } from 'react-bootstrap';
-
+import { Tab, Tabs } from 'react-bootstrap';
+import profile from '../assets/img/1x1Robot2.png';
 
 
 
@@ -43,6 +44,18 @@ export default function ClassGradeTable() {
     const [showDistributionMod, setShowDistributionMod] = useState(false);
     const [showStudentGrade, setShowStudentGrade] = useState(false);
     const [studentSubmission, setStudentSubmission] = useState(null);
+
+    const [studentInfo, setStudentInfo] = useState(null);
+    const [studentScores, setStudentScores] = useState(null);
+    const [assessmentTotal, setAssessmentTotal] = useState(0);
+    const [finalAssessmentTotal, setFinalAssessmentTotal] = useState(0);
+    const [allPoints, setAllPoints] = useState({
+        assessment: 0,
+        finalAssessment: 0
+    });
+    const [finalGrade, setFinalGrade] = useState(0);
+    const [gradeId, setGradeId] = useState(null);
+
 
 
     // handlers for modals
@@ -159,19 +172,102 @@ export default function ClassGradeTable() {
         setShowStudentGrade(false);
     }
 
-    const openShowStudentGrade = (id) => {
+    const [isFetching, setIsFetching] = useState(false);
+
+    const openShowStudentGrade = (id, gradeId) => {
+        setGradeId(gradeId);
         setShowStudentGrade(true);
+        setIsFetching(true);
         customFetch(`/grades/${classData.id}/student/${id}/scores`,{
             method: 'GET'
         })
-        .then(data => {
+        .then(data => { 
             setStudentSubmission(data); 
+            setStudentInfo({
+                name: data[0]?.student_name,
+                email: data[0]?.student_email
+            })
+            setStudentScores(data);
+            const filteredData = data.filter(score => score.final_assessment === 0);
+
+            setAssessmentTotal(filteredData.reduce((acc, score) => acc + score?.submission_score, 0));
+            
+            const finalAssessmentData = data.filter(score => score.final_assessment === 1);
+            setFinalAssessmentTotal(finalAssessmentData.reduce((acc, score) => acc + score?.submission_score, 0));
+
+            setAllPoints({
+                assessment: filteredData.reduce((acc, score) => acc + score?.activity_points, 0),
+                finalAssessment: finalAssessmentData.reduce((acc, score) => acc + score?.activity_points, 0),
+            });
+            
         })
         .catch(error => {
             console.error('Error:', error.message);
         })
+        .finally(() => {
+            setIsFetching(false);
+        });
     }
 
+    useEffect(() => {
+        setIsFetching(false);
+        
+        // Calculate percentages based on allPoints
+        const assessmentPercentage = allPoints.assessment !== 0
+            ? (assessmentTotal / allPoints.assessment) * 100
+            : 0;
+        
+        const finalAssessmentPercentage = allPoints.finalAssessment
+            ? (finalAssessmentTotal / allPoints.finalAssessment) * 100
+            : 0;
+    
+        // If there is no final assessment, apply 100% of the grade to the assessment
+        const calculatedFinalGrade = finalAssessmentTotal === 0
+            ? (assessmentPercentage * (100 / 100)) // 100% for assessment
+            : (assessmentPercentage * (assessmentPercent / 100)) + 
+              (finalAssessmentPercentage * (finalAssessmentPercent / 100));
+    
+        setFinalGrade(Math.round(calculatedFinalGrade * 100) / 100);
+    }, [assessmentTotal, finalAssessmentTotal, allPoints, assessmentPercent, finalAssessmentPercent]);
+    
+
+    const [key, setKey] = useState('Assessments Scores');
+
+    const updateAssessmentPoints = (e) => {
+        const value = e.target.value;
+        setAssessmentTotal(value);
+    }
+
+    const updateFinalAssessmentPoints = (e) => {
+        const value = e.target.value;
+        setFinalAssessmentTotal(value);
+    }
+
+    const updateFinalGrade = (e) => {
+        const value = e.target.value;
+        setFinalGrade(value);
+    }
+
+    const submitGrade = () => {
+        toast.loading('Grade submission in progress...');
+        const gradeData = new FormData(); 
+        gradeData.append('final_grade', parseInt(finalGrade));
+
+        customFetch(`/grades/${gradeId}/update`, {
+            method: 'POST',
+            contentType: 'application/json',
+            body: gradeData
+        })
+        .then(data => {
+            toast.dismiss();
+            toast.success('Grade updated successfully');
+        })
+        .catch(error => {
+            toast.dismiss();
+            toast.error('Failed to update grade');
+        });
+        
+    }
 
     return (
         <HomeTemplate>
@@ -193,23 +289,92 @@ export default function ClassGradeTable() {
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Assessment (%)</Form.Label>
-                                <Form.Control type="number" placeholder="Assessment" value={assessmentPercent} onChange={handleAssessmentPercent} />
+                                <Form.Control type="number" placeholder="Assessment" defaultValue={assessmentPercent} onChange={handleAssessmentPercent} />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>Final Assessment (%)</Form.Label>
-                                <Form.Control type="number" placeholder="Final Assessment" value={finalAssessmentPercent} onChange={handleFinalAssessmentPercent} />
+                                <Form.Control type="number" placeholder="Final Assessment" defaultValue={finalAssessmentPercent} onChange={handleFinalAssessmentPercent} />
                             </Form.Group>
                             <Form.Label>Remaining: {remainingPercentage}%</Form.Label>
                         </Form>
                         <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right'}}>Save</Button>
                     </Modal.Body>
                 </Modal>
-                <Modal show={showStudentGrade}>
+                <Modal size='lg' static show={showStudentGrade}>
                     <Modal.Header closeButton onClick={closeShowStudentGrade}>
-                        <Modal.Title>Modal title</Modal.Title>
+                        <Modal.Title>Upload Final Grade</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Modal body text goes here.</p>
+                    <Tabs
+                        id="controlled-tab-example"
+                        activeKey={key}
+                        onSelect={(k) => setKey(k)}
+                        className="mb-3"
+                    >
+                        <Tab eventKey="Assessments Scores" title="Final Grade">
+                            <div className={styles.studentProfile}>
+                                <div className={styles.profilePic}>
+                                    <img src={profile} alt="" />
+                                </div>
+                                <div className={styles.userInfo}>
+                                    <p>{studentInfo && studentInfo?.name || "Loading Student Name..."}</p>
+                                    <p>{studentInfo && studentInfo?.email || "Loading Email..."}</p>
+                                </div>
+                                <div className={styles.formContainer}>
+                                    <form action="">
+                                        <div className={styles.formGroup}>
+                                            <label htmlFor="assessmentPoints">Assessment</label>
+                                            <div>
+                                                <input type="text" name='assessment_points' disabled value={!isFetching ? assessmentTotal : "--"} onChange={updateAssessmentPoints} />
+                                                <p>/ {allPoints?.assessment}</p>
+                                            </div>
+                                        </div>
+                                        <div className={`${styles.formGroup} ${styles.finalAssessment}`}>
+                                            <label htmlFor="assessmentPoints">Final Assessment</label>
+                                            <div>
+                                                <input type="text" name='final_assessment_points'  disabled value={!isFetching ? finalAssessmentTotal : "--"} onChange={updateFinalAssessmentPoints} />
+                                                <p>/ {allPoints?.finalAssessment}</p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.formGroup}>
+                                            <label htmlFor="assessmentPoints" className={styles.finalLabel}>Final Grade</label>
+                                            <div>
+                                                <input type="text" value={!isFetching ? finalGrade : 0} onChange={updateFinalGrade} />
+                                                <p>%</p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div className={styles.header}>
+                                <div>
+                                    <p>Assessment Title</p>
+                                </div>
+                                <div>
+                                    <p>Due Date</p>
+                                </div>
+                                <div>
+                                    <p>Final Score</p>
+                                </div>
+                            </div>
+                            <div className={styles.userScoresContainer}>
+                                { studentScores !== null && studentScores.length > 0 && studentScores.map((score, index) => (
+                                    <div key={index} className={`${styles.assessmentCard} ${score?.final_assessment === 1 ? styles.borderLeftAssign : ""}`}>
+                                        <div>
+                                            <p>{score?.activity_title || "Assessment Title"}</p>
+                                        </div>
+                                        <div>
+                                            <p>{score?.end_date === null ? "No Due Date" : formatDate(score?.end_date)}</p>
+                                        </div>
+                                        <div>
+                                            <p><span style={{fontWeight: '600', color: 'black'}}>{score?.submission_score}</span> / 100</p>
+                                        </div>
+                                    </div>    
+                                ))}
+                            </div>
+                            <button onClick={submitGrade} className={`mt-3 float-end ${styles.saveGrade}`}>Save</button>
+                        </Tab>
+                        </Tabs>
                     </Modal.Body>
                 </Modal>
                 <div className={`${styles.contentContainer}`}>
@@ -286,14 +451,14 @@ export default function ClassGradeTable() {
                                                     <tr key={grade.id}>
                                                         <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
                                                         <td>{grade.student.name}</td>
-                                                        <td style={{textAlign: 'center'}}>{grade?.final_grade}</td>
+                                                        <td style={{textAlign: 'center'}}>{grade?.final_grade} %</td>
                                                         <td>{grade?.remarks}</td>
-                                                        <td style={{ textAlign: 'center' }}>
+                                                        <td style={{ textAlign: 'center' }} onClick={() => openShowStudentGrade(grade?.student?.id, grade?.id)}>
                                                         <OverlayTrigger
                                                             placement="bottom"
                                                             overlay={<Tooltip id={`tooltip-test`}>Final Grade</Tooltip>}
                                                         >
-                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} onClick={() => openShowStudentGrade(grade.id)} /></p>
+                                                            <p className={styles.finalGradeBtn}><FontAwesomeIcon fade icon={faChartBar} /></p>
                                                         </OverlayTrigger>
                                                         </td>
                                                     </tr>
@@ -337,4 +502,13 @@ export default function ClassGradeTable() {
             </div>
         </HomeTemplate>
     );
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        month: 'short', // Abbreviated month, e.g., "Jul"
+        day: 'numeric', // Numeric day, e.g., "2"
+        year: 'numeric' // Full year, e.g., "2003"
+    });
 }

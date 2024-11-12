@@ -96,7 +96,7 @@ export default function Class() {
                     {
                         user.role === 'teacher' && <AnnouncementForm />
                     }
-                    <CreateAssessment classId={classInfo.id} handleChangePage={handleActivePage}/>
+                    <CreateAssessment subject={classInfo?.subject} classId={classInfo.id} handleChangePage={handleActivePage}/>
                     {
                         activePage === 'default' && <ClassContents data={{courseId: classInfo.id, subject: classInfo.subject}} code={code} className={classInfo?.name}/>
                     }

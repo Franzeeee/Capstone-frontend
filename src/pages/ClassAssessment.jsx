@@ -22,6 +22,9 @@ import { getUserData } from '../utils/userInformation';
 export default function ClassAssessment() {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [totalLeaveFullsreen, setTotalLeaveFullscreen] = useState(0);
+    const [totalAltTab, setTotalAltTab] = useState(0);
     
     const [assessment, setAssessment] = useState(location.state?.item || {});
     const [startAssessment, setStartAssessment] = useState(false);
@@ -37,6 +40,11 @@ export default function ClassAssessment() {
 
     const [done, setDone] = useState(null);
     const [submissionData, setSubmissionData] = useState(null);
+    const [feedback, setFeedback] = useState(null);
+
+    useEffect(() => {
+        console.log(feedback);
+    }, [feedback]);
 
     const user = getUserData();
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
@@ -85,12 +93,17 @@ export default function ClassAssessment() {
             .then(data => {
                 console.log("Submission Data: ", data);
                 setSubmissionData(data.data);
+                setFeedback(data?.feedback);
                 setTimeTaken(prev => prev + data?.data?.time_taken);
                 setDone(data.exists);
                 setRank({
                     rank: data?.rank,
                     total: data?.total_submissions
                 });
+                if(data?.cheating_record !== null) {
+                    setTotalLeaveFullscreen(data?.cheating_record?.exit_fullscreen);
+                    setTotalAltTab(data?.cheating_record?.change_tab);
+                }
             })
             .catch(error => {
                 // navigate('/not-found');
@@ -169,12 +182,6 @@ export default function ClassAssessment() {
         return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
     }
 
-    document.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement) {
-        // If the page is in fullscreen mode, attempt to clear the clipboard
-        clearClipboard();
-    }
-});
     return (
         <HomeTemplate>
         <div className={`${styles.container}`}>
@@ -222,7 +229,7 @@ export default function ClassAssessment() {
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
                         { activityId && assessmentData !== null && (
-                            <AssessmentContent status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
+                            <AssessmentContent antiCheat={[totalAltTab, totalLeaveFullsreen]} feedback={feedback} status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
                             )
                         }
                         {/* <div className={styles.robotContainer}>
@@ -240,9 +247,11 @@ export default function ClassAssessment() {
                         <Offcanvas backdrop="static" keyboard={false} show={show} onHide={handleClose} placement='bottom' className={styles.fullscreenOffcanvas}>
                             <Offcanvas.Body>
                             <CodeEditor 
-                                data={assessmentData}  
+                                data={assessmentData}
+                                
                                 options={{ 
                                     mode: 'Assessment', 
+                                    cheatingData: [totalLeaveFullsreen, totalAltTab],
                                     closeOverlay: () => setShow(false), 
                                     timesup: () => setStartAssessment(false),
                                     closeEditor: () => setShow(false),
@@ -250,6 +259,7 @@ export default function ClassAssessment() {
                                     setRank: (rank) => setRank(rank),
                                     setSubmissionData: (data) => setSubmissionData(data),
                                     setTimeTaken: (time) => setTimeTaken(time),
+                                    setFeedback: (feedback) => setFeedback(feedback),
                                 }} 
                             />
                             </Offcanvas.Body>
@@ -258,7 +268,12 @@ export default function ClassAssessment() {
                         style={canvasStyle}
                         backdrop="static" keyboard={false} show={startAssessment && !inFullscreen || startAssessment && !focused} onHide={handleClose} >
                         <Offcanvas.Body>
-                                <ExitScreen handleFullscreen={returnFullscreen} focus={focused}/>
+                                <ExitScreen 
+                                    handleFullscreen={returnFullscreen}
+                                    focus={focused} 
+                                    addLeaveFullscreen={() => setTotalLeaveFullscreen(prev => prev + 1)}
+                                    addAltTab={() => setTotalAltTab(prev => prev + 1)}
+                                />
                         </Offcanvas.Body>
                         </Offcanvas>
                     </>

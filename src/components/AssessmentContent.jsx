@@ -7,14 +7,19 @@ import SubmittingModal from './SubmitLoader';
 import ConfirmationModal from './ConfirmationModal';
 import AssessmentRankingModal from './AssessmentRankingModal';
 import { getUserData } from '../utils/userInformation';
+import { Modal, ModalBody, ModalHeader } from 'react-bootstrap';
 
 
 
-export default function AssessmentContent({ status = false, startButton, data, time, rank, submission }) {
+export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
     const user = getUserData();
+
+    const [feedbackData, setFeedbackData] = useState(feedback);
+
+    const [showFeedback, setShowFeedback] = useState(false);
 
     const [showRanking, setShowRanking] = useState(false);
 
@@ -26,6 +31,10 @@ export default function AssessmentContent({ status = false, startButton, data, t
             startButton();
         }
     };
+
+    useEffect(() => {
+        feedback?.feedback !== '' && setFeedbackData(feedback);
+    }, [feedback]);
 
     const timeFormatter = (timeInSeconds) => {
         const hours = Math.floor(timeInSeconds / 3600);
@@ -43,9 +52,25 @@ export default function AssessmentContent({ status = false, startButton, data, t
         }
     };
 
+    const feedbackModal = () => {
+        setShowFeedback(true);
+    }
+
+    const closeFeedbackModal = () => {
+        setShowFeedback(false);
+    }
+
     return (
         <>
             <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />
+            <Modal show={showFeedback}>
+                <ModalHeader closeButton onClick={closeFeedbackModal}>Feedback</ModalHeader>
+                <ModalBody>
+                    <p>
+                        {feedbackData?.feedback}
+                    </p>
+                </ModalBody>
+            </Modal>
             {!status ? 
             <div className={styles.container}>
                 
@@ -111,14 +136,20 @@ export default function AssessmentContent({ status = false, startButton, data, t
                             <p>{getOrdinalSuffix(rank?.rank) ?? '--'}</p>
                         </li>
                     </ul>
-                    {/* <div className={styles.robotContainer}>
-                        <img src={imageUsed} alt="" />
-                        <p>{phraseUsed}</p>
-                    </div> */}
+                </div>
+                <div className={`${styles.antiCheatStats}`}>
+                    <div className={`${antiCheat[0] > 1 ? styles.alerted : ""}`}>
+                        <p>{antiCheat[0]}</p>
+                        <p>Exit Fullscreen</p>
+                    </div>
+                    <div className={`${antiCheat[1] > 1 ? styles.alerted : ""}`}>
+                        <p>{antiCheat[0]}</p>
+                        <p>Change Tab</p>
+                    </div>
                 </div>
                 <div className={styles.controls}>
                     <button onClick={handleShow}>View Ranking</button>
-                    <button disabled={status !== 'pending'} className={`${status !== 'pending' && styles.disableButton}`} onClick={handleBtn}>View Feedback</button>
+                    <button type='button' disabled={!feedbackData} className={`${feedbackData ? "" : styles.disableButton}`} onClick={() => setShowFeedback(true)}>View Feedback</button>
                 </div>
             </div>
             }

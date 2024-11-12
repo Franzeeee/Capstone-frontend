@@ -374,3 +374,190 @@
 .finalGradeBtn:hover {
     color: #293af0e1;
 }
+
+.contentContaner {
+    padding: 10px;
+    border: 1px solid black;
+    width: 100%;
+}
+.finalGradeContainer {
+    max-height: 400px;
+    min-height: 300px;
+}
+.studentProfile {
+    width: 100%;
+    padding: 5px;
+    border: 1.5px solid rgb(237, 237, 237);
+    box-shadow: 0px 2px 2px #e0e0e0;
+    display: grid;
+    grid-template-columns: 100px .6fr 1fr;
+    grid-template-rows: 80px;
+    align-items: center;
+
+}
+.profilePic {
+    width: 75%;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    background-color: rgb(239, 239, 239);
+    margin-left: .5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profilePic img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.userInfo {
+    width: 100%;
+    height: 100%;
+    color: black;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    line-height: 1.1;
+}
+.userInfo p:first-of-type {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.userInfo p:nth-child(2) {
+    font-size: .8rem;
+}
+.userScoresContainer {
+    max-height: 250px !important;
+    min-height: 100px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-right: 5px;
+}
+.userScoresContainer::-webkit-scrollbar {
+    width: 5px;
+}
+.userScoresContainer::-webkit-scrollbar-thumb {
+    background-color: #b9b9b9;
+}
+
+.header, .assessmentCard {
+    width: 100%;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: .5fr .3fr .2fr;
+}
+.header div {
+    color: black;
+    padding-inline: 5px;
+    margin-bottom: 5px;
+}
+.header div p {
+    font-size: .85rem;
+    font-weight: 500;
+}
+
+.assessmentCard {
+    padding: 15px 0;
+    border: 1px solid rgb(209, 209, 209);
+    color: black;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #e7e7e7;
+    margin-top: 0 !important;
+    border-left: 3px solid #63179d;
+}
+.assessmentCard div {
+    padding-inline: 10px;
+}
+.assessmentCard div p {
+    font-size: .8rem;
+    font-weight: 500;
+    max-width: 90%;
+    flex-wrap: wrap;
+}
+.assessmentCard div:last-child {
+    margin-left: 5px;
+}
+.saveGrade {
+    border: none;
+    padding: 5px 35px;
+    color: #000 !important;
+    background: #5d5dd4e4;
+    border-radius: 5px;
+}
+.formContainer {
+    width: 100%;
+    height: 100%;
+}
+.formContainer form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 100%;
+    color: black !important;
+    padding-block: 10px;
+    gap: 10px;
+}
+.formContainer form label {
+    font-size: .7rem;
+    position: relative;
+}
+.formContainer form .formGroup {
+    background-color: #ebebeb9b;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-left: 7px;
+    width: auto;
+}
+.formContainer .formGroup div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.formContainer .formGroup div p {
+    font-size: .8rem;
+    font-weight: 500;
+    margin: 0;
+}
+.formContainer form input {
+    max-width: 60px;
+    border: transparent;
+    background-color: transparent;
+    padding: 5px;
+    font-size: .9rem;
+}
+.formContainer .formGroup input:focus {
+    outline: none;
+}
+.formContainer form .formGroup {
+    border-bottom: 3px solid #63179d;
+}
+.formContainer form .finalLabel{
+    color: rgb(33, 0, 218);
+    font-size: .8rem;
+    font-weight: 700;
+}
+.formContainer form .formGroup:last-child {
+    border: 2px solid rgb(84, 8, 206);
+}
+.formContainer form .formGroup:last-child input {
+    font-size: 1.1rem;
+}
+
+.isFinal {
+    color: #28bbff !important;
+}
+.finalAssessment {
+    border-color: #006aff !important;
+}
+
+.borderLeftAssign {
+    border-left: 3px solid #28bbff;
+}
