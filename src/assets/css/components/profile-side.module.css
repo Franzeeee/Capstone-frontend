@@ -72,6 +72,10 @@
 .scheduleText, .profileText {
     font-weight: 600;
 }
+.scheduleText svg:hover {
+    color: #4c00ff;
+    transition: all .3s ease;
+}
 .activityInfo{
     position: relative;
 }
