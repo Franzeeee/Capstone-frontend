@@ -59,7 +59,7 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
     const closeFeedbackModal = () => {
         setShowFeedback(false);
     }
-
+    
     return (
         <>
             <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />

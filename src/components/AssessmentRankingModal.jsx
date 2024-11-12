@@ -80,7 +80,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                 console.error('Error:', error.message);
             })
             .finally(() => setIsFetching(false));
-    }, [assessmentInfo.id]);
+    }, [assessmentInfo.id, show]);
 
     return (
         <>

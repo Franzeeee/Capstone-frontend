@@ -132,7 +132,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const [timer, setTimer] = useState(0)
     const [isActive, setIsActive] = useState(false);
-    const [isCorrect, setIsCorrect] = useState();
+    const [isCorrect, setIsCorrect] = useState(null);
+
 
     useEffect(() => {
         if (timer <= 0 || !isActive) return;
@@ -461,6 +462,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             withAssistance: false
         }));
         if(testGenLevel == 4) {
+            setIde(challangeDetails?.language === 'python' ? 0 : 1)
             setGenerating(true)
             generateProblem()
         }
@@ -487,19 +489,24 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     }
 
     const submitCode = () => {
-        if(code === "") {
+        if(code === "" && challangeDetails?.language === 'python') {
             alert("Please provide a code to evaluate.")
+            return;
+        } else if( challangeDetails?.language === 'html_css' && htmlCode === "") {
+            alert("Please provide the Web Development code to evaluate.")
             return;
         }
         const messageData = new FormData();
-        let prompt = `Evaluate the following code based on the problem description. If the code solves the problem correctly, return "Correct". If the code is incorrect, incomplete, or no code is provided, return "Wrong". Code: "${code}" Problem: "${problem}"`;
+
+        let codeToSend = challangeDetails?.language === 'python' ? code : htmlCode + cssCode;
+
+        let prompt = `Evaluate the following code based on the problem description. If the code solves the problem correctly, return "Correct". If the code is incorrect, incomplete, or no code is provided, return "Wrong". Code: "${codeToSend}" Problem: "${problem}"`;
         messageData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
             contentType: 'application/json',
             body: messageData
         })
-        .then(response => response.json())
         .then(data => {
             setIsCorrect(data.message === "Correct");
             startPractice();
@@ -511,6 +518,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         })
         .catch(error => console.error(error));
     }
+
+    useEffect(() => {
+
+    }, [testGenLevel])
+
 
     const [ide, setIde] = useState(0);
 
@@ -757,7 +769,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 }),
             })
                 .then(response => {
-                    console.log('Response:', response);
                     options.setRank({rank: response.rank});
                     options.setSubmissionData(response.submission);
                     options.setFeedback({feedback: submissionFeedback});
@@ -1121,7 +1132,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 testGenLevel === 5 && 
                                 <>
                                     <p className={`${styles.colorBlack}`}>Coding Challange</p>
-                                    <div className={`${styles.option1Container}`}>
+                                    <div className={`${styles.option1Container} ${problem !== '' && !generating ? styles.challangeTextContainer : ""}`}>
                                         {
                                             generating ? ( 
                                             <>
@@ -1138,7 +1149,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                         }
                                     </div>
                                     <div className={`${styles.controller}`}>
-                                        <button className={`${styles.submitCode}`} disabled={generating} onClick={submitCode}>Submit Code</button>
+                                        <button className={`${styles.submitCode} ${generating ? styles.disabledSubmitBtn : ""}`} disabled={generating} onClick={submitCode}>Submit Code</button>
                                     </div>
                                 </>
                             }
