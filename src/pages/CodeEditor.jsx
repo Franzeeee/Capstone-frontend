@@ -62,7 +62,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 change_tab: options.cheatingData[1],
             });
         };
-        console.log(cheatingData)
     }, [options, options.cheatingData]);
 
 
@@ -183,13 +182,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const generateProblem = () => {
         
+        const msgData = new FormData();
         let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.(no hints)`
 
+        msgData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
-            body: JSON.stringify({ "userMessage": prompt })
+            contentType: 'application/json',
+            body: msgData
         })
-        .then(response => response.json())
         .then(data => {
             setProblem(data.message)
             setIsActive(true)
@@ -254,14 +255,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     }
 
     useEffect(() => {
-        const fetchAuthToken = async () => {
-            try {
-                const data = await fetchToken();
-            } catch (error) {
-                console.error('Error getting auth token:', error);
-            }
-        }; 
-
         fetchAuthToken();
     }, []);
     
@@ -276,6 +269,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const onWsConnection = () => {
+
+        fetchAuthToken();
 
         const socketClient = socketClientRef.current;
 
@@ -496,10 +491,13 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             alert("Please provide a code to evaluate.")
             return;
         }
+        const messageData = new FormData();
         let prompt = `Evaluate the following code based on the problem description. If the code solves the problem correctly, return "Correct". If the code is incorrect, incomplete, or no code is provided, return "Wrong". Code: "${code}" Problem: "${problem}"`;
+        messageData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
-            body: JSON.stringify({ "userMessage": prompt })
+            contentType: 'application/json',
+            body: messageData
         })
         .then(response => response.json())
         .then(data => {
@@ -798,8 +796,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const handleCloseWebSample = () => {
         setShowWebSample(false);
     };
-        
-        
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
@@ -1212,14 +1208,22 @@ export default CodeEditor;
 function parseFeedback(input) {
     // Define the object to hold the structured data
     let feedbackObject = {};
-  
+
     // Use regular expressions to extract Score and Feedback
     const scoreMatch = input.match(/Score:\s*(\d+)/);  // Extracts the score as a number
     const feedbackMatch = input.match(/Feedback:\s*(.*)/);  // Extracts the feedback text
-  
+
     // Assign the matched content to the object if found, else assign empty string
     feedbackObject.score = scoreMatch ? parseInt(scoreMatch[1].trim()) : 0;  // Default to 0 if no score
     feedbackObject.feedback = feedbackMatch ? feedbackMatch[1].trim() : '';
-  
-    return feedbackObject;
-  }
+
+        return feedbackObject;
+    }
+const fetchAuthToken = async () => {
+    try {
+        const data = await fetchToken();
+        return data; // Optionally return data if you need it
+    } catch (error) {
+        console.error('Error getting auth token:', error);
+    }
+};

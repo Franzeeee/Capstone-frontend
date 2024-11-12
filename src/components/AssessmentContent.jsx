@@ -139,11 +139,11 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 </div>
                 <div className={`${styles.antiCheatStats}`}>
                     <div className={`${antiCheat[0] > 1 ? styles.alerted : ""}`}>
-                        <p>{antiCheat[0]}</p>
+                        <p>{antiCheat[0] ?? 0}</p>
                         <p>Exit Fullscreen</p>
                     </div>
                     <div className={`${antiCheat[1] > 1 ? styles.alerted : ""}`}>
-                        <p>{antiCheat[0]}</p>
+                        <p>{antiCheat[0] ?? 0}</p>
                         <p>Change Tab</p>
                     </div>
                 </div>

@@ -16,6 +16,7 @@ import { logout } from "../utils/logout";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
 import customFetch from "../utils/fetchApi";
 import { getUserData } from "../utils/userInformation";
+import { format } from "date-fns";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
@@ -67,6 +68,18 @@ export default function ProfileSide({ info }) {
       user.verified = 'true';
     }
   });
+
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    customFetch('/events/fetch')
+    .then(data => {
+      setEvents(data);
+    })
+    .catch(error => {
+      console.error('Error:', error.message);
+    });
+  }, []);
 
 
   return (
@@ -123,54 +136,36 @@ export default function ProfileSide({ info }) {
       <div className={`${styles.schedule}`}>
         <p className={`${styles.scheduleText}`}>To-do Scheduler <FontAwesomeIcon style={{fontSize: '.8rem', marginLeft: '3px', cursor: 'pointer'}} icon={faPlus} /></p>
         <div className={`${styles.activityContainer}`}>
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 1</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
 
-          <div className={`${styles.card}`}>
-            <div className={`${styles.activityInfo}`}>
-              <p>Activity 2</p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <div className={`${styles.taskInfo}`}>
-                <p>
-                  <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> Mar 9
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon> 0/8
-                </p>
-              </div>
-              <FontAwesomeIcon
-                title="Edit Activity"
-                icon={faEdit}
-                className={`${styles.editActivity}`}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
+          {
+            events.length > 0 ? events.map((event, index) => {
+              return (
+                <div className={`${styles.card}`}>
+                  <div className={`${styles.activityInfo}`}>
+                    <p>{event.title}</p>
+                    <p>{event.description}</p>
+                    <div className={`${styles.taskInfo}`}>
+                      <p>
+                        <FontAwesomeIcon icon={faClock}></FontAwesomeIcon> {formatDate(event.start_date)} - {formatDate(event.end_date)}
+                      </p>
+                    </div>
+                    <FontAwesomeIcon
+                      title="Edit Activity"
+                      icon={faEdit}
+                      className={`${styles.editActivity}`}
+                    ></FontAwesomeIcon>
+                  </div>
+                </div>
+              )
+            }) : "No To-do Activity"
+          }
 
         </div>
       </div>
     </>
   );
+}
+
+function formatDate(dateString) {
+  return format(new Date(dateString), "MMM dd");
 }
