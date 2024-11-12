@@ -64,12 +64,6 @@ export default function ClassDashboard() {
     const [activeForm, setActiveForm] = useState('logic');
 
     useEffect(() => {
-        if (!location.state?.verified || !classData) {
-            navigate('/not-found');
-        }
-    }, [location, navigate, classData]);
-
-    useEffect(() => {
         fetchAssessments(currentPage);
         setIsLoading(false)
     }, [currentPage]); // Fetch assessments whenever currentPage changes
