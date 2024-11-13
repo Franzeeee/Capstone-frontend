@@ -1,0 +1,48 @@
+.container{
+    border: none;
+}
+
+.MainBtn{
+    background-color: #5D5DD4;
+}
+.MainBtn:hover{
+    background-color: #3e3ec0;  
+}
+.modalContent{
+    border: 3px solid #5D5DD4;
+    background-color: #FFFFFF;
+    padding: 5;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;  
+}
+.BtnUpdate{
+    background-color: #5C5CD1;
+    margin: 5px;
+    border-radius: 50px;
+}
+.BtnClose{
+    background-color: #f73a3ae4 ;
+    width: 20%;
+    border-radius: 50px;
+}
+.BtnUpdate:hover {
+    background-color: #3e3ec0;
+}
+.BtnClose:hover {
+    background-color: #df2828e4 ;
+}
+.Title{
+    font-weight: 500;
+    color: #5D5DD4;
+}
+.textArea{
+    width: 100%;
+    border: none;
+    background-color: #EEEEEE;
+}
+.textArea:focus {
+    border: 1px solid #b0b0b0; 
+    outline: none;
+}
