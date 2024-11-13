@@ -24,6 +24,7 @@ import Submissions from "./pages/ClassesPage/Submissions";
 import ClassGradeList from "./pages/ClassGradeList";
 import ClassGradeTable from "./pages/ClassGradeTable";
 import RefetchUser from "./components/RefetchUser";
+import Grades from "./pages/Student/Grades";
 
 export const App = () => {
   return (
@@ -45,6 +46,8 @@ export const App = () => {
             <Route path="/teacher/grades/class" element={<ClassGradeList />}/>
             <Route path="/teacher/grades/class/:code/final-grades" element={<ClassGradeTable />}/>
             <Route path="/verify-email" element={<RefetchUser />} />
+
+            <Route path="/grades" element={<Grades />} />
         </Route>
         
         <Route path="/" element={<Sample />} />

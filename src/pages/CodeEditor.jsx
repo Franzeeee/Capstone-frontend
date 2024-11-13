@@ -28,9 +28,10 @@ import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
 import ConfirmationModal from '../components/ConfirmationModal';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import WebAssessmentSample from '../components/Modals/WebAssessmentSample';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -65,15 +66,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     }, [options, options.cheatingData]);
 
-
-    useEffect(() => {
-        
-        console.log("Exit Fullscreen: ", cheatingData?.exit_fullscreen)
-        
-        console.log("Alt Tab: ", cheatingData?.change_tab)
-    }, [cheatingData])
-
-
     // Codes for the modes
     // Code Editor, LessonTest, Lesson Assessments
     const [mode, setMode] = useState(options.mode)
@@ -94,17 +86,82 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const saveAsPyFile = () => {
-        const filename = 'script.py';
-        const blob = new Blob([code], { type: 'text/plain' });
-        const link = document.createElement('a');
-        
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();
+        // Prompt the user to enter a filename
+        const filename = "script.py";
     
-        // Clean up the URL object after the download
-        URL.revokeObjectURL(link.href);
-        };
+        // Only proceed if the user entered a filename
+        if (filename) {
+            const blob = new Blob([code], { type: 'text/plain' });
+            const link = document.createElement('a');
+            
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;  // Use the user-provided filename
+            link.click();
+            
+            // Clean up the URL object after the download
+            URL.revokeObjectURL(link.href);
+        }
+    };
+    
+
+    const openPythonFile = async () => {
+        // Check if `showOpenFilePicker` is supported
+        if (window.showOpenFilePicker) {
+            try {
+                // Open a file picker and filter to `.py` files
+                const [fileHandle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'Python Files',
+                        accept: { 'text/plain': ['.py'] },
+                    }],
+                    multiple: false // Allow only one file to be selected
+                });
+                
+                // Get the file object from the handle
+                const file = await fileHandle.getFile();
+                
+                // Read the file contents
+                const text = await file.text();
+                
+                // Display the contents or do something with `text`
+                console.log("File contents:", text);
+                // You could also assign `text` to a variable or an element on the page
+                
+            } catch (error) {
+                console.error('Failed to open the file', error);
+            }
+        } else {
+            // Fallback for browsers that don't support `showOpenFilePicker`
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.py';
+            
+            // Listen for file selection
+            input.onchange = async (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const text = await file.text();
+                    setCode(text);
+                    // Handle file contents here, e.g., display in an editor
+                }
+            };
+            
+            // Trigger the file input
+            input.click();
+        }
+    };
+    
+    const copyToClipboard = () => {
+        // Create a new textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = code; // Set the value to copy
+        document.body.appendChild(textarea); // Append the textarea to the body
+        textarea.select(); // Select the textarea
+        document.execCommand('copy'); // Copy the selected text
+        document.body.removeChild(textarea); // Remove the textarea
+        toast('Code copied to clipboard');
+    };
+    
 
     // Warn user about losing progress if they try to leave the page
     useEffect(() => {
@@ -242,11 +299,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         ]);
         setUserMessage('');
     
+        const msgData = new FormData()
+        msgData.append('userMessage', userMessage)
         customFetch('/receiveMessage', {
             method: 'POST',
-            body: JSON.stringify({ "userMessage": userMessage })
+            body: msgData
         })
-        .then(response => response.json())
         .then(data => {
             // Add the response message to the chat history
             setChatHistory(prevChatHistory => [
@@ -479,6 +537,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         setTestGenLevel(prev => prev - 1)
         if(testGenLevel == 1){
             resetChallange()
+            setWithAssistance(true)
         }
     }
 
@@ -815,9 +874,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const handleCloseWebSample = () => {
         setShowWebSample(false);
     };
+    
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
+            <ToastContainer />
             <ConfirmationModal show={showSubmitModal} 
                     handleClose={handleClose} 
                     modalData={{spin: true, 
@@ -843,9 +904,21 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
-                    <li title='Open Project'><FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon} ${styles.folderIcon}`}/></li>
-                    <li title='Save' onClick={openIframeInNewTab}><FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/></li>
-                    <li title='Copy' onClick={handleIde}><FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/></li>
+                    <li onClick={openPythonFile}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
+                            <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
+                    <li onClick={saveAsPyFile}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
+                            <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
+                    <li onClick={copyToClipboard}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
+                            <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
                     <li className={`position-relative ${styles.language}`}>
                     {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
                         <FontAwesomeIcon icon={faPython} className={`${styles.icon}`} title='IDE: Python'></FontAwesomeIcon>
@@ -1175,7 +1248,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             }
                         </div>
                         </div>
-                        <div className={`${styles.aiBot} ${minimize && styles.minimize} ${challangeDetails.withAssistance == false && styles.hideBot}`}>
+                        <div className={`${styles.aiBot} ${minimize && styles.minimize} ${challangeDetails.withAssistance == false ? styles.hideBot : ''}`}>
                             <div className={`${styles.chatHead}`}>
                                 <p className='m-0 text-black'>Ask help to CodeLab AI</p>
                                 {/* <FontAwesomeIcon icon={minimize ?faCaretUp : faCaretDown} onClick={() => setMinimize(!minimize)} className={`${styles.closeIcon}`}/> */}
