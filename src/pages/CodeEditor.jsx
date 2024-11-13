@@ -62,8 +62,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 change_tab: options.cheatingData[1],
             });
         };
+
     }, [options, options.cheatingData]);
 
+
+    useEffect(() => {
+        
+        console.log("Exit Fullscreen: ", cheatingData?.exit_fullscreen)
+        
+        console.log("Alt Tab: ", cheatingData?.change_tab)
+    }, [cheatingData])
 
 
     // Codes for the modes
@@ -681,6 +689,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         }
     };
 
+
     const submitAssessment = async () => {
         options.timesup();
         const allProblemsAndCodes = assessmentData.map(assessment => ({
@@ -738,7 +747,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 allSuccessful = true;
             }
         }
-    
         // Calculate GWA as a percentage
         const gwa = (totalScore / (assessmentCount * maxScorePerItem)) * 100;
     

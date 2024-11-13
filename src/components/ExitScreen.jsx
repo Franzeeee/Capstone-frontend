@@ -6,6 +6,7 @@ import img from '../assets/img/exit-robot.png'
 export default function ExitScreen({handleFullscreen, focus, addLeaveFullscreen, addAltTab}) {
 
     useEffect(() => {
+        console.log(!focus ? "You alt tab" : "You exit fs")
         if(focus) {
             addLeaveFullscreen();
         }else {

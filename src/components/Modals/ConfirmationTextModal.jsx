@@ -42,7 +42,7 @@ export default function ConfirmationTextModal({ show, handleClose, modalData }) 
                             <input type="text" name='confirm' onChange={handleInputChange} value={inputValue} autoComplete='off' autoCorrect='false' className={styles.confirmInput} placeholder={modalData.inputMessage}/>
                         </div>
                         <div className={styles.modalFooter}>
-                            <button className={`${styles.Close} ${styles.textCancel} ${modalData?.hideCancel ? styles.hide : ""}`} onClick={handleCancel}>
+                            <button type='button' className={`${styles.Close} ${styles.textCancel} ${modalData?.hideCancel ? styles.hide : ""}`} onClick={handleCancel}>
                                 {modalData.cancelText || "Cancel"}
                             </button>
                             <button className={`${styles.Confirm} 
