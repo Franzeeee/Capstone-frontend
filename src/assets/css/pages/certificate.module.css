@@ -29,6 +29,6 @@ html, body {
     font-weight: 700;
     width: 100%;
   }
-  p{
+  .text p{
     width: 40%;
   }
