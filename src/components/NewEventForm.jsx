@@ -1,6 +1,8 @@
 // EventModal.js
 import React, { useState } from "react";
 import { Modal, Box, TextField, Button } from "@mui/material";
+import customFetch from "../utils/fetchApi";
+import { format } from "date-fns";
 
 const modalStyle = {
   position: "absolute",
@@ -29,6 +31,27 @@ export default function NewEventForm({ open, onClose, onAddEvent }) {
       start,
       end,
     });
+
+    const evenData = new FormData();
+    evenData.append("title", title);
+    evenData.append("description", description);
+    evenData.append("start_date", format(new Date(start), "yyyy-MM-dd"));
+    evenData.append("start_time", format(new Date(start), "HH:mm"));
+    evenData.append("end_date", format(new Date(end), "yyyy-MM-dd"));
+    evenData.append("end_time", format(new Date(end), "HH:mm"));
+
+    customFetch("/events/create", {
+      method: "POST",
+      contentType: "application/json",
+      body: evenData,
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(err => {
+      console.error(err);
+    });    
+
     setTitle("");
     setDescription("");
     setStart("");

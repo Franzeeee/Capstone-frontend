@@ -3,7 +3,7 @@ import HomeTemplate from '../../templates/HomeTemplate';
 import styles from '../../assets/css/pages/ClassesPage/class-dashboard.module.css';
 import ProfileSide from '../../components/ProfileSide';
 import { getUserData } from '../../utils/userInformation';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
 import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,31 @@ export default function ClassDashboard() {
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = window.location.pathname;
-    const classData = location.state?.data;
+
+    const { code } = useParams();
+    
+    const [classData, setClassData] = useState(location.state?.data || null);
+
+    useEffect(() => {
+        if (!classData) {
+            customFetch(`/class/${code}`, {
+                method: 'GET',
+            })
+            .then(data => {
+                if (data) {
+                    setClassData(data);
+                } else {
+                    navigate('/not-found');
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching class data:", error);
+                navigate('/not-found');
+            });
+        }
+    }, [code, navigate, classData]);
+
+    console.log(classData);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -38,12 +62,6 @@ export default function ClassDashboard() {
     const [itemId, setItemId] = useState(null);
     const [show, setShow] = useState(false);
     const [activeForm, setActiveForm] = useState('logic');
-
-    useEffect(() => {
-        if (!location.state?.verified || !classData) {
-            navigate('/not-found');
-        }
-    }, [location, navigate, classData]);
 
     useEffect(() => {
         fetchAssessments(currentPage);

@@ -28,9 +28,10 @@ import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
 import ConfirmationModal from '../components/ConfirmationModal';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import WebAssessmentSample from '../components/Modals/WebAssessmentSample';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -50,6 +51,20 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const [testGenLevel, setTestGenLevel] = useState(0);
 
+    const [cheatingData, setCheatingData] = useState({
+        exit_fullscreen: 0,
+        change_tab: 0,
+    });
+    
+    useEffect(() => {
+        if ( mode === "Assessment" && options && options.cheatingData !== null || options.cheatingData !== undefined) {
+            setCheatingData({
+                exit_fullscreen: options.cheatingData[0],
+                change_tab: options.cheatingData[1],
+            });
+        };
+
+    }, [options, options.cheatingData]);
 
     // Codes for the modes
     // Code Editor, LessonTest, Lesson Assessments
@@ -71,17 +86,82 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const saveAsPyFile = () => {
-        const filename = 'script.py';
-        const blob = new Blob([code], { type: 'text/plain' });
-        const link = document.createElement('a');
-        
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();
+        // Prompt the user to enter a filename
+        const filename = "script.py";
     
-        // Clean up the URL object after the download
-        URL.revokeObjectURL(link.href);
-        };
+        // Only proceed if the user entered a filename
+        if (filename) {
+            const blob = new Blob([code], { type: 'text/plain' });
+            const link = document.createElement('a');
+            
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;  // Use the user-provided filename
+            link.click();
+            
+            // Clean up the URL object after the download
+            URL.revokeObjectURL(link.href);
+        }
+    };
+    
+
+    const openPythonFile = async () => {
+        // Check if `showOpenFilePicker` is supported
+        if (window.showOpenFilePicker) {
+            try {
+                // Open a file picker and filter to `.py` files
+                const [fileHandle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'Python Files',
+                        accept: { 'text/plain': ['.py'] },
+                    }],
+                    multiple: false // Allow only one file to be selected
+                });
+                
+                // Get the file object from the handle
+                const file = await fileHandle.getFile();
+                
+                // Read the file contents
+                const text = await file.text();
+                
+                // Display the contents or do something with `text`
+                console.log("File contents:", text);
+                // You could also assign `text` to a variable or an element on the page
+                
+            } catch (error) {
+                console.error('Failed to open the file', error);
+            }
+        } else {
+            // Fallback for browsers that don't support `showOpenFilePicker`
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.py';
+            
+            // Listen for file selection
+            input.onchange = async (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const text = await file.text();
+                    setCode(text);
+                    // Handle file contents here, e.g., display in an editor
+                }
+            };
+            
+            // Trigger the file input
+            input.click();
+        }
+    };
+    
+    const copyToClipboard = () => {
+        // Create a new textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = code; // Set the value to copy
+        document.body.appendChild(textarea); // Append the textarea to the body
+        textarea.select(); // Select the textarea
+        document.execCommand('copy'); // Copy the selected text
+        document.body.removeChild(textarea); // Remove the textarea
+        toast('Code copied to clipboard');
+    };
+    
 
     // Warn user about losing progress if they try to leave the page
     useEffect(() => {
@@ -117,7 +197,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const [timer, setTimer] = useState(0)
     const [isActive, setIsActive] = useState(false);
-    const [isCorrect, setIsCorrect] = useState();
+    const [isCorrect, setIsCorrect] = useState(null);
+
 
     useEffect(() => {
         if (timer <= 0 || !isActive) return;
@@ -167,13 +248,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const generateProblem = () => {
         
+        const msgData = new FormData();
         let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.(no hints)`
 
+        msgData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
-            body: JSON.stringify({ "userMessage": prompt })
+            contentType: 'application/json',
+            body: msgData
         })
-        .then(response => response.json())
         .then(data => {
             setProblem(data.message)
             setIsActive(true)
@@ -216,11 +299,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         ]);
         setUserMessage('');
     
+        const msgData = new FormData()
+        msgData.append('userMessage', userMessage)
         customFetch('/receiveMessage', {
             method: 'POST',
-            body: JSON.stringify({ "userMessage": userMessage })
+            body: msgData
         })
-        .then(response => response.json())
         .then(data => {
             // Add the response message to the chat history
             setChatHistory(prevChatHistory => [
@@ -238,14 +322,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     }
 
     useEffect(() => {
-        const fetchAuthToken = async () => {
-            try {
-                const data = await fetchToken();
-            } catch (error) {
-                console.error('Error getting auth token:', error);
-            }
-        }; 
-
         fetchAuthToken();
     }, []);
     
@@ -260,6 +336,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const onWsConnection = () => {
+
+        fetchAuthToken();
 
         const socketClient = socketClientRef.current;
 
@@ -450,6 +528,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             withAssistance: false
         }));
         if(testGenLevel == 4) {
+            setIde(challangeDetails?.language === 'python' ? 0 : 1)
             setGenerating(true)
             generateProblem()
         }
@@ -458,6 +537,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         setTestGenLevel(prev => prev - 1)
         if(testGenLevel == 1){
             resetChallange()
+            setWithAssistance(true)
         }
     }
 
@@ -476,16 +556,24 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     }
 
     const submitCode = () => {
-        if(code === "") {
+        if(code === "" && challangeDetails?.language === 'python') {
             alert("Please provide a code to evaluate.")
             return;
+        } else if( challangeDetails?.language === 'html_css' && htmlCode === "") {
+            alert("Please provide the Web Development code to evaluate.")
+            return;
         }
-        let prompt = `Evaluate the following code based on the problem description. If the code solves the problem correctly, return "Correct". If the code is incorrect, incomplete, or no code is provided, return "Wrong". Code: "${code}" Problem: "${problem}"`;
+        const messageData = new FormData();
+
+        let codeToSend = challangeDetails?.language === 'python' ? code : htmlCode + cssCode;
+
+        let prompt = `Evaluate the following code based on the problem description. If the code solves the problem correctly, return "Correct". If the code is incorrect, incomplete, or no code is provided, return "Wrong". Code: "${codeToSend}" Problem: "${problem}"`;
+        messageData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
-            body: JSON.stringify({ "userMessage": prompt })
+            contentType: 'application/json',
+            body: messageData
         })
-        .then(response => response.json())
         .then(data => {
             setIsCorrect(data.message === "Correct");
             startPractice();
@@ -497,6 +585,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         })
         .catch(error => console.error(error));
     }
+
+    useEffect(() => {
+
+    }, [testGenLevel])
+
 
     const [ide, setIde] = useState(0);
 
@@ -655,6 +748,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         }
     };
 
+
     const submitAssessment = async () => {
         options.timesup();
         const allProblemsAndCodes = assessmentData.map(assessment => ({
@@ -692,10 +786,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     // Extract the score from the response message if it's included as "Total Score: X points"
                     const scoreMatch = response.message.match(/Total Score: (\d+)/);
                     const feedback = response.message.match(/Feedback: (.+)/);
+                    const feedback2 = parseFeedback(response.message);
+                    
+                    const fb = feedback2.feedback;
+                    
                     if (scoreMatch) {
                         const score = parseInt(scoreMatch[1], 10);
                         totalScore += score; // Add score to the total 
-                        submissionFeedback += feedback[1];
+                        submissionFeedback += fb;
 
                         updatedAssessmentData[index] = { ...updatedAssessmentData[index], score };
                     }
@@ -708,7 +806,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 allSuccessful = true;
             }
         }
-    
         // Calculate GWA as a percentage
         const gwa = (totalScore / (assessmentCount * maxScorePerItem)) * 100;
     
@@ -729,6 +826,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     status: 'graded',
                     time_taken: timeConsumed,
                     feedback: submissionFeedback,
+                    exit_fullscreen: cheatingData.exit_fullscreen,
+                    change_tab: cheatingData.change_tab,
                     coding_problem_codes: updatedAssessmentData.map(assessment => ({
                         problem_id: assessment.problem_id,
                         code: assessment.code,
@@ -737,9 +836,9 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 }),
             })
                 .then(response => {
-                    console.log('Response:', response);
                     options.setRank({rank: response.rank});
                     options.setSubmissionData(response.submission);
+                    options.setFeedback({feedback: submissionFeedback});
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
@@ -775,11 +874,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const handleCloseWebSample = () => {
         setShowWebSample(false);
     };
-        
-        
+    
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
+            <ToastContainer />
             <ConfirmationModal show={showSubmitModal} 
                     handleClose={handleClose} 
                     modalData={{spin: true, 
@@ -805,9 +904,21 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
-                    <li title='Open Project'><FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon} ${styles.folderIcon}`}/></li>
-                    <li title='Save' onClick={openIframeInNewTab}><FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/></li>
-                    <li title='Copy' onClick={handleIde}><FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/></li>
+                    <li onClick={openPythonFile}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
+                            <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
+                    <li onClick={saveAsPyFile}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
+                            <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
+                    <li onClick={copyToClipboard}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
+                            <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
                     <li className={`position-relative ${styles.language}`}>
                     {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
                         <FontAwesomeIcon icon={faPython} className={`${styles.icon}`} title='IDE: Python'></FontAwesomeIcon>
@@ -1102,7 +1213,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 testGenLevel === 5 && 
                                 <>
                                     <p className={`${styles.colorBlack}`}>Coding Challange</p>
-                                    <div className={`${styles.option1Container}`}>
+                                    <div className={`${styles.option1Container} ${problem !== '' && !generating ? styles.challangeTextContainer : ""}`}>
                                         {
                                             generating ? ( 
                                             <>
@@ -1119,7 +1230,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                         }
                                     </div>
                                     <div className={`${styles.controller}`}>
-                                        <button className={`${styles.submitCode}`} disabled={generating} onClick={submitCode}>Submit Code</button>
+                                        <button className={`${styles.submitCode} ${generating ? styles.disabledSubmitBtn : ""}`} disabled={generating} onClick={submitCode}>Submit Code</button>
                                     </div>
                                 </>
                             }
@@ -1137,7 +1248,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             }
                         </div>
                         </div>
-                        <div className={`${styles.aiBot} ${minimize && styles.minimize} ${challangeDetails.withAssistance == false && styles.hideBot}`}>
+                        <div className={`${styles.aiBot} ${minimize && styles.minimize} ${challangeDetails.withAssistance == false ? styles.hideBot : ''}`}>
                             <div className={`${styles.chatHead}`}>
                                 <p className='m-0 text-black'>Ask help to CodeLab AI</p>
                                 {/* <FontAwesomeIcon icon={minimize ?faCaretUp : faCaretDown} onClick={() => setMinimize(!minimize)} className={`${styles.closeIcon}`}/> */}
@@ -1185,3 +1296,26 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 };
 
 export default CodeEditor;
+
+function parseFeedback(input) {
+    // Define the object to hold the structured data
+    let feedbackObject = {};
+
+    // Use regular expressions to extract Score and Feedback
+    const scoreMatch = input.match(/Score:\s*(\d+)/);  // Extracts the score as a number
+    const feedbackMatch = input.match(/Feedback:\s*(.*)/);  // Extracts the feedback text
+
+    // Assign the matched content to the object if found, else assign empty string
+    feedbackObject.score = scoreMatch ? parseInt(scoreMatch[1].trim()) : 0;  // Default to 0 if no score
+    feedbackObject.feedback = feedbackMatch ? feedbackMatch[1].trim() : '';
+
+        return feedbackObject;
+    }
+const fetchAuthToken = async () => {
+    try {
+        const data = await fetchToken();
+        return data; // Optionally return data if you need it
+    } catch (error) {
+        console.error('Error getting auth token:', error);
+    }
+};

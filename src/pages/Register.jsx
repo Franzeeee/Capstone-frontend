@@ -74,6 +74,7 @@ export const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // Perform form validation
     const [nameValid, nameErrors] = validateName(formData.name);
@@ -163,6 +164,7 @@ export const Register = () => {
             .catch(error => console.error(error))
         })
         .catch(error => console.error(error))
+        .finally(() => setLoading(false));
     }
   }
 
@@ -299,7 +301,7 @@ export const Register = () => {
                   </ul>
                 </div>
               )}
-            <button type="submit" className="btn btn-primary " disabled={loading}style={{backgroundColor: '#5D5DD4'}}>
+            <button type="submit" className="btn btn-primary " disabled={loading} style={{backgroundColor: '#5D5DD4'}}>
               {
                 loading ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"
               }

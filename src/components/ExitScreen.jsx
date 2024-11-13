@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from '../assets/css/components/exit-screen.module.css'
 import logo from '../assets/img/logoCodelab.png'
 import img from '../assets/img/exit-robot.png'
 
-export default function ExitScreen({handleFullscreen, focus}) {
+export default function ExitScreen({handleFullscreen, focus, addLeaveFullscreen, addAltTab}) {
+
+    useEffect(() => {
+        console.log(!focus ? "You alt tab" : "You exit fs")
+        if(focus) {
+            addLeaveFullscreen();
+        }else {
+            addAltTab();
+        }
+    }, [])
+
     return (
         <div className={styles.container}>
         <div className={styles.head}>

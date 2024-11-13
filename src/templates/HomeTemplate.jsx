@@ -118,7 +118,14 @@ export default function HomeTemplate({ children }) {
                     </>
                   ) : (
                     <>
-                      <li onClick={toggleShow}>
+                      <li className={`${
+                          location.pathname === "/grades" ||
+                          location.pathname.includes("/grades")
+                            ? styles.active
+                            : ""
+                        }`}
+                        onClick={() => navigate('/grades')}
+                      >
                         <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Grades
                       </li>
                     </>

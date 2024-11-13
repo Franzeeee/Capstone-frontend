@@ -44,17 +44,24 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
         }
 
         // Update the score in the state
+        const updatedSubmissions = data.coding_problem_submissions.map((submission, i) => {
+            if (i === index) {
+            return {
+                ...submission,
+                score: e.target.value
+            };
+            }
+            return submission;
+        });
+
+        // Calculate the new overall score
+        const totalScore = updatedSubmissions.reduce((acc, curr) => acc + parseFloat(curr.score || 0), 0);
+        const overallScore = totalScore / updatedSubmissions.length;
+
         setData({
             ...data,
-            coding_problem_submissions: data.coding_problem_submissions.map((submission, i) => {
-                if (i === index) {
-                    return {
-                        ...submission,
-                        score: e.target.value
-                    };
-                }
-                return submission;
-            })
+            coding_problem_submissions: updatedSubmissions,
+            score: overallScore
         });
 
     };
@@ -220,31 +227,22 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                     <div className={styles.content}>
                                         <ul>
                                             <li>
-                                                <p>Time Remaining</p>
+                                                <p>Time Taken</p>
                                                 <div className={styles.Contain}>
                                                 <div className={styles.loadingBarContainer}>
                                                 <div className={styles.loadingBar}></div>
                                                 </div>
-                                                <p className={styles.details}>1st</p>                                            
+                                                <p className={styles.details}>{formatTime(0)}</p>                                            
                                                 </div>
 
                                             </li>
                                             <li>
-                                                <p>Problem Solved</p>
+                                                <p>Total Problem</p>
                                                 <div className={styles.Contain}>
                                                 <div className={styles.loadingBarContainer}>
                                                 <div className={styles.loadingBar}></div>
                                                 </div>
-                                                <p className={styles.details}>1st</p>                                            
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <p>Overall Points</p>
-                                                <div className={styles.Contain}>
-                                                <div className={styles.loadingBarContainer}>
-                                                <div className={styles.loadingBar}></div>
-                                                </div>
-                                                <p className={styles.details}>1st</p>                                            
+                                                <p className={styles.details}>{data?.activity?.coding_problems.length}</p>                                            
                                                 </div>
                                             </li>
                                             <li>
@@ -253,8 +251,14 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                                 <div className={styles.loadingBarContainer}>
                                                 <div className={styles.loadingBar}></div>
                                                 </div>
-                                                <p className={styles.details}>1st</p>                                            
+                                                <p className={styles.details}>{getOrdinalSuffix(data?.rank)}</p>                                            
                                                 </div>
+                                            </li>
+                                            <li>
+                                                <p>Exit Full Screen: <span>{data?.cheating_record !== null ? data?.cheating_record.exit_fullscreen : 0}</span></p>
+                                            </li>
+                                            <li>
+                                                <p>Change Tab: <span>{data?.cheating_record !== null ? data?.cheating_record.change_tab : 0}</span></p>
                                             </li>
                                         </ul>
                                     </div>
@@ -321,4 +325,28 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                 </Modal>
         </>
     );
+}
+
+const formatTime = (seconds) => {
+    if (isNaN(seconds) || seconds < 0) {
+        return '00:00';
+    }
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+};
+
+function getOrdinalSuffix(rank) {
+    const lastDigit = rank % 10;
+    const lastTwoDigits = rank % 100;
+
+    if (lastDigit === 1 && lastTwoDigits !== 11) {
+        return rank + "st";
+    } else if (lastDigit === 2 && lastTwoDigits !== 12) {
+        return rank + "nd";
+    } else if (lastDigit === 3 && lastTwoDigits !== 13) {
+        return rank + "rd";
+    } else {
+        return rank + "th";
+    }
 }
