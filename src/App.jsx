@@ -26,6 +26,7 @@ import ClassGradeTable from "./pages/ClassGradeTable";
 import RefetchUser from "./components/RefetchUser";
 import Certificate from "./pages/Certificate";
 import Grades from "./pages/Student/Grades";
+import Lesson1 from "./pages/LogicLessons/Lesson1";
 
 export const App = () => {
   return (
@@ -48,6 +49,9 @@ export const App = () => {
             <Route path="/teacher/grades/class/:code/final-grades" element={<ClassGradeTable />}/>
             <Route path="/verify-email" element={<RefetchUser />} />
             <Route path="/grades" element={<Grades />} />
+
+            <Route path="/lesson1" element={<Lesson1 />} />
+
         </Route>
         <Route path="/certificate" element={<Certificate />} />
         <Route path="/" element={<Sample />} />
