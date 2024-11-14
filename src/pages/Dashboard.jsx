@@ -113,9 +113,7 @@ export const Dashboard = () => {
                 method: 'GET',
             })
             .then(data => {
-                console.log(data);
                 data?.map((item, index) => {
-                    console.log(item);
                     setClassPerformanceData(prev => ([
                         ...prev,
                         {
@@ -222,8 +220,6 @@ export const Dashboard = () => {
                     room: formData.room,
                     class_code: {code: data.classCode}
                 };
-
-                console.log(newClass);
             
                 // Check if the length is 4 or greater
                 if (prev.length >= 4) {
