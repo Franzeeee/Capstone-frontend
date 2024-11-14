@@ -20,8 +20,7 @@ import {
         const [classData, setClassData] = useState([
             {x: 'John Doe', y: 85},
         ]);
-        
-        console.log(dataClass);
+    
 
     // Sample data based on the names, sections, and scores provided
     const data = {
@@ -59,7 +58,7 @@ import {
         plugins: {
             title: {
                 display: true,
-                text: 'Average Scores by Student',
+                text: 'Average Scores of Enrolled Student',
             },
             tooltip: {
                 callbacks: {

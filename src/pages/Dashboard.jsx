@@ -20,6 +20,7 @@ import Button from 'react-bootstrap/Button';
 import ProfileSide from '../components/ProfileSide.jsx';
 import TeacherScatterPlot from '../components/Charts/TeacherScatterPlot.jsx';
 import customFetch from '../utils/fetchApi.js';
+import TeacherBarChart from '../components/Charts/TeacherBarChart.jsx';
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -28,13 +29,8 @@ export const Dashboard = () => {
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
 
-    const sampleData = [
-        { name: 'John Doe', section: 'AI41', avgScore: 85 },
-        { name: 'Jane Smith', section: 'AI41', avgScore: 90 }, 
-        { name: 'Alice Johnson', section: 'AI42', avgScore: 78 },
-        { name: 'Bob Brown', section: 'AI42', avgScore: 82 },
-        { name: 'John Doe', section: 'AI41', avgScore: 85 },
-    ];
+    const [sampleData, setSampleData] = useState([]);
+    const [classPerformanceData, setClassPerformanceData] = useState([]);
 
     const [formData, setFormData] = useState({
         className: '',
@@ -60,14 +56,23 @@ export const Dashboard = () => {
     
     const [show, setShow] = useState(false);
 
-    const [activateSPerformanceChart, setActivateSPerformanceChart] = useState(false);
+    const [activateSPerformanceChart, setActivateSPerformanceChart] = useState(true);
     const [label, setLabel] = useState('');
+    const [studentPerformanceTable, setStudentPerformanceTable] = useState(false);
+
+    const [showClassPerformanceChart, setShowClassPerformanceChart] = useState(false);
+    const [classPerformanceLabel, setClassPerformanceLabel] = useState([]);
+    const [classPerforanceSend, setClassPerformanceSend] = useState({});
 
     const toggleShow = () => setShow(prevShow => !prevShow);
     const api = import.meta.env.VITE_API_URL;
     
     const [teacherClass, setTeacherClass] = useState(null);
     const [activeClass, setActiveClass] = useState(null);
+
+    const updateActiveClass = (e) => {
+        setActiveClass(e.target.value);
+    }
 
     const [dataset, setDataset] = useState([]);
 
@@ -93,18 +98,61 @@ export const Dashboard = () => {
                 .catch(error => console.error('Error fetching classes:', error));
 
                 // Fetch teacher classess and student performance
-                customFetch(`/teacher/class/all`, {
-                    method: 'GET',
-                })
-                .then(data => {
-                    setTeacherClass(data);
-                    if (data.length > 0) {
-                        setActiveClass(data[0].id);
-                    }
-                })
-                .catch(error => console.error('Error fetching classes:', error));
+            customFetch(`/teacher/class/all`, {
+                method: 'GET',
+            })
+            .then(data => {
+                setTeacherClass(data);
+                if (data.length > 0) {
+                    setActiveClass(data[0].id);
+                }
+            })
+            .catch(error => console.error('Error fetching classes:', error));
+
+            customFetch(`/class/${user.id}/score/average`, {
+                method: 'GET',
+            })
+            .then(data => {
+                console.log(data);
+                data?.map((item, index) => {
+                    console.log(item);
+                    setClassPerformanceData(prev => ([
+                        ...prev,
+                        {
+                            name: item?.label,
+                            section: item?.class_section || 'N/A',
+                            avgScore: item?.data || 0,
+                            enrolled: item?.enrolled_student_count || 0
+                        }
+                    ]))
+
+                    setClassPerformanceLabel(prev => ([
+                        ...prev,
+                        item?.label
+                    ]))
+
+                }
+                )
+            })
+            .catch(error => console.error('Error fetching classes:', error));
         }
     }, [user.id, user.role]);
+
+    const [classPerData, setClassPerData] = useState([]);
+
+    useEffect(() => {
+        if(user.role === 'teacher') {
+            classPerformanceData && classPerformanceData?.map((item) => {
+                setClassPerData(prev => {
+                    return [
+                        ...prev,
+                        item?.avgScore
+                    ];
+                });
+            });
+        }
+    }, [classPerformanceData]);
+    
 
     useEffect(() => {
 
@@ -115,17 +163,22 @@ export const Dashboard = () => {
                     data: data.data,
                     backgroundColor: generateRandomRGB(),
                 })
-                setLabel(data.label);
-                console.log(data?.label);
+                setLabel(data?.label);
+                setStudentPerformanceTable(data);
+                data?.data?.map((item, index) => {
+                    setSampleData(prev => {
+                        return [{
+                            name: item?.x,
+                            section: data?.classData?.section,
+                            avgScore: item?.y
+                        }]  
+                    })
+                })
             })
             .catch(error => console.error('Error fetching classes:', error));
         }
 
     }, [activeClass, teacherClass]);
-
-    useEffect(() => {
-        console.log(dataset);
-    }, [dataset]);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -206,6 +259,7 @@ export const Dashboard = () => {
     const moveTo = (url) => {
         navigate(`/${url}`)
     }
+    
     
 
     return (
@@ -324,7 +378,7 @@ export const Dashboard = () => {
                     <div className={`${styles.card} pt-1 ${styles.studentPerformance}`}>
                         <div className={`${styles.cardHeader}`}>
                             <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Student Performance</p>
-                            <select name="class" id="">
+                            <select name="class" id="" defaultValue={activeClass} onChange={updateActiveClass}>
                                 { teacherClass && teacherClass.map((item, index) => (
                                     <option key={index} value={item.id}>{item.name}</option>
                                 ))
@@ -355,23 +409,37 @@ export const Dashboard = () => {
                                 </DataTable>
                             )
                         }
-                        {/* <DataTable value={sampleData} scrollable={true} paginator rows={5} className="custom-td-padding customPagination">
-                            <Column field="name" header="Name" style={{ width: '25%' }}></Column>
-                            <Column field="section" header="Section" style={{ width: '25%' }}></Column>
-                            <Column field="avgScore" header="Average Score" style={{ width: '25%' }}></Column>
-                            <Column header="Report" style={{width:'10%'}}></Column>
-                        </DataTable> */}
                     </div>
                     
                     <div className={`${styles.card} pt-1 ${styles.studentPerformance}`}>
                         <div className={`${styles.cardHeader}`}>
-                            <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Section Performance</p>
+                            <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Class Performance</p>
+                            <p className={styles.chartText} onClick={() => setShowClassPerformanceChart(prev => !prev)}>
+                            {
+                                !activateSPerformanceChart ? (
+                                    <span>
+                                        <FontAwesomeIcon icon={faChartSimple} /> View Chart
+                                    </span>
+                                ) : (
+                                    <span>
+                                        <FontAwesomeIcon icon={faTable} /> View Table
+                                    </span>
+                                )
+                            }
+                            </p>
                         </div>
-                    <DataTable value={sampleData} scrollable={true} paginator rows={5} className="custom-td-padding">
-                            <Column field="name" header="Name" style={{ width: '25%' }}></Column>
-                            <Column field="section" header="Section" style={{ width: '25%' }}></Column>
-                            <Column field="avgScore" header="Average Score" style={{ width: '25%' }}></Column>
-                        </DataTable>
+                        { showClassPerformanceChart ? (
+                                <TeacherBarChart labelsReceived={classPerformanceLabel} receivedData={classPerData}/>
+                            ) : (
+
+                                <DataTable value={classPerformanceData} scrollable={true} paginator rows={5} className="custom-td-padding" emptyMessage="No available data">
+                                    <Column field="name" header="Class Name" style={{ width: '30%' }}></Column>
+                                    <Column field="section" header="Section" style={{ width: '10%' }}></Column>
+                                    <Column field="avgScore" header="Average Score" style={{ width: '10%' }}></Column>
+                                    <Column field="enrolled" header="Total Student" style={{ width: '10%' }}></Column>
+                                </DataTable>
+                            )
+                        }
                     </div>
                 </div>
             </div>
