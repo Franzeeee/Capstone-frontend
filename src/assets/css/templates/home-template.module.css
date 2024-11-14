@@ -82,3 +82,9 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
+@media screen and (max-width: 426px) {
+    .container {
+        grid-template-columns: 0 1fr;
+    }
+}

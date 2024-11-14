@@ -334,3 +334,12 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     border-color: rgb(54, 54, 54);
     text-decoration: none !important;
 }
+@media screen and (max-width: 426px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    .profileContainer {
+        display: none !important;
+    }
+}
+
