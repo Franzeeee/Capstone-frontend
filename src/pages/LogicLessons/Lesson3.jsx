@@ -17,7 +17,7 @@ export default function Lesson3() {
               <div className={`${styles.create}`}>
                   <div>
                       <ul>
-                          <li>Grades</li>
+                          <li>Lesson</li>
                       </ul>
                   </div>
               </div>
