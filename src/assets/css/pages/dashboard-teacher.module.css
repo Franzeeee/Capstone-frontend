@@ -338,6 +338,9 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     .container {
         grid-template-columns: 1fr;
     }
+    .contentContainer {
+        padding-bottom: 2rem;
+    }
     .profileContainer {
         display: none !important;
     }

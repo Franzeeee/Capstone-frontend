@@ -21,6 +21,7 @@ import CryptoJS from "crypto-js";
 const ErrorContext = createContext();
 import menu from '../assets/img/icons/menu.png';
 import AccountMenu from '../components/AccountMenu';
+import DrawerNav from "../components/MobileVersion/DrawerNav";
 
 
 export default function HomeTemplate({ children }) {
@@ -143,7 +144,7 @@ export default function HomeTemplate({ children }) {
         <div className={`${styles.main}`}>
           <ToastContainer autoClose={3000} />
           <div className={`d-none ${styles.headNav}`}>
-            <img src={menu} alt="" />
+            <DrawerNav />
             <div>
               <AccountMenu />
             </div>
