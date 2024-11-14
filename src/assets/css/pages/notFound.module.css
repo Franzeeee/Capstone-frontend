@@ -57,3 +57,11 @@
     font-size: 15px;
     text-align: center;
 }
+@media screen and (max-width: 426px) {
+    .container .head img:first-child {
+        width: 40%;
+    }
+    .notfound img{
+        width: 75%;
+    }
+}

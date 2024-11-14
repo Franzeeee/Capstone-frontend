@@ -68,6 +68,7 @@ export const App = () => {
 
         <Route path="/load" element={<LoadingPage />} />
 
+
       </Routes>
     </BrowserRouter>
   );
