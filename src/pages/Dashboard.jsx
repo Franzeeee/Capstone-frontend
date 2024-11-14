@@ -153,8 +153,8 @@ export const Dashboard = () => {
     
 
     useEffect(() => {
-
         if (activeClass) {
+            setSampleData([]);
             customFetch(`/class/${activeClass}/student/average`)
             .then(data => {
                 setDataset({
@@ -178,7 +178,7 @@ export const Dashboard = () => {
             .catch(error => console.error('Error fetching classes:', error));
         }
 
-    }, [activeClass, teacherClass]);
+    }, [activeClass, teacherClass, activateSPerformanceChart]);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission

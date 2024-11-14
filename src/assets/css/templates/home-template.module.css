@@ -84,6 +84,9 @@ body {
 }
 
 @media screen and (max-width: 426px) {
+    .main {
+        padding: 0;
+    }
     .container {
         grid-template-columns: 0 1fr;
     }
