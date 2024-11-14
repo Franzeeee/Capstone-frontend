@@ -189,6 +189,11 @@
     font-size: .8rem;
     cursor: pointer;
 }
+.usermessage {
+    max-width: 60%;
+    word-break: break-word;
+    white-space: normal;
+}
 .schedule {
     height: 100%;
     display: flex;

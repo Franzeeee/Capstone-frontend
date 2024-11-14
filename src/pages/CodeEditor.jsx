@@ -551,8 +551,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     }
 
     const assisted = () => {
+
         setTestGenLevel(prev => prev + 1)
         setWithAssistance(true)
+        setIde(challangeDetails?.language === 'python' ? 0 : 1)
+        setGenerating(true)
+        generateProblem()
     }
 
     const submitCode = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../assets/css/pages/announcement.module.css'
 import CryptoJS from 'crypto-js';
 import HomeTemplate from '../templates/HomeTemplate'
@@ -10,6 +10,8 @@ export default function Announcement() {
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
 
+    const [createdData, setCreatedData] = useState(null);
+
     return (
     <HomeTemplate>
         <div className={`${styles.container}`}>
@@ -20,9 +22,9 @@ export default function Announcement() {
                     </div>
                 </div>
                 {
-                    user.role === 'teacher' && <AnnouncementForm />
+                    user.role === 'teacher' && <AnnouncementForm sendCreated={(data) => setCreatedData(data)} />
                 }
-                <AnnouncementContent />
+                <AnnouncementContent addedData={createdData} />
             </div>
             <div className={`${styles.profileContainer}`}>
                 <ProfileSide info={user}/>

@@ -165,7 +165,9 @@ export const Dashboard = () => {
                 setStudentPerformanceTable(data);
                 data?.data?.map((item, index) => {
                     setSampleData(prev => {
-                        return [{
+                        return [
+                            ...prev,
+                            {
                             name: item?.x,
                             section: data?.classData?.section,
                             avgScore: item?.y
