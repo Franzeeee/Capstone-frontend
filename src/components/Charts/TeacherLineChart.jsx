@@ -23,7 +23,7 @@ ChartJS.register(
 
 import styles from '../../assets/css/components/Charts/student-doughnut-chart.module.css'
 
-const LineChart = () => {
+const TeacherLineChart = () => {
     const data = {
         labels: ['Lesson 1', 'Midterm', 'Final Assessment'], // Milestones for each class
         datasets: [
@@ -86,4 +86,4 @@ const LineChart = () => {
     );
 };
 
-export default LineChart;
+export default TeacherLineChart;
