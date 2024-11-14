@@ -1266,7 +1266,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                                 </div>
                                                 <div className={`${styles.messageContent}`}>
                                                     <p className={`m-0 ${styles.userName}`}>{chat.user === 0 ? 'AI' : 'USER'}</p>
-                                                    <p className='m-0'>{chat.message}</p>
+                                                    <p className={`m-0 ${styles.usermessage}`}>{chat.message}</p>
                                                 </div>
                                             </div>
                                         )
