@@ -90,4 +90,23 @@ body {
     .container {
         grid-template-columns: 0 1fr;
     }
+    .headNav {
+        display: flex !important;
+        padding: 8px 10px;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #ffffff;
+        border-bottom: 1px solid #EDEEF5;
+        box-shadow: -1px 1px 10px 1px rgb(235 235 235);
+    } 
+    .headNav img:first-child{
+        width: 25px;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+    .headNav .profileCircle {
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 100%;
+    }
 }

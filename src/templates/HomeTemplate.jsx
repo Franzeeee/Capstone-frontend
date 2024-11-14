@@ -4,6 +4,7 @@ import styles from "../assets/css/templates/home-template.module.css";
 import logo from "../assets/img/logoCodelab.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBars,
   faBullhorn,
   faCalendarDays,
   faChalkboardTeacher,
@@ -18,6 +19,8 @@ import { ToastContainer } from "react-toastify";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import CryptoJS from "crypto-js";
 const ErrorContext = createContext();
+import menu from '../assets/img/icons/menu.png';
+import AccountMenu from '../components/AccountMenu';
 
 
 export default function HomeTemplate({ children }) {
@@ -139,6 +142,12 @@ export default function HomeTemplate({ children }) {
         </div>
         <div className={`${styles.main}`}>
           <ToastContainer autoClose={3000} />
+          <div className={`d-none ${styles.headNav}`}>
+            <img src={menu} alt="" />
+            <div>
+              <AccountMenu />
+            </div>
+          </div>
           {children}
         </div>
       </div>
