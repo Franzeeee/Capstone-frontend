@@ -99,6 +99,7 @@
 }
 .courseCard p {
     font-size: .9rem;
+    
 }
 .courseCard p:nth-child(2){
     font-size: .7rem;
@@ -107,10 +108,15 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 .cardHeader svg {
     font-size: .9rem;
 }
+.cardHeader select {
+    padding-inline: 10px;
+}
+
 .studentPerformance {
     display: flex !important;
     flex-direction: column;
@@ -118,9 +124,17 @@
     padding-top: 5px;
     background-color: #ffffff;
     padding: .4rem 1rem !important;
-    background: #bdd1ff;
+    background: #ffffff;
 }
-
+.chartText {
+    font-size: .8rem;
+    cursor: pointer;
+    transition: all .3s ease;
+    user-select: none;
+}
+.chartText:hover {
+    color: #4040e2;
+}
 
 .profileContainer {
     display: flex;
@@ -181,7 +195,7 @@
 .profileContainer .card {
     padding: 10px;
     width: 100%;
-    background-color: #DBDBFF;
+    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 1px 3px 5px 1px rgb(219 219 219);
 }
@@ -304,4 +318,8 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     padding: 2%;
     border: #e1dfdf solid 1px;
     margin-top: 2%;
+}
+.courseCard:hover {
+    border-color: rgb(54, 54, 54);
+    text-decoration: none !important;
 }

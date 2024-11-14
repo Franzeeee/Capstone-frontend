@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HomeTemplate from '../templates/HomeTemplate'; // Remove curly braces
 import styles from '../assets/css/pages/dashboard-teacher.module.css'
-import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle, faTable } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -18,6 +18,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ClassCardLoader from '../components/ClassCardLoader.jsx';
 import Button from 'react-bootstrap/Button';
 import ProfileSide from '../components/ProfileSide.jsx';
+import TeacherScatterPlot from '../components/Charts/TeacherScatterPlot.jsx';
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -57,6 +58,8 @@ export const Dashboard = () => {
     };
     
     const [show, setShow] = useState(false);
+
+    const [activateSPerformanceChart, setActivateSPerformanceChart] = useState(false);
 
     const toggleShow = () => setShow(prevShow => !prevShow);
     const api = import.meta.env.VITE_API_URL;
@@ -259,7 +262,7 @@ export const Dashboard = () => {
                     {latestClasses !== null ? (
                         latestClasses.length > 0 ? (
                             latestClasses.map((classItem, index) => (
-                                <div key={index} className={`${styles.courseCard}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
+                                <div key={index} className={`${styles.courseCard}`}>
                                     <p>{classItem.name}</p>
                                     <p>{classItem.section} ( {classItem.schedule} {classItem.room} )</p>
                                     <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "Code Generation Error"}</p>
@@ -281,14 +284,45 @@ export const Dashboard = () => {
                     <div className={`${styles.card} pt-1 ${styles.studentPerformance}`}>
                         <div className={`${styles.cardHeader}`}>
                             <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Student Performance</p>
+                            <select name="class" id="">
+                                <option value="class1">Class 1</option>
+                                <option value="class2">Class 2</option>
+                                <option value="class3">Class 3</option>
+                                <option value="class4">Class 4</option>
+                            </select>
+                            <p className={styles.chartText} onClick={() => setActivateSPerformanceChart(prev => !prev)}>
+                            {
+                                !activateSPerformanceChart ? (
+                                    <span>
+                                        <FontAwesomeIcon icon={faChartSimple} /> View Chart
+                                    </span>
+                                ) : (
+                                    <span>
+                                        <FontAwesomeIcon icon={faTable} /> View Table
+                                    </span>
+                                )
+                            }
+                            </p>
                         </div>
-                        <DataTable value={sampleData} scrollable={true} paginator rows={5} className="custom-td-padding customPagination">
+                        {
+                            activateSPerformanceChart ? (
+                                <TeacherScatterPlot />
+                            ) : (
+                                <DataTable value={sampleData} scrollable={true} paginator rows={5} className="custom-td-padding">
+                                    <Column field="name" header="Name" style={{ width: '25%' }}></Column>
+                                    <Column field="section" header="Section" style={{ width: '25%' }}></Column>
+                                    <Column field="avgScore" header="Average Score" style={{ width: '25%' }}></Column>
+                                </DataTable>
+                            )
+                        }
+                        {/* <DataTable value={sampleData} scrollable={true} paginator rows={5} className="custom-td-padding customPagination">
                             <Column field="name" header="Name" style={{ width: '25%' }}></Column>
                             <Column field="section" header="Section" style={{ width: '25%' }}></Column>
                             <Column field="avgScore" header="Average Score" style={{ width: '25%' }}></Column>
                             <Column header="Report" style={{width:'10%'}}></Column>
-                        </DataTable>
+                        </DataTable> */}
                     </div>
+                    
                     <div className={`${styles.card} pt-1 ${styles.studentPerformance}`}>
                         <div className={`${styles.cardHeader}`}>
                             <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Section Performance</p>

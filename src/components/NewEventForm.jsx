@@ -88,6 +88,9 @@ export default function NewEventForm({ open, onClose, onAddEvent }) {
             value={start}
             onChange={(e) => setStart(e.target.value)}
             required
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             fullWidth
@@ -95,6 +98,9 @@ export default function NewEventForm({ open, onClose, onAddEvent }) {
             label="End Date and Time"
             type="datetime-local"
             value={end}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(e) => setEnd(e.target.value)}
             required
           />

@@ -64,10 +64,10 @@ li {
   font-size: 0.9rem;
 }
 .custom-td-padding .p-datatable-tbody > tr > td {
-  background: #bdd1ff;
+  background: #ffffff;
 }
 .custom-td-padding th {
-  background: #bdd1ff !important;
+  background: #e1eaff !important;
   padding: 10px;
 }
 .custom-td-padding tr {
@@ -102,7 +102,7 @@ li {
   ); /* Color of the scrollbar thumb on hover */
 }
 .p-paginator {
-  background-color: #bdd1ff; /* Replace with your desired color */
+  background-color: #ffffff; /* Replace with your desired color */
 }
 .p-dropdown-items {
   padding: 0;
@@ -122,4 +122,31 @@ li {
 }
 .feedbackModal{
   color: red !important;
+}
+.studentGrades .table-responsive {
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+.studentGrades ul.pagination {
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 5px;
+}
+.studentGrades ul.pagination li {
+  margin: 0 5px;
+}
+.studentGrades ul.pagination li a {
+  color: #0066f5;
+}
+.studentGrades ul.pagination li.active a {
+  color: #ffffff;
+  background-color: #0066f5;
+}
+.studentGrades ul.pagination li a:hover {
+  color: #ffffff;
+  background-color: #0066f5;
+}
+.studentGrades ul.pagination li.disabled a {
+  color: #858585;
 }
