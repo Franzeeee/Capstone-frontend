@@ -60,6 +60,8 @@ export const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound/>} />
 
+        <Route path="/load" element={<LoadingPage />} />
+
       </Routes>
     </BrowserRouter>
   );
