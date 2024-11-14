@@ -60,7 +60,7 @@ export const Dashboard = () => {
     const [label, setLabel] = useState('');
     const [studentPerformanceTable, setStudentPerformanceTable] = useState(false);
 
-    const [showClassPerformanceChart, setShowClassPerformanceChart] = useState(false);
+    const [showClassPerformanceChart, setShowClassPerformanceChart] = useState(true);
     const [classPerformanceLabel, setClassPerformanceLabel] = useState([]);
     const [classPerforanceSend, setClassPerformanceSend] = useState({});
 
@@ -416,7 +416,7 @@ export const Dashboard = () => {
                             <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Class Performance</p>
                             <p className={styles.chartText} onClick={() => setShowClassPerformanceChart(prev => !prev)}>
                             {
-                                !activateSPerformanceChart ? (
+                                !showClassPerformanceChart ? (
                                     <span>
                                         <FontAwesomeIcon icon={faChartSimple} /> View Chart
                                     </span>
