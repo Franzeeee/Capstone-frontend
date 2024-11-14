@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-export default function AnnouncementForm() {
+export default function AnnouncementForm({sendCreated}) {
 
   const userData = localStorage.getItem('userData');
   const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
@@ -40,7 +40,7 @@ export default function AnnouncementForm() {
         })
         .then(data => {
             data.forEach((item) => { 
-                setOptions(prevOptions => [{ name: item.name, value: item.id }]);
+                setOptions(prevOptions => [...prevOptions, { name: item.name, value: item.id }]);
             });
         })
         .catch(error => console.error('Error fetching classes:', error));
@@ -78,15 +78,11 @@ export default function AnnouncementForm() {
         'Content-Type': 'application/json',
       }
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok: ' + response.status);
-    }
-    return response.json();
-    })
-    .then(
+    .then(data => {      
       toast.success('Announcement posted successfully'),
       setContent('')
+      sendCreated(data);
+    }
     )
     .catch(error => {
       console.error('Error:', error.message);

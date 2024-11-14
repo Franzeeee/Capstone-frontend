@@ -59,7 +59,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: end;
-}
+}   
 .contentContainer .header .moreCourse p{
     font-size: .8rem;
     margin: 0;
@@ -188,6 +188,11 @@
 .userName svg {
     font-size: .8rem;
     cursor: pointer;
+}
+.usermessage {
+    max-width: 60%;
+    word-break: break-word;
+    white-space: normal;
 }
 .schedule {
     height: 100%;

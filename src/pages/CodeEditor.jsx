@@ -551,8 +551,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     }
 
     const assisted = () => {
+
         setTestGenLevel(prev => prev + 1)
         setWithAssistance(true)
+        setIde(challangeDetails?.language === 'python' ? 0 : 1)
+        setGenerating(true)
+        generateProblem()
     }
 
     const submitCode = () => {
@@ -1266,7 +1270,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                                 </div>
                                                 <div className={`${styles.messageContent}`}>
                                                     <p className={`m-0 ${styles.userName}`}>{chat.user === 0 ? 'AI' : 'USER'}</p>
-                                                    <p className='m-0'>{chat.message}</p>
+                                                    <p className={`m-0 ${styles.usermessage}`}>{chat.message}</p>
                                                 </div>
                                             </div>
                                         )
