@@ -58,7 +58,7 @@
 }
 
 .isGenerting::after {
-  content: "Generatng Problem..";
+  content: "Generating Problem..";
   background-color: rgba(239, 239, 239, 0.681);
   height: 100%;
   width: 100%;

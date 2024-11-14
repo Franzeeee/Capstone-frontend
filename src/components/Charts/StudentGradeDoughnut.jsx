@@ -26,36 +26,41 @@ ChartJS.register(
 );
 import styles from '../../assets/css/components/Charts/student-doughnut-chart.module.css'
 
-const StudentGradeDoughnut = () => {
+const StudentGradeDoughnut = ({classData}) => {
+    console.log(classData);
     const data = {
-        labels: ['Fail', 'Pass'],  // X-axis labels
+        labels: ['Fail', 'Pass', 'Ungraded'],  // X-axis labels now include 'Ungraded'
         datasets: [
             {
                 label: 'Total Class',  // Name of the dataset
-                data: [1, 2],  // Data points
+                data: classData || [1,1,1],  // Data points for Fail, Pass, and Ungraded
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(0, 255, 0, 0.35)',
+                    'rgba(255, 99, 132, 0.2)',  // Color for 'Fail'
+                    'rgba(0, 255, 0, 0.35)',    // Color for 'Pass'
+                    'rgba(255, 255, 0, 0.4)',    // Color for 'Ungraded' (Yellow for visibility)
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(0, 255, 0, 1)',
+                    'rgba(255, 99, 132, 1)',  // Border color for 'Fail'
+                    'rgba(0, 255, 0, 1)',     // Border color for 'Pass'
+                    'rgba(255, 255, 0, 1)',    // Border color for 'Ungraded'
                 ],
-                borderWidth: 1
+                borderWidth: 1,
             },
         ],
     };
-
+    
     const options = {
         responsive: true,
         cutout: '70%',
         plugins: {
             title: {
                 display: true,
-                text: 'Students Grades Distribution',
+                text: 'Students Grades Distribution',  // Title of the chart
             },
         },
+        
     };
+    
 
     return (
         <div className={styles.chartContainer}>

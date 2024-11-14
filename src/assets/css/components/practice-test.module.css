@@ -9,7 +9,7 @@ p {
     justify-content: center;
     position: absolute;
     width: 100%;
-    bottom: 0;
+    bottom: 1rem;
 }
 
 .box {
@@ -53,4 +53,12 @@ p {
     flex-direction: column;
     gap: 5px;
     flex: .4
+}
+
+@media screen and (min-height: 1800px) {
+    .box {
+        bottom: 0;
+    }
+
+    
 }
