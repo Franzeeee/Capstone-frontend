@@ -17,6 +17,7 @@ import { createEventModalPlugin } from "@schedule-x/event-modal";
 import NewEventForm from "../components/NewEventForm";
 import { Button } from "@mui/material";
 import { format } from "date-fns";
+import customFetch from "../utils/fetchApi";
 
 export default function Calendar() {
   const userData = localStorage.getItem("userData");
@@ -34,10 +35,11 @@ export default function Calendar() {
 
   const calendar = useCalendarApp(
     {
+      defaultView: createViewMonthGrid(),
       views: [
+        createViewMonthGrid(),
         createViewDay(),
         createViewWeek(),
-        createViewMonthGrid(),
         createViewMonthAgenda(),
       ],
       events: [],
@@ -46,9 +48,31 @@ export default function Calendar() {
   );
 
   useEffect(() => {
-    calendar.eventsService.getAll();
-  }, []);
+    customFetch('/events/fetch')
+      .then(data => {
 
+        const formattedEvents = data.map(event => {
+          const startDateTime = `${event.start_date}T${event.start_time}`;
+          const endDateTime = `${event.end_date}T${event.end_time}`;
+
+          return {
+            id: event.id.toString(),
+            title: event.title,
+            description: event.description,
+            start: format(new Date(startDateTime), "yyyy-MM-dd HH:mm"),
+            end: format(new Date(endDateTime), "yyyy-MM-dd HH:mm"),
+          };
+        });
+
+        // Add each event to the calendar
+        formattedEvents.forEach(event => calendar.eventsService.add(event));
+      })
+      .catch(error => {
+        console.error('Error:', error.message);
+      });
+  }, [calendar.eventsService]);
+
+  
   const [openModal, setOpenModal] = useState(false);
 
   const handleAddEvent = (event) => {
@@ -67,7 +91,7 @@ export default function Calendar() {
         style={{ gridTemplateColumns: "1fr" }}
       >
         <div className={`${styles.contentContainer}`}>
-          <div className={`${styles.header}`}>
+          <div className={`${styles.header}`} style={{display: "flex", flexDirection: 'column'}}>
             <div className={`${styles.create}`}>
               <p>Calendar</p>
               <Button

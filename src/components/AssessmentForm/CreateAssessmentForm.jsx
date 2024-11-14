@@ -122,6 +122,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
   };
   
   const handleSubmit = (e) => {
+    setProcessing(true);
     e.preventDefault();
     if (activeForm === "coding") {
       if (timeError) {

@@ -95,6 +95,7 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
             }
     
             const result = await response.json();
+            toast.dismiss();
             toast.success("Assessment created successfully");
             handleClose();
         } catch (error) {

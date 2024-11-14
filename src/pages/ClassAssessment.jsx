@@ -42,10 +42,6 @@ export default function ClassAssessment() {
     const [submissionData, setSubmissionData] = useState(null);
     const [feedback, setFeedback] = useState(null);
 
-    useEffect(() => {
-        console.log(feedback);
-    }, [feedback]);
-
     const user = getUserData();
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
     const [currentLesson, setCurrentLesson] = useState(() => {
@@ -71,8 +67,6 @@ export default function ClassAssessment() {
     useEffect(() => {
 
         setActivityId(location.state?.item?.id);
-    
-        console.log("Activity ID: ", activityId);
 
         if (!activityId) {
             navigate('/not-found'); // Navigate away if `activityId` is null
@@ -83,7 +77,6 @@ export default function ClassAssessment() {
         customFetch(`/activity/${activityId}/auth`, 'GET')
             .then(data => {
                 setAssessmentData(data);
-                console.log("Assessment Data: ", data);
             })
             .catch(error => {
                 navigate('/not-found');
@@ -100,7 +93,7 @@ export default function ClassAssessment() {
                     rank: data?.rank,
                     total: data?.total_submissions
                 });
-                if(data?.cheating_record !== null) {
+                if(data?.cheating_record && data?.cheating_record !== null) {
                     setTotalLeaveFullscreen(data?.cheating_record?.exit_fullscreen);
                     setTotalAltTab(data?.cheating_record?.change_tab);
                 }
