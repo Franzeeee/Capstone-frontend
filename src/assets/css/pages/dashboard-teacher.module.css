@@ -115,6 +115,9 @@
 }
 .cardHeader select {
     padding-inline: 10px;
+    max-width: 40%;
+    font-size: .8rem;
+    outline: none;
 }
 
 .studentPerformance {
@@ -205,6 +208,7 @@
 .activityInfo{
     position: relative;
 }
+
 
 .activityContainer {
     width: 100%;

@@ -14,48 +14,22 @@ import {
     // Register the necessary components for Chart.js
     ChartJS.register(CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
 
-    const TeacherScatterPlot = () => {
+    const TeacherScatterPlot = ({dataClass, labels}) => {
 
 
         const [classData, setClassData] = useState([
             {x: 'John Doe', y: 85},
         ]);
+        
+        console.log(dataClass);
 
     // Sample data based on the names, sections, and scores provided
     const data = {
         datasets: [
             {
-                label: 'Section AI41',
-                data: [
-                    { x: 'John Doe', y: 85 },
-                    { x: 'Jane Smith', y: 90 },
-                    { x: 'Michael Lee', y: 88 },
-                    { x: 'Emily Clark', y: 92 },
-                    { x: 'Sophia Davis', y: 95 },
-                    { x: 'Oliver Wilson', y: 87 },
-                    { x: 'Liam Harris', y: 91 },
-                    { x: 'Isabella Martinez', y: 89 },
-                    { x: 'Lucas Anderson', y: 86 },
-                    { x: 'Amelia Taylor', y: 93 },
-                    { x: 'Ethan Thomas', y: 80 },
-                    { x: 'Mia Robinson', y: 94 },
-                    { x: 'Benjamin Garcia', y: 79 },
-                    { x: 'Charlotte Moore', y: 98 },
-                    { x: 'Aiden Jackson', y: 83 },
-                    { x: 'Harper White', y: 92 },
-                    { x: 'Jacob Lewis', y: 96 },
-                    { x: 'Aria Scott', y: 91 },
-                    { x: 'Elijah Walker', y: 90 },
-                    { x: 'Grace King', y: 88 },
-                    { x: 'Sebastian Young', y: 86 },
-                    { x: 'Lily Hernandez', y: 94 },
-                    { x: 'James Allen', y: 93 },
-                    { x: 'Zoe King', y: 92 },
-                    { x: 'Henry Wright', y: 85 },
-                    { x: 'Chloe Hill', y: 89 },
-                ],
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            },
+                ...dataClass,
+                label: labels,
+            }
 
         ]
         
@@ -85,7 +59,7 @@ import {
         plugins: {
             title: {
                 display: true,
-                text: 'Average Scores by Student and Section',
+                text: 'Average Scores by Student',
             },
             tooltip: {
                 callbacks: {

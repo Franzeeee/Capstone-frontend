@@ -19,6 +19,7 @@ import ClassCardLoader from '../components/ClassCardLoader.jsx';
 import Button from 'react-bootstrap/Button';
 import ProfileSide from '../components/ProfileSide.jsx';
 import TeacherScatterPlot from '../components/Charts/TeacherScatterPlot.jsx';
+import customFetch from '../utils/fetchApi.js';
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -60,9 +61,15 @@ export const Dashboard = () => {
     const [show, setShow] = useState(false);
 
     const [activateSPerformanceChart, setActivateSPerformanceChart] = useState(false);
+    const [label, setLabel] = useState('');
 
     const toggleShow = () => setShow(prevShow => !prevShow);
     const api = import.meta.env.VITE_API_URL;
+    
+    const [teacherClass, setTeacherClass] = useState(null);
+    const [activeClass, setActiveClass] = useState(null);
+
+    const [dataset, setDataset] = useState([]);
 
     useEffect(() => {
         if (user.role === 'teacher') {
@@ -84,8 +91,41 @@ export const Dashboard = () => {
                     setLatestClasses(data);
                 })
                 .catch(error => console.error('Error fetching classes:', error));
+
+                // Fetch teacher classess and student performance
+                customFetch(`/teacher/class/all`, {
+                    method: 'GET',
+                })
+                .then(data => {
+                    setTeacherClass(data);
+                    if (data.length > 0) {
+                        setActiveClass(data[0].id);
+                    }
+                })
+                .catch(error => console.error('Error fetching classes:', error));
         }
     }, [user.id, user.role]);
+
+    useEffect(() => {
+
+        if (activeClass) {
+            customFetch(`/class/${activeClass}/student/average`)
+            .then(data => {
+                setDataset({
+                    data: data.data,
+                    backgroundColor: generateRandomRGB(),
+                })
+                setLabel(data.label);
+                console.log(data?.label);
+            })
+            .catch(error => console.error('Error fetching classes:', error));
+        }
+
+    }, [activeClass, teacherClass]);
+
+    useEffect(() => {
+        console.log(dataset);
+    }, [dataset]);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -262,7 +302,7 @@ export const Dashboard = () => {
                     {latestClasses !== null ? (
                         latestClasses.length > 0 ? (
                             latestClasses.map((classItem, index) => (
-                                <div key={index} className={`${styles.courseCard}`}>
+                                <div key={index} className={`${styles.courseCard}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
                                     <p>{classItem.name}</p>
                                     <p>{classItem.section} ( {classItem.schedule} {classItem.room} )</p>
                                     <p className={`${styles.classCode}`}>Class Code: {classItem.class_code?.code || "Code Generation Error"}</p>
@@ -285,10 +325,10 @@ export const Dashboard = () => {
                         <div className={`${styles.cardHeader}`}>
                             <p> <FontAwesomeIcon icon={faChartSimple}></FontAwesomeIcon> Student Performance</p>
                             <select name="class" id="">
-                                <option value="class1">Class 1</option>
-                                <option value="class2">Class 2</option>
-                                <option value="class3">Class 3</option>
-                                <option value="class4">Class 4</option>
+                                { teacherClass && teacherClass.map((item, index) => (
+                                    <option key={index} value={item.id}>{item.name}</option>
+                                ))
+                                }
                             </select>
                             <p className={styles.chartText} onClick={() => setActivateSPerformanceChart(prev => !prev)}>
                             {
@@ -306,7 +346,7 @@ export const Dashboard = () => {
                         </div>
                         {
                             activateSPerformanceChart ? (
-                                <TeacherScatterPlot />
+                                <TeacherScatterPlot labels={label} dataClass={dataset} />
                             ) : (
                                 <DataTable value={sampleData} scrollable={true} paginator rows={5} className="custom-td-padding">
                                     <Column field="name" header="Name" style={{ width: '25%' }}></Column>
@@ -342,3 +382,10 @@ export const Dashboard = () => {
         </HomeTemplate>
     );
 };
+
+function generateRandomRGB() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+}
