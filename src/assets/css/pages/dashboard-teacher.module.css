@@ -358,5 +358,6 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     .cardHeader svg {
         margin-right: 5px;
     }
+    
 }
 

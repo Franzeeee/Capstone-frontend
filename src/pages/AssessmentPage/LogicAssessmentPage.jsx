@@ -67,7 +67,6 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
             const newFiles = [...prev, ...selectedFiles]; // Combine old files with new files
             return newFiles;
         }); // Update state with selected files
-        console.log("files", files);
         setDocFiles(prev => {
             const newFiles = [...prev, ...selectedFiles.map(file => {
                 return {

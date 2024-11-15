@@ -68,8 +68,6 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
             errors.forEach(error => toast.error(error));
             return;
         }
-
-        console.log(data);
     
         try {
 

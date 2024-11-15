@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HomeTemplate from '../templates/HomeTemplate'; // Remove curly braces
 import styles from '../assets/css/pages/dashboard-teacher.module.css'
-import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle, faTable } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle, faSpinner, faTable } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -29,6 +29,8 @@ export const Dashboard = () => {
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
 
+    const [loading, setLoading] = useState(false);
+
     const [sampleData, setSampleData] = useState([]);
     const [classPerformanceData, setClassPerformanceData] = useState([]);
 
@@ -41,7 +43,6 @@ export const Dashboard = () => {
         subject: '',
         startDate: '',
         endDate: '',
-        teacher_id: 1
     });
 
     const [latestClasses, setLatestClasses] = useState(null)
@@ -181,12 +182,14 @@ export const Dashboard = () => {
     }, [activeClass, teacherClass, activateSPerformanceChart]);
 
     const handleSubmit = (e) => {
+        setLoading(true);
         e.preventDefault(); // Prevent the default form submission
         const { className, section, schedule, room, subject, startDate, endDate } = formData;
         formData.teacher_id = user.id;
 
-        if (!className || !section || !schedule || !room || !subject || !startDate || !endDate) {
+        if (!className || !section || !schedule || !room || !subject) {
             toast.error('Please fill in all required fields.');
+            setLoading(false);
             return; // Prevent form submission
         }
         fetch(`${api}/class/create`, {
@@ -234,7 +237,18 @@ export const Dashboard = () => {
             });
             toggleShow();
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            setLoading(false);
+            setFormData({
+                className: '',
+                description: '',
+                section: '',
+                schedule: '',
+                room: '',
+                subject: '',
+            });
+        });
     };
 
     useEffect(() => {
@@ -297,7 +311,7 @@ export const Dashboard = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="schedule"className={`${styles.label}`}>Schedule</label>
-                            <input type="text" className="form-control" id="schedule" placeholder="Enter semester" 
+                            <input type="text" className="form-control" id="schedule" placeholder="Enter Schedule" 
                             value={formData.schedule}
                             onChange={handleChange}
                             />
@@ -323,8 +337,8 @@ export const Dashboard = () => {
                     </form>
                 </Modal.Body>
                 <Modal.Footer className='border-none'>
-                    <Button className={`${styles.Close}`} onClick={toggleShow} >Cancel</Button>
-                    <Button className={`${styles.Create}`} onClick={handleSubmit}>Create</Button>
+                    <Button type='button' className={`${styles.Close}`} onClick={toggleShow} >Cancel</Button>
+                    <Button type='button' disabled={loading} className={`${styles.Create}`} onClick={loading ? "" : handleSubmit}>{!loading ?  "Create" : <FontAwesomeIcon spin icon={faSpinner}/>}</Button>
                 </Modal.Footer>
             </Modal>
 

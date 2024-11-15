@@ -94,7 +94,7 @@ export const Login = () => {
                             <FontAwesomeIcon icon={!showPassword ? faEyeSlash : faEye} className={`${styles.showPassword}`} onClick={handleShowPassword}/>
                         </div>
                         <button type="submit" className="btn btn-primary" style={{backgroundColor: '#5D5DD4'}} disabled={loader}>{ loader ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"}</button>
-                        <p className='text-center mt-3'>Already have an account? <span onClick={moveToLogin}>Sign up</span></p>
+                        <p className='text-center mt-3'>Don't have an account? <span onClick={moveToLogin}>Sign up</span></p>
                     </form>
                 </div>
             </div>

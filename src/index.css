@@ -116,6 +116,7 @@ li {
 .sx-react-calendar-wrapper {
   width: 100%;
   max-width: 100vw;
+  min-height: 500px;
 }
 .hysiap{
   overflow: hidden;

@@ -51,7 +51,7 @@ export default function ConfirmationTextModal({ show, handleClose, modalData }) 
                                                 ${modalData.disableConfirm ? styles.disabled : ""} 
                                                 ${modalData.inputMessage !== inputValue ? styles.disabled : ""}`} 
                                     disabled={modalData.disableConfirm || modalData.inputMessage !== inputValue || loading} 
-                                    onClick={() => modalData.inputMessage === inputValue ? runAction : ""}>
+                                    onClick={runAction}>
                                 {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : modalData.confirmText || "Confirm"}
                             </button>
                         </div>

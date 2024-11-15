@@ -81,8 +81,7 @@ export default function HomeTemplate({ children }) {
                 <li
                   onClick={() => navigate("/calendar")}
                   className={`${
-                    location.pathname === "/calendar" ||
-                    location.pathname === "/c/testurl"
+                    location.pathname === "/calendar"
                       ? styles.active
                       : ""
                   }`}
@@ -92,8 +91,7 @@ export default function HomeTemplate({ children }) {
                 <li
                   onClick={() => navigate("/announcements")}
                   className={`${
-                    location.pathname === "/announcements" ||
-                    location.pathname === "/c/testurl"
+                    location.pathname === "/announcements"
                       ? styles.active
                       : ""
                   }`}

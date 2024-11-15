@@ -20,7 +20,6 @@ const FeedbackModal = ({feedbackData, sendFeedback}) => {
 
     useEffect(() => {
         setFeedback(feedbackData);
-        console.log(feedbackData);
     }, [feedbackData]);
 
     return (

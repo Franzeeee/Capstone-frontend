@@ -94,7 +94,6 @@ export default function ProfileSide({ info }) {
       method: "DELETE"
     })
     .then(data => {
-      console.log(data);
       setEvents(events.filter(event => event.id !== id));
       toast.success("Event deleted successfully");
     })

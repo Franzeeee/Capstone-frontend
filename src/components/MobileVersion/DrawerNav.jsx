@@ -12,9 +12,14 @@ import logo from '../../assets/img/logoCodelab.png';
 import styles from '../../assets/css/templates/home-template.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function DrawerNav() {
     const [open, setOpen] = React.useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const tabName = location.pathname;
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -27,15 +32,24 @@ export default function DrawerNav() {
                 <FontAwesomeIcon icon={faXmark} onClick={toggleDrawer(false)} />
             </div>
         <List>
-            {['Dashboard', 'Coding Playgound', 'Calendar', 'Announcements', 'Classes', 'Grades'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-                <ListItemButton>
-                <ListItemText primary={text} />
-                </ListItemButton>
-            </ListItem>
-            ))}
-        </List>
-        <Divider />
+            {[
+                { text: 'Dashboard', path: '/dashboard' },
+                { text: 'Coding Playground', path: '/playground' },
+                { text: 'Calendar', path: '/calendar' },
+                { text: 'Announcements', path: '/announcements' },
+                { text: 'Classes', path: '/teacher/classes' },
+                { text: 'Grades', path: '/grades' }
+            ].map((item, index) => (
+                <ListItem key={item.text} disablePadding>
+                    <ListItemButton 
+                        className={`${tabName === item.path ? styles.active : ''}`}
+                        onClick={() => navigate(item.path)}
+                    >
+                    <ListItemText primary={item.text} />
+                    </ListItemButton>
+                </ListItem>
+                ))} 
+            </List>
         </Box>
     );
 
@@ -43,7 +57,9 @@ export default function DrawerNav() {
         <div>
         <img onClick={toggleDrawer(true)} src={menu} alt="" />
         <Drawer open={open} onClose={toggleDrawer(false)}>
-            {drawerContent}
+            <div tabIndex={open ? 0 : -1}>
+                {drawerContent}
+            </div>
         </Drawer>
         </div>
     );

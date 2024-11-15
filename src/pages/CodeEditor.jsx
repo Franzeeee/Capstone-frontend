@@ -123,8 +123,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 // Read the file contents
                 const text = await file.text();
                 
-                // Display the contents or do something with `text`
-                console.log("File contents:", text);
                 // You could also assign `text` to a variable or an element on the page
                 
             } catch (error) {
@@ -382,7 +380,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const onWsConnectionFailed = (e) => {
-        console.log("connection failed");
+        alert("connection failed");
     };
 
     const handleInput = (event) => {
@@ -515,7 +513,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         const editor = document.querySelector('.CodeMirror').CodeMirror; // Get the CodeMirror instance
         if (editor) {
             const highlightedCode = editor.getSelection(); // Get the selected text
-            console.log('Highlighted code:', highlightedCode);
         } else {
             console.log('CodeMirror instance not found');
         }
@@ -738,7 +735,6 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 ...prevState,
                 timeConsumed: time - data.time_limit
             }));
-            console.log(time)
         }
     };
 
@@ -856,7 +852,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 });
 
         } else {
-            console.log("Some submissions failed. Check the console for details.");
+            alert("Some submissions failed.");
         }
         
     };
