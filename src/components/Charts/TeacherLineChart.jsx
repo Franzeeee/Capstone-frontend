@@ -25,11 +25,11 @@ import styles from '../../assets/css/components/Charts/student-doughnut-chart.mo
 
 const TeacherLineChart = () => {
     const data = {
-        labels: ['Lesson 1', 'Midterm', 'Final Assessment'], // Milestones for each class
+        labels: ['Lesson 1', 'Midterm', 'Final Assessment'],
         datasets: [
             {
                 label: 'Python Class GWA',
-                data: [85, 90, 92], // Sample GWA values for Python assessments
+                data: [85, 90, 92],
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 2,
@@ -38,7 +38,7 @@ const TeacherLineChart = () => {
             },
             {
                 label: 'Web Development Class GWA',
-                data: [80, 87, 88], // Sample GWA values for Web Dev assessments
+                data: [80, 87, 88],
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 2,
@@ -79,10 +79,9 @@ const TeacherLineChart = () => {
         },
     };
 
-
     return (
-        <div className={`${styles.chartContainer} ${styles.lineChart}`}>
-            <Line data={data} options={options}/>
+        <div className={styles.chartContainer}>
+            <Line data={data} options={options} />
         </div>
     );
 };
