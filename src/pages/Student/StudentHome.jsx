@@ -109,7 +109,7 @@ export default function StudentHome() {
                                     </div>
                                     <div className={`${styles.courseText}`}>
                                         <p>{classItem.name}</p>
-                                        <p>{classItem.subject.toLowerCase() === 'python' ? '12 Lessons' : '10 Lessons'}</p>
+                                        <p>{classItem.subject.toLowerCase() === 'python' ? '28 Lessons' : '44 Lessons'}</p>
                                     </div>
                                     <div className={`${styles.goTo}`}>
                                         <div className={`${styles.viewButton}`} onClick={() => navigate(`/c/${classItem.class_code.code}`)}>
