@@ -165,6 +165,8 @@ export const Register = () => {
         })
         .catch(error => console.error(error))
         .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }
 
