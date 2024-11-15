@@ -48,8 +48,6 @@ export default function ClassDashboard() {
         }
     }, [code, navigate, classData]);
 
-    console.log(classData);
-
     const [isLoading, setIsLoading] = useState(true);
 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
