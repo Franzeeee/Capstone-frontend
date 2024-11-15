@@ -319,18 +319,6 @@ export const Dashboard = () => {
                                 <option value={"Web Development"}>Web Development</option>
                             </select>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="startDate"className={`${styles.label}`}>Start Date</label>
-                            <input type="date" className="form-control" id="startDate" 
-                            value={formData.startDate}
-                            onChange={handleChange}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="endDate"className={`${styles.label}`}>End Date</label>
-                            <input type="date" className="form-control" id="endDate" 
-                            value={formData.endDate}
-                            onChange={handleChange}/>
-                        </div>
                         </div>
                     </form>
                 </Modal.Body>
