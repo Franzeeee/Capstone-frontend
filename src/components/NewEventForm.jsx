@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Modal, Box, TextField, Button } from "@mui/material";
 import customFetch from "../utils/fetchApi";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 
 const modalStyle = {
   position: "absolute",
@@ -46,7 +46,7 @@ export default function NewEventForm({ open, onClose, onAddEvent }) {
       body: evenData,
     })
     .then(data => {
-      console.log(data);
+      // setEvents(data);
     })
     .catch(err => {
       console.error(err);

@@ -59,7 +59,6 @@ export default function StudentHome() {
             }
             return prevClassData; // Return the existing classes if it already exists
         });
-        console.log(newClass);
         toast.success('Class joined successfully!', { autoClose: 5000 });
     };
     

@@ -23,3 +23,18 @@
 .loader p {
     margin-top: -3rem;
 }
+
+@media screen and (max-width: 426px) {
+
+    .container .head img:first-child {
+        width: 40%;
+    }
+    .loader img{
+        width: 60%;
+    }
+    .loader p{
+        margin-top: -1rem;
+        width: 60%;
+        text-align: center;
+    }
+}

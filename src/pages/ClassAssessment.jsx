@@ -84,7 +84,6 @@ export default function ClassAssessment() {
 
         customFetch(`/submission/${activityId}/${user?.id}`, 'GET')
             .then(data => {
-                console.log("Submission Data: ", data);
                 setSubmissionData(data.data);
                 setFeedback(data?.feedback);
                 setTimeTaken(prev => prev + data?.data?.time_taken);

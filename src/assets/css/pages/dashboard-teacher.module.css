@@ -59,7 +59,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: end;
-}
+}   
 .contentContainer .header .moreCourse p{
     font-size: .8rem;
     margin: 0;
@@ -188,6 +188,11 @@
 .userName svg {
     font-size: .8rem;
     cursor: pointer;
+}
+.usermessage {
+    max-width: 60%;
+    word-break: break-word;
+    white-space: normal;
 }
 .schedule {
     height: 100%;
@@ -329,3 +334,30 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     border-color: rgb(54, 54, 54);
     text-decoration: none !important;
 }
+@media screen and (max-width: 426px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    .contentContainer {
+        padding-bottom: 2rem;
+    }
+    .profileContainer {
+        display: none !important;
+    }
+    .cardHeader {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .cardHeader select {
+        max-width: 100%;
+        padding: 5px;
+    }
+    .cardHeader p:first-child {
+        font-size: .8rem !important;
+    }
+    .cardHeader svg {
+        margin-right: 5px;
+    }
+    
+}
+

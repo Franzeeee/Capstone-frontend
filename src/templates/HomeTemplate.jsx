@@ -4,6 +4,7 @@ import styles from "../assets/css/templates/home-template.module.css";
 import logo from "../assets/img/logoCodelab.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBars,
   faBullhorn,
   faCalendarDays,
   faChalkboardTeacher,
@@ -18,6 +19,10 @@ import { ToastContainer } from "react-toastify";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import CryptoJS from "crypto-js";
 const ErrorContext = createContext();
+import menu from '../assets/img/icons/menu.png';
+import AccountMenu from '../components/AccountMenu';
+import DrawerNav from "../components/MobileVersion/DrawerNav";
+import LogoutConfirmationModal from "../components/LogoutConfirmationModal";
 
 
 export default function HomeTemplate({ children }) {
@@ -30,13 +35,17 @@ export default function HomeTemplate({ children }) {
       JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
   );
 
+  const [showModal, setShowModal] = useState(false);
+
   const [show, setShow] = useState(false);
 
   const toggleShow = () => setShow((prev) => !prev);
+  const handleClose = () => setShowModal(false);
 
   return (
     <ErrorContext.Provider value={{ error, setError }}>
       <div className={`${styles.container}`}>
+      <LogoutConfirmationModal show={showModal} handleClose={handleClose}/> 
         <Modal show={show} onHide={toggleShow}>
           <Modal.Header closeButton>
             <p className="m-0">
@@ -72,8 +81,7 @@ export default function HomeTemplate({ children }) {
                 <li
                   onClick={() => navigate("/calendar")}
                   className={`${
-                    location.pathname === "/calendar" ||
-                    location.pathname === "/c/testurl"
+                    location.pathname === "/calendar"
                       ? styles.active
                       : ""
                   }`}
@@ -83,8 +91,7 @@ export default function HomeTemplate({ children }) {
                 <li
                   onClick={() => navigate("/announcements")}
                   className={`${
-                    location.pathname === "/announcements" ||
-                    location.pathname === "/c/testurl"
+                    location.pathname === "/announcements"
                       ? styles.active
                       : ""
                   }`}
@@ -139,6 +146,12 @@ export default function HomeTemplate({ children }) {
         </div>
         <div className={`${styles.main}`}>
           <ToastContainer autoClose={3000} />
+          <div className={`d-none ${styles.headNav}`}>
+            <DrawerNav />
+            <div>
+              <AccountMenu logoutOnClick={() => setShowModal(true)} />
+            </div>
+          </div>
           {children}
         </div>
       </div>

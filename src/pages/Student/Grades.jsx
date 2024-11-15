@@ -65,7 +65,7 @@ useEffect(() => {
   setClassData([
     failClasses.length,
     passClasses.length,
-    !gradedClasses.length,
+    ungraddedClasses
   ])
 
 }, [classes]);
@@ -105,7 +105,7 @@ useEffect(() => {
                   <div className={styles.card}>
                     <div className={styles.cardTitle}>Ungraded Class</div>
                     <div className={styles.cardValue}>
-                      {fetching ? <FontAwesomeIcon icon={faSpinner} spin /> : classes.length - gradedClasses || 0}
+                      {fetching ? <FontAwesomeIcon icon={faSpinner} spin /> : classData && classData[3] || 0}
                     </div>
                   </div>
                 </div>

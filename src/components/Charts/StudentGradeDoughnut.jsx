@@ -27,7 +27,6 @@ ChartJS.register(
 import styles from '../../assets/css/components/Charts/student-doughnut-chart.module.css'
 
 const StudentGradeDoughnut = ({classData}) => {
-    console.log(classData);
     const data = {
         labels: ['Fail', 'Pass', 'Ungraded'],  // X-axis labels now include 'Ungraded'
         datasets: [

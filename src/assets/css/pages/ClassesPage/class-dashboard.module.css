@@ -157,6 +157,7 @@
     width: 100%;
     background-color: #f8f8f8;
     color: #000;
+    position: relative
 }
 .additionalInfo p {
     font-size: .8rem;
@@ -560,4 +561,15 @@
 
 .borderLeftAssign {
     border-left: 3px solid #28bbff;
+}
+.editClass {
+    bottom: 10% !important;
+    right: 10px !important;
+    padding: 0 !important;
+}
+.editClass:hover {
+    background-color: transparent !important;
+    padding: 0 !important;
+    transition: none;
+    color: rgb(34, 0, 255);
 }

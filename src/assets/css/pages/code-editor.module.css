@@ -564,6 +564,11 @@
     font-size: .8rem;
     font-weight: 600;
 }
+.usermessage {
+    max-width: 100%;
+    word-break: break-word;
+    white-space: normal;
+}
 .chatbox {
     width: 90%;
     min-height: 50px;

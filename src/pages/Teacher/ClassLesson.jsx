@@ -22,8 +22,6 @@ export default function ClassLesson() {
 
     const lessons = location.state?.subject === 'Python' ? PythonLesson : webLessons;
 
-    console.log(location.state?.lesson);
-
     const lessonIndex = location.state?.lesson|| 0;
 
     const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);

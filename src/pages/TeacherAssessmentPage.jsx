@@ -63,7 +63,7 @@ export default function TeacherAssessmentPage() {
             <div className={`${styles.container}`}>
                 <ConfirmationTextModal 
                     show={showDeleteConfirmation} 
-                    handleClose={() => deleteClass()} 
+                    handleClose={() => setShowDeleteConfirmation(false)} 
                     modalData={{
                         title: 'Delete Class',
                         inputMessage: 'delete class',

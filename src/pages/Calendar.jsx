@@ -29,7 +29,6 @@ export default function Calendar() {
 
   const plugins = [
     createEventsServicePlugin(),
-    createDragAndDropPlugin(),
     createEventModalPlugin(),
   ];
 

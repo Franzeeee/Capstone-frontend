@@ -9,7 +9,7 @@ import CryptoJS from 'crypto-js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { toast } from 'react-toastify'
 
-export default function AnnouncementContent({ data }) {
+export default function AnnouncementContent({ data, addedData }) {
 
     const userData = localStorage.getItem('userData');
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
@@ -24,13 +24,27 @@ export default function AnnouncementContent({ data }) {
             .catch(error => {
                 console.error('Error:', error.message);
             });
-    }, [])
+    }, [data]); 
+
+    useEffect(() => {
+        if (addedData && addedData?.data) {
+            setAnnouncements((prevAnnouncements) => [{
+                announcement_date: addedData?.data?.announcement_date,
+                content: addedData?.data?.content,
+                content_id: addedData?.data?.id,
+                course_class: addedData?.course_class,
+                teacher: addedData?.teacher,
+            }, ...prevAnnouncements]);
+
+        }
+
+    }, [addedData]);
 
     const deleteAnnouncement = (id) => {
         customFetch(`/announcement/delete/${id}`, 'DELETE')
             .then((data) => {
                 setAnnouncements((prevAnnouncements) =>
-                    prevAnnouncements.filter((announcement) => announcement.id !== id)
+                    prevAnnouncements.filter((announcement) => announcement.announcement_id !== id)
                 );
                 toast.success('Announcement deleted successfully');
             })
@@ -55,9 +69,9 @@ export default function AnnouncementContent({ data }) {
                                 <img src={profile} alt="" />
                             </div>
                             <div className={styles.profileInfo}>
-                                <p>{announcement.teacher.name}</p>
-                                <p>{announcement.course_class.name}</p>
-                                <p>{announcement.announcement_date}</p>
+                                <p>{announcement?.teacher?.name}</p>
+                                <p>{announcement?.course_class?.name}</p>
+                                <p>{announcement?.announcement_date}</p>
                             </div>
                         </div>
                         <div className={styles.more}>

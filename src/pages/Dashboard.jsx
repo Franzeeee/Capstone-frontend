@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HomeTemplate from '../templates/HomeTemplate'; // Remove curly braces
 import styles from '../assets/css/pages/dashboard-teacher.module.css'
-import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle, faTable } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faCheckSquare, faClock, faEdit, faPlusCircle, faSpinner, faTable } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -29,6 +29,8 @@ export const Dashboard = () => {
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));
 
+    const [loading, setLoading] = useState(false);
+
     const [sampleData, setSampleData] = useState([]);
     const [classPerformanceData, setClassPerformanceData] = useState([]);
 
@@ -41,7 +43,6 @@ export const Dashboard = () => {
         subject: '',
         startDate: '',
         endDate: '',
-        teacher_id: 1
     });
 
     const [latestClasses, setLatestClasses] = useState(null)
@@ -113,9 +114,7 @@ export const Dashboard = () => {
                 method: 'GET',
             })
             .then(data => {
-                console.log(data);
                 data?.map((item, index) => {
-                    console.log(item);
                     setClassPerformanceData(prev => ([
                         ...prev,
                         {
@@ -155,8 +154,8 @@ export const Dashboard = () => {
     
 
     useEffect(() => {
-
         if (activeClass) {
+            setSampleData([]);
             customFetch(`/class/${activeClass}/student/average`)
             .then(data => {
                 setDataset({
@@ -167,7 +166,9 @@ export const Dashboard = () => {
                 setStudentPerformanceTable(data);
                 data?.data?.map((item, index) => {
                     setSampleData(prev => {
-                        return [{
+                        return [
+                            ...prev,
+                            {
                             name: item?.x,
                             section: data?.classData?.section,
                             avgScore: item?.y
@@ -178,15 +179,17 @@ export const Dashboard = () => {
             .catch(error => console.error('Error fetching classes:', error));
         }
 
-    }, [activeClass, teacherClass]);
+    }, [activeClass, teacherClass, activateSPerformanceChart]);
 
     const handleSubmit = (e) => {
+        setLoading(true);
         e.preventDefault(); // Prevent the default form submission
         const { className, section, schedule, room, subject, startDate, endDate } = formData;
         formData.teacher_id = user.id;
 
-        if (!className || !section || !schedule || !room || !subject || !startDate || !endDate) {
+        if (!className || !section || !schedule || !room || !subject) {
             toast.error('Please fill in all required fields.');
+            setLoading(false);
             return; // Prevent form submission
         }
         fetch(`${api}/class/create`, {
@@ -222,8 +225,6 @@ export const Dashboard = () => {
                     room: formData.room,
                     class_code: {code: data.classCode}
                 };
-
-                console.log(newClass);
             
                 // Check if the length is 4 or greater
                 if (prev.length >= 4) {
@@ -236,7 +237,18 @@ export const Dashboard = () => {
             });
             toggleShow();
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            setLoading(false);
+            setFormData({
+                className: '',
+                description: '',
+                section: '',
+                schedule: '',
+                room: '',
+                subject: '',
+            });
+        });
     };
 
     useEffect(() => {
@@ -299,7 +311,7 @@ export const Dashboard = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="schedule"className={`${styles.label}`}>Schedule</label>
-                            <input type="text" className="form-control" id="schedule" placeholder="Enter semester" 
+                            <input type="text" className="form-control" id="schedule" placeholder="Enter Schedule" 
                             value={formData.schedule}
                             onChange={handleChange}
                             />
@@ -321,24 +333,12 @@ export const Dashboard = () => {
                                 <option value={"Web Development"}>Web Development</option>
                             </select>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="startDate"className={`${styles.label}`}>Start Date</label>
-                            <input type="date" className="form-control" id="startDate" 
-                            value={formData.startDate}
-                            onChange={handleChange}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="endDate"className={`${styles.label}`}>End Date</label>
-                            <input type="date" className="form-control" id="endDate" 
-                            value={formData.endDate}
-                            onChange={handleChange}/>
-                        </div>
                         </div>
                     </form>
                 </Modal.Body>
                 <Modal.Footer className='border-none'>
-                    <Button className={`${styles.Close}`} onClick={toggleShow} >Cancel</Button>
-                    <Button className={`${styles.Create}`} onClick={handleSubmit}>Create</Button>
+                    <Button type='button' className={`${styles.Close}`} onClick={toggleShow} >Cancel</Button>
+                    <Button type='button' disabled={loading} className={`${styles.Create}`} onClick={loading ? "" : handleSubmit}>{!loading ?  "Create" : <FontAwesomeIcon spin icon={faSpinner}/>}</Button>
                 </Modal.Footer>
             </Modal>
 

@@ -129,38 +129,36 @@ export default function Profile() {
 
     const handleUpdateContact = () => {
         if(updatedContact) {
-            // customFetch('/update/contact-info', {
-            //     method: 'POST',
-            //     body: JSON.stringify(contactInformation)
-            // })
-            //     .then(response => {
-            //         toast.success(response.message);
-            //         setUpdatedContact(false);
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error.message);
-            //     });
+            customFetch('/update/contact-info', {
+                method: 'POST',
+                body: JSON.stringify(contactInformation)
+            })
+                .then(response => {
+                    toast.success(response.message);
+                    setUpdatedContact(false);
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
         }
     }
 
     const handleUpdatePassword = () => {
         if(updatedPassword) {
-            // customFetch('/update/password', {
-            //     method: 'POST',
-            //     body: JSON.stringify({
-            //         current_password: password.current,
-            //         new_password: password.new,
-            //     })
-            // })
-            //     .then(response => {
-            //         toast.success(response.message);
-            //         setUpdatedPassword(false);
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error.message);
-            //     });
-            console.log(password);
-            console.log(user)
+            customFetch('/update/password', {
+                method: 'POST',
+                body: JSON.stringify({
+                    current_password: password.current,
+                    new_password: password.new,
+                })
+            })
+                .then(response => {
+                    toast.success(response.message);
+                    setUpdatedPassword(false);
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
         }
     }
 

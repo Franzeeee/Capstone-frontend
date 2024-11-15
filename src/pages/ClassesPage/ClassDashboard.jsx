@@ -6,7 +6,7 @@ import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faCopy, faEdit, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -303,6 +303,12 @@ export default function ClassDashboard() {
                             <div className={styles.additionalInfo} style={{ display: showAdditionalInfo ? 'block' : 'none' }}>
                                 <p>Code: <span>{classData?.class_code?.code}</span> <FontAwesomeIcon icon={faCopy} className={styles.copy} onClick={() => copyCode(classData?.class_code.code)} /></p>
                                 <p>Room: <span>{classData?.room}</span></p>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>Edit Class Info</Tooltip>}
+                                >
+                                    <p onClick={() => alert("Show")} className={`${styles.exclamation} ${styles.editClass}`}><FontAwesomeIcon icon={faEdit} /></p>
+                                </OverlayTrigger>
                             </div>
                         </div>
                         <div className={`${styles.classAssessments}`}>

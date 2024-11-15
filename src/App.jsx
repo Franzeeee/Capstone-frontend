@@ -27,6 +27,9 @@ import RefetchUser from "./components/RefetchUser";
 import Certificate from "./pages/Certificate";
 import Grades from "./pages/Student/Grades";
 import Lesson1 from "./pages/LogicLessons/Lesson1";
+import Lesson3 from "./pages/LogicLessons/Lesson3";
+import Lesson2 from "./pages/LogicLessons/Lesson2";
+import Lesson4 from "./pages/LogicLessons/Lesson4";
 
 export const App = () => {
   return (
@@ -50,15 +53,21 @@ export const App = () => {
             <Route path="/verify-email" element={<RefetchUser />} />
             <Route path="/grades" element={<Grades />} />
 
-            <Route path="/lesson1" element={<Lesson1 />} />
-
         </Route>
+        <Route path="/lesson1" element={<Lesson1 />} />
+            <Route path="/lesson1" element={<Lesson1 />} />
+            <Route path="/lesson2" element={<Lesson2 />} />
+            <Route path="/lesson3" element={<Lesson3 />} />
+            <Route path="/lesson4" element={<Lesson4 />} />
         <Route path="/certificate" element={<Certificate />} />
         <Route path="/" element={<Sample />} />
         <Route path="/login" element={<Login />} />
 
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound/>} />
+
+        <Route path="/load" element={<LoadingPage />} />
+
 
       </Routes>
     </BrowserRouter>
