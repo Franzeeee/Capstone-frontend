@@ -344,5 +344,19 @@ div:has(.noClasses) .cardContainer .card .noClasses {
     .profileContainer {
         display: none !important;
     }
+    .cardHeader {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .cardHeader select {
+        max-width: 100%;
+        padding: 5px;
+    }
+    .cardHeader p:first-child {
+        font-size: .8rem !important;
+    }
+    .cardHeader svg {
+        margin-right: 5px;
+    }
 }
 

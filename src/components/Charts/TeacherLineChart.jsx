@@ -50,6 +50,7 @@ const TeacherLineChart = () => {
 
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: true,
@@ -81,7 +82,7 @@ const TeacherLineChart = () => {
 
     return (
         <div className={`${styles.chartContainer} ${styles.lineChart}`}>
-            <Line data={data} options={options} />
+            <Line data={data} options={options}/>
         </div>
     );
 };

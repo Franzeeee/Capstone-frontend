@@ -13,7 +13,7 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { getUserData } from '../utils/userInformation';
 import profile from '../assets/img/1x1Robot2.png';
 
-export default function AccountMenu() {
+export default function AccountMenu({logoutOnClick}) {
 
     const user = getUserData();
     const [profilePicture, setProfilePicture] = useState(profile);
@@ -103,7 +103,7 @@ export default function AccountMenu() {
           <Avatar src={profilePicture}/> {user.name}
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={() => logoutOnClick()}>
             <FontAwesomeIcon icon={faRightFromBracket} style={{marginRight: '5px', fontSize: '.8rem'}}/> Logout
         </MenuItem>
       </Menu>

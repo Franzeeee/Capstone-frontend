@@ -8,44 +8,43 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import menu from '../../assets/img/icons/menu.png';
+import logo from '../../assets/img/logoCodelab.png';
+import styles from '../../assets/css/templates/home-template.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function DrawerNav() {
-  const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
+    const toggleDrawer = (newOpen) => () => {
+        setOpen(newOpen);
+    };
 
-  const drawerContent = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+    const drawerContent = (
+        <Box sx={{ width: 250 }} role="presentation" >
+            <div className={styles.drawerLogo}>
+                <img src={logo} alt="" />
+                <FontAwesomeIcon icon={faXmark} onClick={toggleDrawer(false)} />
+            </div>
+        <List>
+            {['Dashboard', 'Coding Playgound', 'Calendar', 'Announcements', 'Classes', 'Grades'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+                <ListItemButton>
+                <ListItemText primary={text} />
+                </ListItemButton>
+            </ListItem>
+            ))}
+        </List>
+        <Divider />
+        </Box>
+    );
 
-  return (
-    <div>
-      <img onClick={toggleDrawer(true)} src={menu} alt="" />
-      <Drawer open={open} onClose={toggleDrawer(false)}>
-        {drawerContent}
-      </Drawer>
-    </div>
-  );
+    return (
+        <div>
+        <img onClick={toggleDrawer(true)} src={menu} alt="" />
+        <Drawer open={open} onClose={toggleDrawer(false)}>
+            {drawerContent}
+        </Drawer>
+        </div>
+    );
 }

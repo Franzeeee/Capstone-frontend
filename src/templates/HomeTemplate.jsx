@@ -22,6 +22,7 @@ const ErrorContext = createContext();
 import menu from '../assets/img/icons/menu.png';
 import AccountMenu from '../components/AccountMenu';
 import DrawerNav from "../components/MobileVersion/DrawerNav";
+import LogoutConfirmationModal from "../components/LogoutConfirmationModal";
 
 
 export default function HomeTemplate({ children }) {
@@ -34,13 +35,17 @@ export default function HomeTemplate({ children }) {
       JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8))
   );
 
+  const [showModal, setShowModal] = useState(false);
+
   const [show, setShow] = useState(false);
 
   const toggleShow = () => setShow((prev) => !prev);
+  const handleClose = () => setShowModal(false);
 
   return (
     <ErrorContext.Provider value={{ error, setError }}>
       <div className={`${styles.container}`}>
+      <LogoutConfirmationModal show={showModal} handleClose={handleClose}/> 
         <Modal show={show} onHide={toggleShow}>
           <Modal.Header closeButton>
             <p className="m-0">
@@ -146,7 +151,7 @@ export default function HomeTemplate({ children }) {
           <div className={`d-none ${styles.headNav}`}>
             <DrawerNav />
             <div>
-              <AccountMenu />
+              <AccountMenu logoutOnClick={() => setShowModal(true)} />
             </div>
           </div>
           {children}
