@@ -43,7 +43,7 @@ export default function DrawerNav() {
                     ? [{ text: 'Classes', path: '/teacher/classes' }]
 
                     : []),
-                { text: 'Grades', path: (user.role === 'teacher' ? '/teacher/grades' : '/grades') }, 
+                { text: 'Grades', path: (user.role === 'teacher' ? '/teacher/grades/class' : '/grades') }, 
             ].map((item) => (
                 <ListItem key={item.text} disablePadding>
                     <ListItemButton 
