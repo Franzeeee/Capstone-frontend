@@ -65,6 +65,7 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
     
         // Display errors if any
         if (errors.length > 0) {
+            toast.dismiss();
             errors.forEach(error => toast.error(error));
             return;
         }

@@ -61,6 +61,9 @@ export default function ClassDashboard() {
     const [show, setShow] = useState(false);
     const [activeForm, setActiveForm] = useState('logic');
 
+
+    console.log(pagination?.data);
+
     useEffect(() => {
         fetchAssessments(currentPage);
         setIsLoading(false)
@@ -167,6 +170,7 @@ export default function ClassDashboard() {
     
         // Display errors if any
         if (errors.length > 0) {
+            toast.dismiss();
             errors.forEach(error => toast.error(error));
             return;
         }
@@ -190,7 +194,7 @@ export default function ClassDashboard() {
                 },
                 body: JSON.stringify(data),
             });
-    
+            toast.dismiss();
             toast.success("Activity updated successfully");
             setPagination((prevPagination) => {
                 const updatedData = [...prevPagination.data];
@@ -330,7 +334,7 @@ export default function ClassDashboard() {
                                                         <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
                                                         <td>{assessment.title}</td>
                                                         <td style={{textAlign: 'center'}}>{assessment.total_submissions || 0}</td>
-                                                        <td>{new Date(assessment.start_date).toLocaleDateString() || 'N/A'}</td>
+                                                        <td>{assessment?.end_date == null ? "No Due" : new Date(assessment.end_date).toLocaleDateString()}</td>
                                                         <td style={{ textAlign: 'center' }}>
                                                             <Dropdown>
                                                                 <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-${assessment.id}`}>

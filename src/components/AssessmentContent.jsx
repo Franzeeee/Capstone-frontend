@@ -32,6 +32,8 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
         }
     };
 
+    
+
     useEffect(() => {
         feedback?.feedback !== '' && setFeedbackData(feedback);
     }, [feedback]);
@@ -59,6 +61,26 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
     const closeFeedbackModal = () => {
         setShowFeedback(false);
     }
+
+
+    useEffect(() => {
+        const currentTime = new Date();
+    
+        const dueDate = new Date(data?.end_date);
+
+        const timeDifference = dueDate - currentTime;
+    
+        if (timeDifference > 0) {
+            // Convert the time difference from milliseconds to seconds
+            const remainingSeconds = Math.floor(timeDifference / 1000);
+    
+            // Log the remaining time in seconds
+            console.log(`Remaining time in seconds: ${remainingSeconds} seconds`);
+        } else {
+            console.log("The due date has already passed.");
+        }
+    }, [data]);
+    
     
     return (
         <>

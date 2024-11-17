@@ -278,3 +278,13 @@ display: none;
 .generateAssessmentBtn:hover {
   background-color: #4c4cc1;
 }
+
+.exclamationInfo {
+  font-size: .8rem;
+  color: #ac8dff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.exclamationInfo:hover {
+  color: #6404ff;
+}

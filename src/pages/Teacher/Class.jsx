@@ -34,6 +34,7 @@ export default function Class() {
     const [loading, setLoading] = useState(true);
 
     const [nullClass, setNullClass] = useState(null);
+    const [activatedLogicLesson, setActivatedLogicLesson] = useState(null);
 
     const api  = import.meta.env.VITE_API_URL;
 
@@ -54,6 +55,7 @@ export default function Class() {
 
         const data = await response.json();
         setClassInfo(data);
+        setActivatedLogicLesson(data?.active_logic_lesson);
         } catch (error) {
         setError(error.message);
         } finally {
@@ -98,7 +100,7 @@ export default function Class() {
                     }
                     <CreateAssessment subject={classInfo?.subject} classId={classInfo.id} handleChangePage={handleActivePage}/>
                     {
-                        activePage === 'default' && <ClassContents data={{courseId: classInfo.id, subject: classInfo.subject}} code={code} className={classInfo?.name}/>
+                        activePage === 'default' && <ClassContents data={{courseId: classInfo.id, subject: classInfo.subject, activatedLogicLesson: activatedLogicLesson }} code={code} className={classInfo?.name}/>
                     }
                     {
                         activePage === 'classwork' && <ClassroomWork classId={classInfo.id} className={classInfo?.name} code={code} />

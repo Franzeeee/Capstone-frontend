@@ -55,20 +55,34 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-
-  const gradedClasses = classes.filter(classItem => classItem?.grade?.remarks === "Not Yet Graded" && classItem?.grade?.final_grade === 0);
+  const gradedClasses = classes.filter(classItem =>
+    classItem?.grade?.remarks === "Not Yet Graded" && Number(classItem?.grade?.final_grade) === 0
+  );
   setGradedClasses(gradedClasses.length);
 
-  const ungraddedClasses = classes.filter(classItem => classItem?.grade?.remarks === "Not Yet Graded" && classItem?.grade?.final_grade === 0);
-  const failClasses = classes.filter(classItem => classItem?.grade?.remarks === "Fail" && classItem?.grade?.final_grade < 70);
-  const passClasses = classes.filter(classItem => classItem?.grade?.remarks !== "Fail" && classItem?.grade?.final_grade >= 70 && classItem?.grade?.final_grade <= 100);
+  const ungraddedClasses = classes.filter(classItem =>
+    classItem?.grade?.remarks === "Not Yet Graded" && Number(classItem?.grade?.final_grade) === 0
+  );
+  const failClasses = classes.filter(classItem =>
+    classItem?.grade?.remarks === "Fail" && Number(classItem?.grade?.final_grade) < 70
+  );
+  const passClasses = classes.filter(classItem =>
+    classItem?.grade?.remarks !== "Fail" && Number(classItem?.grade?.final_grade) >= 70 && Number(classItem?.grade?.final_grade) <= 100
+  );
+
   setClassData([
     failClasses.length,
     passClasses.length,
-    ungraddedClasses
-  ])
+    classes.length - (failClasses.length + passClasses.length),
+  ]);
 
+  console.log('classes', classes);
+  console.log('gradedClasses', gradedClasses);
+  console.log('ungraddedClasses', ungraddedClasses);
+  console.log('failClasses', failClasses);
+  console.log('passClasses', passClasses);
 }, [classes]);
+
 
   return (
     <HomeTemplate>
@@ -99,13 +113,13 @@ useEffect(() => {
                   <div className={styles.card}>
                     <div className={styles.cardTitle}>Graded Class</div>
                     <div className={styles.cardValue}>
-                      {fetching ? <FontAwesomeIcon icon={faSpinner} spin /> : gradedClasses || 0}
+                      {fetching ? <FontAwesomeIcon icon={faSpinner} spin /> : classData[0] + classData[1] || 0}
                     </div>
                   </div>
                   <div className={styles.card}>
                     <div className={styles.cardTitle}>Ungraded Class</div>
                     <div className={styles.cardValue}>
-                      {fetching ? <FontAwesomeIcon icon={faSpinner} spin /> : classData && classData[3] || 0}
+                      {fetching ? <FontAwesomeIcon icon={faSpinner} spin /> : classes.length - (classData[0] + classData[1]) || 0}
                     </div>
                   </div>
                 </div>

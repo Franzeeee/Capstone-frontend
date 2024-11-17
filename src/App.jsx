@@ -53,12 +53,13 @@ export const App = () => {
             <Route path="/verify-email" element={<RefetchUser />} />
             <Route path="/grades" element={<Grades />} />
 
+            <Route path="/c/:code/logical/1" element={<Lesson1 />} />
+            <Route path="/c/:code/logical/2" element={<Lesson2 />} />
+            <Route path="/c/:code/logical/3" element={<Lesson3 />} />
+            <Route path="/c/:code/logical/4" element={<Lesson4 />} />
         </Route>
         <Route path="/lesson1" element={<Lesson1 />} />
-            <Route path="/lesson1" element={<Lesson1 />} />
-            <Route path="/lesson2" element={<Lesson2 />} />
-            <Route path="/lesson3" element={<Lesson3 />} />
-            <Route path="/lesson4" element={<Lesson4 />} />
+
         <Route path="/certificate" element={<Certificate />} />
         <Route path="/" element={<Sample />} />
         <Route path="/login" element={<Login />} />
