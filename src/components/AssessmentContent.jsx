@@ -62,21 +62,25 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
         setShowFeedback(false);
     }
 
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const currentTime = new Date();
+
     
         const dueDate = new Date(data?.end_date);
 
         const timeDifference = dueDate - currentTime;
     
-        if (timeDifference > 0) {
+        if (timeDifference > 0 || data?.end_date === null) {
             // Convert the time difference from milliseconds to seconds
             const remainingSeconds = Math.floor(timeDifference / 1000);
     
+            setOpen(true);
             // Log the remaining time in seconds
             console.log(`Remaining time in seconds: ${remainingSeconds} seconds`);
         } else {
+            setOpen(false);
             console.log("The due date has already passed.");
         }
     }, [data]);
@@ -125,7 +129,7 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 </div>
                 <div className={styles.controls}>
                     <button onClick={() => setShowRanking(true)}>View Ranking</button>
-                    { user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>
+                    { open && user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>
                         
                     }
                 </div>

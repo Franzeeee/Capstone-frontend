@@ -129,9 +129,12 @@
     flex: 1;
     display: flex;
     gap: 2px;
+    /* max-width: 65%; */
 }
 .codeArea {
     min-height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 .languageDropdown {
     display: flex;
@@ -310,7 +313,7 @@
     padding: 20px 10px;
 }
 .practiceTest {
-    width: 90%;
+    width: 75%;
     height: auto;
     position: absolute;
     align-self: flex-end;

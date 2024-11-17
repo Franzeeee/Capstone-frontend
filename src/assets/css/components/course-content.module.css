@@ -136,4 +136,5 @@ p {
     position: absolute;
     left: -15rem;
     color: black;
+    cursor: default;
 }

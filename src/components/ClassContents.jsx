@@ -83,7 +83,6 @@ export default function ClassContents({ data, code, className }) {
             // If there's no last completed lesson, start with the first lesson
             if (progress.last_completed_lesson === null) {
                 const assessmentLessonId = defaultAssessment.length > 0 ? defaultAssessment[0]?.lessonId : null;
-                console.log("Lesson ID", assessmentLessonId);
                 setOpen({
                     lesson: assessmentLessonId,
                     quiz: assessmentLessonId,
@@ -97,12 +96,6 @@ export default function ClassContents({ data, code, className }) {
             }
         }
     }, [progress, defaultAssessment]);
-
-    useEffect(() => {
-        console.log(progress);
-        console.log('Lesson: ', open.lesson);
-        console.log('Quiz: ', open.quiz);
-    }, [open]);
 
     const isLessonUnlocked = (lessonId, hasAssessment = true) => {
         // Allow access to the first lesson (id 0) for all users if there's no progress
@@ -193,7 +186,7 @@ export default function ClassContents({ data, code, className }) {
         <div className={styles.contentContainer}>
             <div className={styles.controls}>
                 <div>
-                    <p><FontAwesomeIcon icon={faEye} /> Show:</p>
+                    <p><FontAwesomeIcon icon={faFilter} /></p>
                     <select name="" id="" onChange={handleSelectChange}>
                         <option value="all">Lesson & Assessments</option>
                         <option value="lessons">Lessons Only</option>

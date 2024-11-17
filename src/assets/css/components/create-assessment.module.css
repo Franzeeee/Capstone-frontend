@@ -133,3 +133,19 @@
     box-shadow: 0px 0px 10px 0px #00000033;
     max-width: 900px;
 }
+.ellipsisIcon::after {
+    display: none !important;
+}
+.deleteIcon {
+    color: #ff0000 !important;
+    margin-right: 5px;
+    font-size: .9rem;
+}
+.removeBg p{
+    background-color: transparent !important;
+    color: black;
+    font-size: 1rem !important;
+}
+.removeBg p:hover{
+    color: #2b00ff !important;
+}
