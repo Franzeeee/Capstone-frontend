@@ -345,7 +345,7 @@ export const Dashboard = () => {
             <div className={`${styles.contentContainer}`}>
                 <div className={`${styles.header}`}>
                     <div className={`${styles.create}`}>
-                        <p>Course <FontAwesomeIcon icon={faPlusCircle} onClick={toggleShow}></FontAwesomeIcon></p>
+                        <p>Classes <FontAwesomeIcon icon={faPlusCircle} onClick={toggleShow}></FontAwesomeIcon></p>
                     </div>
                     <div className={`${styles.moreCourse}`}>
                         <p onClick={() => navigate('/teacher/classes')}>View More</p>

@@ -94,7 +94,7 @@ export default function PeopleContents({classId, classInfo}) {
             </div>
             <div className={styles.instructorContainer}>
                 <div className={styles.infoContainer}>
-                    <p className={styles.instructorHeader}>Classmates</p>
+                    <p className={styles.instructorHeader}>Students</p>
                     <p>Students ({people?.classmates.length || 0})</p>
                 </div>
                 {

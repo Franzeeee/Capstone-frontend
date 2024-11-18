@@ -151,14 +151,14 @@ export default function ClassContents({ data, code, className }) {
 
     const activateLogicLesson = () => {
         setActivatedLogicLesson((prev) => {
-            if (prev.status === 'active') {
+            if (prev?.status === 'active') {
                 return { ...prev, status: 'inactive' };
             } else {
                 return { ...prev, status: 'active' };
             }
         });
 
-        if (activatedLogicLesson.status === 'active') {
+        if (activatedLogicLesson?.status === 'active') {
             customFetch(`/class/${data.courseId}/deactivate-logic`, {
                 method: 'GET',
             })
@@ -198,9 +198,9 @@ export default function ClassContents({ data, code, className }) {
                     user.role === 'teacher' && (
                         <div>
                             <p className={styles.activateButton} onClick={activateLogicLesson}>
-                                <FontAwesomeIcon icon={ activatedLogicLesson.status !== 'active' ? faKey : faLock} /> 
+                                <FontAwesomeIcon icon={ activatedLogicLesson?.status !== 'active' ? faKey : faLock} /> 
                                 {
-                                    activatedLogicLesson.status == 'active' ? 'Deactivate Logic Lesson' : 'Activate Logic Lesson'
+                                    activatedLogicLesson?.status == 'active' ? 'Deactivate Logic Lesson' : 'Activate Logic Lesson'
                                 }
                             </p>
                         </div>
@@ -218,10 +218,10 @@ export default function ClassContents({ data, code, className }) {
 
             {progress === null && "Loading..."}
 
-            {activatedLogicLesson.status === 'active' || user.role === 'teacher' ? progress !== null && (viewMode === "all" || viewMode === "lessons") &&
+            {activatedLogicLesson?.status === 'active' || user.role === 'teacher' ? progress !== null && (viewMode === "all" || viewMode === "lessons") &&
                 logicLesson.map((logicLesson) => (
                     <>
-                        <div className={`${styles.card} ${user.role === 'teacher' ? activatedLogicLesson.status !== 'active' ? styles.lockedBorder : styles.unlockedBorder : ""}`}>
+                        <div className={`${styles.card} ${user.role === 'teacher' ? activatedLogicLesson?.status !== 'active' ? styles.lockedBorder : styles.unlockedBorder : ""}`}>
                             <div className={styles.left}>
                                 <img src={book} alt={"Test"} />
                             </div>

@@ -7,12 +7,24 @@ import { toast } from 'react-toastify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import customFetch from '../utils/fetchApi.js'
+import { faBell } from '@fortawesome/free-solid-svg-icons'
+import { Badge } from 'primereact/badge'
+import { Dropdown } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import LogoutConfirmationModal from '../components/LogoutConfirmationModal.jsx'
 
 export default function Profile() {
+
+    const navigate = useNavigate();
 
     const userData = localStorage.getItem('userData');
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
     const profilePicture = localStorage.getItem('profilePicture') || profile;
+
+    const [showModal, setShowModal] = useState(false);
+    const [notification, setNotification] = useState([]);
+
+    const handleClose = () => setShowModal(false);
 
     const [updatedInfo, setUpdatedInfo] = useState(false);
     const [updatedContact, setUpdatedContact] = useState(false);
@@ -273,6 +285,46 @@ export default function Profile() {
                 </div>
                 <div className={`${styles.profileContainer}`}>
                     <div className={styles.profileHeader}>
+                    <LogoutConfirmationModal show={showModal} handleClose={handleClose}/> 
+                        <div className={styles.headIcons}>
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    as="div"
+                                    className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
+                                >
+                                    {notification.length > 0 || !user?.verified &&
+                                    <Badge severity="danger" style={{ display: "none !important" }} />
+                                    }
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className={styles.notifContainer}>
+                                    <p className="mb-1"><FontAwesomeIcon className={styles.bell} icon={faBell} /> Notification</p>
+                                    { user && !user?.verified &&
+                                    <Dropdown.Item href="#/action-1">
+                                        <div className={styles.notificationCard}>
+                                        <p className="text-danger">Email Verification</p>
+                                        <p>Your account email is not verified. You need to verify to recieve email reminders. Verification sent on your email.</p>
+                                        </div>
+                                    </Dropdown.Item>
+                                    }
+                                    {
+                                    user?.verified && (
+                                        <div className={styles.notificationCard}>
+                                        <p className="text-success"></p>
+                                        <p className="text-center">No Notification</p>
+                                        </div>
+                                    )
+                                    }
+                                </Dropdown.Menu>
+                                </Dropdown>
+                                <Dropdown>
+                                <Dropdown.Toggle
+                                    onClick={() => setShowModal(true)}
+                                    as="div"
+                                    title="Sign Out"
+                                    className={`${styles.notification} ${styles.customDropdownToggle} pi pi-sign-out`}
+                                ></Dropdown.Toggle>
+                            </Dropdown>
+                        </div>
                         <p>Profile Photo</p>
                     </div>
                     <div className={styles.userInfo}>
