@@ -81,7 +81,7 @@ export default function ClassContents({ data, code, className }) {
     useEffect(() => {
         if (progress) {
             // If there's no last completed lesson, start with the first lesson
-            if (progress.last_completed_lesson === null) {
+            if (progress?.last_completed_lesson === null) {
                 const assessmentLessonId = defaultAssessment.length > 0 ? defaultAssessment[0]?.lessonId : null;
                 setOpen({
                     lesson: assessmentLessonId,
@@ -90,8 +90,8 @@ export default function ClassContents({ data, code, className }) {
             } else {
                 // When there is progress, update lesson and quiz based on last completed
                 setOpen({
-                    lesson: progress.last_completed_lesson + 1,  // Unlock next lesson
-                    quiz: progress.last_completed_quiz + 1,  // Unlock next quiz
+                    lesson: progress?.last_completed_lesson + 1,  // Unlock next lesson
+                    quiz: progress?.last_completed_quiz + 1,  // Unlock next quiz
                 });
             }
         }
@@ -99,7 +99,7 @@ export default function ClassContents({ data, code, className }) {
 
     const isLessonUnlocked = (lessonId, hasAssessment = true) => {
         // Allow access to the first lesson (id 0) for all users if there's no progress
-        if (!progress || progress.last_completed_lesson === null) {
+        if (!progress || progress?.last_completed_lesson === null) {
             return lessonId <= open.lesson || user.role === 'teacher';
         }
     
@@ -109,14 +109,14 @@ export default function ClassContents({ data, code, className }) {
         return (
             baseUnlock ||
             extraUnlock ||
-            (!hasAssessment && lessonId === progress.last_completed_lesson) ||
+            (!hasAssessment && lessonId === progress?.last_completed_lesson) ||
             user.role === 'teacher'
         );
     };
     
     const isAssessmentUnlocked = (lessonId, hasAssessment = true) => {
         // Allow access to the first quiz (id 0) for all users if there's no progress
-        if (!progress || progress.last_completed_quiz === null) {
+        if (!progress || progress?.last_completed_quiz === null) {
             return lessonId <= open.quiz || user.role === 'teacher';
         }
     
@@ -126,7 +126,7 @@ export default function ClassContents({ data, code, className }) {
         return (
             baseUnlock ||
             extraUnlock ||
-            (!hasAssessment && lessonId === progress.last_completed_quiz) ||
+            (!hasAssessment && lessonId === progress?.last_completed_quiz) ||
             user.role === 'teacher'
         );
     };
@@ -298,7 +298,7 @@ export default function ClassContents({ data, code, className }) {
                                     >
                                         <p>
                                             {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `
-                                                ${lesson.id !== progress.last_completed_quiz ? `View Quiz` : `View Result`}
+                                                ${lesson.id !== progress?.last_completed_quiz ? `View Quiz` : `View Result`}
                                             ` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
                                         </p>
                                     </div>
