@@ -20,37 +20,37 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
     const [studentData, setStudentData] = useState([
         {
             name: '----',
-            score: 100,
+            score: 0,
             time: '00:00:00',
             rank: 1
         },
         {
             name: '----',
-            score: 100,
+            score: 0,
             time: '00:00:00',
             rank: 2
         },
         {
             name: '----',
-            score: 100,
+            score: 0,
             time: '00:00:00',
             rank: 3
         },
         {
             name: '----',
-            score: 100,
+            score: 0,
             time: '00:00:00',
             rank: 4
         },
         {
             name: '----',
-            score: 100,
+            score: 0,
             time: '00:00:00',
             rank: 5
         },
         {
             name: '----',
-            score: 100,
+            score: 0,
             time: '00:00:00',
             rank: 6
         }
@@ -113,7 +113,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                     </div>
                                     <p className={styles.name}>{studentData[1]?.name}</p>
                                     <p>{studentData[1]?.score}</p>
-                                    <p>{studentData[1]?.time}</p>
+                                    <p>{timeFormatter(studentData[1]?.time_taken || 0)}</p>
                                 </div>
                                 <div className={`${styles.topSpot} ${styles.firstSpot}`}>
                                     <div className={styles.imageContainer}>
@@ -122,7 +122,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                     </div>
                                     <p className={styles.name}>{studentData[0]?.name}</p>
                                     <p>{studentData[0]?.score}</p>
-                                    <p>{studentData[0]?.time}</p>
+                                    <p>{timeFormatter(studentData[0]?.time_taken || 0)}</p>
                                 </div>
                                 <div className={styles.topSpot}>
                                     <div className={styles.imageContainer}>
@@ -131,7 +131,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                     </div>
                                     <p className={styles.name}>{studentData[2]?.name}</p>
                                     <p>{studentData[2]?.score}</p>
-                                    <p>{studentData[2]?.time}</p>
+                                    <p>{timeFormatter(studentData[2]?.time_taken || 0)}</p>
                                 </div>
                             </div>
                             <div className={styles.studentContainer}>

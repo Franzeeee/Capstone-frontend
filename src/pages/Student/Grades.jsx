@@ -76,11 +76,11 @@ useEffect(() => {
     classes.length - (failClasses.length + passClasses.length),
   ]);
 
-  console.log('classes', classes);
-  console.log('gradedClasses', gradedClasses);
-  console.log('ungraddedClasses', ungraddedClasses);
-  console.log('failClasses', failClasses);
-  console.log('passClasses', passClasses);
+  // console.log('classes', classes);
+  // console.log('gradedClasses', gradedClasses);
+  // console.log('ungraddedClasses', ungraddedClasses);
+  // console.log('failClasses', failClasses);
+  // console.log('passClasses', passClasses);
 }, [classes]);
 
 

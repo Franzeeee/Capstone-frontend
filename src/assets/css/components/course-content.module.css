@@ -133,8 +133,9 @@ p {
     border: 1.5px solid rgba(32, 88, 255, 0.933) !important;
 }
 .dueText {
-    position: absolute;
-    left: -15rem;
     color: black;
     cursor: default;
+    font-size: .7rem;
+    text-align: end;
+    margin-right: 1rem;
 }

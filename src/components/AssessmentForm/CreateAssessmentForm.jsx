@@ -263,7 +263,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
   const handleFileChange = (event) => {
       if (event.target.files && event.target.files.length > 0) {
           setFile(prev => [...prev, ...event.target.files])
-          console.log("Files selected:", event.target.files);
+          // console.log("Files selected:", event.target.files);
       }
   }
 
@@ -292,7 +292,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
         body: problemForm
       })
       .then(data => {
-        console.log(convertToProblemObject(data.result));
+        // console.log(convertToProblemObject(data.result));
         const generatedProblem = convertToProblemObject(data.result);
         setTempProblem({
           problem_title: generatedProblem.problemName,

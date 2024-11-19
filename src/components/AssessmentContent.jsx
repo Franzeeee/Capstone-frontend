@@ -77,11 +77,8 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             const remainingSeconds = Math.floor(timeDifference / 1000);
     
             setOpen(true);
-            // Log the remaining time in seconds
-            console.log(`Remaining time in seconds: ${remainingSeconds} seconds`);
         } else {
             setOpen(false);
-            console.log("The due date has already passed.");
         }
     }, [data]);
     

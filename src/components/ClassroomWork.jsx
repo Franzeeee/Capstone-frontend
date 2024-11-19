@@ -37,10 +37,10 @@ export default function ClassroomWork({ classId, code, className }) {
                             <img src={book} alt="test" />
                         </div>
                         <div className={styles.right}>
+                            <p className={styles.dueText}>{formatDate(item?.end_date)}</p>
                             <p className={styles.lessonTitle}>{item.title}</p>
                             <p className={styles.lessonDescription}>{item.description}</p>
                             <div className={styles.status} onClick={() => navigate(`a/${item.title}`, { state: { item: item, code,name: className } })}>
-                                <p className={styles.dueText}>Due: {formatDate(item?.end_date)}</p>
                                 <p>View</p>
                             </div>
                         </div>

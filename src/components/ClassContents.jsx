@@ -285,6 +285,7 @@ export default function ClassContents({ data, code, className }) {
                                     <img src={book} alt={assessment.title} />
                                 </div>
                                 <div className={styles.right}>
+                                    <p className={styles.dueText}>{formatDate(assessment?.end_date)}</p>
                                     <p className={styles.lessonTitle}>{assessment.title}</p>
                                     <p className={styles.lessonDescription}>{assessment.description}</p>
                                     <div
@@ -295,9 +296,10 @@ export default function ClassContents({ data, code, className }) {
                                                 : null
                                         }
                                     >
-                                        <p className={styles.dueText}>Due: {formatDate(assessment?.end_date)}</p>
                                         <p>
-                                            {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `View Quiz` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
+                                            {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `
+                                                ${lesson.id !== progress.last_completed_quiz ? `View Quiz` : `View Result`}
+                                            ` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
                                         </p>
                                     </div>
                                 </div>

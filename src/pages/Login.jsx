@@ -51,6 +51,10 @@ export const Login = () => {
             body: JSON.stringify(formData),
             })
             .then(response => {
+                    if(response.status === 429) {
+                        toast.error('Login Attempt Restricted! Please try again in later.')
+                        return;
+                    }
                     return response.json();
                 })
             .then(data => {
@@ -68,7 +72,9 @@ export const Login = () => {
                 }
                 
                 })
-            .catch(error => console.error(error))
+            .catch(error => 
+            {}
+            )
             .finally(() => {
                 setLoader(false);
             })
@@ -83,7 +89,7 @@ export const Login = () => {
                         <img src={logoHorizontal} alt="" className={`${styles.logo}`}/>
                         <p className={` ${styles.tagline} m-0 mt-3`}>CodeLab: Empowering Students to Learn Python Programming</p>
                     </div>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={loader ? null : handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="email">Email address</label>
                             <input type="email" autoComplete='email' onChange={handleInputChange} name="email" className="form-control" id="email" placeholder="Enter email" />

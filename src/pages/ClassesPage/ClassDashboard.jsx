@@ -62,8 +62,6 @@ export default function ClassDashboard() {
     const [activeForm, setActiveForm] = useState('logic');
 
 
-    console.log(pagination?.data);
-
     useEffect(() => {
         fetchAssessments(currentPage);
         setIsLoading(false)

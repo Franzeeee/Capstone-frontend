@@ -148,7 +148,6 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
             }
     
             const result = await response.json();
-            console.log(result);
             toast.success("Leaved class successfully");
             navigate('/dashboard');
             handleClose();
@@ -183,7 +182,7 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
                     show={showLeaveModal} 
                     handleClose={() => handleCloseLeaveModal()} 
                     modalData={{
-                        title: "Confirm Removal", 
+                        title: "Confirm Leave Class", 
                         body: "Are you sure you want to leave this class?", 
                         action: () => submitLeaveClass(),
                         iconColor: "red",
