@@ -23,7 +23,7 @@ export default function ClassDashboard() {
     const user = getUserData();
     const navigate = useNavigate();
     const location = useLocation();
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname || null;
 
     const { code } = useParams();
     
@@ -63,9 +63,12 @@ export default function ClassDashboard() {
 
 
     useEffect(() => {
-        fetchAssessments(currentPage);
-        setIsLoading(false)
-    }, [currentPage]); // Fetch assessments whenever currentPage changes
+        setIsLoading(true);
+        if (classData) {
+            fetchAssessments(currentPage);
+            setIsLoading(false);
+        }
+    }, [currentPage, classData]); // Fetch assessments whenever currentPage changes
 
     const fetchAssessments = async (page) => {
         try {
@@ -96,10 +99,6 @@ export default function ClassDashboard() {
     const handleShowAdditionalInfo = () => {
         setShowAdditionalInfo(!showAdditionalInfo);
     };
-
-    if (!location.state?.verified || !classData) {
-        return null; // Prevents rendering before navigation
-    }
 
     const handleCloseDeleteConfirmation = () => {
         setShowDeleteConfirmation(false);
@@ -290,7 +289,7 @@ export default function ClassDashboard() {
                                     <p className={`${styles.icon} ${styles.studentCount}`}><FontAwesomeIcon icon={faUsers} /></p>
                                     <div className={`${styles.text}`}>
                                         <p>No. of Students</p>
-                                        <p>{'0' + classData?.students_count || 0}</p>
+                                        <p>{'0' . classData?.students_count || 0}</p>
                                     </div>
                                 </div>
                                 <OverlayTrigger

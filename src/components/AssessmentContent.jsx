@@ -8,7 +8,8 @@ import ConfirmationModal from './ConfirmationModal';
 import AssessmentRankingModal from './AssessmentRankingModal';
 import { getUserData } from '../utils/userInformation';
 import { Modal, ModalBody, ModalHeader } from 'react-bootstrap';
-
+import { useNavigate, useParams } from 'react-router-dom';
+import customFetch from '../utils/fetchApi';
 
 
 export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission }) {
@@ -16,6 +17,9 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
     const user = getUserData();
+    const navigate = useNavigate();
+
+    const { code } = useParams();
 
     const [feedbackData, setFeedbackData] = useState(feedback);
 
@@ -81,7 +85,19 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             setOpen(false);
         }
     }, [data]);
+
+    const [totalSubmission, setTotalSubmission] = useState(0);
     
+
+    useEffect(() => {
+        customFetch(`/activity/${data?.id}/rankings`, 'GET')
+            .then(data => {
+                setTotalSubmission(data.length);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+    }, [data]);
     
     return (
         <>
@@ -102,26 +118,54 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 </div>
                 <div className={styles.content}>
                     <ul>
-                        <li>
-                            <p>Time Remaining</p>
-                            <LoadingBar progress={100} status={status} />
-                            <p>{timeFormatter(data?.time_limit || 1)}</p>
-                        </li>
-                        <li>
-                            <p>Problem Solved</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>0/{data?.coding_problems.length}</p>
-                        </li>
-                        <li>
-                            <p>Overall Points</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>--/{data?.point}</p>
-                        </li>
-                        <li>
-                            <p>Current Rank</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>----</p>
-                        </li>
+                        { user.role === 'student' &&
+                        <>
+                            <li>
+                                <p>Time Remaining</p>
+                                <LoadingBar progress={100} status={status} />
+                                <p>{timeFormatter(data?.time_limit || 1)}</p>
+                            </li>
+                            <li>
+                                <p>Problem Solved</p>
+                                <LoadingBar progress={0} status={status} />
+                                <p>0/{data?.coding_problems.length}</p>
+                            </li>
+                            <li>
+                                <p>Overall Points</p>
+                                <LoadingBar progress={0} status={status} />
+                                <p>--/{data?.point}</p>
+                            </li>
+                            <li>
+                                <p>Current Rank</p>
+                                <LoadingBar progress={0} status={status} />
+                                <p>----</p>
+                            </li>
+                        </>
+                        }
+                        { user.role === 'teacher' &&
+                            <>
+                                <li>
+                                    <p>Time Limit</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{timeFormatter(data?.time_limit || 1)}</p>
+                                </li>
+                                <li>
+                                    <p>Total Problem</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{data?.coding_problems.length}</p>
+                                </li>
+                                <li>
+                                    <p>Overall Points</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{data?.point}</p>
+                                </li>
+                                <li>
+                                    <p>Total Submissions</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{totalSubmission || 0}</p>
+                                </li>
+                            </>
+                        }
                     </ul>
                 </div>
                 <div className={styles.controls}>
@@ -130,7 +174,7 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                         <button onClick={handleBtn}>Start Assessment</button>
                     }
                     { user.role === 'teacher' &&    
-                        <button onClick={() => alert('View Submissions clicked')}>View Submissions</button>
+                        <button onClick={() => navigate(`/teacher/classes/${code}/dashboard`)}>View Activities & Submission</button>
                     }
                 </div>
             </div>
@@ -169,7 +213,7 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                         <p>Exit Fullscreen</p>
                     </div>
                     <div className={`${antiCheat[1] > 1 ? styles.alerted : ""}`}>
-                        <p>{antiCheat[0] ?? 0}</p>
+                        <p>{antiCheat[1] ?? 0}</p>
                         <p>Change Tab</p>
                     </div>
                 </div>

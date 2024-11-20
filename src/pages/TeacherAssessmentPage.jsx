@@ -111,7 +111,7 @@ export default function TeacherAssessmentPage() {
                                         placement="auto" // Adjust placement as needed
                                         overlay={<Tooltip id={`tooltip-${index}`}>Class Dashboard</Tooltip>}
                                     >
-                                    <div className={`${styles.viewButton}`} onClick={() => navigate(`${classItem.class_code.code}/dashboard`, {state: {verified: true, data: classItem}})} >
+                                    <div className={`${styles.viewButton}`} onClick={() => navigate(`${classItem.class_code.code}/dashboard`, {state: {data: classItem}})} >
                                         <p className='m-0' title='Overview'><FontAwesomeIcon icon={faArrowRight} fade /></p>
                                     </div>
                                     </OverlayTrigger>
