@@ -111,10 +111,6 @@ export default function ClassContents({ data, code, className }) {
         }
     }, [progress, defaultAssessment]);
 
-    useEffect(() => {
-        console.log('open', open);
-    }, [open]);
-
     const isLessonUnlocked = (lessonId, hasAssessment = true) => {
         // Allow access to the first lesson (id 0) for all users if there's no progress
         if (!progress || progress?.last_completed_lesson === null) {
@@ -282,10 +278,10 @@ export default function ClassContents({ data, code, className }) {
                                 >
                                     <p>
                                         {isLessonUnlocked(lesson.id, lesson.hasAssessment) ? (
-                                            `View Lesson ${lesson.id}`
+                                            `View Lesson`
                                         ) : (
                                             <>
-                                                <FontAwesomeIcon icon={faLock} /> Locked {lesson.id}
+                                                <FontAwesomeIcon icon={faLock} /> Locked
                                             </>
                                         )}
                                     </p>
@@ -317,7 +313,7 @@ export default function ClassContents({ data, code, className }) {
                                         <p>
                                             {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `
                                                 ${lesson.id > progress?.last_completed_quiz ? `View Quiz` : `View Result`}
-                                            ${lesson.id}` : <><FontAwesomeIcon icon={faLock} /> Locked {lesson.id}</>}
+                                            ` : <><FontAwesomeIcon icon={faLock} /> Locked </>}
                                         </p>
                                     </div>
                                 </div>

@@ -904,24 +904,29 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
-                    <li onClick={openPythonFile}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
-                            <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
-                        </OverlayTrigger>
-                    </li>
-                    <li onClick={saveAsPyFile}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
-                            <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
-                        </OverlayTrigger>
-                    </li>
-                    <li onClick={copyToClipboard}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
-                            <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
-                        </OverlayTrigger>
-                    </li>
+                   
+                    { ide === 0 && (
+                        <>
+                            <li onClick={openPythonFile}>
+                                <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
+                                    <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
+                                </OverlayTrigger>
+                            </li>
+                            <li onClick={saveAsPyFile}>
+                                <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
+                                    <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
+                                </OverlayTrigger>
+                            </li>
+                            <li onClick={copyToClipboard}>
+                                <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
+                                    <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
+                                </OverlayTrigger>
+                            </li>
+                        </>
+                    )}
                     <li className={`position-relative ${styles.language}`}>
                     {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
-                        <FontAwesomeIcon icon={faPython} className={`${styles.icon}`} title='IDE: Python'></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={ide === 0 ? faPython : faHtml5} className={`${styles.icon}`} title={`IDE: ${ide === 0 ? 'Python' : 'HTML and CSS'}`}></FontAwesomeIcon>
                         <ul className={`${styles.selectLanguage}`}>
                             <label htmlFor="">Select Language</label>
                             <li onClick =  {() => setIde(0)}> <img src={pythonPng} className={`${styles.pythonLogo}`} alt="" /> Python</li>

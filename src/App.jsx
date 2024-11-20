@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Routes providers
 import { ProtectedRoutes } from "./routes/ProtectedRoutes";
+import { AuthRoutes } from "./routes/AuthRoutes";
 import Class from "./pages/Teacher/Class";
 import ClassLesson from "./pages/Teacher/ClassLesson";
 import LoadingPage from "./pages/LoadingPage";
@@ -36,6 +37,12 @@ export const App = () => {
     <BrowserRouter>
         <Routes>
 
+
+        <Route element={<AuthRoutes />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+
         <Route element={<ProtectedRoutes />} >
             <Route path="/playground" element={<CodeEditor />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -58,16 +65,11 @@ export const App = () => {
             <Route path="/c/:code/logical/3" element={<Lesson3 />} />
             <Route path="/c/:code/logical/4" element={<Lesson4 />} />
         </Route>
-        <Route path="/lesson1" element={<Lesson1 />} />
 
         <Route path="/certificate" element={<Certificate />} />
         <Route path="/" element={<Sample />} />
-        <Route path="/login" element={<Login />} />
-
-        <Route path="/register" element={<Register />} />
+        
         <Route path="*" element={<NotFound/>} />
-
-        <Route path="/load" element={<LoadingPage />} />
 
 
       </Routes>

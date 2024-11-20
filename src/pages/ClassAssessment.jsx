@@ -41,6 +41,7 @@ export default function ClassAssessment() {
     const [done, setDone] = useState(null);
     const [submissionData, setSubmissionData] = useState(null);
     const [feedback, setFeedback] = useState(null);
+    const [submittedCode, setSubmittedCode] = useState();
 
     const user = getUserData();
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
@@ -92,6 +93,7 @@ export default function ClassAssessment() {
                     rank: data?.rank,
                     total: data?.total_submissions
                 });
+                setSubmittedCode(data?.coding_problem_submissions);
                 if(data?.cheating_record && data?.cheating_record !== null) {
                     setTotalLeaveFullscreen(data?.cheating_record?.exit_fullscreen);
                     setTotalAltTab(data?.cheating_record?.change_tab);
@@ -222,7 +224,7 @@ export default function ClassAssessment() {
                 <div className={styles.lessonContent}>
                     <div className={styles.contentContainer} style={{width: '80%'}}>
                         { activityId && assessmentData !== null && (
-                            <AssessmentContent antiCheat={[totalAltTab, totalLeaveFullsreen]} feedback={feedback} status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
+                            <AssessmentContent submittedCode={submittedCode} antiCheat={[totalAltTab, totalLeaveFullsreen]} feedback={feedback} status={done} rank={rank} data={assessmentData} time={timeTaken} submission={submissionData} startButton={handleShow}/>
                             )
                         }
                         {/* <div className={styles.robotContainer}>

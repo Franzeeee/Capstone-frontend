@@ -574,6 +574,36 @@
     color: rgb(34, 0, 255);
 }
 
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+.buttonGroup button {
+    padding: 5px 20px;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.buttonGroup button:first-child {
+    background-color: #ff4848;
+    color: #ffffff;
+}
+.buttonGroup button:last-child {
+    background-color: #5d5dd4;
+    color: #fff;
+}
+.buttonGroup button:hover {
+    filter: brightness(1.1);
+}
+.buttonGroup .disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 @media screen and (max-width: 426px) {
     .container {
         grid-template-columns: 1fr;

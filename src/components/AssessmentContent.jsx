@@ -10,14 +10,16 @@ import { getUserData } from '../utils/userInformation';
 import { Modal, ModalBody, ModalHeader } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import customFetch from '../utils/fetchApi';
+import CodeReviewModal from '../components/CodeReviewModal';
 
-
-export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission }) {
+export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission, submittedCode }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
     const user = getUserData();
     const navigate = useNavigate();
+
+    const [showReview, setShowReview] = useState(false);
 
     const { code } = useParams();
 
@@ -35,8 +37,6 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             startButton();
         }
     };
-
-    
 
     useEffect(() => {
         feedback?.feedback !== '' && setFeedbackData(feedback);
@@ -220,9 +220,15 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 <div className={styles.controls}>
                     <button onClick={handleShow}>View Ranking</button>
                     <button type='button' disabled={!feedbackData} className={`${feedbackData ? "" : styles.disableButton}`} onClick={() => setShowFeedback(true)}>View Feedback</button>
+                    <button type='button' onClick={() => setShowReview(true)}>Review Code</button>
                 </div>
             </div>
             }
+            <CodeReviewModal
+                show={showReview}
+                handleClose={() => setShowReview(false)}
+                submissionData={submittedCode}
+            />
         </>
     );
 }
