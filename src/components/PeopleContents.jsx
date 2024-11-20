@@ -32,10 +32,12 @@ export default function PeopleContents({classId, classInfo}) {
             .then(data => {
                 setPeople({
                     instructor: {
-                        name: classInfo.teacher.name
+                        name: classInfo.teacher.name,
+                        profile_path: classInfo.teacher.profile.profile_path
                     },
                     classmates: data
                 });
+                console.log(data);
             })
             .catch(error => {
                 console.error('Error:', error.message);
@@ -88,7 +90,7 @@ export default function PeopleContents({classId, classInfo}) {
             <div className={styles.instructorContainer}>
                 <p className={styles.instructorHeader}>Instructor</p>
                 <div className={styles.itemCard}>
-                    <img src={profile} alt="" />
+                    <img src={people?.instructor?.profile_path !== null ? `https://codelabbucket.s3.us-east-1.amazonaws.com/${people.instructor.profile_path}` : profile} alt="" />
                     <p>{people.instructor.name}</p>
                 </div>
             </div>

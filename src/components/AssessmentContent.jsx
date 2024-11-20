@@ -126,8 +126,11 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 </div>
                 <div className={styles.controls}>
                     <button onClick={() => setShowRanking(true)}>View Ranking</button>
-                    { open && user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>
-                        
+                    { open && user.role === 'student' && 
+                        <button onClick={handleBtn}>Start Assessment</button>
+                    }
+                    { user.role === 'teacher' &&    
+                        <button onClick={() => alert('View Submissions clicked')}>View Submissions</button>
                     }
                 </div>
             </div>

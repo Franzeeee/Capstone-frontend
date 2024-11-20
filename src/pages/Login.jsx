@@ -94,7 +94,7 @@ export const Login = () => {
                         <p className={` ${styles.tagline} m-0 mt-3`}>CodeLab: Empowering Students to Learn Python Programming</p>
                     </div>
                     <form onSubmit={loader ? null : handleSubmit}>
-                        {loginTimeout && <Alert severity="error">Too many failed attempts. Please try again in later in 5 minutes.</Alert>}
+                        {loginTimeout && <Alert severity="error">Too many failed attempts. Please try again in 5 minutes.</Alert>}
                         <div className="form-group">
                             <label htmlFor="email">Email address</label>
                             <input type="email" autoComplete='email' onChange={handleInputChange} name="email" className="form-control" id="email" placeholder="Enter email" />
@@ -104,7 +104,7 @@ export const Login = () => {
                             <input autoComplete='current-password' type={showPassword ? "text" : "password"}  name="password" onChange={handleInputChange} className="form-control" id="password" placeholder="Password"/>
                             <FontAwesomeIcon icon={!showPassword ? faEyeSlash : faEye} className={`${styles.showPassword}`} onClick={handleShowPassword}/>
                         </div>
-                        <button type="submit" className="btn btn-primary" style={{backgroundColor: '#5D5DD4'}} disabled={loader}>{ loader ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"}</button>
+                        <button type="submit" className="btn btn-primary" style={{backgroundColor: '#5D5DD4'}} disabled={loader || setLoginTimeout}>{ loader ? <FontAwesomeIcon icon={faSpinner} spin/> : "Submit"}</button>
                         <p className='text-center mt-3'>Don't have an account? <span onClick={moveToLogin}>Sign up</span></p>
                     </form>
                 </div>

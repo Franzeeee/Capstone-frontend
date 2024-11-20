@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import HomeTemplate from '../templates/HomeTemplate'
 import styles from '../assets/css/pages/profile.module.css'
 import CryptoJS from 'crypto-js'
 import profile from '../assets/img/user.png'
 import { toast } from 'react-toastify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRotateLeft } from '@fortawesome/free-solid-svg-icons'
+import { faRotateLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import customFetch from '../utils/fetchApi.js'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { Badge } from 'primereact/badge'
@@ -21,6 +21,9 @@ export default function Profile() {
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
     const profilePicture = localStorage.getItem('profilePicture') || profile;
 
+    const [updating, setUpdating] = useState(false);
+    const [updatingBasicInfo, setUpdatingBasicInfo] = useState(false);
+
     const [showModal, setShowModal] = useState(false);
     const [notification, setNotification] = useState([]);
 
@@ -32,16 +35,29 @@ export default function Profile() {
     const [updatedPhoto, setUpdatedPhoto] = useState(false);
 
     const [basicInformation, setBasicInformation] = useState({
-        first_name: user.name,
-        middle_name: user.name,
-        last_name: user.name,
-        birthday: "mm/dd/yyyy",
-        name: "",
+        first_name: user.first_name,
+        middle_name: user.middle_name,
+        last_name: user.last_name,
+        suffix: user.suffix || "", 
+        birthday: user.birthdate || "",
+        gender: user.gender || "",
+        name: user.name,
     });
     const [contactInformation, setContactInformation] = useState({
         email: user.email,
         phone: user.phone
     });
+
+    useEffect(() => {
+        setBasicInformation((prevInfo) => {
+            const updatedInfo = {
+                ...prevInfo,
+                name: `${prevInfo.first_name} ${prevInfo.middle_name} ${prevInfo.last_name}`.trim()
+            };
+
+            return updatedInfo;
+        });
+    }, [basicInformation.first_name, basicInformation.middle_name, basicInformation.last_name]);
 
     const [password, setPassword] = useState({
         current: '',
@@ -85,12 +101,15 @@ export default function Profile() {
             ...password,
             [e.target.name]: e.target.value
         });
+    }
+
+    useEffect(() => {
         if(password.current !== '' && password.new !== '' && password.confirm !== '' && password.new === password.confirm) {
             setUpdatedPassword(true);
         } else {
             setUpdatedPassword(false); 
         }
-    }
+    }, [password]);
 
     const handlePhotoInput = (e) => {
         const file = e.target.files[0]; // Get the file from the input
@@ -105,7 +124,9 @@ export default function Profile() {
                 first_name: user.name,
                 middle_name: user.name,
                 last_name: user.name,
-                birthday: "mm/dd/yyyy",
+                suffix: user.suffix || "",
+                gender: user.gender || "",
+                birthday: "",
                 name: `${user.name.first} ${user.name.middle} ${user.name.last}`,
             });
             setUpdatedInfo(false);
@@ -122,19 +143,44 @@ export default function Profile() {
 
     const handleUpdateInfo = () => {
         if(updatedInfo) {
-            // customFetch('/update/basic-info', {
-            //     method: 'POST',
-            //     body: JSON.stringify({
-            //         name: basicInformation.name,
-            //     })
-            // })
-            //     .then(response => {
-            //         toast.success(response.message);
-            //         setUpdatedInfo(false);
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error.message);
-            //     });
+            setUpdatingBasicInfo(true);
+            customFetch('/update/basic-info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: basicInformation.name,
+                    first_name: basicInformation.first_name,
+                    middle_name: basicInformation.middle_name,
+                    last_name: basicInformation.last_name,
+                    suffix: basicInformation.suffix,
+                    birthdate: basicInformation.birthday,
+                    gender: basicInformation.gender
+                })
+            })
+                .then(response => {
+                    toast.success(response.message);
+                    setUpdatedInfo(false);
+                    const newUserData = {
+                        ...user,
+                        name: basicInformation.name,
+                        first_name: basicInformation.first_name,
+                        middle_name: basicInformation.middle_name,
+                        last_name: basicInformation.last_name,
+                        suffix: basicInformation.suffix,
+                        gender: basicInformation.gender,
+                        birthdate: basicInformation.birthday
+                    };
+                    localStorage.setItem('userData', CryptoJS.AES.encrypt(JSON.stringify(newUserData), 'capstone'));
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                })
+                .finally(() => {
+                    setUpdatingBasicInfo(false);
+                });
+            console.log(basicInformation);
 
         }
     }
@@ -157,8 +203,12 @@ export default function Profile() {
 
     const handleUpdatePassword = () => {
         if(updatedPassword) {
+            setUpdating(true);
             customFetch('/update/password', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     current_password: password.current,
                     new_password: password.new,
@@ -167,9 +217,17 @@ export default function Profile() {
                 .then(response => {
                     toast.success(response.message);
                     setUpdatedPassword(false);
+                    setPassword({
+                        current: '',
+                        new: '',
+                        confirm: ''
+                    });
                 })
                 .catch(error => {
-                    console.error('Error:', error.message);
+                    toast.error(error.message);
+                })
+                .finally(() => {
+                    setUpdating(false);
                 });
         }
     }
@@ -237,16 +295,20 @@ export default function Profile() {
                                     <input type="text" name='last_name' value={basicInformation.last_name} onChange={handleTextInput} />
                                 </div>
                                 <div className={styles.formGroup}>
+                                    <label htmlFor="suffix">Suffix</label>
+                                    <input type="text" name='suffix' value={basicInformation.suffix} onChange={handleTextInput} />
+                                </div>
+                                <div className={styles.formGroup}>
                                     <label htmlFor="birthday">Birthday</label>
                                     <input type="date" name='birthday' value={basicInformation.birthday} onChange={handleTextInput}/>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="first_name">Gender</label>
-                                    <input type="text" name='first_name' placeholder='ex. Male'/>
+                                    <label htmlFor="gender">Gender</label>
+                                    <input type="text" name='gender' value={basicInformation.gender} onChange={handleTextInput}/>
                                 </div>
                             </div>
-                            <button onClick={updatedInfo ? handleUpdateInfo : () => {}} title='Save Updates' type='button' className={`${styles.formSubmit} ${updatedInfo ? "" : styles.disabled}`}>Save Information</button>
-                            <button title='Undo Changes' type='button' onClick={() => undo("info")} className={`${styles.undo} ${updatedInfo ? "" : styles.disabled}`}><FontAwesomeIcon icon={faRotateLeft} /></button>
+                            <button onClick={updatedInfo && !updatingBasicInfo ? handleUpdateInfo : null} title='Save Updates' type='button' className={`${styles.formSubmit} ${updatedInfo ? "" : styles.disabled}`}>Save Information {updatingBasicInfo && <FontAwesomeIcon spin icon={faSpinner} />}</button>
+                            <button title='Undo Changes' type='button' onClick={() => undo("info")} disabled={updatingBasicInfo} className={`${styles.undo} ${updatedInfo ? "" : styles.disabled}`}><FontAwesomeIcon icon={faRotateLeft} /></button>
                         </form>
                         <form action="">
                             <p className={styles.formTitle}>Contact Information</p>
@@ -263,23 +325,23 @@ export default function Profile() {
                             <button onClick={handleUpdateContact} type='button' className={`${styles.formSubmit} ${ updatedContact ? "" : styles.disabled}`}>Save Contact</button>
                             <button title='Undo Changes' type='button' onClick={() => undo("contact")} className={`${styles.undo} ${updatedContact ? "" : styles.disabled}`}><FontAwesomeIcon icon={faRotateLeft} /></button>
                         </form>
-                        <form action="">
+                        <form>
                             <p className={styles.formTitle}>Security</p>
                             <div className={`${styles.formGroupContainer}`} style={{gridTemplateColumns: '1fr'}}>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="current_password">Current Password</label>
-                                    <input type="password" name='current' onChange={handlePasswordInput} value={password.current} placeholder='********'/>
+                                    <input type="password" name='current' onChange={handlePasswordInput} value={password.current}/>
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="new">New Password</label>
-                                    <input type="text" name='new' value={password.new} onChange={handlePasswordInput} placeholder='********'/>
+                                    <input type="password" name='new' value={password.new} onChange={handlePasswordInput}/>
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="confirm">Confirm Password</label>
-                                    <input type="text" name='confirm' value={password.confirm} onChange={handlePasswordInput} placeholder='********'/>
+                                    <input type="password" name='confirm' value={password.confirm} onChange={handlePasswordInput}/>
                                 </div>
                             </div>
-                            <button type='button' onClick={handleUpdatePassword} className={`${styles.formSubmit} ${updatedPassword ? "" : styles.disabled}`}>Update Password</button>
+                            <button type='button' onClick={updating ? null : handleUpdatePassword} className={`${styles.formSubmit} ${updatedPassword ? "" : styles.disabled}`}>Update Password { updating && <FontAwesomeIcon spin icon={faSpinner} />}</button>
                         </form>
                     </div>
                 </div>

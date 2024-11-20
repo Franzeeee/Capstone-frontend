@@ -491,7 +491,7 @@ export default function ClassGradeTable() {
                                             </div></>
                                     )
                                     :
-                                    !isLoading ? <p>Loading...</p> : <p>No assessments found</p>
+                                    isLoading ? <p className='text-center'>Loading...</p> : <p className='text-center'>No students enrolled</p>
                             }
                         </div>
                     </div>

@@ -69,7 +69,7 @@ export default function ClassDashboard() {
 
     const fetchAssessments = async (page) => {
         try {
-            const data = await customFetch(`/activity/${classData.id}/fetch?page=${page}`, 'GET');
+            const data = await customFetch(`/activity/${classData?.id}/fetch?page=${page}`, 'GET');
             setPagination(data);
         } catch (error) {
             console.error('Error:', error.message);
@@ -354,7 +354,7 @@ export default function ClassDashboard() {
                                         </MDBTable><div className={styles.footer}>
                                                 <div className={styles.totalEntry}>
                                                     <p>Showing </p>
-                                                    <select name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
+                                                    <select disabled name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
                                                         <option value="10">10</option>
                                                         <option value="20">20</option>
                                                         <option value="30">30</option>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import styles from '../assets/css/pages/register.module.css';
 import { AuthTemplate } from '../templates/AuthTemplate';
@@ -8,7 +8,9 @@ import {
     validatePhone, 
     validatePassword,
     validateConfirm,
-    validateRole
+    validateRole,
+    validateFirstName,
+    validateLastName
 } from '../utils/registerValidation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
@@ -20,6 +22,10 @@ export const Register = () => {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    suffix: '',
     email: '',
     phone: '',
     password: '',
@@ -27,8 +33,22 @@ export const Register = () => {
     role: '',
   });
 
+  useEffect(() => {
+    setFormData(prev => {
+      return {
+        ...prev,
+        name: formData.first_name + ' ' + formData.middle_name + ' ' + formData.last_name + ' ' + formData.suffix
+      }
+    })
+
+  }, [formData.first_name, formData.middle_name, formData.last_name, formData.suffix])
+
   const [validated, setValidated] = useState({
     name: [null, []],
+    first_name: [null, []],
+    middle_name: [null, []],
+    last_name: [null, []],
+    suffix: [null, []],
     email: [null, []],
     phone: [null, []],
     password: [null, []],
@@ -83,6 +103,18 @@ export const Register = () => {
       name: [nameValid, nameErrors]
     }));
 
+    const [firstValid, firstErrors] = validateFirstName(formData.first_name);
+    setValidated(prevState => ({
+      ...prevState,
+      first_name: [firstValid, firstErrors]
+    }));
+
+    const [lastValid, lastErrors] = validateLastName(formData.last_name);
+    setValidated(prevState => ({
+      ...prevState,
+      last_name: [lastValid, lastErrors]
+    }));
+
     const [emailValid, emailErrors] = validateEmail(formData.email);
     setValidated(prevState => ({
       ...prevState,
@@ -115,6 +147,8 @@ export const Register = () => {
 
     if (
       nameValid &&
+      firstValid &&
+      lastValid &&
       emailValid &&
       phoneValid &&
       passwordValid &&
@@ -179,26 +213,69 @@ export const Register = () => {
         <div className={`${styles['form-container']}`}>
           <h4>Create an account</h4>
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className={`${styles.formGroup}`}>
-              <label htmlFor="fullname">Full Name</label>
-              <input 
-                type="text" 
-                className={`form-control ${validated.name[0] === false && styles.errorBorder}`} 
-                id="fullname" 
-                placeholder="Example: John Noveda Doe"
-                name='name'
-                value={formData.name}
-                onChange={(e) => handleInputChange(e)}
-              />
-              {!validated.name[0] && (
-                <div className={styles.errorMessage}>
-                  <ul className="m-0">
-                    {validated.name[1].map((error, index) => (
-                      <li key={index}>{error}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            <div className={`${styles.formGroup} ${styles.userNames}`}>
+              <div className={styles.firstName}>
+                <label htmlFor="fullname">First Name</label>
+                <input 
+                  type="text" 
+                  className={`form-control ${validated.first_name[0] === false && styles.errorBorder}`} 
+                  id="first_name" 
+                  name='first_name'
+                  value={formData.first_name}
+                  onChange={(e) => handleInputChange(e)}
+                />
+                {!validated.first_name[0] && (
+                  <div className={styles.errorMessage}>
+                    <ul className="m-0">
+                      {validated.first_name[1].map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div className={styles.firstName}>
+                <label htmlFor="fullname">Middle Name</label>
+                <input 
+                  type="text" 
+                  className={`form-control`} 
+                  id="middle_name" 
+                  name='middle_name'  
+                  value={formData.middle_name}
+                  onChange={(e) => handleInputChange(e)}
+                />
+              </div>
+              <div className={styles.firstName}>
+                <label htmlFor="fullname">Last Name</label>
+                <input 
+                  type="text" 
+                  className={`form-control ${validated.last_name[0] === false && styles.errorBorder}`} 
+                  id="last_name" 
+                  name='last_name'
+                  value={formData.last_name}
+                  onChange={(e) => handleInputChange(e)}
+                />
+                {!validated.last_name[0] && (
+                  <div className={styles.errorMessage}>
+                    <ul className="m-0">
+                      {validated.last_name[1].map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div className={styles.firstName}>
+                <label htmlFor="fullname">Suffix</label>
+                <input 
+                  type="text" 
+                  className={`form-control`} 
+                  id="suffix" 
+                  name='suffix'
+                  value={formData.suffix}
+                  onChange={(e) => handleInputChange(e)}
+                />
+              </div>
             </div>
             <div className={`${styles.formGroup}`}>
               <label htmlFor="email">Email Address</label>
@@ -206,7 +283,6 @@ export const Register = () => {
                 type="email" 
                 className={`form-control ${validated.email[0] === false && styles.errorBorder}`} 
                 id="email" 
-                placeholder="Example: john@example.com"
                 name='email'
                 value={formData.email}
                 onChange={(e) => handleInputChange(e)}
@@ -228,7 +304,6 @@ export const Register = () => {
                 className={`form-control ${validated.phone[0] === false && styles.errorBorder}`}  
                 id="phone"
                 name='phone'
-                placeholder="Example: 09000000000"
                 value={formData.phone}
                 onChange={(e) => handleInputChange(e)} 
               />
@@ -248,8 +323,7 @@ export const Register = () => {
                 type="password" 
                 className={`form-control ${validated.password[0] === false && styles.errorBorder}`}
                 id="password" 
-                name='password'
-                placeholder="Password" 
+                name='password' 
                 value={formData.password}
                 onChange={(e) => handleInputChange(e)}
               />
@@ -270,7 +344,6 @@ export const Register = () => {
                 className={`form-control ${validated.confirm[0] === false && styles.errorBorder}`}
                 id="confirmPassword" 
                 name='confirmPassword'
-                placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange(e)}
               />

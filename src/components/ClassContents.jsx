@@ -188,7 +188,7 @@ export default function ClassContents({ data, code, className }) {
                 <div>
                     <p><FontAwesomeIcon icon={faFilter} /></p>
                     <select name="" id="" onChange={handleSelectChange}>
-                        <option value="all">Lesson & Assessments</option>
+                        <option value="all">All</option>
                         <option value="lessons">Lessons Only</option>
                         <option value="quizzes">Assessments Only</option>
                     </select>
