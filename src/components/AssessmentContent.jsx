@@ -32,6 +32,8 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
         }
     };
 
+    
+
     useEffect(() => {
         feedback?.feedback !== '' && setFeedbackData(feedback);
     }, [feedback]);
@@ -59,6 +61,27 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
     const closeFeedbackModal = () => {
         setShowFeedback(false);
     }
+
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const currentTime = new Date();
+
+    
+        const dueDate = new Date(data?.end_date);
+
+        const timeDifference = dueDate - currentTime;
+    
+        if (timeDifference > 0 || data?.end_date === null) {
+            // Convert the time difference from milliseconds to seconds
+            const remainingSeconds = Math.floor(timeDifference / 1000);
+    
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    }, [data]);
+    
     
     return (
         <>
@@ -103,8 +126,11 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 </div>
                 <div className={styles.controls}>
                     <button onClick={() => setShowRanking(true)}>View Ranking</button>
-                    { user.role === 'student' && <button onClick={handleBtn}>Start Assessment</button>
-                        
+                    { open && user.role === 'student' && 
+                        <button onClick={handleBtn}>Start Assessment</button>
+                    }
+                    { user.role === 'teacher' &&    
+                        <button onClick={() => alert('View Submissions clicked')}>View Submissions</button>
                     }
                 </div>
             </div>

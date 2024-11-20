@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { getUserData } from '../utils/userInformation';
 import profile from '../assets/img/1x1Robot2.png';
+import customFetch from '../utils/fetchApi';
 
 export default function AccountMenu({logoutOnClick}) {
 
@@ -100,7 +101,7 @@ export default function AccountMenu({logoutOnClick}) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar src={profilePicture}/> {user.name}
+          <Avatar src={profilePicture} style={{objectFit: 'cover'}}/> {user.name}
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => logoutOnClick()}>

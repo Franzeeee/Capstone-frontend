@@ -9,6 +9,11 @@ import CreateAssessmentForm from './AssessmentForm/CreateAssessmentForm';
 import { toast } from 'react-toastify';
 import { customFetch } from '../utils/api';
 import CryptoJS from 'crypto-js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRightFromBracket, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateAssessment({handleChangePage, subject,classId}) {
     const [show, setShow] = useState(false);
@@ -16,6 +21,8 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
     
     const userData = localStorage.getItem('userData');
     const user = JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8));
+
+    const navigate = useNavigate();
 
     const [activeForm, setActiveForm] = useState("coding");
 
@@ -65,6 +72,7 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
     
         // Display errors if any
         if (errors.length > 0) {
+            toast.dismiss();
             errors.forEach(error => toast.error(error));
             return;
         }
@@ -101,7 +109,55 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
             toast.error("Failed to create assessment");
         }
     };
+
+    const [showLeaveModal, setShowLeaveModal] = useState(false);
+
+    const handleLeaveClass = () => {
+        setShowLeaveModal(true);
+    }
+    const handleCloseLeaveModal = () => {
+        setShowLeaveModal(false);
+    }
+
+    const [leaving, setLeaving] = useState(false);
+
+    const submitLeaveClass = async () => {
+        
+        const formData = new FormData();
+
+        formData.append('class_id', classId);
+        formData.append('student_id', user.id);
+
+        setLeaving(true);
+
+        try {
+            const response = await customFetch('/student/remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    class_id: classId,
+                    student_id: user.id
+                }),
+
+            });
     
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            toast.success("Leaved class successfully");
+            navigate('/dashboard');
+            handleClose();
+        } catch (error) {
+            toast.error("Failed to leave class");
+        }
+        finally {
+            setLeaving(false);
+        }
+    }
 
     return (
         <>
@@ -121,7 +177,18 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
                     <CreateAssessmentForm subject={subject} classId={classId} activeForm={activeForm} handleClose={handleClose} onSubmit={onSubmit} />
                 </Offcanvas.Body>
             </Offcanvas>
-            <div className={`${styles.createContainer}`}>
+            <div className={`${styles.createContainer} ${user.role === 'student' ? styles.removeBg : ""}`}>
+                <ConfirmationModal 
+                    show={showLeaveModal} 
+                    handleClose={() => handleCloseLeaveModal()} 
+                    modalData={{
+                        title: "Confirm Leave Class", 
+                        body: "Are you sure you want to leave this class?", 
+                        action: () => submitLeaveClass(),
+                        iconColor: "red",
+                        disableConfirm: leaving,
+                    }}
+                />
                 <div className={styles.menuContainer}>
                     <ul>    
                         <li className={activePage === 'default' ? styles.active : ''} onClick={() => handleActivePage("default")}>Default</li>
@@ -134,6 +201,19 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
                     <div className={styles.buttonContainer}>
                         <p onClick={handleShow}>+ Create Assessment</p>
                     </div>
+                )}
+                {user.role === 'student' && (
+                    <>
+                        <Dropdown>
+                            <Dropdown.Toggle as="span" id="dropdown-basic" className={styles.ellipsisIcon}>
+                            <p><FontAwesomeIcon icon={faEllipsisVertical} /></p>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setShowLeaveModal(true)} href="#/action-2"><FontAwesomeIcon className={styles.deleteIcon} icon={faArrowRightFromBracket} /> Leave Class</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </>
                 )}
             </div>
         </>

@@ -6,7 +6,7 @@ import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -156,10 +156,10 @@ export default function Submissions() {
                                         </div>
                                     </div>
                                     <div className={`${styles.headerItem}`}>
-                                        <p className={`${styles.icon} ${styles.studentCount}`}><FontAwesomeIcon icon={faUsers} /></p>
+                                        <p className={`${styles.icon} ${styles.studentCount}`}><FontAwesomeIcon icon={faClipboardCheck} /></p>
                                         <div className={`${styles.text}`}>
-                                            <p>No. of Students</p>
-                                            <p>20</p>
+                                            <p>Submission</p>
+                                            <p>{pagination?.data.length || 0}</p>
                                         </div>
                                     </div>
                                     <OverlayTrigger

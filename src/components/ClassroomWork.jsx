@@ -37,6 +37,7 @@ export default function ClassroomWork({ classId, code, className }) {
                             <img src={book} alt="test" />
                         </div>
                         <div className={styles.right}>
+                            <p className={styles.dueText}>{formatDate(item?.end_date)}</p>
                             <p className={styles.lessonTitle}>{item.title}</p>
                             <p className={styles.lessonDescription}>{item.description}</p>
                             <div className={styles.status} onClick={() => navigate(`a/${item.title}`, { state: { item: item, code,name: className } })}>
@@ -52,4 +53,26 @@ export default function ClassroomWork({ classId, code, className }) {
             )}
         </div>
     );
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (!dateString) {
+        return "No Due";
+    }
+
+    // Options to format the date
+    const options = {
+        month: 'short',   // Abbreviated month name (e.g., "Jul")
+        day: '2-digit',   // Two-digit day (e.g., "09")
+        hour: '2-digit',  // Two-digit hour (e.g., "03")
+        minute: '2-digit',// Two-digit minute (e.g., "50")
+        hour12: true      // 12-hour clock format (AM/PM)
+    };
+
+    // Format the date using toLocaleString
+    const formattedDate = date.toLocaleString('en-US', options);
+
+    // Return formatted date in the desired format
+    return formattedDate.replace(",", "").replace(/(\d{2})(?=\s)/, '$1');
 }

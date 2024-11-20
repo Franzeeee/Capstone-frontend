@@ -13,9 +13,11 @@ import styles from '../../assets/css/templates/home-template.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getUserData } from '../../utils/userInformation';
 
 export default function DrawerNav() {
     const [open, setOpen] = React.useState(false);
+    const user = getUserData();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -31,15 +33,18 @@ export default function DrawerNav() {
                 <img src={logo} alt="" />
                 <FontAwesomeIcon icon={faXmark} onClick={toggleDrawer(false)} />
             </div>
-        <List>
+            <List>
             {[
                 { text: 'Dashboard', path: '/dashboard' },
                 { text: 'Coding Playground', path: '/playground' },
                 { text: 'Calendar', path: '/calendar' },
                 { text: 'Announcements', path: '/announcements' },
-                { text: 'Classes', path: '/teacher/classes' },
-                { text: 'Grades', path: '/grades' }
-            ].map((item, index) => (
+                ...(user.role === 'teacher'
+                    ? [{ text: 'Classes', path: '/teacher/classes' }]
+
+                    : []),
+                { text: 'Grades', path: (user.role === 'teacher' ? '/teacher/grades/class' : '/grades') }, 
+            ].map((item) => (
                 <ListItem key={item.text} disablePadding>
                     <ListItemButton 
                         className={`${tabName === item.path ? styles.active : ''}`}

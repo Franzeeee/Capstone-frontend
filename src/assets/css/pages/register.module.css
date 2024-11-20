@@ -98,12 +98,19 @@
     font-size: .9rem;
 }
 .errorBorder {
-    border: 1px solid rgb(219, 27, 27) !important;
+    border: 1px solid rgb(255, 55, 55) !important;
 }
 
 .form-container ul {
     
 }
+
+.userNames {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) .4fr;
+    gap: 10px;
+}
+
 
 @media (max-width: 767px) {
     /* Media query for screens smaller than 768px (mobile devices) */
@@ -111,5 +118,12 @@
         align-content: center !important;
         justify-content: start !important;
         overflow: auto;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .userNames {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 }

@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { Form, Button, Accordion } from "react-bootstrap";
 import styles from "../../assets/css/components/create-assessment-form.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faFile, faFileAlt, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileWord, faSpinner, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faExclamationCircle, faFile, faFileAlt, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileWord, faSpinner, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import customFetch from "../../utils/fetchApi"
 import { toast } from "react-toastify";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleClose, editMode = {active: false, data: {}}  }) => {
 
@@ -122,7 +123,6 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
   };
   
   const handleSubmit = (e) => {
-    setProcessing(true);
     e.preventDefault();
     if (activeForm === "coding") {
       if (timeError) {
@@ -138,7 +138,11 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
         description: problem.description, // Keep description
       })),
     };
-    toast.loading("Creating assessment...");
+    if (editMode) {
+      toast.loading("Updating assessment...");
+    }else {
+      toast.loading("Creating assessment...");
+    }
     onSubmit(editMode ? formattedData : formData); // Send formatted data to parent
     } else {
       toast.loading("Creating assessment...");
@@ -259,6 +263,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
   const handleFileChange = (event) => {
       if (event.target.files && event.target.files.length > 0) {
           setFile(prev => [...prev, ...event.target.files])
+          // console.log("Files selected:", event.target.files);
       }
   }
 
@@ -287,7 +292,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
         body: problemForm
       })
       .then(data => {
-        console.log(convertToProblemObject(data.result));
+        // console.log(convertToProblemObject(data.result));
         const generatedProblem = convertToProblemObject(data.result);
         setTempProblem({
           problem_title: generatedProblem.problemName,
@@ -384,12 +389,48 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
           >
             <Form.Label className={styles.formLabel}>Due Date</Form.Label>
             <Form.Control
-              type="date"
+              type="datetime-local"
               name="due_date"
               value={formData.due_date}
               onChange={handleChange}
               className={styles.control}
             />
+          </Form.Group>
+          <Form.Group
+            className={`${styles.formGroup} mb-2 d-flex flex-column gap-1 w-100`}
+            controlId="options"
+          >
+            <div className="d-flex flex-row align-items-center gap-1">
+              <Form.Check
+                className="switch-left"
+                id="custom-switch-1"
+                type="switch"
+                label="Final Assessment"
+                onChange={handleFinalAssessment}
+              />
+              
+              <OverlayTrigger
+                  placement="right"
+                  overlay={<Tooltip id={`tooltip-test`}>Turn this on to set this as a final assessment</Tooltip>}
+              >
+                <p className={styles.exclamationInfo}><FontAwesomeIcon icon={faExclamationCircle} /></p>
+              </OverlayTrigger>
+            </div>
+            <div className="d-flex flex-row align-items-center gap-1">
+              <Form.Check
+                className="switch-right"
+                id="custom-switch-3"
+                type="switch"
+                label="Graded Assessment"
+                onChange={handleGraded}
+              />
+              <OverlayTrigger
+                  placement="right"
+                  overlay={<Tooltip id={`tooltip-test`}>Turn this on to set the points from 0 to 100</Tooltip>}
+              >
+                <p className={styles.exclamationInfo}><FontAwesomeIcon icon={faExclamationCircle} /></p>
+              </OverlayTrigger>
+            </div>
           </Form.Group>
 
         </>
@@ -611,10 +652,23 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
             )}
           </Form.Group>
           <Form.Group
+            className={`${styles.formGroup} mb-3`}
+            controlId="dueDate"
+          >
+            <Form.Label className={styles.formLabel}>Due Date</Form.Label>
+            <Form.Control
+              type="datetime-local"
+              name="due_date"
+              value={formData.due_date}
+              onChange={handleChange}
+              className={styles.control}
+            />
+          </Form.Group>
+          <Form.Group
             className={`${styles.formGroup} mb-2 d-flex justify-content-between w-100`}
             controlId="options"
           >
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-row align-items-center gap-1">
               <Form.Check
                 className="switch-left"
                 id="custom-switch-1"
@@ -622,6 +676,14 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 label="Final Assessment"
                 onChange={handleFinalAssessment}
               />
+              <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id={`tooltip-test`}>Turn this on to set this as a final assessment</Tooltip>}
+              >
+                <p className={styles.exclamationInfo}><FontAwesomeIcon icon={faExclamationCircle} /></p>
+              </OverlayTrigger>
+            </div>
+            <div className="d-flex flex-row align-items-center gap-1">
               <Form.Check
                 className="switch-left"
                 id="custom-switch-2"
@@ -629,8 +691,14 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 label="Manual Checking"
                 onChange={handleManualChecking}
               />
+              <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id={`tooltip-test`}>Turn this on to manually check every student submission</Tooltip>}
+              >
+                <p className={styles.exclamationInfo}><FontAwesomeIcon icon={faExclamationCircle} /></p>
+              </OverlayTrigger>
             </div>
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-row align-items-center gap-1">
               <Form.Check
                 className="switch-right"
                 id="custom-switch-3"
@@ -638,6 +706,12 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 label="Graded Assessment"
                 onChange={handleGraded}
               />
+              <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id={`tooltip-test`}>Turn this on to set the points from 0 to 100</Tooltip>}
+              >
+                <p className={styles.exclamationInfo}><FontAwesomeIcon icon={faExclamationCircle} /></p>
+              </OverlayTrigger>
             </div>
           </Form.Group>
         </>

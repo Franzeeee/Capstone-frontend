@@ -6,6 +6,22 @@ export function validateName(name) {
     }
 }
 
+export function validateFirstName(first_name) {
+    if (first_name.trim() === '') {
+        return [false, ['']];
+    } else {
+        return [true, []];
+    }
+}
+
+export function validateLastName(last_name) {
+    if (last_name.trim() === '') {
+        return [false, ['']];
+    } else {
+        return [true, []];
+    }
+}
+
 export function validateEmail(email) {
     if (email.trim() === '') {
         return [false, ['Email is required']];

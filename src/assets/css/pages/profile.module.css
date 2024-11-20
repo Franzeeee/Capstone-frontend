@@ -111,7 +111,7 @@
 .formGroupContainer {
     display: grid;
     gap: .5rem;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     margin-bottom: 5px;
 }
 .formGroup {
@@ -258,4 +258,89 @@
 .undo.disabled:hover {
     background: transparent;
     color: #4f4fbccb;
+}
+
+
+.userInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.notification {
+    color: #373737;
+    font-size: 1.2rem;
+    cursor: pointer;
+    
+}
+.customDropdownToggle::after {
+    display: none !important;
+}
+.profileHeader {
+    display: flex;
+    flex-direction: column;
+}
+.profileHeader .headIcons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.notifMemu {
+    max-width: 100px !important;
+}
+
+.notificationCard {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 10px;
+}
+.notificationCard p:first-child {
+    font-size: .85rem;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+}
+.notificationCard p {
+    text-wrap: wrap;
+}
+.notificationCard p:last-child {
+    font-size: .8rem;
+    font-weight: 400;
+    font-family: "Montserrat", sans-serif;
+    color: #646464;
+
+}
+
+.notifContainer {
+    padding: 10px !important;
+    border: none !important;
+    max-height: 300px !important;
+    overflow: auto !important;
+    min-width: 300px;
+    font-size: .9rem;
+    user-select: none;
+}
+.notifContainer a {
+    border-top: 1px solid rgb(200, 200, 200);
+}
+.notifContainer::-webkit-scrollbar {
+    display: none;
+}
+.notifContainer a:first-child {
+    border-top: none !important;
+}
+.notifContainer a:hover {
+    background-color: #bfb9ff7c !important;
+}
+.notifContainer a:hover p:not(p:first-child) {
+    color: #3a3a3a !important;
+}
+.bell {
+    margin-right: 3px;
 }

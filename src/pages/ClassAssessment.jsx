@@ -165,6 +165,7 @@ export default function ClassAssessment() {
         const newPath = currentPath.substring(0, currentPath.lastIndexOf('/') - 2);
         navigate(newPath);
     };
+    
 
     if (isFetching) {
         return <LoadingPage />;

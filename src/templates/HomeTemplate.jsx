@@ -72,7 +72,7 @@ export default function HomeTemplate({ children }) {
                       : ""
                   }`}
                 >
-                  <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>Dashboard
+                  <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>{user.role === 'teacher' ? "Dashboard" : "Home"}
                 </li>
                 <li onClick={() => navigate("/playground")}>
                   <FontAwesomeIcon icon={faCode}></FontAwesomeIcon> Coding

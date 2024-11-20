@@ -573,3 +573,15 @@
     transition: none;
     color: rgb(34, 0, 255);
 }
+
+@media screen and (max-width: 426px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    .contentContainer {
+        padding-bottom: 2rem;
+    }
+    .profileContainer {
+        display: none !important;
+    }
+}

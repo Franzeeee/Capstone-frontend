@@ -48,8 +48,6 @@ export default function ClassDashboard() {
         }
     }, [code, navigate, classData]);
 
-    console.log(classData);
-
     const [isLoading, setIsLoading] = useState(true);
 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -63,6 +61,7 @@ export default function ClassDashboard() {
     const [show, setShow] = useState(false);
     const [activeForm, setActiveForm] = useState('logic');
 
+
     useEffect(() => {
         fetchAssessments(currentPage);
         setIsLoading(false)
@@ -70,7 +69,7 @@ export default function ClassDashboard() {
 
     const fetchAssessments = async (page) => {
         try {
-            const data = await customFetch(`/activity/${classData.id}/fetch?page=${page}`, 'GET');
+            const data = await customFetch(`/activity/${classData?.id}/fetch?page=${page}`, 'GET');
             setPagination(data);
         } catch (error) {
             console.error('Error:', error.message);
@@ -169,6 +168,7 @@ export default function ClassDashboard() {
     
         // Display errors if any
         if (errors.length > 0) {
+            toast.dismiss();
             errors.forEach(error => toast.error(error));
             return;
         }
@@ -192,7 +192,7 @@ export default function ClassDashboard() {
                 },
                 body: JSON.stringify(data),
             });
-    
+            toast.dismiss();
             toast.success("Activity updated successfully");
             setPagination((prevPagination) => {
                 const updatedData = [...prevPagination.data];
@@ -332,7 +332,7 @@ export default function ClassDashboard() {
                                                         <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
                                                         <td>{assessment.title}</td>
                                                         <td style={{textAlign: 'center'}}>{assessment.total_submissions || 0}</td>
-                                                        <td>{new Date(assessment.start_date).toLocaleDateString() || 'N/A'}</td>
+                                                        <td>{assessment?.end_date == null ? "No Due" : new Date(assessment.end_date).toLocaleDateString()}</td>
                                                         <td style={{ textAlign: 'center' }}>
                                                             <Dropdown>
                                                                 <Dropdown.Toggle variant="link" style={{ color: 'black' }} id={`dropdown-basic-${assessment.id}`}>
@@ -354,7 +354,7 @@ export default function ClassDashboard() {
                                         </MDBTable><div className={styles.footer}>
                                                 <div className={styles.totalEntry}>
                                                     <p>Showing </p>
-                                                    <select name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
+                                                    <select disabled name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
                                                         <option value="10">10</option>
                                                         <option value="20">20</option>
                                                         <option value="30">30</option>
