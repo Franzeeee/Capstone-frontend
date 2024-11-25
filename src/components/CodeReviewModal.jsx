@@ -63,7 +63,7 @@ export default function CodeReviewModal({ show, handleClose, submissionData, upd
             {/* Modal component */}
             <Modal className={styles.modalBody} size='lg' show={show} onHide={handleClose}>
                 <Modal.Body>
-                    <Tabs
+                    { submissionData ? <Tabs
                         id="controlled-tab-example"
                         activeKey={key}
                         onSelect={(k) => setKey(k)}
@@ -176,7 +176,12 @@ export default function CodeReviewModal({ show, handleClose, submissionData, upd
                                 </Tab>
                             )
                         }
-                    </Tabs>
+                    </Tabs> : (
+                        <div className="d-flex justify-content-center gap-2 align-items-center flex-column">
+                            <p className='text-center p-1'>Refresh Page to View</p>
+                            <button className="btn btn-primary w-25" onClick={() => window.location.reload()}>Refresh</button>
+                        </div>
+                    )}
                 <div className={styles.footer}>
                     <Button variant="secondary" onClick={handleClose} className={styles.Close}>
                         Close

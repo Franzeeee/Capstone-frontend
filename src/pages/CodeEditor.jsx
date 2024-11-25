@@ -332,13 +332,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     const startTour = () => {
         introJs()
-          .setOptions(playgroundIntro)
-          .start();
-      };
+        .setOptions(playgroundIntro)
+        .start();
+    };
 
-      useEffect(() => {
-        startTour();
-      }, []);
+    useEffect(() => {
+        if (mode === 'playground') {
+            if(localStorage.getItem('playgroundIntro') === null) {
+                startTour();
+                localStorage.setItem('playgroundIntro', 'true');
+            }
+        }
+    }, []);
     
 
     const initializeSocket = () => {

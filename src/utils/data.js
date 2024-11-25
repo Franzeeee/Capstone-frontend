@@ -417,6 +417,7 @@ print("Bitwise OR:", p | q)  # Output: 7 (Binary: 111)
     {
         id: 2,
         title: "Comments",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Comments in Python are used to explain code, make it more readable, or to prevent the execution of certain lines of code. They are not executed by Python, and their purpose is purely for humans reading the code. Comments are crucial when writing clean, understandable, and maintainable code.

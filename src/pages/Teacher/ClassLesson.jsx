@@ -7,7 +7,7 @@ import { Button, Offcanvas } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as regularSquare } from '@fortawesome/free-regular-svg-icons';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import CodeEditor from '../CodeEditor';
 import TextFormatter from '../../components/TextFormatter';
 import PythonLesson from '../../utils/data';
@@ -19,6 +19,10 @@ import HomeTemplate from '../../templates/HomeTemplate';
 export default function ClassLesson() {
     const navigate = useNavigate()
     const location = useLocation();
+
+    const { code } = useParams();
+
+    const navigateBack = () => navigate(`/c/${code}`);
 
     const lessons = location.state?.subject === 'Python' ? PythonLesson : webLessons;
 
@@ -38,22 +42,6 @@ export default function ClassLesson() {
 
     const [show, setShow] = useState(false);
 
-    // Function to handle the Escape key press
-    const handleKeyPress = (event) => {
-        if (event.key === 'Escape' || event.key === 'Esc') {
-            alert('Escape key was pressed!');
-        }
-    };
-
-    useEffect(() => {
-        // Add key press event listener when component mounts
-        window.addEventListener('keydown', handleKeyPress);
-        
-        // Cleanup the event listener when component unmounts
-        return () => {
-            window.removeEventListener('keydown', handleKeyPress);
-        };
-    }, []);
 
     const handleClose = () => {
         setShow(false);
@@ -165,6 +153,7 @@ export default function ClassLesson() {
             </div>
                 <div className={`${styles.control}`}>
                     {/* <button className={`${styles.back}`}>Back</button> */}
+                    <button className={`${styles.back}`} onClick={navigateBack}>Back to Class</button>
                     <button onClick={handleShow} className={`${styles.try}`}>Try on Editor</button>
                     {/* <button onClick={() => getNextLesson()} className={styles.nextButton}>Next</button> */}
                 </div>
