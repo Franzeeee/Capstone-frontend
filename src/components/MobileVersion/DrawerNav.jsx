@@ -30,8 +30,8 @@ export default function DrawerNav() {
     const drawerContent = (
         <Box sx={{ width: 250 }} role="presentation" >
             <div className={styles.drawerLogo}>
-                <img src={logo} alt="" />
-                <FontAwesomeIcon icon={faXmark} onClick={toggleDrawer(false)} />
+                <img src={logo} onClick={() => navigate('/dashboard')} alt="" />
+                <FontAwesomeIcon icon={faXmark}onClick={toggleDrawer(false)} />
             </div>
             <List>
             {[
@@ -60,7 +60,7 @@ export default function DrawerNav() {
 
     return (
         <div>
-        <img onClick={toggleDrawer(true)} src={menu} alt="" />
+        <img className={styles.menuIcon} onClick={toggleDrawer(true)} src={menu} alt="" />
         <Drawer open={open} onClose={toggleDrawer(false)}>
             <div tabIndex={open ? 0 : -1}>
                 {drawerContent}

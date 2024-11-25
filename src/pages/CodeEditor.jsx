@@ -10,7 +10,7 @@ import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
 import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
@@ -32,6 +32,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import WebAssessmentSample from '../components/Modals/WebAssessmentSample';
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import CodeEditorDemo from '../components/Modals/CodeEditorDemo';
+import DrawerNav from '../components/MobileVersion/DrawerNav';
+import introJs from 'intro.js'
+import 'intro.js/introjs.css';
+import playgroundIntro from '../utils/IntroJS/playgroundIntro';
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -48,6 +53,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const [time, setTime] = useState(0)
     const [authToken, setAuthToken] = useState(null)
     const navigate = useNavigate();
+
+    const [submittingPractice, setSubmittingPractice] = useState(false);
 
     const [testGenLevel, setTestGenLevel] = useState(0);
 
@@ -322,6 +329,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     useEffect(() => {
         fetchAuthToken();
     }, []);
+
+    const startTour = () => {
+        introJs()
+          .setOptions(playgroundIntro)
+          .start();
+      };
+
+      useEffect(() => {
+        startTour();
+      }, []);
     
 
     const initializeSocket = () => {
@@ -564,6 +581,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             alert("Please provide the Web Development code to evaluate.")
             return;
         }
+        setSubmittingPractice(true);
         const messageData = new FormData();
 
         let codeToSend = challangeDetails?.language === 'python' ? code : htmlCode + cssCode;
@@ -584,7 +602,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 withAssistance: true
             }));
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            setSubmittingPractice(false)
+        })
     }
 
     useEffect(() => {
@@ -874,6 +895,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const handleCloseWebSample = () => {
         setShowWebSample(false);
     };
+
+    const [showHelpModal, setShowHelpModal] = useState(false);
     
 
     return (
@@ -901,7 +924,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 </Offcanvas.Body>
             </Offcanvas>
             <nav className={`${styles.nav} ${mode !== "playground" ? 'd-none' : ""}`}>
-                <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
+                <p><DrawerNav /></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
                    
@@ -932,6 +955,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             <li onClick =  {() => setIde(0)}> <img src={pythonPng} className={`${styles.pythonLogo}`} alt="" /> Python</li>
                             <li onClick =  {() => setIde(1)}> <FontAwesomeIcon icon={faHtml5} className={`${styles.icon} ${styles.html}`} title='IDE: Python'> </FontAwesomeIcon><FontAwesomeIcon  icon={faCss3Alt} className={`${styles.icon} ${styles.css} ml-1`} title='IDE: Python'></FontAwesomeIcon>  HTML and CSS</li>
                         </ul>
+                    </li>
+                    <li onClick={() => setShowHelpModal(true)} id='step1'>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Help</Tooltip>}>
+                            <FontAwesomeIcon icon={faQuestionCircle} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
                     </li>
                 </ul>
             </nav>
@@ -966,7 +994,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 <main className={`${styles.main}`}>
                     <div className={` ${ide == 0 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
 
-                        <div className={`${styles.codeEditor}`}>
+                        <div className={`${styles.codeEditor}`} id='step2'>
                             <CodeMirror
                                 value={code}
                                 options={{
@@ -988,7 +1016,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 
                             />
                         </div>
-                        <div className={` ${styles.outputInput}`}>
+                        <div className={` ${styles.outputInput}`} id='step3'>
                             <div className={`${styles.inputArea}`}>
                             <div className={`${styles.switchContainer} position-absolute`}>
                                 <div className={`${styles.switch} ${isInteractive ? styles.active : ''}`} onClick={handleIteractive}>
@@ -1235,7 +1263,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                         }
                                     </div>
                                     <div className={`${styles.controller}`}>
-                                        <button className={`${styles.submitCode} ${generating ? styles.disabledSubmitBtn : ""}`} disabled={generating} onClick={submitCode}>Submit Code</button>
+                                        <button className={`${styles.submitCode} ${generating ? styles.disabledSubmitBtn : ""}`} disabled={generating || submittingPractice} onClick={!submittingPractice && submitCode}>Submit Code {submittingPractice ? <FontAwesomeIcon icon={faSpinner} spin /> : ""}</button>
                                     </div>
                                 </>
                             }
@@ -1295,7 +1323,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     <QuestionList data={assessmentData} handleChangeAssessment={handleChangeAssessment}/>
                 </Offcanvas.Body>
             </Offcanvas>
-
+            <CodeEditorDemo show={showHelpModal} handleClose={() => setShowHelpModal(false)}/>
         </div>
     );
 };

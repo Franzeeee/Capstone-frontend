@@ -31,6 +31,7 @@ import Lesson1 from "./pages/LogicLessons/Lesson1";
 import Lesson3 from "./pages/LogicLessons/Lesson3";
 import Lesson2 from "./pages/LogicLessons/Lesson2";
 import Lesson4 from "./pages/LogicLessons/Lesson4";
+import LandingPage from "./pages/LandingPage";
 
 export const App = () => {
   return (
@@ -71,6 +72,8 @@ export const App = () => {
         
         <Route path="*" element={<NotFound/>} />
 
+
+        <Route path="/landing" element={<LandingPage/>} />
 
       </Routes>
     </BrowserRouter>

@@ -83,6 +83,12 @@ body {
     overflow: hidden;
 }
 
+.menuIcon {
+    width: 25px;
+    align-self: center;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 426px) {
     .main {
         padding: 0;
@@ -109,21 +115,27 @@ body {
         border: 1px solid black;
         border-radius: 100%;
     }
-    .drawerLogo {
-        width: 100%;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .drawerLogo img:first-child {
-        width: 50%;
-        object-fit: cover;
-    }
-    .drawerLogo svg {
+    .menu {
         width: auto;
-        aspect-ratio: 1/1;
-        object-fit: cover;
-        max-height: 20px;
     }
+}
+.drawerLogo {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.drawerLogo img, .drawerLogo svg {
+    cursor: pointer;
+}
+.drawerLogo img:first-child {
+    width: 50%;
+    object-fit: cover;
+}
+.drawerLogo svg {
+    width: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    max-height: 20px;
 }

@@ -1,0 +1,116 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    background-color: #EDEEF5;
+    display: grid;
+    grid-template-rows: 80px 1fr;
+    padding-inline: 2rem;
+    position: relative;
+}
+.container > * {
+    z-index: 2;
+}
+.container header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.container header img {
+    height: 60px;
+    object-fit: cover;
+}
+.container header button {
+    padding: 5px 35px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #5D5DD4;
+    font-size: .9rem;
+    font-weight: 500;
+    transition: all 300ms ease-in-out;
+}
+.container header button:hover {
+    background-color: #2424bf;
+}
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    padding-inline: 20px;
+}
+.content div {
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+.content div h1 {
+    text-wrap: wrap;
+    font-weight: 800;
+    font-size: 2.8rem;
+    margin: 0 !important;
+}
+.content div span {
+    color: #5D5DD4;
+}
+.content div:first-child {
+    padding-top: 4rem;
+}
+.content div:last-child {
+    padding-top: none;
+}
+.content div p {
+    font-size: .8rem;
+    font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 2rem;
+}
+.content div img {
+    width: 85%;
+    max-width: 500px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    min-width: 400px;
+}
+.content button {
+    width: 30%;
+    min-width: 150px;
+    text-transform: uppercase;
+    max-width: 200px;
+    padding: 6px 25px;
+    border: none;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #fff;
+    border: 3px solid #5D5DD4;
+    background-image: -webkit-linear-gradient(30deg, #5D5DD4 50%, transparent 50%);
+    background-image: linear-gradient(30deg, #5D5DD4 50%, transparent 50%);
+    background-size: 500px;
+    background-repeat: no-repeat;
+    background-position: 0%;
+    -webkit-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+}
+.content button:hover {
+    background-position: 100%;
+    color: #5D5DD4;
+    font-weight: bold;
+}
+.vector1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    z-index: 1;
+}
+.vector2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    z-index: 1;
+}
