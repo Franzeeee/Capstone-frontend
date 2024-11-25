@@ -96,6 +96,7 @@ export default function ClassContents({ data, code, className }) {
                             quiz: progress?.last_completed_lesson + 1,
                         });
                     } else {
+                        console.log(lessons[progress?.last_completed_lesson + 1]);
                         setOpen({
                             lesson: progress?.last_completed_lesson + 2,
                             quiz: progress?.last_completed_lesson + 2,
@@ -109,7 +110,10 @@ export default function ClassContents({ data, code, className }) {
                 }
             }
         }
+
+    console.log(open);
     }, [progress, defaultAssessment]);
+    
 
     const isLessonUnlocked = (lessonId, hasAssessment = true) => {
         // Allow access to the first lesson (id 0) for all users if there's no progress
@@ -312,7 +316,7 @@ export default function ClassContents({ data, code, className }) {
                                     >
                                         <p>
                                             {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `
-                                                ${lesson.id > progress?.last_completed_quiz ? `View Quiz` : `View Result`}
+                                                ${ progress?.last_completed_quiz === null || lesson.id > progress?.last_completed_quiz ? `View Quiz` : `View Result`}
                                             ` : <><FontAwesomeIcon icon={faLock} /> Locked </>}
                                         </p>
                                     </div>

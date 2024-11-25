@@ -231,6 +231,7 @@ print(x)  # Output: Hello
     {
         id: 1,
         title: "Operators",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Operators are special symbols or keywords in Python that perform operations on variables and values. Python supports a variety of operators, which are categorized based on the type of operations they perform. These include arithmetic, comparison, logical, bitwise, assignment, and more.
@@ -520,6 +521,7 @@ This can serve as a placeholder for future code.
     {
         id: 3,
         title: "String Manipulation",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             In Python, strings are sequences of characters enclosed in either single quotes ('), double quotes ("), or triple quotes (''' or """). Python provides a wide range of functionalities to manipulate strings, from basic slicing to more advanced formatting and operations.
@@ -603,6 +605,7 @@ print(repeated)  # Output: Python! Python! Python!
     {
         id: 4,
         title: "Built-in methods for manipulating strings",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Python provides a wide range of built-in methods for manipulating strings, making it easier to perform various text processing tasks.
@@ -685,6 +688,7 @@ print(sentence)  # Output: Join these words
     {
         id: 5,
         title: "String Formatting",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Python offers several ways to format strings, such as using the % operator, str.format() method, and f-strings.
@@ -720,6 +724,7 @@ print("My name is %s and I am %d years old." % (name, age))  # Output: My name i
     {
         id: 6,
         title: "Checking String Characteristics",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             In Python, checking string characteristics involves using built-in methods to determine certain properties or attributes of a string. These methods can help identify whether a string contains only alphabetic characters, digits, whitespace, or other patterns.
@@ -787,6 +792,7 @@ print(f"My name is {name} and I am {age} years old.")  # Output: My name is John
     {
         id: 8,
         title: "Decision Control Structures",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Decision control structures in Python enable you to control the flow of your program based on conditions. These structures allow your code to make decisions and execute certain sections based on whether a given condition is True or False. The primary decision control structures in Python include if, elif, and else statements, which are used for conditional execution of code.
@@ -1176,6 +1182,7 @@ else:
     {
         id: 13,
         title: "Data Structures",
+        hasAssessment: false,
         content: `
             \`\`\`Para
             Data structures are fundamental components of any programming language, allowing you to store, organize, and manage data efficiently. Python provides several built-in data structures that are easy to use and versatile for various applications. The most common data structures in 

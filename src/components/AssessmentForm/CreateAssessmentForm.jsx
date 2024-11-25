@@ -48,6 +48,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
     if (editMode.active) {
       const newFormat = {
         ...editMode.data,
+        due_date: editMode.data.end_date ? editMode.data.end_date : null,
         time_limit: secondsToTime(editMode.data.time_limit),
         coding_problems: editMode.data.coding_problems.map(problem => ({
           ...problem,
@@ -131,6 +132,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
       }
       const formattedData = {
       ...formData,
+      end_date: formData.due_date,
       time_limit: timeToSeconds(formData.time_limit),
       coding_problems: formData.coding_problems.map(problem => ({
         ...problem,
@@ -406,6 +408,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 id="custom-switch-1"
                 type="switch"
                 label="Final Assessment"
+                checked={formData?.final_assessment || false}
                 onChange={handleFinalAssessment}
               />
               
@@ -422,6 +425,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 id="custom-switch-3"
                 type="switch"
                 label="Graded Assessment"
+                checked={formData?.points === 100}
                 onChange={handleGraded}
               />
               <OverlayTrigger
@@ -674,6 +678,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 id="custom-switch-1"
                 type="switch"
                 label="Final Assessment"
+                checked={formData?.final_assessment || false}
                 onChange={handleFinalAssessment}
               />
               <OverlayTrigger
@@ -689,6 +694,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 id="custom-switch-2"
                 type="switch"
                 label="Manual Checking"
+                checked={formData?.manual_checking || false}
                 onChange={handleManualChecking}
               />
               <OverlayTrigger
@@ -704,6 +710,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
                 id="custom-switch-3"
                 type="switch"
                 label="Graded Assessment"
+                checked={formData?.points === 100}
                 onChange={handleGraded}
               />
               <OverlayTrigger
