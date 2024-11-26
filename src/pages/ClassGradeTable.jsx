@@ -138,6 +138,23 @@ export default function ClassGradeTable() {
         setShowDeleteConfirmation(false);
     }
 
+    const [certificateStatus, setCertificateStatus] = useState(null);
+    const [certificateData, setCertificateData] = useState(null);
+    useEffect(() => {
+        customFetch(`/class/certificate/status/${classData.id}`, {
+            method: 'GET'
+        })
+        .then(data => {
+            setCertificateStatus(data.status);
+            if(data.status) {
+                setCertificateData(data.data);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+    }, [])
+
     const [remainingPercentage, setRemainingPercentage] = useState(100 - assessmentPercent - finalAssessmentPercent);
 
     const handleAssessmentPercent = (e) => {
@@ -305,7 +322,7 @@ export default function ClassGradeTable() {
                             </Form.Group>
                             <Form.Label>Remaining: {remainingPercentage}%</Form.Label>
                         </Form>
-                        <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right'}}>Save</Button>
+                        <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right', background: '#6c4cd2'}}>Save</Button>
                     </Modal.Body>
                 </Modal>
                 <Modal size='lg' static show={showStudentGrade}>
@@ -512,6 +529,9 @@ export default function ClassGradeTable() {
                     handleClose={() => setShowCertificateModal(false)}
                     classId={classData.id}
                     nameClass={classData.name}
+                    certStatus={certificateStatus}
+                    data={certificateData}
+                    handleCreate={(data) => setCertificateData(data)}
                 />
             </div>
         </HomeTemplate>

@@ -1,9 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import styles from '../../assets/css/components/Modals/issue-certificate-modal.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCog, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCog, faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -11,21 +11,26 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { getUserData } from '../../utils/userInformation';
 import customFetch from '../../utils/fetchApi';
+import { toast } from 'react-toastify';
 
-export default function IssueCertificateModal({show, handleClose, classId, nameClass}) {
+export default function IssueCertificateModal({show, handleClose, classId, nameClass, certStatus, data, handleCreate}) {
 
     const navigate = useNavigate();
     const user = getUserData();
 
     const [hoveredConfirm, setHoveredConfirm] = useState(false);
     const [hoveredCog, setHoveredCog] = useState(false);
+    
+    const [status, setStatus] = useState(certStatus);
 
     const [selectedValue, setSelectedValue] = useState('passed');
     const [selectedDate, setSelectedDate] = useState(() => {
         // Format the current date as YYYY-MM-DD to ignore time
         const currentDate = new Date();
         return currentDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' format
-      });
+    });
+
+    const [loading, setLoading] = useState(false);
 
     const handleRadioChange = (event) => {
         setSelectedValue(event.target.value);
@@ -36,6 +41,7 @@ export default function IssueCertificateModal({show, handleClose, classId, nameC
     };
 
     const issueCertificate = () => {
+        setLoading(true);
         customFetch('/class/certificate/issue', {
             method: 'POST',
             headers: {
@@ -50,17 +56,30 @@ export default function IssueCertificateModal({show, handleClose, classId, nameC
             }),
         })
         .then(data => {
-            console.log(data);
+            toast.success("Certificate issued successfully!");
+            handleCreate(data);
         })
         .catch(error => {
             console.error(error);
+        })
+        .finally(() => {
+            setLoading(false);
+            handleClose();
         });
-    }
+    };
+
+    useEffect(() => {
+        setStatus(certStatus);
+        if (data) {
+            setSelectedDate(data.issue_date);
+            setSelectedValue(data.issued_to);
+        }
+    }, [certStatus]);
 
   return (
     <Modal show={show} className={styles.certModal}>
         <Modal.Header closeButton onClick={handleClose}>
-            <Modal.Title>Issue Certificate</Modal.Title>
+            <Modal.Title>Issue Certificate {status && <span className={styles.status}>(Issued)</span>}</Modal.Title>
         </Modal.Header>
         <Modal.Body className={styles.modalBody}>
             <FormControl>
@@ -71,7 +90,7 @@ export default function IssueCertificateModal({show, handleClose, classId, nameC
                     value={selectedValue}
                     onChange={handleRadioChange}
                 >
-                    <FormControlLabel value="all" control={<Radio />} label="All Students" />
+                    <FormControlLabel disabled={status} value="all" control={<Radio />} label="All Students" />
                     <FormControlLabel value="passed" control={<Radio />} label="Passed/Eligible Students" />
                 </RadioGroup>
             </FormControl>
@@ -81,6 +100,7 @@ export default function IssueCertificateModal({show, handleClose, classId, nameC
                     type='date' 
                     value={selectedDate} 
                     onChange={handleDateChange}
+                    disabled={status}
                 />
             </FormControl>
         </Modal.Body>
@@ -93,11 +113,13 @@ export default function IssueCertificateModal({show, handleClose, classId, nameC
                 {hoveredCog ? <FontAwesomeIcon icon={faMagnifyingGlass} fade = {hoveredCog}/> : "Preview"}
             </button>
             <button 
-                onClick={issueCertificate} 
+                onClick={!loading && !status ? issueCertificate : ""} 
                 onMouseEnter={() => setHoveredConfirm(true)}
                 onMouseLeave={() => setHoveredConfirm(false)}
+                disabled={loading || status}
+                className={`${status ? styles.disabled : ""}`}
             >
-                {!hoveredConfirm ? 'Confirm' : <FontAwesomeIcon icon={faCheckCircle} fade/>}
+                {!status && !hoveredConfirm && !loading ? `${"Confirm"}` : <FontAwesomeIcon icon={loading ? faSpinner : faCheckCircle} fade={!status && !loading} spin={loading}/>} {!hoveredConfirm && loading && <FontAwesomeIcon spin={loading} icon={faSpinner} />}
             </button>
         </Modal.Footer>
     </Modal>
