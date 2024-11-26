@@ -19,6 +19,7 @@ import SubmissionDetailModal from '../components/SubmissionDetailModal';
 import { Form, FormGroup, Button } from 'react-bootstrap';
 import { Tab, Tabs } from 'react-bootstrap';
 import profile from '../assets/img/1x1Robot2.png';
+import IssueCertificateModal from '../components/Modals/IssueCertificateModal';
 
 
 
@@ -56,6 +57,13 @@ export default function ClassGradeTable() {
     const [finalGrade, setFinalGrade] = useState(0);
     const [gradeId, setGradeId] = useState(null);
 
+    const [showCertificateModal, setShowCertificateModal] = useState(false);
+
+
+    const captureOtherPage = async () => {
+        // Navigate to the other page
+        navigate("/certificate", { state: { captureMode: true } });
+    };
 
 
     // handlers for modals
@@ -429,7 +437,7 @@ export default function ClassGradeTable() {
                                     placement="bottom"
                                     overlay={<Tooltip id={`tooltip-test`}>Issue Completion Certificates</Tooltip>}
                                 >
-                                    <p className={styles.gradeDistribution}><FontAwesomeIcon icon={faUserGraduate} /></p>
+                                    <p onClick={() => setShowCertificateModal(true)} className={styles.gradeDistribution}><FontAwesomeIcon icon={faUserGraduate} /></p>
                                 </OverlayTrigger>
                             </div>
                             {
@@ -499,6 +507,10 @@ export default function ClassGradeTable() {
                 <div className={`${styles.profileContainer}`}>
                     <ProfileSide info={user} />
                 </div>
+                <IssueCertificateModal
+                    show={showCertificateModal}
+                    handleClose={() => setShowCertificateModal(false)}
+                />
             </div>
         </HomeTemplate>
     );
