@@ -3,8 +3,32 @@ import HomeTemplate from '../../templates/HomeTemplate'
 import { getUserData } from '../../utils/userInformation'
 import styles from '../../assets/css/pages/LogicLesson/lesson2.module.css'
 import ProfileSide from '../../components/ProfileSide'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import customFetch from '../../utils/fetchApi'
+import { toast } from 'react-toastify'
 
 export default function Lesson2() {
+  const navigate = useNavigate();
+
+  const { code } = useParams();
+
+  const navigateToClass = () => navigate(`/c/${code}`);
+
+  const [classInfo, setClassInfo] = useState(null);
+
+
+  useEffect(() => {
+      customFetch(`/class/${code}`, {
+          method: 'GET',
+      })
+      .then(data => {
+          setClassInfo(data);
+      })
+      .catch(err => {
+          toast.error("An error occurred while fetching class information");
+      })
+  }, [])
 
   const user = getUserData();
 
@@ -16,7 +40,11 @@ export default function Lesson2() {
               <div className={`${styles.create}`}>
                   <div>
                       <ul>
-                          <li>Grades</li>
+                        <li onClick={() => navigate('/')}>{user.role === 'teacher' ? "Dashboard" : "Home"}</li>
+                        <li>/</li>
+                        <li onClick={navigateToClass}>{classInfo?.name || "Loading"}</li>
+                        <li>/</li>
+                        <li className={`${styles.active}`}>Lesson 2: Basic Control Structures in Pseudocode</li>
                       </ul>
                   </div>
               </div>
