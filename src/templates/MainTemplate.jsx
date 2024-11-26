@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { checkLoggedIn } from '../utils/auth';
 import { customFetch } from '../utils/api';
 import CryptoJS from 'crypto-js';
+import { toast } from 'react-toastify';
 
 const ErrorContext = createContext();
 
@@ -51,7 +52,7 @@ export const MainTemplate = ({children}) => {
                 navigate('/login');
             })
             .catch(error => {
-                console.log(error);
+                toast.error("An error occurred while logging out");
             })
     }
 

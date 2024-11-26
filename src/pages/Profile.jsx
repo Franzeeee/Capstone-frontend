@@ -180,8 +180,6 @@ export default function Profile() {
                 .finally(() => {
                     setUpdatingBasicInfo(false);
                 });
-            console.log(basicInformation);
-
         }
     }
 

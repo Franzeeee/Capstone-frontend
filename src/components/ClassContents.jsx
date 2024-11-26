@@ -96,7 +96,6 @@ export default function ClassContents({ data, code, className }) {
                             quiz: progress?.last_completed_lesson + 1,
                         });
                     } else {
-                        console.log(lessons[progress?.last_completed_lesson + 1]);
                         setOpen({
                             lesson: progress?.last_completed_lesson + 2,
                             quiz: progress?.last_completed_lesson + 2,
@@ -111,7 +110,6 @@ export default function ClassContents({ data, code, className }) {
             }
         }
 
-    console.log(open);
     }, [progress, defaultAssessment]);
     
 

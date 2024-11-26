@@ -26,7 +26,6 @@ export default function EditClassModal({show, handleClose, classData, setUpdated
     }
 
     const handleUpdateClass = () => {
-        console.log(classFormData)
         setUpdating(true)
         const formData = new FormData()
         formData.append('class_id', classData.id)
@@ -41,7 +40,6 @@ export default function EditClassModal({show, handleClose, classData, setUpdated
             body: formData
         })
         .then(data => {
-            console.log(data)
             setUpdatedClass({
                 ...classData,
                 id: classData.id,
@@ -55,7 +53,7 @@ export default function EditClassModal({show, handleClose, classData, setUpdated
             handleClose()
         })
         .catch(error => {
-            console.log(error)
+            toast.error("An error occurred while updating class")
         })
         .finally(() => {
             setUpdating(false)

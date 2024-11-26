@@ -5,7 +5,18 @@ import styles from '../../assets/css/pages/logic-assessment-page.module.css'
 import { useNavigate } from 'react-router-dom'
 import bot from '../../assets/img/assessmentBot.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClose } from '@fortawesome/free-solid-svg-icons'
+import { faClose, faImage, faFileImage,
+    faFilePdf,
+    faFileWord,
+    faFileExcel,
+    faFilePowerpoint,
+    faFileAlt,
+    faFileArchive,
+    faFileAudio,
+    faFileVideo,
+    faFileCode,
+    faFile,
+    faDownload, } from '@fortawesome/free-solid-svg-icons'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {getUserData} from '../../utils/userInformation'
 import { toast } from 'react-toastify'
@@ -24,6 +35,7 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
     const BASE_URL = import.meta.env.VITE_API_URL;
 
 
+    const [assessmentDocFile, setAssessmentDocFile] = useState([]); // State to store assessment file
     const [assessmentFile, setAssessmentFile] = useState([]); // State to store assessment file
 
     const [submitted, setSubmitted] = useState(false);
@@ -33,6 +45,8 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
 
     // For File Preview
     const [showFilePreview, setShowFilePreview] = useState(false);
+    const [showAssessmentFile, setShowAssessmentFile] = useState(false);
+
 
     const handleFilePreview = () => {
         setShowFilePreview(true);
@@ -48,6 +62,16 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
         customFetch(`/activity/logic/${assessmentData.id}/files`)
             .then(data => {
                 setAssessmentFile(data);
+                setAssessmentDocFile(prev => {
+                    const newFiles = [...prev, ...data.files.map(file => {
+                        return {
+                            uri: file.file_path,
+                            fileType: file.type,
+                            fileName: file.name
+                        }
+                    })]; // Combine old files with new files
+                    return newFiles;
+                }); // Update state with selected files
             })
             .catch(error => {
                 console.error('Error:', error.message);
@@ -206,6 +230,24 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                                 <p>
                                     {assessmentData?.description || "Fetching Description Failed"}
                                 </p>
+                                <div className={`${styles.assessmentFileContainer}`}>
+                                { assessmentFile?.files && assessmentFile?.files.length > 0 && assessmentFile?.files.map((file, index) => (
+
+                                        <div className={`${styles.assessmentFileCards}`} onClick={() => setShowAssessmentFile(true)}>
+                                            <div>
+                                                <p><FontAwesomeIcon icon={getFontAwesomeIcon(file?.file_type)} /></p>
+                                            </div>
+                                            <div>
+                                                <p>{file?.file_name}</p>
+                                                <p>Image</p>
+                                            </div>
+                                            <div className={styles.download}>
+                                                <FontAwesomeIcon icon={faDownload} />
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                                </div>
                             </div>
                         </div>
                         <div className={styles.contentContainer}>
@@ -295,7 +337,59 @@ export default function LogicAssessmentPage({ assessmentData, ...props }) {
                         />
                     </ModalBody>
                 </Modal>
+
+                <Modal style={{background: 'transparent !important'}} show={showAssessmentFile} size='lg' onHide={() => setShowAssessmentFile(false)}>
+                    <ModalBody className={styles.modalBody}>
+                        <DocViewer 
+                            documents={assessmentDocFile}
+                            config={{
+                                header: {
+                                    disableFileName: true,
+                                }
+                            }}
+                            pluginRenderers={DocViewerRenderers} 
+                            preFetchMethod="GET"
+                            style={{width: '100%', height: '100%'}}
+                        />
+                    </ModalBody>
+                </Modal>
             </div>
         </HomeTemplate>
     )
 }
+
+
+const getFontAwesomeIcon = (extension) => {
+    const ext = extension.toLowerCase();
+
+    const extensionToIcon = {
+        png: faFileImage,
+        jpg: faFileImage,
+        jpeg: faFileImage,
+        gif: faFileImage,
+        svg: faFileImage,
+        pdf: faFilePdf,
+        doc: faFileWord,
+        docx: faFileWord,
+        xls: faFileExcel,
+        xlsx: faFileExcel,
+        ppt: faFilePowerpoint,
+        pptx: faFilePowerpoint,
+        txt: faFileAlt,
+        csv: faFileAlt,
+        zip: faFileArchive,
+        rar: faFileArchive,
+        mp3: faFileAudio,
+        wav: faFileAudio,
+        mp4: faFileVideo,
+        mov: faFileVideo,
+        avi: faFileVideo,
+        json: faFileCode,
+        js: faFileCode,
+        html: faFileCode,
+        css: faFileCode,
+        default: faFile, // Default file icon
+    };
+
+    return extensionToIcon[ext] || extensionToIcon.default;
+};
