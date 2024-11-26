@@ -510,6 +510,8 @@ export default function ClassGradeTable() {
                 <IssueCertificateModal
                     show={showCertificateModal}
                     handleClose={() => setShowCertificateModal(false)}
+                    classId={classData.id}
+                    nameClass={classData.name}
                 />
             </div>
         </HomeTemplate>

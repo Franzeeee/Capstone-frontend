@@ -14,6 +14,9 @@ const Certificate = () => {
   const [teacher, setTeacher] = useState(location?.state?.teacher || "Teacher Name");
   const [date, setDate] = useState(location?.state?.date || "Date Here");
 
+
+  const isCertificatePage = location.pathname === '/certificate';
+
   useEffect(() => {
     if (print) {
       capturePage();
@@ -30,8 +33,6 @@ const Certificate = () => {
     const canvas = await html2canvas(element, {
       scale: window.devicePixelRatio, // Match device pixel ratio for better quality
       useCORS: true, // Handle external resources like images or fonts
-      height: 550, // Set the height of the canvas
-      width: 1163, // Set the width of the canvas
     });
   
     const image = canvas.toDataURL("image/png");
@@ -52,7 +53,7 @@ const Certificate = () => {
         <p>Student Name</p>
       </div>
         <div className={styles.text}>
-            <p>{date}</p>
+            <p>{formatDate(date)}</p>
             <p>{teacher}</p>
         </div>
             <img src={backgroundImage} alt="certificate" className={styles.image}/>
@@ -60,6 +61,11 @@ const Certificate = () => {
     </div>
 
   );
+}
+
+function formatDate(date) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(date).toLocaleDateString('en-US', options);
 }
 
 export default Certificate;
