@@ -344,3 +344,11 @@
 .bell {
     margin-right: 3px;
 }
+
+.errorBorder {
+    border: 1px solid red !important;
+}
+
+.formGroup input[type="number"]::-webkit-outer-spin-button, .formGroup input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+}

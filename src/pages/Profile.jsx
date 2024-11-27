@@ -34,6 +34,8 @@ export default function Profile() {
     const [updatedPassword, setUpdatedPassword] = useState(false);
     const [updatedPhoto, setUpdatedPhoto] = useState(false);
 
+    const [contactError, setContactError] = useState(false);
+
     const [basicInformation, setBasicInformation] = useState({
         first_name: user.first_name,
         middle_name: user.middle_name,
@@ -89,12 +91,31 @@ export default function Profile() {
     
 
     const handleContactInput = (e) => {
+        const { name, value } = e.target;
+    
+        // Allow only numbers, '+', and empty values
+        const sanitizedValue = value.replace(/[^0-9+]/g, '').trim();
+        const phoneRegex = /^(09\d{9}|\+639\d{9})$/;
+    
+        // Do not update if the value is the same as the stored phone number
+        if (sanitizedValue === user.phone) {
+            setUpdatedContact(false);
+        } 
+        // Check if the sanitized value matches the regex or is empty
+        else if (phoneRegex.test(sanitizedValue) || sanitizedValue === "") {
+            setContactError(false);
+            setUpdatedContact(true);
+        } else {
+            setContactError(true);
+        }
+    
         setContactInformation({
             ...contactInformation,
-            [e.target.name]: e.target.value
+            [name]: sanitizedValue, // Use sanitized value
         });
-        setUpdatedContact(true);
-    }
+    };
+    
+
 
     const handlePasswordInput = (e) => {
         setPassword({
@@ -121,9 +142,9 @@ export default function Profile() {
     const undo = (formName) => {
         if(formName === 'info') {
             setBasicInformation({
-                first_name: user.name,
-                middle_name: user.name,
-                last_name: user.name,
+                first_name: user.first_name,
+                middle_name: user.middle_name,
+                last_name: user.last_name,
                 suffix: user.suffix || "",
                 gender: user.gender || "",
                 birthday: "",
@@ -187,11 +208,21 @@ export default function Profile() {
         if(updatedContact) {
             customFetch('/update/contact-info', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(contactInformation)
             })
                 .then(response => {
                     toast.success(response.message);
                     setUpdatedContact(false);
+                    const newUserData = {
+                        ...user,
+                        email: contactInformation.email,
+                        phone: contactInformation.phone
+                    };
+                    localStorage.setItem('userData', CryptoJS.AES.encrypt(JSON.stringify(newUserData), 'capstone'));
+
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
@@ -317,7 +348,7 @@ export default function Profile() {
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="phone">Contact Number</label>
-                                    <input type="text" name='phone' value={contactInformation.phone} onChange={handleContactInput}/>
+                                    <input type="text" name='phone' className={`${contactError ? styles.errorBorder : ""}`} value={contactInformation.phone} onChange={handleContactInput}/>
                                 </div>
                             </div>
                             <button onClick={handleUpdateContact} type='button' className={`${styles.formSubmit} ${ updatedContact ? "" : styles.disabled}`}>Save Contact</button>
