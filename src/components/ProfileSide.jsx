@@ -20,6 +20,7 @@ import { getUserData } from "../utils/userInformation";
 import { format } from "date-fns";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
+import NotificationModal from "./Modals/NotificationModal";
 
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
@@ -102,6 +103,8 @@ export default function ProfileSide({ info }) {
     });
   };
 
+  const [showNotification, setShowNotification] = useState(false);
+
 
   return (
     <>
@@ -135,6 +138,30 @@ export default function ProfileSide({ info }) {
                 </div>
               )
             }
+            <Dropdown.Item>
+              <div onClick={() => setShowNotification(true)} className={`${styles.notificationCard} ${styles.otherNotification}`}>
+                <p className="text-danger">New Announcement Posted</p>
+                <p>
+                  Your teacher posted new announcement on class ClassName(Section 11).
+                </p>
+                <div className={styles.notificationBtns}>
+                  <button className={styles.remove}>Remove</button>
+                  <button>View Class</button>
+                </div>
+              </div>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <div onClick={() => setShowNotification(true)} className={`${styles.notificationCard} ${styles.otherNotification}`}>
+                <p className="text-danger">New Assessment Posted</p>
+                <p>
+                  Your teacher posted new announcement on class ClassName(Section 11).
+                </p>
+                <div className={styles.notificationBtns}>
+                  <button className={styles.remove}>Remove</button>
+                  <button>View Class</button>
+                </div>
+              </div>
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
@@ -190,7 +217,10 @@ export default function ProfileSide({ info }) {
             )
           )
         }
-
+        <NotificationModal
+          show={showNotification}
+          handleClose={() => setShowNotification(false)}
+        />
         </div>
       </div>
     </>

@@ -338,9 +338,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     useEffect(() => {
         if (mode === 'playground') {
-
+            if(localStorage.getItem('playgroundIntro') === null) {
                 startTour();
                 localStorage.setItem('playgroundIntro', 'true');
+            }
         }
     }, []);
     

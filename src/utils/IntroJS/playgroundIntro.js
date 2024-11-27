@@ -43,7 +43,7 @@ const playgroundIntro = {
       },
       {
         element: '#step11',
-        intro: 'Tracks how long your code takes to execute after you run it.',
+        intro: 'Is used for timer during coding practice.',
       },
       {
         element: '#step12',
