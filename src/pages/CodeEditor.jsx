@@ -338,10 +338,9 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
     useEffect(() => {
         if (mode === 'playground') {
-            if(localStorage.getItem('playgroundIntro') === null) {
+
                 startTour();
                 localStorage.setItem('playgroundIntro', 'true');
-            }
         }
     }, []);
     
@@ -935,24 +934,24 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                    
                     { ide === 0 && (
                         <>
-                            <li onClick={openPythonFile}>
+                            <li onClick={openPythonFile}  id='step2'>
                                 <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
                                     <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
                                 </OverlayTrigger>
                             </li>
-                            <li onClick={saveAsPyFile}>
+                            <li onClick={saveAsPyFile} id='step3'>
                                 <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
                                     <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
                                 </OverlayTrigger>
                             </li>
-                            <li onClick={copyToClipboard}>
+                            <li onClick={copyToClipboard} id='step4'>
                                 <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
                                     <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
                                 </OverlayTrigger>
                             </li>
                         </>
                     )}
-                    <li className={`position-relative ${styles.language}`}>
+                    <li className={`position-relative ${styles.language}`}id='step5'>
                     {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
                         <FontAwesomeIcon icon={ide === 0 ? faPython : faHtml5} className={`${styles.icon}`} title={`IDE: ${ide === 0 ? 'Python' : 'HTML and CSS'}`}></FontAwesomeIcon>
                         <ul className={`${styles.selectLanguage}`}>
@@ -961,7 +960,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             <li onClick =  {() => setIde(1)}> <FontAwesomeIcon icon={faHtml5} className={`${styles.icon} ${styles.html}`} title='IDE: Python'> </FontAwesomeIcon><FontAwesomeIcon  icon={faCss3Alt} className={`${styles.icon} ${styles.css} ml-1`} title='IDE: Python'></FontAwesomeIcon>  HTML and CSS</li>
                         </ul>
                     </li>
-                    <li onClick={() => setShowHelpModal(true)} id='step1'>
+                    <li onClick={() => setShowHelpModal(true)} id=''>
                         <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Help</Tooltip>}>
                             <FontAwesomeIcon icon={faQuestionCircle} className={`${styles.icon}`}/>
                         </OverlayTrigger>
@@ -971,15 +970,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             <section className={`w-100 d-flex flex-column ${styles.section}`}>
                 <header>
                 <div className={`position-relative logo d-flex align-items-center justify-content-center ${styles.logo} ${mode !== "playground" ? 'd-none' : 'justify-content-end'}`}>
-                        <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/dashboard')}/>
+                        <img src={logo} alt="CodeLab Logo" id="step1" onClick={() => navigate('/dashboard')}/>
                     </div>
-                    <div className={`${styles.clockLogo} ${mode !== "playground" ? 'd-none' : ''}`}>
+                    <div className={`${styles.clockLogo} ${mode !== "playground" ? 'd-none' : ''}`}id="step11">
                         <p className={`m-0 ${styles.timer}`}><span><FontAwesomeIcon icon={faClock} /></span> {formatTime(timer)}</p>
                         {/* <div className="play">
                         </div> */}
                     </div>
                     <div className={`${styles.controls}`}>
-                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute} ${ide !== 1 ? '' : 'd-none'}`}>
+                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute} ${ide !== 1 ? '' : 'd-none'}`} id="step7">
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
@@ -992,14 +991,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         />
                     )
                     }
-                    <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
+                    <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}id="step14">
                         <FontAwesomeIcon icon={ mode === 'playground' ? faRightFromBracket : faClose}/>
                     </div>
                 </header>
                 <main className={`${styles.main}`}>
                     <div className={` ${ide == 0 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
 
-                        <div className={`${styles.codeEditor}`} id='step2'>
+                        <div className={`${styles.codeEditor}`} id="step6">
                             <CodeMirror
                                 value={code}
                                 options={{
@@ -1021,9 +1020,9 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 
                             />
                         </div>
-                        <div className={` ${styles.outputInput}`} id='step3'>
+                        <div className={` ${styles.outputInput}`} >
                             <div className={`${styles.inputArea}`}>
-                            <div className={`${styles.switchContainer} position-absolute`}>
+                            <div className={`${styles.switchContainer} position-absolute`}id="step10">
                                 <div className={`${styles.switch} ${isInteractive ? styles.active : ''}`} onClick={handleIteractive}>
                                 </div>
                                 <p className='text-black'>Interactive</p>
@@ -1034,9 +1033,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                     placeholder="Stdin Inputs"
                                     cols="30"
                                     disabled={isInteractive}
-                                />
+                                    id="step8"
+                                 />
                             </div>
-                            <div className={`${styles.outputArea}`}>
+                            <div className={`${styles.outputArea}`}id="step9">
                                 <p className={`${styles.title}`}>Output:</p>
                                 {output && <textarea readOnly={!isInteractive} onChange={(e) => setOutput(e.target.value)} onKeyPress={handleInput} className='m-0' value={output} />}
                             </div>
@@ -1155,7 +1155,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             {testGenLevel === 0 ? (
                                 <>
                                     <img src={practiceTest} alt="Practice Test" className={`${styles.practiceTest}`} />
-                                    <button className={`${styles.firstButton}`} onClick={startPractice}>Start Practice Test</button>
+                                    <button className={`${styles.firstButton}`} onClick={startPractice}id="step12">Start Practice Test</button>
                                 </>
                             ) : (
                                 testGenLevel === 1 && (
@@ -1312,7 +1312,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 }
 
                             </div>
-                            <div className={`${styles.chatbox}`}>
+                            <div className={`${styles.chatbox}`}id="step13">
                                 <input type="text" name="" id="" value={userMessage} onChange={handleMessageInput} onKeyPress={handleKeyPress}/>
                                 <FontAwesomeIcon icon={faPaperPlane} title="Send" className={`${styles.sendIcon}`} onClick={handleSendMessage}/>
                             </div>
