@@ -144,6 +144,8 @@
     align-items: flex-start;
     justify-content: flex-start;
     padding: 10px 0;
+    font-size: .8rem;
+    word-break: break-all;
 }
 .notificationCard p:first-child {
     font-size: .85rem;
@@ -225,6 +227,9 @@
 .notificationBtns .remove:hover {
     color: #fe3c23;
     background-color: transparent;
+}
+.date {
+    font-size: .7rem !important;
 }
 
 @media screen and (min-height: 700px) {

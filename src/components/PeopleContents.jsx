@@ -52,7 +52,6 @@ export default function PeopleContents({classId, classInfo}) {
     };
 
     const removeStudent = () => {
-        alert(id);
         const formData = new FormData();
         formData.append('class_id', classId);
         formData.append('student_id', id);

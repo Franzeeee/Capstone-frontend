@@ -11,6 +11,7 @@ import { Modal, ModalBody, ModalHeader } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import customFetch from '../utils/fetchApi';
 import CodeReviewModal from '../components/CodeReviewModal';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
 export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission, submittedCode }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
@@ -29,13 +30,20 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
 
     const [showRanking, setShowRanking] = useState(false);
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
     const handleClose = () => setShowRanking(false);
     const handleShow = () => setShowRanking(true);
 
     const handleBtn = () => { 
         if (!status) {
-            startButton();
+            setShowConfirmation(true);
         }
+    };
+
+    const handleConfirm = () => {
+        startButton();
+        setShowConfirmation(false);
     };
 
     useEffect(() => {
@@ -228,6 +236,16 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 show={showReview}
                 handleClose={() => setShowReview(false)}
                 submissionData={submittedCode}
+            />
+            <ConfirmationModal
+                show={showConfirmation}
+                handleClose={() => setShowConfirmation(false)}
+                modalData={{
+                    title: "Start Assessment",
+                    body: "Are you sure you want to start the assessment?",
+                    action: handleConfirm,
+                    icon: faQuestion,
+                }}
             />
         </>
     );

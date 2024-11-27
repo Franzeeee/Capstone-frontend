@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import styles from '../assets/css/pages/code-editor.module.css';
 import axios from 'axios'; // Import Axios for making HTTP requests
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useBeforeUnload } from 'react-router-dom'
 import customFetch from '../utils/fetchApi';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
-import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
+import 'codemirror/addon/hint/show-hint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
-import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
+import { faClock, faClose, faCopy, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
 import practiceTest from '../assets/img/practice-test.png';
@@ -21,9 +21,7 @@ import success from '../assets/img/excellent.png'
 import fail from '../assets/img/tiger.png'
 import html5 from '../assets/img/html-5.png'
 import css3 from '../assets/img/css-3.png'
-import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
-import swap1 from '../assets/img/Swap1.png'
-import swap2 from '../assets/img/swap2.png'
+import { faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
 import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
@@ -62,7 +60,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         exit_fullscreen: 0,
         change_tab: 0,
     });
-    
+
     useEffect(() => {
         if ( mode === "Assessment" && options && options.cheatingData !== null || options.cheatingData !== undefined) {
             setCheatingData({
@@ -171,8 +169,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     // Warn user about losing progress if they try to leave the page
     useEffect(() => {
         const handleBeforeUnload = (event) => {
+            window.alert('Are you sure you want to leave the page? Your progress will be lost.');
             event.preventDefault();
-            event.returnValue = 'Your code will be permanently lost if you reload or close the page. Are you sure you want to proceed?';
         };
     
         window.addEventListener('beforeunload', handleBeforeUnload);
@@ -402,7 +400,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const onWsConnectionFailed = (e) => {
-        alert("connection failed");
+        console.error("connection failed");
     };
 
     const handleInput = (event) => {
@@ -902,7 +900,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const [showHelpModal, setShowHelpModal] = useState(false);
-    
+
+    useBeforeUnload(
+        useCallback(() => {
+            if(mode === 'Assessment') {
+                submitAssessment();
+            }
+        }, [])
+    );
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
@@ -1330,6 +1335,9 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 </Offcanvas.Body>
             </Offcanvas>
             <CodeEditorDemo show={showHelpModal} handleClose={() => setShowHelpModal(false)}/>
+            <ConfirmationModal
+                show={true}
+            />
         </div>
     );
 };

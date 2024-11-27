@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import profile from "../assets/img/1x1Robot2.png";
 import { Badge } from "primereact/badge";
 import { Dropdown } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { logout } from "../utils/logout";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
 import customFetch from "../utils/fetchApi";
@@ -22,14 +22,17 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
 import NotificationModal from "./Modals/NotificationModal";
 
+
 export default function ProfileSide({ info }) {
   const navigate = useNavigate();
+  const {code} = useParams();
 
   const [showModal, setShowModal] = useState(false);
   const [profilePicture, setProfilePicture] = useState(profile);
 
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState([]);
+  const [removing, setRemoving] = useState(false);
 
   const user = getUserData();
 
@@ -104,6 +107,48 @@ export default function ProfileSide({ info }) {
   };
 
   const [showNotification, setShowNotification] = useState(false);
+  const [notificationData, setNotificationData] = useState([]);
+
+  useEffect(() => {
+    customFetch(`/notification/${user.id}/fetch`, {
+      method: "GET"
+    })
+    .then(data => {
+      if(data.notifications.length > 0) {
+      const sortedNotifications = data.notifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setNotificationData(sortedNotifications);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error.message);
+    });
+  }, []);
+
+
+  const navigateToClass = (classCode) => {
+    if(code === classCode) {
+      toast.info("You are already in this class");
+    }else {
+      navigate(`/c/${classCode}`);
+    }
+  }
+
+  const handleDeleteNotification = (id) => {
+    setRemoving(true);
+    customFetch(`/notification/${id}/delete`, {
+      method: "GET"
+    })
+    .then(data => {
+      setNotificationData(notificationData.filter(notification => notification.id !== id));
+      toast.success("Notification deleted successfully");
+    })
+    .catch(error => {
+      console.error('Error:', error.message);
+    })
+    .finally(() => {
+      setRemoving(false);
+    });
+  };
 
 
   return (
@@ -111,7 +156,7 @@ export default function ProfileSide({ info }) {
       <div className={`${styles.profileHeader}`}>
         <LogoutConfirmationModal show={showModal} handleClose={handleClose}/> 
         <p className={`${styles.profileText}`}>Profile</p>
-        <Dropdown>
+        <Dropdown autoClose="outside">
           <Dropdown.Toggle
             as="div"
             className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
@@ -123,10 +168,10 @@ export default function ProfileSide({ info }) {
           <Dropdown.Menu className={styles.notifContainer}>
             <p className="mb-1"><FontAwesomeIcon className={styles.bell} icon={faBell} /> Notification</p>
             { user && !user?.verified &&
-              <Dropdown.Item href="#/action-1">
+              <Dropdown.Item>
                 <div className={styles.notificationCard}>
-                  <p className="text-danger">Email Verification</p>
-                  <p>Your account email is not verified. You need to verify to recieve email reminders. Verification sent on your email.</p>
+                  <p className="text-danger">Email Verification <Badge severity="danger" style={{ display: "none !important" }} /></p>
+                  <p>Your account email is not verified. You need to verify to recieve email reminders. <b>Verification sent on your email</b>.</p>
                 </div>
               </Dropdown.Item>
             }
@@ -138,30 +183,32 @@ export default function ProfileSide({ info }) {
                 </div>
               )
             }
-            <Dropdown.Item>
-              <div onClick={() => setShowNotification(true)} className={`${styles.notificationCard} ${styles.otherNotification}`}>
-                <p className="text-danger">New Announcement Posted</p>
-                <p>
-                  Your teacher posted new announcement on class ClassName(Section 11).
-                </p>
-                <div className={styles.notificationBtns}>
-                  <button className={styles.remove}>Remove</button>
-                  <button>View Class</button>
-                </div>
-              </div>
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <div onClick={() => setShowNotification(true)} className={`${styles.notificationCard} ${styles.otherNotification}`}>
-                <p className="text-danger">New Assessment Posted</p>
-                <p>
-                  Your teacher posted new announcement on class ClassName(Section 11).
-                </p>
-                <div className={styles.notificationBtns}>
-                  <button className={styles.remove}>Remove</button>
-                  <button>View Class</button>
-                </div>
-              </div>
-            </Dropdown.Item>
+            {notificationData && notificationData.length > 0 && notificationData.map((notification, index) => (
+              notification.type === 'announcement' ? (
+                <Dropdown.Item key={index}>
+                  <div className={styles.notificationCard}>
+                    <p className="text-danger">New Announcement</p>
+                    <p>{notification?.message}</p>
+                    <div className={styles.notificationBtns}>
+                      <button className={styles.remove} onClick={() => handleDeleteNotification(notification?.id)}>Remove</button>
+                      <button onClick={() => navigateToClass(notification?.class_code)}>View Class</button>
+                    </div>
+                  </div>
+                </Dropdown.Item>
+              ) : (
+                <Dropdown.Item key={index}>
+                  <div className={styles.notificationCard}>
+                    <p className="text-danger">New Assessment Posted</p>
+                    <p>{notification.message}</p>
+                    <div className={styles.notificationBtns}>
+                      <button className={styles.remove} onClick={() => handleDeleteNotification(notification?.id)}>Remove</button>
+                      <button onClick={() => navigateToClass(notification?.classCode)}>View Class</button>
+                    </div>
+                  </div>
+                </Dropdown.Item>
+              )
+            ))}
+
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
@@ -229,4 +276,40 @@ export default function ProfileSide({ info }) {
 
 function formatDate(dateString) {
   return format(new Date(dateString), "MMM dd");
+}
+
+function timeAgo(dateString) {
+  // Parse the provided date string into a Date object
+  const date = new Date(dateString);
+  
+  // Get the current time
+  const now = new Date();
+  
+  // Calculate the difference in milliseconds
+  const diffInSeconds = Math.floor((now - date) / 1000);
+  
+  // Calculate time differences
+  const minutes = Math.floor(diffInSeconds / 60);
+  const hours = Math.floor(diffInSeconds / 3600);
+  const days = Math.floor(diffInSeconds / 86400);
+  const months = Math.floor(diffInSeconds / 2592000);
+  const years = Math.floor(diffInSeconds / 31536000);
+  
+  // Return human-readable time ago string
+  if (years > 0) {
+      return years === 1 ? '1 year ago' : `${years} years ago`;
+  }
+  if (months > 0) {
+      return months === 1 ? '1 month ago' : `${months} months ago`;
+  }
+  if (days > 0) {
+      return days === 1 ? '1 day ago' : `${days} days ago`;
+  }
+  if (hours > 0) {
+      return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+  }
+  if (minutes > 0) {
+      return minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
+  }
+  return diffInSeconds < 60 ? 'Just now' : 'Now';
 }

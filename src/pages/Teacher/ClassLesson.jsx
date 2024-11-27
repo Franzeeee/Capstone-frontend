@@ -45,7 +45,6 @@ export default function ClassLesson() {
 
     const handleClose = () => {
         setShow(false);
-        alert()
         // Exit fullscreen mode when the Offcanvas is closed
         // if (document.exitFullscreen) {
         //     document.exitFullscreen();
