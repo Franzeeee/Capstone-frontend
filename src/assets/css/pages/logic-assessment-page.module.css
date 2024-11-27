@@ -256,6 +256,7 @@
     max-height: 170px;
     overflow-y: auto;
     padding: 0 !important;
+    min-width: 100%;
 }
 .uploadContainer::-webkit-scrollbar {
     width: 7px; /* Set the width of the scrollbar */
@@ -341,4 +342,108 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.assessmentFileContainer {
+    width: 100%;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    max-height: 200px !important;
+    overflow: auto;
+}
+.assessmentFileContainer .assessmentFileCards {
+    display: grid;
+    padding: 5px;
+    border: 1px solid rgb(117, 136, 231);
+    min-height: 70px;
+    grid-template-columns: auto 1fr auto;
+    max-height: 80px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.assessmentFileCards div:first-child {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.assessmentFileCards div:nth-child(2) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 5px 10px;
+    font-size: .7rem;
+    padding: 5px;
+    flex-direction: column;
+}
+
+.assessmentFileCards div:nth-child(2) p {
+    max-width: 95%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.assessmentFileCards div:nth-child(2) p:first-child {
+    text-decoration: underline !important;
+    font-size: .8rem !important;
+}
+
+.assessmentFileCards div svg {
+    font-size: 1.5rem;
+    color: #6464fa;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 100%;
+    background-color: #e2e2e29c;
+    aspect-ratio: 1/1;
+    border: 1px solid rgb(201, 201, 201);
+}
+.download {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.download svg {
+    color: #5d5dff !important;
+    font-size: .8rem !important;
+    transition: all .3s ease;
+}
+.download svg:hover {
+    background-color: #8787ff;
+    color: #fff !important;
+}
+
+
+@media (min-width: 600px) and (max-width: 1024px) {
+    .content {
+        margin-bottom: 1rem;
+    }
+    /* Styles for tablets */
+    .assessmentFileContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 599px) {
+    /* Styles for phones */
+    .assessmentInfo {
+        flex-direction: column;
+        gap: 0px
+    }
+    .submissionBox {
+        grid-template-columns: 1fr;
+    }
+    .uploadCard {
+        min-width: 100%;
+    }
+    .robot {
+        display: none !important;
+    }
+    .assessmentFileContainer {
+        grid-template-columns: 1fr;
+    }
 }

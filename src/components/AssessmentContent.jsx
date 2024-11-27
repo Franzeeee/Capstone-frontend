@@ -8,14 +8,21 @@ import ConfirmationModal from './ConfirmationModal';
 import AssessmentRankingModal from './AssessmentRankingModal';
 import { getUserData } from '../utils/userInformation';
 import { Modal, ModalBody, ModalHeader } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
+import customFetch from '../utils/fetchApi';
+import CodeReviewModal from '../components/CodeReviewModal';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
-
-
-export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission }) {
+export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission, submittedCode }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
     const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
 
     const user = getUserData();
+    const navigate = useNavigate();
+
+    const [showReview, setShowReview] = useState(false);
+
+    const { code } = useParams();
 
     const [feedbackData, setFeedbackData] = useState(feedback);
 
@@ -23,16 +30,21 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
 
     const [showRanking, setShowRanking] = useState(false);
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
     const handleClose = () => setShowRanking(false);
     const handleShow = () => setShowRanking(true);
 
     const handleBtn = () => { 
         if (!status) {
-            startButton();
+            setShowConfirmation(true);
         }
     };
 
-    
+    const handleConfirm = () => {
+        startButton();
+        setShowConfirmation(false);
+    };
 
     useEffect(() => {
         feedback?.feedback !== '' && setFeedbackData(feedback);
@@ -81,7 +93,19 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             setOpen(false);
         }
     }, [data]);
+
+    const [totalSubmission, setTotalSubmission] = useState(0);
     
+
+    useEffect(() => {
+        customFetch(`/activity/${data?.id}/rankings`, 'GET')
+            .then(data => {
+                setTotalSubmission(data.length);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+    }, [data]);
     
     return (
         <>
@@ -102,26 +126,54 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 </div>
                 <div className={styles.content}>
                     <ul>
-                        <li>
-                            <p>Time Remaining</p>
-                            <LoadingBar progress={100} status={status} />
-                            <p>{timeFormatter(data?.time_limit || 1)}</p>
-                        </li>
-                        <li>
-                            <p>Problem Solved</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>0/{data?.coding_problems.length}</p>
-                        </li>
-                        <li>
-                            <p>Overall Points</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>--/{data?.point}</p>
-                        </li>
-                        <li>
-                            <p>Current Rank</p>
-                            <LoadingBar progress={0} status={status} />
-                            <p>----</p>
-                        </li>
+                        { user.role === 'student' &&
+                        <>
+                            <li>
+                                <p>Time Remaining</p>
+                                <LoadingBar progress={100} status={status} />
+                                <p>{timeFormatter(data?.time_limit || 1)}</p>
+                            </li>
+                            <li>
+                                <p>Problem Solved</p>
+                                <LoadingBar progress={0} status={status} />
+                                <p>0/{data?.coding_problems.length}</p>
+                            </li>
+                            <li>
+                                <p>Overall Points</p>
+                                <LoadingBar progress={0} status={status} />
+                                <p>--/{data?.point}</p>
+                            </li>
+                            <li>
+                                <p>Current Rank</p>
+                                <LoadingBar progress={0} status={status} />
+                                <p>----</p>
+                            </li>
+                        </>
+                        }
+                        { user.role === 'teacher' &&
+                            <>
+                                <li>
+                                    <p>Time Limit</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{timeFormatter(data?.time_limit || 1)}</p>
+                                </li>
+                                <li>
+                                    <p>Total Problem</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{data?.coding_problems.length}</p>
+                                </li>
+                                <li>
+                                    <p>Overall Points</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{data?.point}</p>
+                                </li>
+                                <li>
+                                    <p>Total Submissions</p>
+                                    <LoadingBar progress={100} status={status} />
+                                    <p>{totalSubmission || 0}</p>
+                                </li>
+                            </>
+                        }
                     </ul>
                 </div>
                 <div className={styles.controls}>
@@ -130,7 +182,7 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                         <button onClick={handleBtn}>Start Assessment</button>
                     }
                     { user.role === 'teacher' &&    
-                        <button onClick={() => alert('View Submissions clicked')}>View Submissions</button>
+                        <button onClick={() => navigate(`/teacher/classes/${code}/dashboard`)}>View Activities & Submission</button>
                     }
                 </div>
             </div>
@@ -169,16 +221,32 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                         <p>Exit Fullscreen</p>
                     </div>
                     <div className={`${antiCheat[1] > 1 ? styles.alerted : ""}`}>
-                        <p>{antiCheat[0] ?? 0}</p>
+                        <p>{antiCheat[1] ?? 0}</p>
                         <p>Change Tab</p>
                     </div>
                 </div>
                 <div className={styles.controls}>
                     <button onClick={handleShow}>View Ranking</button>
                     <button type='button' disabled={!feedbackData} className={`${feedbackData ? "" : styles.disableButton}`} onClick={() => setShowFeedback(true)}>View Feedback</button>
+                    <button type='button' onClick={() => setShowReview(true)}>Review Code</button>
                 </div>
             </div>
             }
+            <CodeReviewModal
+                show={showReview}
+                handleClose={() => setShowReview(false)}
+                submissionData={submittedCode}
+            />
+            <ConfirmationModal
+                show={showConfirmation}
+                handleClose={() => setShowConfirmation(false)}
+                modalData={{
+                    title: "Start Assessment",
+                    body: "Are you sure you want to start the assessment?",
+                    action: handleConfirm,
+                    icon: faQuestion,
+                }}
+            />
         </>
     );
 }

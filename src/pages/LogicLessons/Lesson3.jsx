@@ -5,7 +5,33 @@ import styles from '../../assets/css/pages/LogicLesson/lesson3.module.css'
 import ProfileSide from '../../components/ProfileSide'
 import SimpleFlowchart from '../../assets/img/SimpleFlowchart.png'
 import { SubTitle } from 'chart.js'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import customFetch from '../../utils/fetchApi'
+import { toast } from 'react-toastify'
+
 export default function Lesson3() {
+
+  const navigate = useNavigate();
+
+  const { code } = useParams();
+
+  const navigateToClass = () => navigate(`/c/${code}`);
+
+  const [classInfo, setClassInfo] = useState(null);
+
+
+  useEffect(() => {
+      customFetch(`/class/${code}`, {
+          method: 'GET',
+      })
+      .then(data => {
+          setClassInfo(data);
+      })
+      .catch(err => {
+          toast.error("An error occurred while fetching class information");
+      })
+  }, [])
 
   const user = getUserData();
 
@@ -16,9 +42,13 @@ export default function Lesson3() {
           <div className={`${styles.header}`}>
               <div className={`${styles.create}`}>
                   <div>
-                      <ul>
-                          <li>Lesson</li>
-                      </ul>
+                    <ul>
+                      <li onClick={() => navigate('/')}>{user.role === 'teacher' ? "Dashboard" : "Home"}</li>
+                      <li>/</li>
+                      <li onClick={navigateToClass}>{classInfo?.name || "Loading"}</li>
+                      <li>/</li>
+                      <li className={`${styles.active}`}>Lesson 3: Introduction to Flowcharts</li>
+                    </ul>
                   </div>
               </div>
           </div>

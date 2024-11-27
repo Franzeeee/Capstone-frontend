@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../assets/css/components/confirmation-modal.module.css'
 import { Modal } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWarning } from '@fortawesome/free-solid-svg-icons'
+import { faWarning,faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 export default function ConfirmationModal({ show, handleClose, modalData }) {
 

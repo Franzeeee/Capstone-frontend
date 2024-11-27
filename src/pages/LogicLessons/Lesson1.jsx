@@ -3,7 +3,34 @@ import HomeTemplate from '../../templates/HomeTemplate'
 import { getUserData } from '../../utils/userInformation'
 import styles from '../../assets/css/pages/LogicLesson/lesson1.module.css'
 import ProfileSide from '../../components/ProfileSide'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import customFetch from '../../utils/fetchApi'
+import { toast } from 'react-toastify'
+
+
 export default function Lesson1() {
+
+    const navigate = useNavigate();
+
+    const { code } = useParams();
+
+    const navigateToClass = () => navigate(`/c/${code}`);
+
+    const [classInfo, setClassInfo] = useState(null);
+
+
+    useEffect(() => {
+        customFetch(`/class/${code}`, {
+            method: 'GET',
+        })
+        .then(data => {
+            setClassInfo(data);
+        })
+        .catch(err => {
+            toast.error("An error occurred while fetching class information");
+        })
+    }, [])
 
   const user = getUserData();
 
@@ -11,16 +38,20 @@ export default function Lesson1() {
     <HomeTemplate>
         <div className={`${styles.container} ${styles.classDashboard}`}>
         <div className={`${styles.contentContainer}`}>
-          <div className={`${styles.header}`}>
-              <div className={`${styles.create}`}>
-                  <div>
-                      <ul>
-                          <li>Grades</li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-          <div className={styles.content}>
+            <div className={`${styles.header}`}>
+                <div className={`${styles.create}`}>
+                    <div>
+                        <ul>
+                            <li onClick={() => navigate('/')}>{user.role === 'teacher' ? "Dashboard" : "Home"}</li>
+                            <li>/</li>
+                            <li onClick={navigateToClass}>{classInfo?.name || "Loading"}</li>
+                            <li>/</li>
+                            <li className={`${styles.active}`}>Lesson 1: Introduction to Pseudocode</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div className={styles.content}>
             <div className={styles.LessonHeader}>
                 <p className={styles.Title}>Lesson 1: Introduction to Pseudocode</p>
                 <p><span className={styles.Sub}>Objective:</span> Teach the basics of pseudocode and how it is used to represent algorithms in a human-readable way before translating them into actual programming languages.</p>

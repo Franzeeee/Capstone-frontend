@@ -89,13 +89,29 @@ export default function ClassContents({ data, code, className }) {
                 });
             } else {
                 // When there is progress, update lesson and quiz based on last completed
-                setOpen({
-                    lesson: progress?.last_completed_lesson + 1,  // Unlock next lesson
-                    quiz: progress?.last_completed_quiz + 1,  // Unlock next quiz
-                });
+                if(data.subject === 'Python') {
+                    if(lessons[progress?.last_completed_lesson + 1]?.hasAssessment) {
+                        setOpen({
+                            lesson: progress?.last_completed_lesson + 1,
+                            quiz: progress?.last_completed_lesson + 1,
+                        });
+                    } else {
+                        setOpen({
+                            lesson: progress?.last_completed_lesson + 2,
+                            quiz: progress?.last_completed_lesson + 2,
+                        });
+                    }
+                } else {
+                    setOpen({
+                        lesson: progress?.last_completed_lesson + 1,
+                        quiz: progress?.last_completed_quiz + 1,
+                    });
+                }
             }
         }
+
     }, [progress, defaultAssessment]);
+    
 
     const isLessonUnlocked = (lessonId, hasAssessment = true) => {
         // Allow access to the first lesson (id 0) for all users if there's no progress
@@ -298,8 +314,8 @@ export default function ClassContents({ data, code, className }) {
                                     >
                                         <p>
                                             {isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? `
-                                                ${lesson.id !== progress?.last_completed_quiz ? `View Quiz` : `View Result`}
-                                            ` : <><FontAwesomeIcon icon={faLock} /> Locked</>}
+                                                ${ progress?.last_completed_quiz === null || lesson.id > progress?.last_completed_quiz ? `View Quiz` : `View Result`}
+                                            ` : <><FontAwesomeIcon icon={faLock} /> Locked </>}
                                         </p>
                                     </div>
                                 </div>

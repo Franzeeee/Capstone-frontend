@@ -19,6 +19,7 @@ import SubmissionDetailModal from '../components/SubmissionDetailModal';
 import { Form, FormGroup, Button } from 'react-bootstrap';
 import { Tab, Tabs } from 'react-bootstrap';
 import profile from '../assets/img/1x1Robot2.png';
+import IssueCertificateModal from '../components/Modals/IssueCertificateModal';
 
 
 
@@ -56,6 +57,13 @@ export default function ClassGradeTable() {
     const [finalGrade, setFinalGrade] = useState(0);
     const [gradeId, setGradeId] = useState(null);
 
+    const [showCertificateModal, setShowCertificateModal] = useState(false);
+
+
+    const captureOtherPage = async () => {
+        // Navigate to the other page
+        navigate("/certificate", { state: { captureMode: true } });
+    };
 
 
     // handlers for modals
@@ -129,6 +137,23 @@ export default function ClassGradeTable() {
         
         setShowDeleteConfirmation(false);
     }
+
+    const [certificateStatus, setCertificateStatus] = useState(null);
+    const [certificateData, setCertificateData] = useState(null);
+    useEffect(() => {
+        customFetch(`/class/certificate/status/${classData.id}`, {
+            method: 'GET'
+        })
+        .then(data => {
+            setCertificateStatus(data.status);
+            if(data.status) {
+                setCertificateData(data.data);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+    }, [])
 
     const [remainingPercentage, setRemainingPercentage] = useState(100 - assessmentPercent - finalAssessmentPercent);
 
@@ -297,7 +322,7 @@ export default function ClassGradeTable() {
                             </Form.Group>
                             <Form.Label>Remaining: {remainingPercentage}%</Form.Label>
                         </Form>
-                        <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right'}}>Save</Button>
+                        <Button enable={assessmentPercent} onClick={handleUpdateGradeDistribution} style={{float: 'right', background: '#6c4cd2'}}>Save</Button>
                     </Modal.Body>
                 </Modal>
                 <Modal size='lg' static show={showStudentGrade}>
@@ -429,7 +454,7 @@ export default function ClassGradeTable() {
                                     placement="bottom"
                                     overlay={<Tooltip id={`tooltip-test`}>Issue Completion Certificates</Tooltip>}
                                 >
-                                    <p className={styles.gradeDistribution}><FontAwesomeIcon icon={faUserGraduate} /></p>
+                                    <p onClick={() => setShowCertificateModal(true)} className={styles.gradeDistribution}><FontAwesomeIcon icon={faUserGraduate} /></p>
                                 </OverlayTrigger>
                             </div>
                             {
@@ -499,6 +524,15 @@ export default function ClassGradeTable() {
                 <div className={`${styles.profileContainer}`}>
                     <ProfileSide info={user} />
                 </div>
+                <IssueCertificateModal
+                    show={showCertificateModal}
+                    handleClose={() => setShowCertificateModal(false)}
+                    classId={classData.id}
+                    nameClass={classData.name}
+                    certStatus={certificateStatus}
+                    data={certificateData}
+                    handleCreate={(data) => setCertificateData(data)}
+                />
             </div>
         </HomeTemplate>
     );

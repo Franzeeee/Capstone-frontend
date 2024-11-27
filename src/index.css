@@ -151,3 +151,7 @@ li {
 .studentGrades ul.pagination li.disabled a {
   color: #858585;
 }
+
+/* .customTooltip {
+  min-width: 500px !;
+} */

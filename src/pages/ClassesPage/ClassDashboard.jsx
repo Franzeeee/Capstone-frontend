@@ -16,6 +16,7 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 import { Offcanvas } from 'react-bootstrap';
 import CreateAssessmentForm from '../../components/AssessmentForm/CreateAssessmentForm';
 import SubmissionDetailModal from '../../components/SubmissionDetailModal';
+import EditClassModal from '../../components/Modals/EditClassModal';
 
 
 
@@ -23,7 +24,7 @@ export default function ClassDashboard() {
     const user = getUserData();
     const navigate = useNavigate();
     const location = useLocation();
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname || null;
 
     const { code } = useParams();
     
@@ -48,6 +49,8 @@ export default function ClassDashboard() {
         }
     }, [code, navigate, classData]);
 
+    console.log(classData);
+
     const [isLoading, setIsLoading] = useState(true);
 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -61,11 +64,24 @@ export default function ClassDashboard() {
     const [show, setShow] = useState(false);
     const [activeForm, setActiveForm] = useState('logic');
 
+    const [showEdit, setShowEdit] = useState(false);
+
+    const handleShowEdit = () => {
+        setShowEdit(true);
+    }
+
+    const handleCloseEdit = () => {
+        setShowEdit(false);
+    }
+
 
     useEffect(() => {
-        fetchAssessments(currentPage);
-        setIsLoading(false)
-    }, [currentPage]); // Fetch assessments whenever currentPage changes
+        setIsLoading(true);
+        if (classData) {
+            fetchAssessments(currentPage);
+            setIsLoading(false);
+        }
+    }, [currentPage, classData]); // Fetch assessments whenever currentPage changes
 
     const fetchAssessments = async (page) => {
         try {
@@ -96,10 +112,6 @@ export default function ClassDashboard() {
     const handleShowAdditionalInfo = () => {
         setShowAdditionalInfo(!showAdditionalInfo);
     };
-
-    if (!location.state?.verified || !classData) {
-        return null; // Prevents rendering before navigation
-    }
 
     const handleCloseDeleteConfirmation = () => {
         setShowDeleteConfirmation(false);
@@ -215,12 +227,6 @@ export default function ClassDashboard() {
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
-
-                <SubmissionDetailModal
-                    show={showMod}
-                    handleClose={closeShowMod}
-                />
-
                 <ConfirmationModal
                     show={showDeleteConfirmation}
                     handleClose={handleCloseDeleteConfirmation}
@@ -256,6 +262,14 @@ export default function ClassDashboard() {
                         />
                     </Offcanvas.Body>
                 </Offcanvas>
+                
+                <EditClassModal
+                    show={showEdit}
+                    handleClose={handleCloseEdit}
+                    classData={classData}
+                    setUpdatedClass={setClassData}
+                />
+
                 <div className={`${styles.contentContainer}`}>
                     <div className={`${styles.header}`}>
                         <div className={`${styles.create}`}>
@@ -266,7 +280,7 @@ export default function ClassDashboard() {
                                     <li className={`${styles.active}`}>{classData?.name || "Class 404"}</li>
                                 </ul>
                             </div>
-                            <p onClick={() => setShowMod(true)}>{classData?.name || "Class 404"}</p>
+                            <p>{classData?.name || "Class 404"}</p>
                         </div>
                     </div>
                     <div className={`${styles.content}`}>
@@ -290,7 +304,7 @@ export default function ClassDashboard() {
                                     <p className={`${styles.icon} ${styles.studentCount}`}><FontAwesomeIcon icon={faUsers} /></p>
                                     <div className={`${styles.text}`}>
                                         <p>No. of Students</p>
-                                        <p>{'0' + classData?.students_count || 0}</p>
+                                        <p>{'0' + classData?.students_count || 0 || 0}</p>
                                     </div>
                                 </div>
                                 <OverlayTrigger
@@ -307,7 +321,7 @@ export default function ClassDashboard() {
                                     placement="bottom"
                                     overlay={<Tooltip id={`tooltip-test`}>Edit Class Info</Tooltip>}
                                 >
-                                    <p onClick={() => alert("Show")} className={`${styles.exclamation} ${styles.editClass}`}><FontAwesomeIcon icon={faEdit} /></p>
+                                    <p onClick={() => setShowEdit(true)} className={`${styles.exclamation} ${styles.editClass}`}><FontAwesomeIcon icon={faEdit} /></p>
                                 </OverlayTrigger>
                             </div>
                         </div>

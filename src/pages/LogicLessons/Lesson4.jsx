@@ -4,7 +4,34 @@ import { getUserData } from '../../utils/userInformation'
 import styles from '../../assets/css/pages/LogicLesson/lesson4.module.css'
 import ProfileSide from '../../components/ProfileSide'
 import ComplexFlowchart from '../../assets/img/ComplexFlowchart.png'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import customFetch from '../../utils/fetchApi'
+import { toast } from 'react-toastify'
+
+
 export default function Lesson4() {
+
+  const navigate = useNavigate();
+
+  const { code } = useParams();
+
+  const navigateToClass = () => navigate(`/c/${code}`);
+
+  const [classInfo, setClassInfo] = useState(null);
+
+
+  useEffect(() => {
+      customFetch(`/class/${code}`, {
+          method: 'GET',
+      })
+      .then(data => {
+          setClassInfo(data);
+      })
+      .catch(err => {
+          toast.error("An error occurred while fetching class information");
+      })
+  }, [])
 
   const user = getUserData();
 
@@ -16,7 +43,11 @@ export default function Lesson4() {
               <div className={`${styles.create}`}>
                   <div>
                       <ul>
-                          <li>Grades</li>
+                        <li onClick={() => navigate('/')}>{user.role === 'teacher' ? "Dashboard" : "Home"}</li>
+                        <li>/</li>
+                        <li onClick={navigateToClass}>{classInfo?.name || "Loading"}</li>
+                        <li>/</li>
+                        <li className={`${styles.active}`}>Lesson 4: Creating Flowcharts for Algorithms</li>
                       </ul>
                   </div>
               </div>

@@ -231,6 +231,7 @@ print(x)  # Output: Hello
     {
         id: 1,
         title: "Operators",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Operators are special symbols or keywords in Python that perform operations on variables and values. Python supports a variety of operators, which are categorized based on the type of operations they perform. These include arithmetic, comparison, logical, bitwise, assignment, and more.
@@ -416,6 +417,7 @@ print("Bitwise OR:", p | q)  # Output: 7 (Binary: 111)
     {
         id: 2,
         title: "Comments",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Comments in Python are used to explain code, make it more readable, or to prevent the execution of certain lines of code. They are not executed by Python, and their purpose is purely for humans reading the code. Comments are crucial when writing clean, understandable, and maintainable code.
@@ -520,6 +522,7 @@ This can serve as a placeholder for future code.
     {
         id: 3,
         title: "String Manipulation",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             In Python, strings are sequences of characters enclosed in either single quotes ('), double quotes ("), or triple quotes (''' or """). Python provides a wide range of functionalities to manipulate strings, from basic slicing to more advanced formatting and operations.
@@ -603,6 +606,7 @@ print(repeated)  # Output: Python! Python! Python!
     {
         id: 4,
         title: "Built-in methods for manipulating strings",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Python provides a wide range of built-in methods for manipulating strings, making it easier to perform various text processing tasks.
@@ -685,6 +689,7 @@ print(sentence)  # Output: Join these words
     {
         id: 5,
         title: "String Formatting",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Python offers several ways to format strings, such as using the % operator, str.format() method, and f-strings.
@@ -720,6 +725,7 @@ print("My name is %s and I am %d years old." % (name, age))  # Output: My name i
     {
         id: 6,
         title: "Checking String Characteristics",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             In Python, checking string characteristics involves using built-in methods to determine certain properties or attributes of a string. These methods can help identify whether a string contains only alphabetic characters, digits, whitespace, or other patterns.
@@ -787,6 +793,7 @@ print(f"My name is {name} and I am {age} years old.")  # Output: My name is John
     {
         id: 8,
         title: "Decision Control Structures",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Decision control structures in Python enable you to control the flow of your program based on conditions. These structures allow your code to make decisions and execute certain sections based on whether a given condition is True or False. The primary decision control structures in Python include if, elif, and else statements, which are used for conditional execution of code.
@@ -941,6 +948,7 @@ else:
     {
         id: 9,
         title: "Logical Operators with Decision Control Structures",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             You can combine conditions using logical operators (and, or, not) to create more complex decision-making processes.
@@ -1000,6 +1008,7 @@ else:
     {
         id: 10,
         title: "Relational Operators in Conditional Statements",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Relational operators (also known as comparison operators) are used in Python to compare two values or expressions. The result of a relational operation is a Boolean value, meaning it evaluates to either True or False. These operators are often used in conditional statements (if, elif, else) to control the flow of the program based on comparisons.
@@ -1024,6 +1033,7 @@ else:
     {
         id: 11,
         title: "Using Relational Operators in Conditional Statements",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Relational operators are frequently used in if statements to determine the execution of specific code blocks based on conditions.
@@ -1097,6 +1107,7 @@ if a <= b:
     {
         id: 12,
         title: "Combining Relational Operators with Logical Operators",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             You can also combine relational operators with logical operators (and, or, not) to form more complex conditions.
@@ -1172,6 +1183,7 @@ else:
     {
         id: 13,
         title: "Data Structures",
+        hasAssessment: false,
         content: `
             \`\`\`Para
             Data structures are fundamental components of any programming language, allowing you to store, organize, and manage data efficiently. Python provides several built-in data structures that are easy to use and versatile for various applications. The most common data structures in 
@@ -1201,6 +1213,7 @@ else:
     {
         id: 14,
         title: "Lists",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Lists are one of the most versatile and commonly used data structures in Python. They are ordered, meaning that elements maintain the sequence in which they are added. Lists are also mutable, which allows them to grow or shrink as needed by adding, modifying, or removing elements. Furthermore, lists allow duplicate elements, which makes them suitable for scenarios where data redundancy is acceptable.
@@ -1238,6 +1251,7 @@ print(fruit)
     {
         id: 15,
         title: "Tuples",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Tuples are similar to lists in that they are ordered collections. However, unlike lists, tuples are immutable, meaning that once a tuple is created, its content cannot be changed. This immutability makes tuples ideal for situations where the integrity of the data must be preserved throughout the program. Although tuples allow duplicate elements, their fixed nature makes them useful in cases where you want to prevent accidental modification.
@@ -1266,6 +1280,7 @@ print(x, y)  # Output: 10 20
     {
         id: 16,
         title: "Sets",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Sets are unordered collections of unique elements. Unlike lists and tuples, sets do not allow duplicate values, making them perfect for storing collections where uniqueness is important. Sets are highly efficient for membership testing (i.e., checking if an element exists in the set) and performing operations like union, intersection, and difference between sets.
@@ -1306,6 +1321,7 @@ print(set_a - set_b)  # Output: {1, 2}
     {
 
         id: 17,
+        hasAssessment: true,
         title: "Dictionaries",
         content: `
             \`\`\`Para
@@ -1344,6 +1360,7 @@ for key, value in person.items():
     {
         id: 18,
         title: "Function Calls",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             A function in Python is a reusable block of code that performs a specific task. Functions help break down complex problems into smaller, manageable parts, making code modular, organized, and easier to maintain. Functions can take inputs (called arguments), perform actions, and return an output (or result).
@@ -1402,6 +1419,7 @@ print(result)  # Output: 8
     {
         id: 19,
         title: "Function Arguments",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Functions can take zero or more arguments, which are passed when the function is called. There are different ways to pass arguments to functions.
@@ -1484,6 +1502,7 @@ describe_person(name="Alice", age=25, job="Engineer")
 
         id: 20,
         title: "Return Statement",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             The return statement is used to send back a result from the function to the caller. Once the return statement is executed, the function terminates.
@@ -1525,6 +1544,7 @@ print(f"Sum: {sum_value}, Difference: {diff_value}")
     {
         id: 21,
         title: "Scope of Variables",
+        hasAssessment: false,
         content: `
             \`\`\`Para
             Local Variables: Variables defined inside a function are local to that function. They cannot be accessed outside the function.
@@ -1553,6 +1573,7 @@ print(f"Outside function: {x}")  # Output: Outside function: 10
     {
         id: 22,
         title: "Lambda Functions (Anonymous Functions)",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Lambda functions are small, anonymous functions defined using the lambda keyword. They are typically used for short, simple operations.
@@ -1656,6 +1677,7 @@ print_results(length, width)
     {
         id: 23,
         title: "Using Built-In Modules",
+        hasAssessment: false,
         content: `
             \`\`\`Para
             Python has an extensive collection of built-in modules that make it easier to perform various operations, such as mathematical calculations, random number generation, file handling, date and time manipulation, and more. These modules are designed to provide functionality without the need to install any external libraries, making Python a powerful and versatile programming language right out of the box.
@@ -1669,6 +1691,7 @@ print_results(length, width)
     {
         id: 24,
         title: "The math Module",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             The math module provides access to various mathematical functions and constants. It includes trigonometric functions (like sin, cos, and tan), logarithmic functions, exponential functions, and constants like pi and e. This module is useful for performing precise mathematical operations beyond Python's basic arithmetic operators.
@@ -1713,6 +1736,7 @@ print(math.sin(math.radians(90)))  # Output: 1.0 (since sin(90 degrees) = 1)
     {
         id: 25,
         title: "The random Module",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             The random module allows you to generate random numbers, shuffle lists, and make random choices. It is widely used in applications such as simulations, games, cryptography, or any situation where randomness is required. The module provides functions to generate random integers, floats, or select random elements from a sequence.
@@ -1778,6 +1802,7 @@ print(random_float)  # Output: A random float between 0.0 and 1.0
     {
         id: 26,
         title: "File Handling in Python",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             File handling refers to the process of opening, reading, writing, and closing files. Python provides several built-in functions and methods that make file operations straightforward. Files are an important way to store persistent data, such as logs, configurations, or datasets, that can be accessed by a Python program at any point.
@@ -1856,6 +1881,7 @@ with open("example.txt", "a") as file:
     {
         id: 27,
         title: "Exception Handling in Python",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             Exception handling allows you to deal with runtime errors in a controlled way, ensuring your program doesn't crash unexpectedly. Exceptions occur when something goes wrong during the execution of a program (e.g., trying to divide by zero or access a file that doesn’t exist).
@@ -1930,6 +1956,7 @@ else:
     {
         id: 28,
         title: "Combining File Handling and Exception Handling",
+        hasAssessment: true,
         content: `
             \`\`\`Para
             When working with files, errors can frequently occur, such as trying to open a file that doesn’t exist, or attempting to read from a file that cannot be accessed. Exception handling makes it easy to anticipate and handle these issues gracefully, so the program doesn’t crash unexpectedly.

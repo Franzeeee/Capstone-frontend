@@ -1,0 +1,39 @@
+.modalFooter button {
+    border: 1.5px transparent solid;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #6c4cd2;
+    color: white;
+    transition: all .3s ease-in-out;
+}
+.modalFooter button:hover {
+    color: #6c4cd2;
+    background-color: white;
+    border: #6c4cd2 solid 1.5px;
+}
+.modalFooter button {
+    min-width: 100px;
+}
+.modalFooter button:last-child svg {
+    font-size: 1.1rem;
+}
+.modalBody {
+    display: flex !important;
+    flex-direction: column !important;
+}
+.modalBody input[type="date"] {
+    border: 1px solid #6c4cd2;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: .9rem;
+    margin: 5px 0;
+}
+.status {
+    color: rgb(68, 0, 255);
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}

@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import styles from '../assets/css/pages/code-editor.module.css';
 import axios from 'axios'; // Import Axios for making HTTP requests
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useBeforeUnload } from 'react-router-dom'
 import customFetch from '../utils/fetchApi';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
-import 'codemirror/addon/hint/show-hint'; // Import show-hint addon
+import 'codemirror/addon/hint/show-hint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faClock, faClose, faCopy, faPaperPlane, faPlay, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
-import { faFile, faFolder, faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
+import { faClock, faClose, faCopy, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
 import practiceTest from '../assets/img/practice-test.png';
@@ -21,9 +21,7 @@ import success from '../assets/img/excellent.png'
 import fail from '../assets/img/tiger.png'
 import html5 from '../assets/img/html-5.png'
 import css3 from '../assets/img/css-3.png'
-import { faCss3, faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
-import swap1 from '../assets/img/Swap1.png'
-import swap2 from '../assets/img/swap2.png'
+import { faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
 import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
@@ -32,6 +30,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import WebAssessmentSample from '../components/Modals/WebAssessmentSample';
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import CodeEditorDemo from '../components/Modals/CodeEditorDemo';
+import DrawerNav from '../components/MobileVersion/DrawerNav';
+import introJs from 'intro.js'
+import 'intro.js/introjs.css';
+import playgroundIntro from '../utils/IntroJS/playgroundIntro';
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -49,13 +52,15 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const [authToken, setAuthToken] = useState(null)
     const navigate = useNavigate();
 
+    const [submittingPractice, setSubmittingPractice] = useState(false);
+
     const [testGenLevel, setTestGenLevel] = useState(0);
 
     const [cheatingData, setCheatingData] = useState({
         exit_fullscreen: 0,
         change_tab: 0,
     });
-    
+
     useEffect(() => {
         if ( mode === "Assessment" && options && options.cheatingData !== null || options.cheatingData !== undefined) {
             setCheatingData({
@@ -164,8 +169,8 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     // Warn user about losing progress if they try to leave the page
     useEffect(() => {
         const handleBeforeUnload = (event) => {
+            window.alert('Are you sure you want to leave the page? Your progress will be lost.');
             event.preventDefault();
-            event.returnValue = 'Your code will be permanently lost if you reload or close the page. Are you sure you want to proceed?';
         };
     
         window.addEventListener('beforeunload', handleBeforeUnload);
@@ -322,6 +327,21 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     useEffect(() => {
         fetchAuthToken();
     }, []);
+
+    const startTour = () => {
+        introJs()
+        .setOptions(playgroundIntro)
+        .start();
+    };
+
+    useEffect(() => {
+        if (mode === 'playground') {
+            if(localStorage.getItem('playgroundIntro') === null) {
+                startTour();
+                localStorage.setItem('playgroundIntro', 'true');
+            }
+        }
+    }, []);
     
 
     const initializeSocket = () => {
@@ -380,7 +400,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     };
 
     const onWsConnectionFailed = (e) => {
-        alert("connection failed");
+        console.error("connection failed");
     };
 
     const handleInput = (event) => {
@@ -564,6 +584,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
             alert("Please provide the Web Development code to evaluate.")
             return;
         }
+        setSubmittingPractice(true);
         const messageData = new FormData();
 
         let codeToSend = challangeDetails?.language === 'python' ? code : htmlCode + cssCode;
@@ -584,7 +605,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 withAssistance: true
             }));
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            setSubmittingPractice(false)
+        })
     }
 
     useEffect(() => {
@@ -874,7 +898,16 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const handleCloseWebSample = () => {
         setShowWebSample(false);
     };
-    
+
+    const [showHelpModal, setShowHelpModal] = useState(false);
+
+    useBeforeUnload(
+        useCallback(() => {
+            if(mode === 'Assessment') {
+                submitAssessment();
+            }
+        }, [])
+    );
 
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
@@ -901,47 +934,57 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 </Offcanvas.Body>
             </Offcanvas>
             <nav className={`${styles.nav} ${mode !== "playground" ? 'd-none' : ""}`}>
-                <p><FontAwesomeIcon icon={faBars} className={`${styles.icon}`}/></p>
+                <p><DrawerNav /></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
-                    <li onClick={openPythonFile}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
-                            <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
-                        </OverlayTrigger>
-                    </li>
-                    <li onClick={saveAsPyFile}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
-                            <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
-                        </OverlayTrigger>
-                    </li>
-                    <li onClick={copyToClipboard}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
-                            <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
-                        </OverlayTrigger>
-                    </li>
-                    <li className={`position-relative ${styles.language}`}>
+                   
+                    { ide === 0 && (
+                        <>
+                            <li onClick={openPythonFile}  id='step2'>
+                                <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
+                                    <FontAwesomeIcon icon={faFolderOpen} className={`${styles.icon}`}/>
+                                </OverlayTrigger>
+                            </li>
+                            <li onClick={saveAsPyFile} id='step3'>
+                                <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Save Code</Tooltip>}>
+                                    <FontAwesomeIcon icon={faSave} className={`${styles.icon}`}/>
+                                </OverlayTrigger>
+                            </li>
+                            <li onClick={copyToClipboard} id='step4'>
+                                <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Copy</Tooltip>}>
+                                    <FontAwesomeIcon icon={faCopy} className={`${styles.icon}`}/>
+                                </OverlayTrigger>
+                            </li>
+                        </>
+                    )}
+                    <li className={`position-relative ${styles.language}`}id='step5'>
                     {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
-                        <FontAwesomeIcon icon={faPython} className={`${styles.icon}`} title='IDE: Python'></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={ide === 0 ? faPython : faHtml5} className={`${styles.icon}`} title={`IDE: ${ide === 0 ? 'Python' : 'HTML and CSS'}`}></FontAwesomeIcon>
                         <ul className={`${styles.selectLanguage}`}>
                             <label htmlFor="">Select Language</label>
                             <li onClick =  {() => setIde(0)}> <img src={pythonPng} className={`${styles.pythonLogo}`} alt="" /> Python</li>
                             <li onClick =  {() => setIde(1)}> <FontAwesomeIcon icon={faHtml5} className={`${styles.icon} ${styles.html}`} title='IDE: Python'> </FontAwesomeIcon><FontAwesomeIcon  icon={faCss3Alt} className={`${styles.icon} ${styles.css} ml-1`} title='IDE: Python'></FontAwesomeIcon>  HTML and CSS</li>
                         </ul>
                     </li>
+                    <li onClick={() => setShowHelpModal(true)} id=''>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Help</Tooltip>}>
+                            <FontAwesomeIcon icon={faQuestionCircle} className={`${styles.icon}`}/>
+                        </OverlayTrigger>
+                    </li>
                 </ul>
             </nav>
             <section className={`w-100 d-flex flex-column ${styles.section}`}>
                 <header>
                 <div className={`position-relative logo d-flex align-items-center justify-content-center ${styles.logo} ${mode !== "playground" ? 'd-none' : 'justify-content-end'}`}>
-                        <img src={logo} alt="CodeLab Logo" onClick={() => navigate('/dashboard')}/>
+                        <img src={logo} alt="CodeLab Logo" id="step1" onClick={() => navigate('/dashboard')}/>
                     </div>
-                    <div className={`${styles.clockLogo} ${mode !== "playground" ? 'd-none' : ''}`}>
+                    <div className={`${styles.clockLogo} ${mode !== "playground" ? 'd-none' : ''}`}id="step11">
                         <p className={`m-0 ${styles.timer}`}><span><FontAwesomeIcon icon={faClock} /></span> {formatTime(timer)}</p>
                         {/* <div className="play">
                         </div> */}
                     </div>
                     <div className={`${styles.controls}`}>
-                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute} ${ide !== 1 ? '' : 'd-none'}`}>
+                        <button onClick={execute ? terminate : handleExecute} className={`${execute && styles.execute} ${ide !== 1 ? '' : 'd-none'}`} id="step7">
                             {execute ? "Terminate" : "Execute"} <span><FontAwesomeIcon icon={execute ? faSpinner : faPlay} spin={execute && true}/></span>
                         </button>
                     </div>
@@ -954,14 +997,14 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         />
                     )
                     }
-                    <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}>
+                    <div className={`${styles.exit} cursor-pointer ${mode === 'Assessment' && 'd-none'}`} title={mode === 'playground' ? 'Exit Playground' : "Close Editor"} onClick={() => closeCodeModal()}id="step14">
                         <FontAwesomeIcon icon={ mode === 'playground' ? faRightFromBracket : faClose}/>
                     </div>
                 </header>
                 <main className={`${styles.main}`}>
                     <div className={` ${ide == 0 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
 
-                        <div className={`${styles.codeEditor}`}>
+                        <div className={`${styles.codeEditor}`} id="step6">
                             <CodeMirror
                                 value={code}
                                 options={{
@@ -983,9 +1026,9 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 
                             />
                         </div>
-                        <div className={` ${styles.outputInput}`}>
+                        <div className={` ${styles.outputInput}`} >
                             <div className={`${styles.inputArea}`}>
-                            <div className={`${styles.switchContainer} position-absolute`}>
+                            <div className={`${styles.switchContainer} position-absolute`}id="step10">
                                 <div className={`${styles.switch} ${isInteractive ? styles.active : ''}`} onClick={handleIteractive}>
                                 </div>
                                 <p className='text-black'>Interactive</p>
@@ -996,9 +1039,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                     placeholder="Stdin Inputs"
                                     cols="30"
                                     disabled={isInteractive}
-                                />
+                                    id="step8"
+                                 />
                             </div>
-                            <div className={`${styles.outputArea}`}>
+                            <div className={`${styles.outputArea}`}id="step9">
                                 <p className={`${styles.title}`}>Output:</p>
                                 {output && <textarea readOnly={!isInteractive} onChange={(e) => setOutput(e.target.value)} onKeyPress={handleInput} className='m-0' value={output} />}
                             </div>
@@ -1117,7 +1161,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             {testGenLevel === 0 ? (
                                 <>
                                     <img src={practiceTest} alt="Practice Test" className={`${styles.practiceTest}`} />
-                                    <button className={`${styles.firstButton}`} onClick={startPractice}>Start Practice Test</button>
+                                    <button className={`${styles.firstButton}`} onClick={startPractice}id="step12">Start Practice Test</button>
                                 </>
                             ) : (
                                 testGenLevel === 1 && (
@@ -1230,7 +1274,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                         }
                                     </div>
                                     <div className={`${styles.controller}`}>
-                                        <button className={`${styles.submitCode} ${generating ? styles.disabledSubmitBtn : ""}`} disabled={generating} onClick={submitCode}>Submit Code</button>
+                                        <button className={`${styles.submitCode} ${generating ? styles.disabledSubmitBtn : ""}`} disabled={generating || submittingPractice} onClick={!submittingPractice && submitCode}>Submit Code {submittingPractice ? <FontAwesomeIcon icon={faSpinner} spin /> : ""}</button>
                                     </div>
                                 </>
                             }
@@ -1274,7 +1318,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                 }
 
                             </div>
-                            <div className={`${styles.chatbox}`}>
+                            <div className={`${styles.chatbox}`}id="step13">
                                 <input type="text" name="" id="" value={userMessage} onChange={handleMessageInput} onKeyPress={handleKeyPress}/>
                                 <FontAwesomeIcon icon={faPaperPlane} title="Send" className={`${styles.sendIcon}`} onClick={handleSendMessage}/>
                             </div>
@@ -1290,7 +1334,10 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                     <QuestionList data={assessmentData} handleChangeAssessment={handleChangeAssessment}/>
                 </Offcanvas.Body>
             </Offcanvas>
-
+            <CodeEditorDemo show={showHelpModal} handleClose={() => setShowHelpModal(false)}/>
+            <ConfirmationModal
+                show={true}
+            />
         </div>
     );
 };

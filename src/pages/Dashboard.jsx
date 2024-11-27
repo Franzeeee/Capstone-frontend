@@ -268,11 +268,6 @@ export const Dashboard = () => {
         return  <StudentHome />
     }
     
-    const moveTo = (url) => {
-        navigate(`/${url}`)
-    }
-    
-    
 
     return (
         <HomeTemplate>

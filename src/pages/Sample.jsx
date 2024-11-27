@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingPage from './LoadingPage';
+import LandingPage from '../pages/LandingPage';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -51,7 +52,7 @@ const Sample = () => {
             if (isAuthenticated === true) {
                 navigate('/dashboard'); // Navigate to dashboard if authenticated
             } else if (isAuthenticated === false) {
-                navigate('/login'); // Navigate to login if not authenticated
+                navigate('/'); // Navigate to login if not authenticated
             }
         }
     }, [isAuthenticated, isCheckingAuth, navigate]);
@@ -66,7 +67,7 @@ const Sample = () => {
         return <div>Error: {error}</div>;
     }
 
-    return null; // Nothing to display after navigation
+    return <LandingPage />; // Nothing to display after navigation
 };
 
 export default Sample;
