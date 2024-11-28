@@ -31,7 +31,7 @@ export default function AnnouncementContent({ data, addedData }) {
             setAnnouncements((prevAnnouncements) => [{
                 announcement_date: addedData?.data?.announcement_date,
                 content: addedData?.data?.content,
-                content_id: addedData?.data?.id,
+                announcement_id: addedData?.data?.id,
                 course_class: addedData?.course_class,
                 teacher: addedData?.teacher,
             }, ...prevAnnouncements]);
@@ -82,7 +82,7 @@ export default function AnnouncementContent({ data, addedData }) {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        <Dropdown.Item onClick={() => deleteAnnouncement(announcement.announcement_id)} href="#/action-2"><FontAwesomeIcon className={styles.deleteIcon} icon={faTrashAlt} />Delete</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => deleteAnnouncement(announcement.announcement_id)}><FontAwesomeIcon className={styles.deleteIcon} icon={faTrashAlt} />Delete</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             )}

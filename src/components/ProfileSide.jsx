@@ -150,6 +150,26 @@ export default function ProfileSide({ info }) {
     });
   };
 
+  const handleClearAll = () => {
+    setRemoving(true);
+    customFetch(`/notification/${user.id}/deleteAll`, {
+      method: "GET"
+    })
+    .then(data => {
+      setNotificationData([]);
+      toast.success("All notifications deleted successfully");
+    })
+    .catch(error => {
+      console.error('Error:', error.message);
+    })
+    .finally(() => {
+      setRemoving(false);
+    });
+  }
+
+  useEffect(() => {
+    console.log(notificationData.length);
+  }, [notificationData]);
 
   return (
     <>
@@ -161,12 +181,15 @@ export default function ProfileSide({ info }) {
             as="div"
             className={`${styles.notification} ${styles.customDropdownToggle} pi pi-bell p-overlay-badge`}
           >
-            {notification.length > 0 || !user?.verified &&
+            {notification.length > 0 || notificationData.length > 0 || !user?.verified ? (
               <Badge severity="danger" style={{ display: "none !important" }} />
+            ) : null
             }
           </Dropdown.Toggle>
           <Dropdown.Menu className={styles.notifContainer}>
-            <p className="mb-1"><FontAwesomeIcon className={styles.bell} icon={faBell} /> Notification</p>
+            <p className="mb-1"><FontAwesomeIcon className={styles.bell} icon={faBell} /> Notification({(notificationData.length) + (!user?.verified ? 1 : 0)}) 
+              <span onClick={handleClearAll} className={`${styles.clearNotif} ${notificationData.length === 0 ? styles.disabledClear : ""}`}>Clear All</span>
+            </p>
             { user && !user?.verified &&
               <Dropdown.Item>
                 <div className={styles.notificationCard}>
@@ -176,7 +199,7 @@ export default function ProfileSide({ info }) {
               </Dropdown.Item>
             }
             {
-              user?.verified && (
+              user?.verified && notificationData.length === 0 && (
                 <div className={styles.notificationCard}>
                   <p className="text-success"></p>
                   <p className="text-center">No Notification</p>
