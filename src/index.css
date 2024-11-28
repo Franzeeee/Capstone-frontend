@@ -155,3 +155,7 @@ li {
 /* .customTooltip {
   min-width: 500px !;
 } */
+
+iframe {
+  pointer-events: none;
+}
