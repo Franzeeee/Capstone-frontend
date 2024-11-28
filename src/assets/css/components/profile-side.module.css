@@ -231,7 +231,27 @@
 .date {
     font-size: .7rem !important;
 }
-
+.clearNotif {
+    float: right;
+    font-size: .7rem;
+    color: #e05555;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.clearNotif:hover {
+    color: hwb(0 0% 9%);
+    cursor: pointer;
+    text-decoration: underline;
+}
+.disabledClear {
+    color: #737373 !important;
+    cursor: not-allowed !important;
+}
+.disabledClear:hover {
+    color: #737373 !important;
+    cursor: not-allowed !important;
+    text-decoration: none;
+}
 @media screen and (min-height: 700px) {
     .activityContainer {
         height: 100%;

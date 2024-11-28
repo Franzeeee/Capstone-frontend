@@ -40,7 +40,7 @@ export default function AnnouncementForm({sendCreated}) {
         })
         .then(data => {
             data.forEach((item) => { 
-                setOptions(prevOptions => [...prevOptions, { name: item.name, value: item.id }]);
+                setOptions(prevOptions => [...prevOptions, { name: item.name + ` (${item.section})`, value: item.id }]);
             });
         })
         .catch(error => console.error('Error fetching classes:', error));
