@@ -227,8 +227,9 @@ export default function ProfileSide({ info }) {
                     <p>{notification.message}</p>
                     <div className={styles.notificationBtns}>
                       <button className={styles.remove} onClick={() => handleDeleteNotification(notification?.id)}>Remove</button>
-                      <button onClick={() => navigateToClass(notification?.classCode)}>View Class</button>
+                      <button onClick={() => navigateToClass(notification?.class_code)}>View Class</button>
                     </div>
+                    <p className={styles.date}>{timeAgo(notification.created_at)}</p>
                   </div>
                 </Dropdown.Item>
               )
