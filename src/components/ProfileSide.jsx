@@ -210,23 +210,26 @@ export default function ProfileSide({ info }) {
               notification.type === 'announcement' ? (
                 <Dropdown.Item key={index}>
                   <div className={styles.notificationCard}>
-                    <p className="text-danger">New Announcement</p>
+                    <p className="text-primary">New Announcement</p>
                     <p>{notification?.message}</p>
                     <div className={styles.notificationBtns}>
                       <button className={styles.remove} onClick={() => handleDeleteNotification(notification?.id)}>Remove</button>
                       <button onClick={() => navigateToClass(notification?.class_code)}>View Class</button>
                     </div>
+                    <p className={styles.date}>{timeAgo(notification?.created_at)}</p>
+                    
                   </div>
                 </Dropdown.Item>
               ) : (
                 <Dropdown.Item key={index}>
                   <div className={styles.notificationCard}>
-                    <p className="text-danger">New Assessment Posted</p>
+                    <p className="text-primary">New Assessment Posted</p>
                     <p>{notification.message}</p>
                     <div className={styles.notificationBtns}>
                       <button className={styles.remove} onClick={() => handleDeleteNotification(notification?.id)}>Remove</button>
-                      <button onClick={() => navigateToClass(notification?.classCode)}>View Class</button>
+                      <button onClick={() => navigateToClass(notification?.class_code)}>View Class</button>
                     </div>
+                    <p className={styles.date}>{timeAgo(notification.created_at)}</p>
                   </div>
                 </Dropdown.Item>
               )

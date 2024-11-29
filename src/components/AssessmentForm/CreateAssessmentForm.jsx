@@ -803,15 +803,16 @@ function secondsToTime(seconds) {
       return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 
 }
+
 function convertToProblemObject(input) {
   // Define the object to hold the structured data
   let problemObject = {};
 
   // Use regular expressions to match each section (ProblemName, ProblemDescription, etc.)
   const problemNameMatch = input.match(/ProblemName:\s*([^\n]+)/);
-  const problemDescriptionMatch = input.match(/ProblemDescription:\s*([^\n]+(?:\n.+)*)\nSampleInput:/);
-  const sampleInputMatch = input.match(/SampleInput:\s*([^\n]+(?:\n.+)*)\nSampleOutput:/);
-  const sampleOutputMatch = input.match(/SampleOutput:\s*(.*)/);
+  const problemDescriptionMatch = input.match(/ProblemDescription:\s*([\s\S]+?)\nSampleInput:/);
+  const sampleInputMatch = input.match(/SampleInput:\s*([\s\S]+?)\nSampleOutput:/);
+  const sampleOutputMatch = input.match(/SampleOutput:\s*([\s\S]+)/);
 
   // Assign the matched content to the object if found, else assign empty string
   problemObject.problemName = problemNameMatch ? problemNameMatch[1].trim() : '';
@@ -819,5 +820,11 @@ function convertToProblemObject(input) {
   problemObject.sampleInput = sampleInputMatch ? sampleInputMatch[1].trim() : '';
   problemObject.sampleOutput = sampleOutputMatch ? sampleOutputMatch[1].trim() : '';
 
+  // Clean up the sample output if it's HTML (remove extra newlines)
+  if (problemObject.sampleOutput.includes('<!DOCTYPE html>')) {
+    problemObject.sampleOutput = problemObject.sampleOutput.trim();
+  }
+
+  console.log(problemObject);
   return problemObject;
 }
