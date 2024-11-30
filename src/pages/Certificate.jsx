@@ -18,7 +18,7 @@ const Certificate = () => {
   const isCertificatePage = location.pathname === '/certificate';
 
   useEffect(() => {
-    if (print) {
+    if(true) {
       capturePage();
     }
   }, [print]);
@@ -29,10 +29,15 @@ const Certificate = () => {
       console.error("Element with the class 'container' not found!");
       return;
     }
-  
+    const width = element.scrollWidth;
+    const height = element.scrollHeight;
+
+
     const canvas = await html2canvas(element, {
-      scale: window.devicePixelRatio, // Match device pixel ratio for better quality
-      useCORS: true, // Handle external resources like images or fonts
+      // scale: window.devicePixelRatio,
+      // width: width, // Set canvas width to the element's content width
+      height: height,
+      useCORS: true,
     });
   
     const image = canvas.toDataURL("image/png");
@@ -40,10 +45,10 @@ const Certificate = () => {
     // Trigger download
     const link = document.createElement("a");
     link.href = image;
-    link.download = "container-screenshot.png";
+    link.download = "certificate.png";
     link.click();
   
-    window.history.back(); // Return to the previous page
+    // window.history.back(); // Return to the previous page
   };
   
     

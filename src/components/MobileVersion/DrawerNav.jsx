@@ -11,7 +11,7 @@ import menu from '../../assets/img/icons/menu.png';
 import logo from '../../assets/img/logoCodelab.png';
 import styles from '../../assets/css/templates/home-template.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBullhorn, faCalendar, faChalkboardTeacher, faCode, faDashboard, faHome, faStar, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserData } from '../../utils/userInformation';
 
@@ -35,21 +35,22 @@ export default function DrawerNav() {
             </div>
             <List>
             {[
-                { text: 'Dashboard', path: '/dashboard' },
-                { text: 'Coding Playground', path: '/playground' },
-                { text: 'Calendar', path: '/calendar' },
-                { text: 'Announcements', path: '/announcements' },
+                { text: 'Dashboard', path: '/dashboard', icon: user.role === 'teacher' ? faBars : faHome },
+                { text: 'Coding Playground', path: '/playground', icon: faCode },
+                { text: 'Calendar', path: '/calendar', icon: faCalendar },
+                { text: 'Announcements', path: '/announcements', icon: faBullhorn },
                 ...(user.role === 'teacher'
-                    ? [{ text: 'Classes', path: '/teacher/classes' }]
+                    ? [{ text: 'Classes', path: '/teacher/classes', icon: faChalkboardTeacher }]
 
                     : []),
-                { text: 'Grades', path: (user.role === 'teacher' ? '/teacher/grades/class' : '/grades') }, 
+                { text: 'Grades', path: (user.role === 'teacher' ? '/teacher/grades/class' : '/grades'), icon: faStar }, 
             ].map((item) => (
                 <ListItem key={item.text} disablePadding>
                     <ListItemButton 
                         className={`${tabName === item.path ? styles.active : ''}`}
                         onClick={() => navigate(item.path)}
                     >
+                    <FontAwesomeIcon icon={item.icon || faHome} style={{marginRight: '5px'}} />
                     <ListItemText primary={item.text} />
                     </ListItemButton>
                 </ListItem>
