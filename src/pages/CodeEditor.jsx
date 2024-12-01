@@ -968,7 +968,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                     <WebAssessmentSample webCode={activeAssessment?.testCase?.output} />
                 </Offcanvas.Body>
             </Offcanvas>
-            <nav className={`${styles.nav} ${mode !== "playground" ? 'd-none' : ""}`}>
+            <nav className={`${styles.nav} ${mode === "assessment" ? 'd-none' : ""}`}>
                 <p><DrawerNav /></p>
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
