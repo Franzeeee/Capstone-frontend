@@ -252,8 +252,31 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const generateProblem = () => {
         
         const msgData = new FormData();
-        let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.(no hints)`
-
+        let topicsByDifficulty = {
+            python: {
+                easy: "Basic syntax, printing, variables",
+                medium: "Conditional statements, loops",
+                hard: "Sorting algorithms, recursion",
+                mastery: "Dynamic programming, optimization problems"
+            },
+            html_css: {
+                easy: "Basic HTML structure",
+                medium: "CSS selectors, simple layouts",
+                hard: "Responsive design, media queries",
+                mastery: "Animations, complex layouts"
+            }
+        };
+        
+        let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.
+        Topic: ${topicsByDifficulty[challangeDetails.language.toLowerCase()][challangeDetails.difficulty.toLowerCase()]} (no hints)
+        Format:
+        - Problem Description: 
+        - Input: if there is
+        - Output: if there is
+        
+        Put a new line after each section.
+        `;
+        
         msgData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
