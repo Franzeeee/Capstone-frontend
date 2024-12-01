@@ -60,7 +60,7 @@ const Certificate = () => {
   return (
     <div className={styles.container} >
       <div className={styles.studentName}>
-        <p>Student Name</p>
+        <p>{studentName}</p>
       </div>
         <div className={styles.text}>
             <p>{formatDate(date)}</p>

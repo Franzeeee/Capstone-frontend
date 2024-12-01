@@ -149,7 +149,7 @@ useEffect(() => {
                                   icon={faDownload} 
                                   onClick={
                                     classItem?.certificate ? 
-                                      () => navigate(`/certificate`, { state: { captureMode: true, studetName: "Student Name", teacher: classItem?.certificate?.teacher_name, date: classItem?.certificate?.issue_date } }) 
+                                      () => navigate(`/certificate`, { state: { captureMode: true, studentName: user.name, teacher: classItem?.certificate?.teacher_name, date: classItem?.certificate?.issue_date } }) 
                                       : 
                                       null
                                   }
