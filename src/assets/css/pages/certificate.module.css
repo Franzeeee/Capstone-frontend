@@ -49,9 +49,9 @@
 .studentName {
   position: absolute;
   width: 55%;
-  top: 330px;
+  top: 340px;
   left: 7.5%;
-  font-size: 2rem;
+  font-size: 1.5rem;
   height: auto;
   display: flex;
   justify-content: center;
