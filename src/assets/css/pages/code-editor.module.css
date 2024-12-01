@@ -313,7 +313,7 @@
     padding: 20px 10px;
 }
 .practiceTest {
-    width: 75%;
+    width: 85%;
     height: auto;
     position: absolute;
     align-self: flex-end;
@@ -348,6 +348,17 @@
     justify-content: start !important;
     overflow: auto;
 }
+.difficultyInfo {
+    color: rgb(100, 100, 100) !important;
+    margin-left: 5px;
+}
+.instructionModal {
+    text-align: left;
+}
+.levelText {
+    color: rgb(255, 23, 23);
+}
+
 .challangeTextContainer::-webkit-scrollbar {
     width: 5px; 
 }

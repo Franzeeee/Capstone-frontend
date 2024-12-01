@@ -10,7 +10,7 @@ import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
 import 'codemirror/addon/hint/show-hint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faClose, faCopy, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faClose, faCopy, faExclamationCircle, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
@@ -1186,7 +1186,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             )}
                             {testGenLevel === 2 && (
                                 <>
-                                    <p className={`${styles.colorBlack}`}>Choose difficulty level</p>
+                                    <p className={`${styles.colorBlack}`}>Choose difficulty level 
+                                        <OverlayTrigger
+                                                placement="bottom"
+                                                overlay={<Tooltip id={`tooltip-test`}>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Easy:</span> Suitable for beginners who are new to coding.</p>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Medium:</span> Suitable for intermediate coders who have some experience.</p>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Hard:</span> Suitable for advanced coders who are looking for a challenge.</p>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Mastery:</span> Suitable for experts who are looking to master advanced concepts.</p>
+                                                </Tooltip>}
+                                            >
+                                                <span className={styles.difficultyInfo}><FontAwesomeIcon icon={faExclamationCircle} /></span>
+                                            </OverlayTrigger></p> 
                                     <div className={`${styles.option1Container}`}>
                                         <div className={`${styles.levelOption} ${challangeDetails.difficulty === 'easy' ? styles.selectedLanguage : ''}`}
                                         onClick={() => setDifficulty("easy")}>

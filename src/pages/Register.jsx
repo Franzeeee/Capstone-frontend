@@ -170,7 +170,8 @@ export const Register = () => {
         .then(data => {
           if(data.message === "Duplicate"){
             toast.error("Email already exists!")
-            return
+            navigate('/register')
+            return;
           }
           toast.success("Registered Successfully")
           toast.loading("Redirecting...")
