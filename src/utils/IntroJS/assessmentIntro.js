@@ -46,10 +46,20 @@ const assessmentIntro = {
         tooltipClass: 'customTooltip'
       },
       {
+        element: '#problemButton',
+        intro: 'Clicking this button will display all the available coding problem to be solved.',
+        tooltipClass: 'customTooltip'
+      },
+      {
         element: '#step17',
         intro: 'Clicking this button, you will submit your code for evaluation and it will be processed accordingly.',
         tooltipClass: 'customTooltip'
       },
+      {
+        element: '#step18',
+        intro: 'Any attempts to reload or leave the page will result in automatic submission of your code.',
+        tooltipClass: 'customTooltip'
+      }
     ],
   }
 

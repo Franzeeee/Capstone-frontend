@@ -37,7 +37,7 @@ import 'intro.js/introjs.css';
 import playgroundIntro from '../utils/IntroJS/playgroundIntro';
 import assessmentIntro from '../utils/IntroJS/assessmentIntro';
 
-const CodeEditor = ({data, options = {mode: "playground"}}) => {
+const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
 
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));  
@@ -368,8 +368,12 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                 startTour();
                 localStorage.setItem('playgroundIntro', 'true');
             }
-        }else if(mode==="Assessment"){
-                assessmentTour();
+        }else if(mode==="Assessment" && classSubject !== "Web Development"){
+                if(localStorage.getItem('assessmentIntro') === null) {
+                    assessmentTour();
+                    localStorage.setItem('assessmentIntro', 'true');
+                }
+                
         }
         
     }, []);
@@ -1174,7 +1178,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             )}
                             <div className={`${styles.assessmentFooter}`}>
                                 <div className={`${styles.assessmentBtns}`}>
-                                    <button onClick={() => setShow(true)}>
+                                    <button id='problemButton' onClick={() => setShow(true)}>
                                         Problems ({assessmentData.length})
                                     </button>
                                 </div>

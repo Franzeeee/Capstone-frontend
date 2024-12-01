@@ -308,7 +308,7 @@ export default function ClassContents({ data, code, className }) {
                                         className={`${styles.status} ${isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? styles.viewAssessment : styles.locked}`}
                                         onClick={() =>
                                             isAssessmentUnlocked(lesson.id, lesson.hasAssessment)
-                                                ? navigate(`/c/${code}/a/${assessment.title}`, { state: { name: className, progress: progress, item: assessment } })
+                                                ? navigate(`/c/${code}/a/${assessment.title}`, { state: { name: className, progress: progress, item: assessment, classSubject: data?.subject } })
                                                 : null
                                         }
                                     >
