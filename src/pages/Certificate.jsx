@@ -3,7 +3,8 @@ import styles from '../assets/css/pages/certificate.module.css';
 import backgroundImage from '../assets/img/CodelabCert.png'; // Import image
 import { useLocation, useNavigate } from 'react-router-dom';
 import html2canvas from "html2canvas";
-
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Certificate = () => {
 
@@ -58,7 +59,14 @@ const Certificate = () => {
   
     
   return (
-    <div className={styles.container} >
+    <div>
+      <div className={styles.LoadingCont}>
+        <FontAwesomeIcon icon={faSpinner} spin/>
+        <p className={styles.Loading}>
+          Generating Certificate
+        </p>   
+      </div>
+          <div className={styles.container} >
       <div className={styles.studentName}>
         <p>{studentName}</p>
       </div>
@@ -69,6 +77,8 @@ const Certificate = () => {
             <img src={backgroundImage} alt="certificate" className={styles.image}/>
   
     </div>
+    </div>
+
 
   );
 }
