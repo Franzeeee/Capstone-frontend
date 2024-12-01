@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../assets/css/components/timer.module.css';
 
-export default function TimerComponent({ time = 0, finishedTime, pause, onPause }) {
+export default function TimerComponent({ time = 0, finishedTime, pause, onPause,id }) {
   const [countdown, setCountdown] = useState(Number(time));
   const timerRef = useRef(null);
 
@@ -47,7 +47,7 @@ export default function TimerComponent({ time = 0, finishedTime, pause, onPause 
   };
 
   return (
-    <div className={styles.timerContainer}>
+    <div className={styles.timerContainer}id={id}>
       <p>Time Left: {formatTime(countdown)}</p>
     </div>
   );

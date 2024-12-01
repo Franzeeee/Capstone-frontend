@@ -35,6 +35,7 @@ import DrawerNav from '../components/MobileVersion/DrawerNav';
 import introJs from 'intro.js'
 import 'intro.js/introjs.css';
 import playgroundIntro from '../utils/IntroJS/playgroundIntro';
+import assessmentIntro from '../utils/IntroJS/assessmentIntro';
 
 const CodeEditor = ({data, options = {mode: "playground"}}) => {
 
@@ -333,14 +334,21 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         .setOptions(playgroundIntro)
         .start();
     };
-
+    const assessmentTour = () => {
+        introJs()
+        .setOptions(assessmentIntro)
+        .start();
+    };
     useEffect(() => {
         if (mode === 'playground') {
             if(localStorage.getItem('playgroundIntro') === null) {
                 startTour();
                 localStorage.setItem('playgroundIntro', 'true');
             }
+        }else if(mode==="Assessment"){
+                assessmentTour();
         }
+        
     }, []);
     
 
@@ -989,7 +997,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         </button>
                     </div>
                     { mode === 'Assessment' && (
-                        <TimerComponent 
+                        <TimerComponent id="step12"
                             time={data.time_limit} 
                             pause={pauseTimer} 
                             finishedTime={finishedAssessmentTimer}
@@ -1086,18 +1094,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             mode === 'Assessment' && (
                                 <div className={`${styles.assessmentContainer}`}>
                             <div className={`${styles.assessmentHeader}`}>
-                                <button onClick={() => handlePreviosAssessment()}>
+                                <button onClick={() => handlePreviosAssessment()}id="step15">
                                     Back
                                 </button>
                                 <p>
                                     Lesson Assessment
                                 </p>
-                                <button onClick={() => handleChangeAssessment(activeAssessment.id + 1)}>
+                                <button id="step16" onClick={() => handleChangeAssessment(activeAssessment.id + 1)}>
                                     Next
                                 </button>
                             </div>
                             { activeAssessment && (
-                                <div className={`${styles.assessmentContent}`}>
+                                <div className={`${styles.assessmentContent}`}id ="step13">
                                 <div className={`${styles.problemTitle}`}>
                                     <p>{activeAssessment.id + 1}. {activeAssessment.title}</p>
                                     {/* <p>{activeAssessment.description}</p> */}
@@ -1147,7 +1155,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                                         Problems ({assessmentData.length})
                                     </button>
                                 </div>
-                                <div onClick={submitAssessment} className={`${styles.submitButton}`}>
+                                <div onClick={submitAssessment} className={`${styles.submitButton}`}id="step17">
                                     Submit
                                 </div>
                             </div>
