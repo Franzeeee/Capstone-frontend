@@ -1001,8 +1001,8 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                             <li onClick =  {() => setIde(1)}> <FontAwesomeIcon icon={faHtml5} className={`${styles.icon} ${styles.html}`} title='IDE: Python'> </FontAwesomeIcon><FontAwesomeIcon  icon={faCss3Alt} className={`${styles.icon} ${styles.css} ml-1`} title='IDE: Python'></FontAwesomeIcon>  HTML and CSS</li>
                         </ul>
                     </li>
-                    <li onClick={() => setShowHelpModal(true)} id=''>
-                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Help</Tooltip>}>
+                    <li onClick={() => window.open('https://www.youtube.com/watch?v=qDVNEQZpGI0')} id=''>
+                        <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>View Quick Tutorial</Tooltip>}>
                             <FontAwesomeIcon icon={faQuestionCircle} className={`${styles.icon}`}/>
                         </OverlayTrigger>
                     </li>
@@ -1225,10 +1225,39 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                                         <OverlayTrigger
                                                 placement="bottom"
                                                 overlay={<Tooltip id={`tooltip-test`}>
-                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Easy:</span> Suitable for beginners who are new to coding.</p>
-                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Medium:</span> Suitable for intermediate coders who have some experience.</p>
-                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Hard:</span> Suitable for advanced coders who are looking for a challenge.</p>
-                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Mastery:</span> Suitable for experts who are looking to master advanced concepts.</p>
+                                            {
+                                            challangeDetails.language === 'python' ? (
+                                                <>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Easy:</span> Basic syntax, printing, variables.
+                                                </p>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Medium:</span> Conditional statements, loops.
+                                                </p>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Hard:</span> Sorting algorithms, recursion.
+                                                </p>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Mastery:</span> Dynamic programming, optimization problems.
+                                                </p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Easy:</span> Basic HTML structure.
+                                                </p>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Medium:</span> CSS selectors, simple layouts.
+                                                </p>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Hard:</span> Responsive design, media queries.
+                                                </p>
+                                                <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Mastery:</span> Animations, complex layouts.
+                                                </p>
+                                                </>
+                                            )
+                                            }
                                                 </Tooltip>}
                                             >
                                                 <span className={styles.difficultyInfo}><FontAwesomeIcon icon={faExclamationCircle} /></span>
