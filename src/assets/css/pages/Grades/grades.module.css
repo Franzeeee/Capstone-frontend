@@ -115,6 +115,20 @@
     margin: 0;
 }
 
+.noCertificate {
+    cursor: not-allowed;
+    color: #8C8CAB !important;
+}
+
+.hasCertificate {
+    cursor: pointer;
+    color: #5D5DD4;
+    transition: all .3s ease;
+}
+.hasCertificate:hover {
+    color: #2e2ed7;
+}
+
 @media screen and (max-width: 426px) {
     .container {
         grid-template-columns: 1fr;

@@ -9,7 +9,7 @@ import StudentGradeDoughnut from '../../components/Charts/StudentGradeDoughnut';
 import LineChart from '../../components/Charts/LineChart';
 import customFetch from '../../utils/fetchApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 export default function Grades() {
 
@@ -132,6 +132,7 @@ useEffect(() => {
                         <th scope="col">Class</th>
                         <th scope="col">Final Grade</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Certificate</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
@@ -142,11 +143,24 @@ useEffect(() => {
                               <td>{classItem?.name}</td>
                               <td>{classItem?.grade?.final_grade || 0}</td>
                               <td>{classItem?.grade?.remarks}</td>
+                              <td style={{textAlign: 'center'}}>
+                                <FontAwesomeIcon 
+                                  className={classItem?.certificate ? styles.hasCertificate : styles.noCertificate} 
+                                  icon={faDownload} 
+                                  onClick={
+                                    classItem?.certificate ? 
+                                      () => navigate(`/certificate`, { state: { captureMode: true, studetName: "Student Name", teacher: classItem?.certificate?.teacher_name, date: classItem?.certificate?.issue_date } }) 
+                                      : 
+                                      null
+                                  }
+                                />
+                                
+                              </td>
                           </tr>
                         </>
                     )) :
                     <tr>
-                        <td colSpan="4" className="text-center">No classes found</td>
+                        <td colSpan="5" className="text-center">No classes found</td>
                     </tr>
                     }
                 </MDBTableBody>
