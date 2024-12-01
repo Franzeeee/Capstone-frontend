@@ -90,7 +90,7 @@ export const Login = () => {
                 <ToastContainer />
                 <div className={`${styles['form-container']}`}>
                     <div className={`text ${styles.headerText}`}>
-                        <img src={logoHorizontal} alt="" className={`${styles.logo}`}/>
+                        <img src={logoHorizontal} alt="" className={`${styles.logo}`} onClick={() => navigate('/')}/>
                         <p className={` ${styles.tagline} m-0 mt-3`}>CodeLab: Empowering Students to Learn Python Programming</p>
                     </div>
                     <form onSubmit={loader ? null : handleSubmit}>

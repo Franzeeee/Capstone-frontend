@@ -87,7 +87,7 @@ export default function TeacherAssessmentPage() {
                                     <img src={book} alt="" />
                                 </div>
                                 <div className={`${styles.courseText}`}>
-                                    <p>{classItem.name}</p>
+                                    <p>{classItem.name} <span style={{fontSize: '.7rem'}}>({classItem?.section})</span></p>
                                     <p className={`${styles.classCode}`}>Class Code: <span>{classItem.class_code.code}</span> <FontAwesomeIcon onClick={() => copyCode(classItem.class_code.code)} icon={faCopy} /></p>
                                 </div>
                                 <div className={`${styles.goTo}`}>

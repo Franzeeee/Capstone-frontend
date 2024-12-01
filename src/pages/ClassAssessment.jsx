@@ -43,6 +43,8 @@ export default function ClassAssessment() {
     const [feedback, setFeedback] = useState(null);
     const [submittedCode, setSubmittedCode] = useState();
 
+    const [classSubject, setClassSubject] = useState(location.state?.classSubject || {});
+
     const user = getUserData();
     const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
     const [currentLesson, setCurrentLesson] = useState(() => {
@@ -51,7 +53,7 @@ export default function ClassAssessment() {
         }
         return lessons[lessonIndex].title || "Variables";
     });
-
+    
     // const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     const [show, setShow] = useState(false);
 
@@ -243,7 +245,7 @@ export default function ClassAssessment() {
                             <Offcanvas.Body>
                             <CodeEditor 
                                 data={assessmentData}
-                                
+                                classSubject={classSubject}
                                 options={{ 
                                     mode: 'Assessment', 
                                     cheatingData: [totalLeaveFullsreen, totalAltTab],

@@ -10,7 +10,7 @@ import 'codemirror/theme/material.css';
 import 'codemirror/mode/python/python';
 import 'codemirror/addon/hint/show-hint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faClose, faCopy, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faClose, faCopy, faExclamationCircle, faPaperPlane, faPlay, faQuestionCircle, faRightFromBracket, faRobot, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFolderOpen, faSave } from '@fortawesome/free-regular-svg-icons';
 import fetchToken from '../utils/fetchToken';
 import logo from '../assets/img/logoCodelab.png';
@@ -35,8 +35,9 @@ import DrawerNav from '../components/MobileVersion/DrawerNav';
 import introJs from 'intro.js'
 import 'intro.js/introjs.css';
 import playgroundIntro from '../utils/IntroJS/playgroundIntro';
+import assessmentIntro from '../utils/IntroJS/assessmentIntro';
 
-const CodeEditor = ({data, options = {mode: "playground"}}) => {
+const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
 
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(JSON.parse(CryptoJS.AES.decrypt(userData, 'capstone').toString(CryptoJS.enc.Utf8)));  
@@ -252,8 +253,31 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
     const generateProblem = () => {
         
         const msgData = new FormData();
-        let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.(no hints)`
-
+        let topicsByDifficulty = {
+            python: {
+                easy: "Basic syntax, printing, variables",
+                medium: "Conditional statements, loops",
+                hard: "Sorting algorithms, recursion",
+                mastery: "Dynamic programming, optimization problems"
+            },
+            html_css: {
+                easy: "Basic HTML structure",
+                medium: "CSS selectors, simple layouts",
+                hard: "Responsive design, media queries",
+                mastery: "Animations, complex layouts"
+            }
+        };
+        
+        let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.
+        Topic: ${topicsByDifficulty[challangeDetails.language.toLowerCase()][challangeDetails.difficulty.toLowerCase()]} (no hints)
+        Format:
+        - Problem Description: 
+        - Input: if there is
+        - Output: if there is
+        
+        Put a new line after each section.
+        `;
+        
         msgData.append('userMessage', prompt);
         customFetch('/receiveMessage', {
             method: 'POST',
@@ -333,14 +357,25 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
         .setOptions(playgroundIntro)
         .start();
     };
-
+    const assessmentTour = () => {
+        introJs()
+        .setOptions(assessmentIntro)
+        .start();
+    };
     useEffect(() => {
         if (mode === 'playground') {
             if(localStorage.getItem('playgroundIntro') === null) {
                 startTour();
                 localStorage.setItem('playgroundIntro', 'true');
             }
+        }else if(mode==="Assessment" && classSubject !== "Web Development"){
+                if(localStorage.getItem('assessmentIntro') === null) {
+                    assessmentTour();
+                    localStorage.setItem('assessmentIntro', 'true');
+                }
+                
         }
+        
     }, []);
     
 
@@ -989,7 +1024,7 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                         </button>
                     </div>
                     { mode === 'Assessment' && (
-                        <TimerComponent 
+                        <TimerComponent id="step12"
                             time={data.time_limit} 
                             pause={pauseTimer} 
                             finishedTime={finishedAssessmentTimer}
@@ -1086,18 +1121,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             mode === 'Assessment' && (
                                 <div className={`${styles.assessmentContainer}`}>
                             <div className={`${styles.assessmentHeader}`}>
-                                <button onClick={() => handlePreviosAssessment()}>
+                                <button onClick={() => handlePreviosAssessment()}id="step15">
                                     Back
                                 </button>
                                 <p>
                                     Lesson Assessment
                                 </p>
-                                <button onClick={() => handleChangeAssessment(activeAssessment.id + 1)}>
+                                <button id="step16" onClick={() => handleChangeAssessment(activeAssessment.id + 1)}>
                                     Next
                                 </button>
                             </div>
                             { activeAssessment && (
-                                <div className={`${styles.assessmentContent}`}>
+                                <div className={`${styles.assessmentContent}`}id ="step13">
                                 <div className={`${styles.problemTitle}`}>
                                     <p>{activeAssessment.id + 1}. {activeAssessment.title}</p>
                                     {/* <p>{activeAssessment.description}</p> */}
@@ -1143,11 +1178,11 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             )}
                             <div className={`${styles.assessmentFooter}`}>
                                 <div className={`${styles.assessmentBtns}`}>
-                                    <button onClick={() => setShow(true)}>
+                                    <button id='problemButton' onClick={() => setShow(true)}>
                                         Problems ({assessmentData.length})
                                     </button>
                                 </div>
-                                <div onClick={submitAssessment} className={`${styles.submitButton}`}>
+                                <div onClick={submitAssessment} className={`${styles.submitButton}`}id="step17">
                                     Submit
                                 </div>
                             </div>
@@ -1186,7 +1221,18 @@ const CodeEditor = ({data, options = {mode: "playground"}}) => {
                             )}
                             {testGenLevel === 2 && (
                                 <>
-                                    <p className={`${styles.colorBlack}`}>Choose difficulty level</p>
+                                    <p className={`${styles.colorBlack}`}>Choose difficulty level 
+                                        <OverlayTrigger
+                                                placement="bottom"
+                                                overlay={<Tooltip id={`tooltip-test`}>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Easy:</span> Suitable for beginners who are new to coding.</p>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Medium:</span> Suitable for intermediate coders who have some experience.</p>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Hard:</span> Suitable for advanced coders who are looking for a challenge.</p>
+                                                    <p className={styles.instructionModal}><span className={styles.levelText}>Mastery:</span> Suitable for experts who are looking to master advanced concepts.</p>
+                                                </Tooltip>}
+                                            >
+                                                <span className={styles.difficultyInfo}><FontAwesomeIcon icon={faExclamationCircle} /></span>
+                                            </OverlayTrigger></p> 
                                     <div className={`${styles.option1Container}`}>
                                         <div className={`${styles.levelOption} ${challangeDetails.difficulty === 'easy' ? styles.selectedLanguage : ''}`}
                                         onClick={() => setDifficulty("easy")}>

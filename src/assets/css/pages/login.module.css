@@ -24,6 +24,7 @@
 .logo {
     width: 20rem;
     margin-bottom: -2rem;
+    cursor: pointer;
 }
 .form-container {
     width: 95% !important;
