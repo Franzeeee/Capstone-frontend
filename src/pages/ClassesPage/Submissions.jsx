@@ -145,7 +145,7 @@ export default function Submissions() {
                                         <p className={`${styles.icon} ${styles.language}`}><FontAwesomeIcon icon={faPython} /></p>
                                         <div className={`${styles.text}`}>
                                             <p>Subject</p>
-                                            <p>Python</p>
+                                            <p>{classData?.subject === 'python' ? "Python" : "Web Dev"}</p>
                                         </div>
                                     </div>
                                     <div className={`${styles.headerItem}`}>

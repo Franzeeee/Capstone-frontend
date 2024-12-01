@@ -57,6 +57,24 @@
   justify-content: center;
   text-align: center;
   z-index: 10;
+  font-weight: bold;
+}
+.Loading {
+  font-weight: 500;
+  font-size: 1.5rem;
+  text-align: center;
+}
+.LoadingCont svg{
+  font-size: 2rem;
+}
+.LoadingCont{
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 @media screen and (max-width: 426px) {

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/pages/certificate.module.css';
 import backgroundImage from '../assets/img/CodelabCert.png'; // Import image
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import html2canvas from "html2canvas";
-
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Certificate = () => {
 
@@ -17,9 +18,14 @@ const Certificate = () => {
 
   const isCertificatePage = location.pathname === '/certificate';
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if(true) {
+    if(print) {
       capturePage();
+    }
+    if(teacher === "Teacher Name") {
+      navigate('/');
     }
   }, [print]);
 
@@ -35,8 +41,8 @@ const Certificate = () => {
 
     const canvas = await html2canvas(element, {
       // scale: window.devicePixelRatio,
-      // width: width, // Set canvas width to the element's content width
-      height: height,
+      width: width, // Set canvas width to the element's content width
+      height: height + 200,
       useCORS: true,
     });
   
@@ -48,14 +54,21 @@ const Certificate = () => {
     link.download = "certificate.png";
     link.click();
   
-    // window.history.back(); // Return to the previous page
+    window.history.back(); // Return to the previous page
   };
   
     
   return (
-    <div className={styles.container} >
+    <div>
+      <div className={styles.LoadingCont}>
+        <FontAwesomeIcon icon={faSpinner} spin/>
+        <p className={styles.Loading}>
+          Generating Certificate
+        </p>   
+      </div>
+          <div className={styles.container} >
       <div className={styles.studentName}>
-        <p>Student Name</p>
+        <p>{studentName}</p>
       </div>
         <div className={styles.text}>
             <p>{formatDate(date)}</p>
@@ -64,6 +77,8 @@ const Certificate = () => {
             <img src={backgroundImage} alt="certificate" className={styles.image}/>
   
     </div>
+    </div>
+
 
   );
 }
