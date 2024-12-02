@@ -9,8 +9,10 @@ export default function ExitScreen({handleFullscreen, focus, addLeaveFullscreen,
     useEffect(() => {
         if(focus) {
             addLeaveFullscreen();
+            console.log('Added Exit fullscreen')
         }else {
             addAltTab();
+            console.log("Added Change tab")
         }
     }, [])
 
