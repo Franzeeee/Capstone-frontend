@@ -6,7 +6,7 @@ import { getUserData } from '../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faChartBar, faCopy, faEllipsisVertical, faExclamation, faScaleBalanced, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faChartBar, faCopy, faDownload, faEllipsisVertical, faExclamation, faScaleBalanced, faSpinner, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -20,6 +20,7 @@ import { Form, FormGroup, Button } from 'react-bootstrap';
 import { Tab, Tabs } from 'react-bootstrap';
 import profile from '../assets/img/1x1Robot2.png';
 import IssueCertificateModal from '../components/Modals/IssueCertificateModal';
+import * as XLSX from 'xlsx';
 
 
 
@@ -294,6 +295,45 @@ export default function ClassGradeTable() {
         
     }
 
+    const [isExporting, setIsExporting] = useState(false);
+    const [allData, setAllData] = useState([]);
+
+    const handleExportGrades = () => {
+        console.log(classData.name)
+        setIsExporting(true);
+        toast.loading('Exporting Grades...');
+        customFetch(`/grades/${classData.id}/print`, {
+            method: 'GET',
+        })
+        .then(data => {
+            toast.dismiss();
+            toast.success('Grades exported successfully');
+            setAllData(data)
+        })
+        .catch(error => {
+            toast.dismiss();
+            toast.error("Error Exporting Grades")
+        })
+        .finally(() => {
+            setIsExporting(false);
+        });
+
+        const newData = allData.map((grade) => {
+            return {
+                'Student Name': grade.student.name,
+                'Final Grade': grade.final_grade,
+                'Remarks': grade.remarks
+            }
+        });
+        const worksheet = XLSX.utils.json_to_sheet(newData)
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Grades');
+        const rawName = classData.name + ' ' + classData.section;
+        const fileName = rawName.replace(/ /g, "_");
+
+        XLSX.writeFile(workbook, 'grades_' + fileName + '.xlsx');
+    }
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
@@ -444,6 +484,12 @@ export default function ClassGradeTable() {
                         </div>
                         <div className={`${styles.classAssessments}`}>
                             <div className={styles.gradeControls}>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>Export Grade to Excel</Tooltip>}
+                                >
+                                    <p className={styles.gradeDistribution} onClick={isExporting ? null : handleExportGrades }><FontAwesomeIcon icon={isExporting ? faSpinner : faDownload} spin={isExporting} /></p>
+                                </OverlayTrigger>
                                 <OverlayTrigger
                                         placement="bottom"
                                         overlay={<Tooltip id={`tooltip-test`}>View Grade Calculation</Tooltip>}

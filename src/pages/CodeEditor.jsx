@@ -421,7 +421,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
         let data = JSON.stringify({
             script: script,
             language: "python3",
-            versionIndex: 3,
+            versionIndex: 5,
         });
 
         socketClient.send(
