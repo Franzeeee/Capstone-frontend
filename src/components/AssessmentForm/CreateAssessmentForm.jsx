@@ -48,6 +48,7 @@ const CreateAssessmentForm = ({ activeForm, classId, subject, onSubmit, handleCl
     if (editMode.active) {
       const newFormat = {
         ...editMode.data,
+        points: editMode.data.point,
         due_date: editMode.data.end_date ? editMode.data.end_date : null,
         time_limit: secondsToTime(editMode.data.time_limit),
         coding_problems: editMode.data.coding_problems.map(problem => ({
