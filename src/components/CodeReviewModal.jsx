@@ -54,7 +54,6 @@ export default function CodeReviewModal({ show, handleClose, submissionData, upd
 
     useEffect(() => {
         setData(submissionData);
-        console.log(submissionData);
     }, [submissionData]);
 
 
