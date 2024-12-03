@@ -167,10 +167,6 @@ export default function ProfileSide({ info }) {
     });
   }
 
-  useEffect(() => {
-    console.log(notificationData.length);
-  }, [notificationData]);
-
   return (
     <>
       <div className={`${styles.profileHeader}`}>

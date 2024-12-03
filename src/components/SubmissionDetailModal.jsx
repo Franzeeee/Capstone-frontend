@@ -213,7 +213,7 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                     <div className={styles.feedbackContainer}>
                                     {
                                         submissionData?.coding_problem_submissions.length > 0 && (
-                                            <Feedback feedbackData={feedback?.feedback} sendFeedback={(text) => updateFeedback(text)} />
+                                            <Feedback feedbackData={submissionData?.feedback?.feedback} sendFeedback={(text) => updateFeedback(text)} />
                                         )
                                     }
                                     </div>
