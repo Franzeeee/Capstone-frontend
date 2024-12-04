@@ -45,6 +45,16 @@
     margin: 0;
     font-size: 1.7rem;
 }
+.create svg {
+    font-size: 1.2rem;
+    color: #4040e2;
+    background-color: #fff;
+    overflow: hidden;
+    border-radius: 100%;
+    box-shadow: 1px 0px 5px 0px rgb(233, 233, 233);
+    cursor: pointer;
+    margin-bottom: 1px;
+}
 .create div ul {
     padding: 0 !important;
     margin: 0 !important;
@@ -162,6 +172,31 @@
     background-color: rgba(255, 255, 255, 0.237) !important;
     border: 1.5px solid red !important;
     color: red !important;
+}
+
+.Header{
+    background: linear-gradient(110.75deg, #8E8EE9 5.35%, #5D5DD4 72.54%);
+}
+.Title{
+    font-weight: 600;
+    color: #f6eeee;
+}
+.Create{
+    background-color: #5D5DD4;
+}
+.Create:hover{
+    background-color: #4A4AC3;
+}
+.Close{
+    background-color: #f73a3ae4;
+    border: none;
+}
+.Close:hover{
+    background-color: #df2828e4;
+}
+.label{
+    font-size: .75rem;
+    font-weight: 500;
 }
 
 @media screen and (max-width: 426px) {
