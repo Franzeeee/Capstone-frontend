@@ -21,7 +21,7 @@ import success from '../assets/img/excellent.png'
 import fail from '../assets/img/tiger.png'
 import html5 from '../assets/img/html-5.png'
 import css3 from '../assets/img/css-3.png'
-import { faCss3Alt, faHtml5, faPython } from '@fortawesome/free-brands-svg-icons';
+import { faCss3Alt, faHtml5, faPython, faRProject } from '@fortawesome/free-brands-svg-icons';
 import TimerComponent from '../components/TimerComponent';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import QuestionList from '../components/QuestionList';
@@ -36,6 +36,7 @@ import introJs from 'intro.js'
 import 'intro.js/introjs.css';
 import playgroundIntro from '../utils/IntroJS/playgroundIntro';
 import assessmentIntro from '../utils/IntroJS/assessmentIntro';
+import RLogo from '../assets/img/Rlogo.png';
 
 const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
 
@@ -420,7 +421,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
 
         let data = JSON.stringify({
             script: script,
-            language: "python3",
+            language: `${ide === 0 ? 'python3' : 'r'}`,
             versionIndex: 5,
         });
 
@@ -973,7 +974,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
                    
-                    { ide === 0 && (
+                    { ide === 3 || ide === 0 && (
                         <>
                             <li onClick={openPythonFile}  id='step2'>
                                 <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
@@ -994,14 +995,15 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                     )}
                     <li className={`position-relative ${styles.language}`}id='step5'>
                     {/* <img src={ide === 0 ? swap2 : swap1} alt="" /> */}
-                        <FontAwesomeIcon icon={ide === 0 ? faPython : faHtml5} className={`${styles.icon}`} title={`IDE: ${ide === 0 ? 'Python' : 'HTML and CSS'}`}></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={ide === 0 ? faPython : ide === 3 ? faRProject : faHtml5} className={`${styles.icon}`} title={`IDE: ${ide === 0 ? 'Python' : 'HTML and CSS'}`}></FontAwesomeIcon>
                         <ul className={`${styles.selectLanguage}`}>
                             <label htmlFor="">Select Language</label>
                             <li onClick =  {() => setIde(0)}> <img src={pythonPng} className={`${styles.pythonLogo}`} alt="" /> Python</li>
+                            <li onClick =  {() => setIde(3)}> <img src={RLogo} className={`${styles.pythonLogo}`} alt="" /> R Programming</li>
                             <li onClick =  {() => setIde(1)}> <FontAwesomeIcon icon={faHtml5} className={`${styles.icon} ${styles.html}`} title='IDE: Python'> </FontAwesomeIcon><FontAwesomeIcon  icon={faCss3Alt} className={`${styles.icon} ${styles.css} ml-1`} title='IDE: Python'></FontAwesomeIcon>  HTML and CSS</li>
                         </ul>
                     </li>
-                    <li onClick={() => window.open('https://www.youtube.com/watch?v=qDVNEQZpGI0')} id=''>
+                    <li onClick={() => setShowHelpModal(true)} id=''>
                         <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>View Quick Tutorial</Tooltip>}>
                             <FontAwesomeIcon icon={faQuestionCircle} className={`${styles.icon}`}/>
                         </OverlayTrigger>
@@ -1037,7 +1039,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                     </div>
                 </header>
                 <main className={`${styles.main}`}>
-                    <div className={` ${ide == 0 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
+                    <div className={` ${ide == 0 || ide == 3 ? "d-flex" : "d-none"} flex-column ${styles.codeArea}`}>
 
                         <div className={`${styles.codeEditor}`} id="step6">
                             <CodeMirror

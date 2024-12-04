@@ -107,6 +107,7 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             });
     }, [data]);
     
+    console.log(feedbackData?.feedback)
     return (
         <>
             <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />
@@ -114,7 +115,14 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                 <ModalHeader closeButton onClick={closeFeedbackModal}>Feedback</ModalHeader>
                 <ModalBody>
                     <p>
-                        {feedbackData?.feedback}
+                        <ul className={styles.feedbackContainer}>
+                            {feedbackData?.feedback && parseText(feedbackData?.feedback).length > 0 ? parseText(feedbackData?.feedback).map((line, index) => (
+                                <span key={index}>
+                                    <li>{line}</li>
+                                    <br />
+                                </span>
+                            )) : ''}
+                        </ul>
                     </p>
                 </ModalBody>
             </Modal>
@@ -305,4 +313,10 @@ function calculateRemainingPercentage(totalTime, pausedTime) {
     const elapsedPercentage = (elapsedTime / totalTime) * 100;  // Percentage of time passed
     const remainingPercentage = 100 - elapsedPercentage;  // Remaining time as a percentage
     return remainingPercentage;
+}
+function parseText(input) {
+    // Split the text by the '-' character and remove extra spaces
+    const lines = input.split('-').map(line => line.trim()).filter(line => line.length > 0);
+
+    return lines;
 }

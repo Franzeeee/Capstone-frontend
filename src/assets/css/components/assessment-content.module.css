@@ -151,3 +151,9 @@
 .alerted {
     background-color: #ed4b4b !important;
 }
+.feedbackContainer {
+    padding: 0 20px;
+}
+.feedbackContainer li {
+    list-style-type: disc;
+}
