@@ -12,6 +12,7 @@ import CodeEditor from '../CodeEditor';
 import TextFormatter from '../../components/TextFormatter';
 import PythonLesson from '../../utils/data';
 import webLessons from '../../utils/BASIC_WEB';
+import rlessons from '../../utils/Rlessons';
 import customFetch from '../../utils/fetchApi';
 import HomeTemplate from '../../templates/HomeTemplate';
 
@@ -24,7 +25,7 @@ export default function ClassLesson() {
 
     const navigateBack = () => navigate(`/c/${code}`);
 
-    const lessons = location.state?.subject === 'Python' ? PythonLesson : webLessons;
+    const lessons = location.state?.subject === 'Python' ? PythonLesson : location.state?.subject === 'Web' ? webLessons : rlessons;
 
     const lessonIndex = location.state?.lesson|| 0;
 
