@@ -270,6 +270,7 @@ export default function TeacherAssessmentPage() {
                                 <option value=""className={`${styles.label}`}>Select a subject</option>
                                 <option value={"Python"}>Python</option>
                                 <option value={"Web Development"}>Web Development</option>
+                                <option value={"R Programming"}>R Programming</option>
                             </select>
                         </div>
                         </div>

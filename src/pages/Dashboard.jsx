@@ -325,6 +325,7 @@ export const Dashboard = () => {
                             onChange={handleChange}>
                                 <option value=""className={`${styles.label}`}>Select a subject</option>
                                 <option value={"Python"}>Python</option>
+                                <option value={"R Programming"}>R Programming</option>
                                 <option value={"Web Development"}>Web Development</option>
                             </select>
                         </div>

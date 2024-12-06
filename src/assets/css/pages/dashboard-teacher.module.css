@@ -54,6 +54,7 @@
     border-radius: 100%;
     box-shadow: 1px 0px 5px 0px rgb(233, 233, 233);
     cursor: pointer;
+    margin-bottom: 1px;
 }
 .contentContainer .header .moreCourse {
     display: flex;
@@ -324,11 +325,6 @@ div:has(.noClasses) .cardContainer .card .noClasses {
 .label{
     font-size: .75rem;
     font-weight: 500;
-}
-.contain{
-    padding: 2%;
-    border: #e1dfdf solid 1px;
-    margin-top: 2%;
 }
 .courseCard:hover {
     border-color: rgb(54, 54, 54);
