@@ -1,4 +1,4 @@
-const lessons = [
+const rlessons = [
     {
         id: 0,
         title: "Introduction to R",
@@ -3241,3 +3241,5 @@ Percentiles are essential for understanding the distribution and spread of data,
     `
     },
 ]
+
+export default rlessons;
