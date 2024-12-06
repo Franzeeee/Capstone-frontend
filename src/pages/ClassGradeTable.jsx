@@ -447,7 +447,7 @@ export default function ClassGradeTable() {
                         <div className={`${styles.create}`}>
                             <div>
                                 <ul>
-                                    <li onClick={() => navigate('/teacher/classes')}>Classes</li>
+                                    <li onClick={() => navigate('/teacher/grades/class')}>Classes</li>
                                     <li>/</li>
                                     <li className={`${styles.active}`}>{classData?.name || "Class 404"}</li>
                                 </ul>
