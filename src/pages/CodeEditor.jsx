@@ -37,6 +37,7 @@ import 'intro.js/introjs.css';
 import playgroundIntro from '../utils/IntroJS/playgroundIntro';
 import assessmentIntro from '../utils/IntroJS/assessmentIntro';
 import RLogo from '../assets/img/Rlogo.png';
+import RubricsTable from '../components/RubricsTable';
 
 const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
 
@@ -945,6 +946,8 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
         }, [])
     );
 
+    const [showRubrics, setShowRubrics] = useState(false);
+
     return (
         <div className={`code-editor container-fluid p-0 m-0 vh-100 d-flex ${styles.container}`}>
             <ToastContainer />
@@ -1183,7 +1186,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                                     <button id='problemButton' onClick={() => setShow(true)}>
                                         Problems ({assessmentData.length})
                                     </button>
-                                    <button>Rubrics</button>
+                                    <button onClick={() => setShowRubrics(true)}>Rubrics</button>
                                 </div>
                                 <div onClick={submitAssessment} className={`${styles.submitButton}`}id="step17">
                                     Submit
@@ -1404,12 +1407,20 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                     </div>
                 </main>
             </section>
-            <Offcanvas show={show} onHide={handleClose} placement="end">
+            <Offcanvas backdrop={true} show={show} onHide={handleClose} placement="end">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Questions  List</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body className={`${styles.offCanvasBody}`}>
                     <QuestionList data={assessmentData} handleChangeAssessment={handleChangeAssessment}/>
+                </Offcanvas.Body>
+            </Offcanvas>
+            <Offcanvas backdrop={true} show={showRubrics} onHide={() => setShowRubrics(false)} placement="end">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Scoring Rubricks</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body className={`${styles.offCanvasBody}`}>
+                    <RubricsTable />
                 </Offcanvas.Body>
             </Offcanvas>
             <CodeEditorDemo show={showHelpModal} handleClose={() => setShowHelpModal(false)}/>
