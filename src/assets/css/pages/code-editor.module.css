@@ -837,7 +837,7 @@ main:has(.assessmentContainer) {
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 100px;
+    max-width: 120px;
     transition: all .5s ease;
     cursor: pointer;
     padding-inline: 10px;

@@ -1183,6 +1183,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                                     <button id='problemButton' onClick={() => setShow(true)}>
                                         Problems ({assessmentData.length})
                                     </button>
+                                    <button>Rubrics</button>
                                 </div>
                                 <div onClick={submitAssessment} className={`${styles.submitButton}`}id="step17">
                                     Submit
