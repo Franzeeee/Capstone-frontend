@@ -2,7 +2,7 @@ const rlessons = [
     {
         id: 0,
         title: "Introduction to R",
-        hasAssessment: true,
+        hasAssessment: false,
         content: `
  	     \`\`\`Bold
 	     Introduction to R 
