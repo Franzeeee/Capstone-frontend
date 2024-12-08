@@ -94,8 +94,13 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
     };
 
     const saveAsPyFile = () => {
+        if (code === "" ){
+            alert("Please provide a code to save.")
+            return;
+        }
+        const extension = classSubject === "R Programming" ? 'r' : 'py';
         // Prompt the user to enter a filename
-        const filename = "script.py";
+        const filename = `script.`.concat(extension || 'py');
     
         // Only proceed if the user entered a filename
         if (filename) {
@@ -985,7 +990,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
                    
-                    { ide === 3 || ide === 0 && (
+                    { ide !== 1 && (
                         <>
                             <li onClick={openPythonFile}  id='step2'>
                                 <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>
