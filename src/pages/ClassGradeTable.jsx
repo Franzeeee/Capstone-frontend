@@ -21,6 +21,7 @@ import { Tab, Tabs } from 'react-bootstrap';
 import profile from '../assets/img/1x1Robot2.png';
 import IssueCertificateModal from '../components/Modals/IssueCertificateModal';
 import * as XLSX from 'xlsx';
+import RemarksModal from '../components/Modals/RemarksModal';
 
 
 
@@ -274,6 +275,9 @@ export default function ClassGradeTable() {
         setFinalGrade(value);
     }
 
+    const [showRemarksModal, setShowRemarksModal] = useState(false);
+    const [remarks, setRemarks] = useState('');
+
     const submitGrade = () => {
         toast.loading('Grade submission in progress...');
         const gradeData = new FormData(); 
@@ -438,6 +442,7 @@ export default function ClassGradeTable() {
                                 ))}
                             </div>
                             <button onClick={submitGrade} className={`mt-3 float-end ${styles.saveGrade}`}>Save</button>
+                            <button className={`mt-3 float-end ${styles.saveGrade}`} onClick={() => setShowRemarksModal(true)}>Remarks</button>
                         </Tab>
                         </Tabs>
                     </Modal.Body>
@@ -578,6 +583,12 @@ export default function ClassGradeTable() {
                     certStatus={certificateStatus}
                     data={certificateData}
                     handleCreate={(data) => setCertificateData(data)}
+                />
+                <RemarksModal
+                    show={showRemarksModal}
+                    handleClose={() => setShowRemarksModal(false)}
+                    remarks={remarks}
+                    handleRemarks={(e) => setRemarks(e.target.value)}
                 />
             </div>
         </HomeTemplate>

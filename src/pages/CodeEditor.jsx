@@ -94,8 +94,13 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
     };
 
     const saveAsPyFile = () => {
+        if (code === "" ){
+            alert("Please provide a code to save.")
+            return;
+        }
+        const extension = classSubject === "R Programming" ? 'r' : 'py';
         // Prompt the user to enter a filename
-        const filename = "script.py";
+        const filename = `script.`.concat(extension || 'py');
     
         // Only proceed if the user entered a filename
         if (filename) {
@@ -371,10 +376,11 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 localStorage.setItem('playgroundIntro', 'true');
             }
         }else if(mode==="Assessment" && classSubject !== "Web Development"){
-                if(localStorage.getItem('assessmentIntro') === null) {
-                    assessmentTour();
-                    localStorage.setItem('assessmentIntro', 'true');
-                }
+        
+            if(localStorage.getItem('assessmentIntro') === null) {
+                assessmentTour();
+                localStorage.setItem('assessmentIntro', 'true');
+            }
                 
         }
         
@@ -728,11 +734,18 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
         
         useEffect(() => {
             if (mode === 'Assessment') {
-                const isWeb = activeAssessment?.testCase.output.includes('<!DOCTYPE');
+                // const isWeb = activeAssessment?.testCase.output.includes('<!DOCTYPE');
 
-                setIde(isWeb ? 1 : 0);
+                // setIde(isWeb ? 1 : 0);
+                if (classSubject === "R Programming") {
+                    setIde(3);
+                } else if (classSubject === "Web Development") {
+                    setIde(1);
+                } else if (classSubject === "Python") {
+                    setIde(0);
+                }
             }
-        }, [activeAssessment]);
+        }, [activeAssessment, classSubject]);
 
         const handleChangeAssessment = (id) => {
             if (id >= assessmentData.length) return; // Stop if id is not valid
@@ -977,7 +990,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 <ul className='d-flex flex-column mt-3 gap-3'>
                     {/* <li title='New Project'><FontAwesomeIcon icon={faFile} className={`${styles.icon}`}/></li> */}
                    
-                    { ide === 3 || ide === 0 && (
+                    { ide !== 1 && (
                         <>
                             <li onClick={openPythonFile}  id='step2'>
                                 <OverlayTrigger placement="right" overlay={<Tooltip id={`tooltip-test`}>Open File</Tooltip>}>

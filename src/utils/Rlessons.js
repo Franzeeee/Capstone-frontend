@@ -153,9 +153,6 @@ sum <- a + b  # Calculate sum
         title: "R Variables",
         hasAssessment: true,
         content: `
- 	     \`\`\`Para
-	R Variables
- 	     \`\`\`Para
 
  	     \`\`\`Para
 In R, variables are used to store data values. A variable is essentially a name that points to a value, which can be of various data types such as numbers, characters, logical values, or more complex structures like vectors, matrices, and data frames.
