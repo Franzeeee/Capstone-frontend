@@ -303,6 +303,7 @@ export const Register = () => {
               <input 
                 type="tel" 
                 className={`form-control ${validated.phone[0] === false && styles.errorBorder}`}  
+                pattern="^(09\d{9}|\\+639\d{9})$"
                 id="phone"
                 name='phone'
                 value={formData.phone}

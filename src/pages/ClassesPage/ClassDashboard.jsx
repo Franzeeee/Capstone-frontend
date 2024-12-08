@@ -302,7 +302,7 @@ export default function ClassDashboard() {
                                     <p className={`${styles.icon} ${styles.studentCount}`}><FontAwesomeIcon icon={faUsers} /></p>
                                     <div className={`${styles.text}`}>
                                         <p>No. of Students</p>
-                                        <p>{'0' + classData?.students_count || 0 || 0}</p>
+                                        <p>{String(classData?.students_count ?? 0).padStart(2, '0')}</p>
                                     </div>
                                 </div>
                                 <OverlayTrigger

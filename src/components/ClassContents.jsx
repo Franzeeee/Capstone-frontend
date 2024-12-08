@@ -4,6 +4,7 @@ import book from '../assets/img/book.png';
 import { useNavigate } from 'react-router-dom';
 import pythonLesson from '../utils/data';
 import webLesson from '../utils/BASIC_WEB'
+import rlessons from '../utils/Rlessons';
 import { toast } from 'react-toastify';
 import CryptoJS from 'crypto-js';
 import customFetch from '../utils/fetchApi';
@@ -14,7 +15,24 @@ export default function ClassContents({ data, code, className }) {
     const navigate = useNavigate();
     const { courseId } = data;
 
-    const lessons = data.subject === 'Python' ? pythonLesson : webLesson;
+    const [lessons, setLessons] = useState([]);
+
+    useEffect(() => {
+        switch (data.subject) {
+            case 'Python':
+                setLessons(pythonLesson);
+                break;
+            case 'Web Development':
+                setLessons(webLesson);
+                break;
+            case 'R Programming':
+                setLessons(rlessons);
+                break;
+            default:
+                setLessons(pythonLesson);
+        }
+    }, [data.subject]);
+
     const [defaultAssessment, setDefaultAssessment] = useState([]);
     const userData = localStorage.getItem('userData');
     const [user, setUser] = useState(

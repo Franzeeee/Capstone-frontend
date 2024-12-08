@@ -3,11 +3,13 @@ import { Button, Modal } from 'react-bootstrap';
 import styles from "../assets/css/components/FeedbackModal.module.css"
 import '../index.css'
 const FeedbackModal = ({feedbackData, sendFeedback}) => {
-    const [feedback, setFeedback] = useState(feedbackData?.feedback || '');
+    const [feedback, setFeedback] = useState(feedbackData || '');
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    console.log(feedbackData);
 
     const handleChange = (e) => {
         setFeedback(e.target.value);

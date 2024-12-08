@@ -38,8 +38,10 @@
     "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
+    "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "intro.js": "^7.2.0",
+    "jszip": "^3.10.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "mdb-react-ui-kit": "^9.0.0",
@@ -58,7 +60,8 @@
     "react-toastify": "^10.0.5",
     "sockjs-client": "^1.6.1",
     "sort-by": "^1.2.0",
-    "universal-cookie": "^7.1.4"
+    "universal-cookie": "^7.1.4",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/codemirror": "^5.60.15",

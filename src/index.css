@@ -159,3 +159,6 @@ li {
 iframe {
   pointer-events: none;
 }
+.tutorialFrame {
+  pointer-events: auto !important;
+}

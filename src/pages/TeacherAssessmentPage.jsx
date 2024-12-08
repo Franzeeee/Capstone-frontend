@@ -6,21 +6,113 @@ import ProfileSide from '../components/ProfileSide';
 import { getUserData } from '../utils/userInformation';
 import book from '../assets/img/book.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faCog, faCopy, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faPlusCircle, faCopy, faEye, faTrashAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import customFetch from '../utils/fetchApi';
 import LessonCardLoader from '../components/LazyLoaders/LessonCardLoader';
 import ConfirmationTextModal from '../components/Modals/ConfirmationTextModal';
+import { Modal, Button } from 'react-bootstrap';
 
 export default function TeacherAssessmentPage() {
     const navigate = useNavigate();
     const user = getUserData();
+    const api = import.meta.env.VITE_API_URL;
 
     // Example array of class items
     const [classItems, setClassItems] = useState(null);
     const [selectedClass, setSelectedClass] = useState(null);
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const [formData, setFormData] = useState({
+        className: '',
+        description: '',
+        section: '',
+        schedule: '',
+        room: '',
+        subject: '',
+        startDate: '',
+        endDate: '',
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        });
+    }
+
+    const toggleShow = () => setShow(!show);
+
+    const handleSubmit = (e) => {
+        setLoading(true);
+        e.preventDefault(); // Prevent the default form submission
+        const { className, section, schedule, room, subject, startDate, endDate } = formData;
+        formData.teacher_id = user.id;
+
+        if (!className || !section || !schedule || !room || !subject) {
+            toast.error('Please fill in all required fields.');
+            setLoading(false);
+            return; // Prevent form submission
+        }
+        fetch(`${api}/class/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Specify the content type
+            },
+            credentials: 'include',
+            body: JSON.stringify(formData),
+        })
+        .then( async response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 422) {
+                return response.json().then(errorData => {
+                    // Create a string of error messages
+                    const errorMessages = Object.values(errorData.errors).flat().join(', ');
+                    // Show the error messages using toast.error
+                    toast.error(`Error: ${errorMessages}`);
+                    throw new Error('Validation failed'); // This will go to the catch block
+                });
+            } else {
+                throw new Error('Network response was not ok: ' + response.status);
+            }
+        })
+        .then(data => {
+            toast.success("Course Successfully Created!");
+            setClassItems(prev => {
+                const newClass = {
+                    id: data.data.id,
+                    description: formData.description,
+                    grade_distribution: data.data.grade_distribution,
+                    student_count: 0,
+                    subject: formData.subject,
+                    name: formData.className,
+                    section: formData.section,
+                    schedule: formData.schedule,
+                    room: formData.room,
+                    class_code: {code: data.classCode}
+                };
+
+                return [newClass, ...prev];
+            });
+            toggleShow();
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            setLoading(false);
+            setFormData({
+                className: '',
+                description: '',
+                section: '',
+                schedule: '',
+                room: '',
+                subject: '',
+            });
+        });
+    };
 
     useEffect(() => {
         customFetch(`/class/all`, 'GET')
@@ -75,7 +167,7 @@ export default function TeacherAssessmentPage() {
                 <div className={`${styles.contentContainer}`}>
                     <div className={`${styles.header}`}>
                         <div className={`${styles.create}`}>
-                            <p>Classes</p>
+                            <p>Classes  <FontAwesomeIcon icon={faPlusCircle} onClick={toggleShow} /></p>
                         </div>
                     </div>
                     <div className={`${styles.cardContainer}`}>
@@ -124,6 +216,71 @@ export default function TeacherAssessmentPage() {
                 <div className={`${styles.profileContainer}`}>
                     <ProfileSide info={user} />
                 </div>
+
+                <Modal
+                show={show}
+                onHide={toggleShow}
+                backdrop="static"
+                keyboard={false}
+                size='lg'
+            >
+                <Modal.Header closeButton className={`${styles.Header}`}>
+                <Modal.Title className={`${styles.Title}`}>Create Class</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form onSubmit={handleSubmit}>  
+                        <div className="form-group">
+                            <label htmlFor="className"className={`${styles.label}`}>Class Name</label>
+                            <input type="text" className="form-control" id="className" placeholder="Enter class name" 
+                            value={formData.className}
+                            onChange={handleChange}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="description" className={`${styles.label}`}>Description (Optional)</label>
+                            <textarea className="form-control" id="description" placeholder="Enter class description (optional)"
+                            value={formData.description}
+                            onChange={handleChange} />
+                        </div>
+                        <div className={`${styles.contain}`}>
+                        <div className="form-group">
+                            <label htmlFor="section" className={`${styles.label}`}>Section</label>
+                            <input type="text" className="form-control" id="section" placeholder="Enter section" 
+                            value={formData.section}
+                            onChange={handleChange}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="schedule"className={`${styles.label}`}>Schedule</label>
+                            <input type="text" className="form-control" id="schedule" placeholder="Enter Schedule" 
+                            value={formData.schedule}
+                            onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="room"className={`${styles.label}`}>Room</label>
+                            <input type="text" className="form-control" id="room" placeholder="Enter room" 
+                            value={formData.room}
+                            onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="exampleSelect"className={`${styles.label}`}>Subject</label>
+                            <select className="form-control" id="subject" 
+                            value={formData.subject}
+                            onChange={handleChange}>
+                                <option value=""className={`${styles.label}`}>Select a subject</option>
+                                <option value={"Python"}>Python</option>
+                                <option value={"Web Development"}>Web Development</option>
+                                <option value={"R Programming"}>R Programming</option>
+                            </select>
+                        </div>
+                        </div>
+                    </form>
+                </Modal.Body>
+                <Modal.Footer className='border-none'>
+                    <Button type='button' className={`${styles.Close}`} onClick={toggleShow} >Cancel</Button>
+                    <Button type='button' disabled={loading} className={`${styles.Create}`} onClick={loading ? "" : handleSubmit}>{!loading ?  "Create" : <FontAwesomeIcon spin icon={faSpinner}/>}</Button>
+                </Modal.Footer>
+            </Modal>
             </div>
         </HomeTemplate>
     );
