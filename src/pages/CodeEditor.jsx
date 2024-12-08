@@ -371,10 +371,11 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 localStorage.setItem('playgroundIntro', 'true');
             }
         }else if(mode==="Assessment" && classSubject !== "Web Development"){
-                if(localStorage.getItem('assessmentIntro') === null) {
-                    assessmentTour();
-                    localStorage.setItem('assessmentIntro', 'true');
-                }
+        
+            if(localStorage.getItem('assessmentIntro') === null) {
+                assessmentTour();
+                localStorage.setItem('assessmentIntro', 'true');
+            }
                 
         }
         
@@ -728,11 +729,18 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
         
         useEffect(() => {
             if (mode === 'Assessment') {
-                const isWeb = activeAssessment?.testCase.output.includes('<!DOCTYPE');
+                // const isWeb = activeAssessment?.testCase.output.includes('<!DOCTYPE');
 
-                setIde(isWeb ? 1 : 0);
+                // setIde(isWeb ? 1 : 0);
+                if (classSubject === "R Programming") {
+                    setIde(3);
+                } else if (classSubject === "Web Development") {
+                    setIde(1);
+                } else if (classSubject === "Python") {
+                    setIde(0);
+                }
             }
-        }, [activeAssessment]);
+        }, [activeAssessment, classSubject]);
 
         const handleChangeAssessment = (id) => {
             if (id >= assessmentData.length) return; // Stop if id is not valid
