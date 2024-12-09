@@ -21,37 +21,37 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 1
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 2
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 3
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 4
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 5
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 6
         }
     ]);
@@ -67,7 +67,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                         ...student,
                         rank: index + 1,
                         profile_path: student?.profile_path || userImage,
-                        time: "00:00:00"
+                        time: student.time_taken || 0
                     })));
                 } else {
                     // Update only the top places if data length is less than 4
@@ -144,7 +144,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                         <p className={styles.name}>{student?.name}</p>
                                         <div className={styles.info}>
                                             <p><FontAwesomeIcon icon={faStar} /> {student?.score}</p>
-                                            <p><FontAwesomeIcon icon={faClock} /> {student?.time}</p>
+                                            <p><FontAwesomeIcon icon={faClock} /> {timeFormatter(student.time)}</p>
                                         </div>
                                     </div>
                                 ))}
