@@ -82,6 +82,12 @@
 }
 .topSpot .name {
     font-weight: 600;
+    text-align: center;
+    max-width: 80px;
+    white-space: nowrap; /* Prevent the text from wrapping */
+    overflow-x: hidden; /* Hide the overflowed content */
+    text-overflow: ellipsis; 
+    height: 35px;
 }
 .firstSpot img{
     width: 100%
@@ -104,7 +110,6 @@
     height: 100%;
     position: relative;
     width: 50%;
-
 }
 .imageContainer img {
     width: 75%;

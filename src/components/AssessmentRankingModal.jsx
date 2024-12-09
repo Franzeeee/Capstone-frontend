@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faStar } from '@fortawesome/free-solid-svg-icons';
 import customFetch from '../utils/fetchApi';
 import CryptoJS from 'crypto-js';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
 
@@ -21,37 +22,37 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 1
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 2
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 3
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 4
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 5
         },
         {
             name: '----',
             score: 0,
-            time: '00:00:00',
+            time: 0,
             rank: 6
         }
     ]);
@@ -67,7 +68,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                         ...student,
                         rank: index + 1,
                         profile_path: student?.profile_path || userImage,
-                        time: "00:00:00"
+                        time: student.time_taken || 0
                     })));
                 } else {
                     // Update only the top places if data length is less than 4
@@ -111,7 +112,12 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                         <img src={studentData[1]?.profile_path || userImage} alt="" />
                                         <p className={`${styles.rankingLabel} ${styles.bgPurple}`}>2</p>
                                     </div>
-                                    <p className={styles.name}>{studentData[1]?.name}</p>
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={<Tooltip id={`tooltip-test`}>{studentData[1]?.name}</Tooltip>}
+                                    >
+                                        <p className={styles.name}>{studentData[1]?.name}</p>
+                                    </OverlayTrigger>
                                     <p>{studentData[1]?.score}</p>
                                     <p>{timeFormatter(studentData[1]?.time_taken || 0)}</p>
                                 </div>
@@ -120,7 +126,12 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                         <img src={studentData[0]?.profile_path || userImage} alt="" />
                                         <p className={`${styles.rankingLabel}`}>1</p>
                                     </div>
-                                    <p className={styles.name}>{studentData[0]?.name}</p>
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={<Tooltip id={`tooltip-test`}>{studentData[0]?.name}</Tooltip>}
+                                    >
+                                        <p className={styles.name}>{studentData[0]?.name}</p>
+                                    </OverlayTrigger>
                                     <p>{studentData[0]?.score}</p>
                                     <p>{timeFormatter(studentData[0]?.time_taken || 0)}</p>
                                 </div>
@@ -129,7 +140,12 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                         <img src={studentData[2]?.profile_path || userImage} alt="" />
                                         <p className={`${styles.rankingLabel} ${styles.thirdPlace}`}>3</p>
                                     </div>
-                                    <p className={styles.name}>{studentData[2]?.name}</p>
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={<Tooltip id={`tooltip-test`}>{studentData[2]?.name}</Tooltip>}
+                                    >
+                                        <p className={styles.name}>{studentData[2]?.name}</p>
+                                    </OverlayTrigger>
                                     <p>{studentData[2]?.score}</p>
                                     <p>{timeFormatter(studentData[2]?.time_taken || 0)}</p>
                                 </div>
@@ -144,7 +160,7 @@ function AssessmentRankingModal({ show, handleClose, assessmentInfo }) {
                                         <p className={styles.name}>{student?.name}</p>
                                         <div className={styles.info}>
                                             <p><FontAwesomeIcon icon={faStar} /> {student?.score}</p>
-                                            <p><FontAwesomeIcon icon={faClock} /> {student?.time}</p>
+                                            <p><FontAwesomeIcon icon={faClock} /> {timeFormatter(student.time)}</p>
                                         </div>
                                     </div>
                                 ))}
