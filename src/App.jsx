@@ -32,6 +32,7 @@ import Lesson3 from "./pages/LogicLessons/Lesson3";
 import Lesson2 from "./pages/LogicLessons/Lesson2";
 import Lesson4 from "./pages/LogicLessons/Lesson4";
 import LandingPage from "./pages/LandingPage";
+import CryptoTest from "./pages/TestPage/CryptoTest";
 
 export const App = () => {
   return (
@@ -65,9 +66,10 @@ export const App = () => {
             <Route path="/c/:code/logical/2" element={<Lesson2 />} />
             <Route path="/c/:code/logical/3" element={<Lesson3 />} />
             <Route path="/c/:code/logical/4" element={<Lesson4 />} />
+            <Route path="/certificate" element={<Certificate />} />
         </Route>
 
-        <Route path="/certificate" element={<Certificate />} />
+        <Route path="/crypto" element={<CryptoTest />} />
         <Route path="/" element={<Sample />} />
         
         <Route path="*" element={<NotFound/>} />
