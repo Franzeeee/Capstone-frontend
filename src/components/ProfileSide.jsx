@@ -244,7 +244,7 @@ export default function ProfileSide({ info }) {
       </div>
       <div className={`${styles.userInfo}`}>
         <img src={profilePicture !== null ? profilePicture : profile} alt="Profile Picture" />
-        <p className={`${styles.userName}`}>
+        <p className={`${styles.userName} text-center`}>
           {info ? info.name : "Undefined User"}{" "}
           <FontAwesomeIcon title="Edit Name" onClick={() => navigate('/profile')} icon={faEdit}></FontAwesomeIcon>
         </p>
