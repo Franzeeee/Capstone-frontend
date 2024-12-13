@@ -6,7 +6,7 @@ import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faDownload,faSpinner, faMedal } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -105,6 +105,21 @@ export default function Submissions() {
     }
     const handleSubmissionDetailClose = () => setShowSubmissionModal(false);
 
+    const [isExporting, setIsExporting] = useState(false);
+    const handleExportGrades = () => {
+    }
+
+    const issueBadge = () => {
+        customFetch(`/badge/${assessmentData.id}/issue`, { method: 'GET' })
+        .then(data => {
+            toast.success(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            toast.error('Failed to issue badge');
+        });
+    }
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
@@ -175,6 +190,20 @@ export default function Submissions() {
                                 </div>
                             </div>
                             <div className={`${styles.classAssessments}`}>
+                            <div className={styles.gradeControls}>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>Export Grade to Excel</Tooltip>}
+                                >
+                                    <p className={styles.gradeDistribution} onClick={isExporting ? null : handleExportGrades }><FontAwesomeIcon icon={isExporting ? faSpinner : faDownload} spin={isExporting} /></p>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>Issue Badge</Tooltip>}
+                                >
+                                    <p className={styles.gradeDistribution} onClick={issueBadge}><FontAwesomeIcon icon={faMedal} spin={isExporting} /></p>
+                                </OverlayTrigger>
+                            </div>
                                 {
                                     
                                     pagination && pagination.data.length > 0 && pagination !== null?

@@ -64,7 +64,7 @@ const Sample = () => {
 
     // If there is an error, show the error
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div className='text-center'>There is an error on the authentication or server is down. Please Contact the Developer.</div>;
     }
 
     return <LandingPage />; // Nothing to display after navigation
