@@ -113,13 +113,39 @@
 .robotContainer {
     width: 150px;
     position: absolute;
-    right: -8rem;
-    top: 0;
+    right: -10rem;
+    top: -80px;
     overflow: visible;
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 10;
+    min-height: 150px !important;
 }
 .robotContainer img {
     width: 100%;
     aspect-ratio: 1;
+}
+
+.robotContainer p {
+    padding: 10px;
+    background: #FFFFFF;
+    border: 1.4px solid #9696e7;
+    border-bottom: 1px solid rgb(210, 208, 208);
+    max-width: 150px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.robotContainer p::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    bottom: -10px;
+    left: 45%;
+    z-index: -1;
+    transform: rotate(45deg);
+    background-color: rgb(255, 255, 255);
+    border: 1.4px solid #9696e7;
 }
 .antiCheatStats {
     width: 100%;
