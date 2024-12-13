@@ -38,6 +38,7 @@ import playgroundIntro from '../utils/IntroJS/playgroundIntro';
 import assessmentIntro from '../utils/IntroJS/assessmentIntro';
 import RLogo from '../assets/img/Rlogo.png';
 import RubricsTable from '../components/RubricsTable';
+import rImage from '../assets/img/Rlogo.png';
 
 const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
 
@@ -98,7 +99,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
             alert("Please provide a code to save.")
             return;
         }
-        const extension = classSubject === "R Programming" ? 'r' : 'py';
+        const extension = ide === 3 ? 'r' : 'py';
         // Prompt the user to enter a filename
         const filename = `script.`.concat(extension || 'py');
     
@@ -124,8 +125,8 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 // Open a file picker and filter to `.py` files
                 const [fileHandle] = await window.showOpenFilePicker({
                     types: [{
-                        description: 'Python Files',
-                        accept: { 'text/plain': ['.py'] },
+                        description: 'Python and R Files',
+                        accept: { 'text/plain': ['.py', '.r'] },
                     }],
                     multiple: false // Allow only one file to be selected
                 });
@@ -145,7 +146,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
             // Fallback for browsers that don't support `showOpenFilePicker`
             const input = document.createElement('input');
             input.type = 'file';
-            input.accept = '.py';
+            input.accept = '.py', '.r'; // Accept only Python and R files
             
             // Listen for file selection
             input.onchange = async (event) => {
@@ -272,17 +273,22 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                 medium: "CSS selectors, simple layouts",
                 hard: "Responsive design, media queries",
                 mastery: "Animations, complex layouts"
+            },
+            r: {
+                easy: "Introduction to R, R Comments, R Variables",
+                medium: "if and else Statements in R, Loops in R",
+                hard: "R Max and Min, Mean, Median, and Mode in R, Percentile in R",
+                mastery: "Data Types in R, Numbers in R, Strings in R, Booleans in R, Functions in R"
             }
         };
         
         let prompt = `Create a coding challenge for ${challangeDetails.language} at ${challangeDetails.difficulty} level.
         Topic: ${topicsByDifficulty[challangeDetails.language.toLowerCase()][challangeDetails.difficulty.toLowerCase()]} (no hints)
-        Format:
-        - Problem Description: 
-        - Input: if there is
-        - Output: if there is
+        You should directly give the instructions to the user on what to do.
+        Sample:
+        Write a function isPalindrome that takes a string as input and returns true if the string is a palindrome, and false otherwise. A palindrome is a word, phrase, or sequence that reads the same backward as forward. Ignore spaces, punctuation, and letter casing.
         
-        Put a new line after each section.
+        Just exclude the title, sample input and the output. The user should be able to solve the problem without any hints.
         `;
         
         msgData.append('userMessage', prompt);
@@ -588,7 +594,7 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
             withAssistance: false
         }));
         if(testGenLevel == 4) {
-            setIde(challangeDetails?.language === 'python' ? 0 : 1)
+            setIde(challangeDetails?.language === 'python' ? 0 : challangeDetails?.language === 'r' ? 3 : 1)
             setGenerating(true)
             generateProblem()
         }
@@ -1230,6 +1236,10 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                                                 <img src={htmlCss} alt="" />
                                                 <p>Basic Web Development</p>
                                             </div>
+                                            <div className={`${styles.langguageOption} ${challangeDetails.language == 'r' ? styles.selectedLanguage : ''}`} onClick={() => setLanguage("r")}>
+                                                <img src={rImage} alt="" />
+                                                <p>R Programming</p>
+                                            </div>
                                         </div>
                                         <div className={`${styles.controller}`}>
                                             <button onClick={prevOption}>Cancel</button>
@@ -1259,6 +1269,21 @@ const CodeEditor = ({data, classSubject, options = {mode: "playground"}}) => {
                                                 <p className={styles.instructionModal}>
                                                     <span className={styles.levelText}>Mastery:</span> Dynamic programming, optimization problems.
                                                 </p>
+                                                </>
+                                            ) : challangeDetails.language === 'r' ? (
+                                                <>
+                                                    <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Easy:</span>R Comments, R Variables.
+                                                    </p>
+                                                    <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Medium:</span> if and else Statements in R, Loops in R.
+                                                    </p>
+                                                    <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Hard:</span> R Max and Min, Mean, Median, and Mode in R, Percentile in R.
+                                                    </p>
+                                                    <p className={styles.instructionModal}>
+                                                    <span className={styles.levelText}>Mastery:</span> Data Types in R, Numbers in R, Strings in R, Booleans in R, Functions in R.
+                                                    </p>
                                                 </>
                                             ) : (
                                                 <>
