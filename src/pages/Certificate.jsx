@@ -42,7 +42,7 @@ const Certificate = () => {
     const canvas = await html2canvas(element, {
       // scale: window.devicePixelRatio,
       width: width, // Set canvas width to the element's content width
-      height: height + 200,
+      height: height,
       useCORS: true,
     });
   
@@ -69,6 +69,10 @@ const Certificate = () => {
           <div className={styles.container} >
       <div className={styles.studentName}>
         <p>{studentName}</p>
+      </div>
+      <div className={styles.certificateMsg}>
+        <p>This certifies the successful completion of the [Class Name] course with an outstanding General Weighted Average (GWA) of [GWA]. Through dedication and hard work, this accomplishment highlights a strong understanding of programming concepts and practical application skills.</p>
+        <p className='mt-1'>Your perseverance and commitment throughout the course are truly commendable. Continue to challenge yourself, explore new opportunities, and build upon the foundation of knowledge and expertise you have gained. Your efforts are a testament to your potential for future success in the field of programming.</p>
       </div>
         <div className={styles.text}>
             <p>{formatDate(date)}</p>

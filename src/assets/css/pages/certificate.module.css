@@ -39,11 +39,11 @@
     position: absolute;
   }
   .text p:nth-child(1){
-    top: 600px;
+    top: 650px;
     left: 8%;
   }
   .text p:nth-child(2){
-    top: 600px;
+    top: 650px;
     left: 50%;
   }
 .studentName {
@@ -75,10 +75,38 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
 }
-
+.certificateMsg {
+  width: 55%;
+  height: 25%;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  top: 390px;
+  left: 7.5%;
+  z-index: 10;
+  min-height: 500px;
+  font-size: .9rem;
+}
+.certificateMsg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+}
 @media screen and (max-width: 426px) {
   .container {
     height: auto;
+  }
+  .certificateMsg {
+    color: green !important;
+    position: absolute;
+    height: 100%;
+    left: 85px !important;
+    top: 400px;
+  }
+  .certificateMsg p {
+    background-color: white;
   }
 }
