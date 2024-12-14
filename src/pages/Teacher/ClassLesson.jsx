@@ -15,7 +15,7 @@ import webLessons from '../../utils/BASIC_WEB';
 import rlessons from '../../utils/Rlessons';
 import customFetch from '../../utils/fetchApi';
 import HomeTemplate from '../../templates/HomeTemplate';
-import { decryptData } from '../../utils/cryptoUtils';
+import { decryptData, encryptData } from '../../utils/cryptoUtils';
 
 
 export default function ClassLesson() {
@@ -30,7 +30,9 @@ export default function ClassLesson() {
     const navigateBack = () => navigate(`/c/${code}`);
 
     const [activeLesson, setActiveLesson] = useState(0);
+    const [className, setClassname] = useState(location.state?.name || 'Class Name');
     const [subject, setSubject] = useState(location.state?.subject || 'Python');
+    const decryptedData = decryptData(lessonData);
 
     const [lessons, setLessons] = useState(subject=== 'Python' ? PythonLesson : subject === 'Web Development' ? webLessons : rlessons);
 
@@ -39,6 +41,8 @@ export default function ClassLesson() {
     const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);
     
     const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+
+    const [lesson, setLesson] = useState(lessons.find(lesson => lesson.title === currentLesson));
 
     useEffect(() => {
         // Check if encryptedData is present in the query params
@@ -50,21 +54,33 @@ export default function ClassLesson() {
                 navigate('/not-found');
             }
             console.log(decryptedData);
-            if(location.state) {
-                setSubject(location.state.subject);
-                setLessonIndex(location.state.lesson);
+            if(location.state === null) {
+                setSubject(encryptData.subject);
+                setLessonIndex(encryptData.lesson);
             }
         }
     }, [lessonData, navigate]);
 
-    
+    useEffect(() => {
+        const decryptedData = decryptData(lessonData);
+        if(decryptedData === null) {
+            navigate('/not-found');
+        }
+        if(location.state === null) {
+            setSubject(decryptedData.subject);
+            setClassname(decryptedData.name);
+            setLessonIndex(decryptedData.lesson);
+            setCurrentLesson(lessons[decryptedData.lesson].title);
+        }
+    }, [subject, lessonData, location.state, navigate]);
+
+    useEffect(() => {
+        setLesson(lessons.find(lesson => lesson.title === currentLesson));
+    }, [lessonIndex]);
 
     const getNextLesson = () => {
         setCurrentLesson(lessonTitle[lessonTitle.indexOf(currentLesson) + 1]);
     };
-
-    const lesson = lessons.find(lesson => lesson.title === currentLesson);
-
 
     const [show, setShow] = useState(false);
 
@@ -166,7 +182,7 @@ export default function ClassLesson() {
                 <ul>
                     <li onClick={() => navigate('/dashboard')}>Dashboard</li>
                     <li>/</li>
-                    <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
+                    <li onClick={handleBack}>{className}</li>
                     <li>/</li>
                     <li className={`${styles.active}`}>{currentLesson}</li>
                 </ul>
