@@ -25,46 +25,57 @@ export default function ClassLesson() {
 
     const lessonData = searchParams.get('info');
 
+    const decryptedData  = decryptData(lessonData);
+    if(decryptedData === null) {
+        window.location.href = "/not-found";
+    }
+
+    useEffect(() => {
+        if (!lessonData || decryptedData  === null || !decryptData) {
+            navigate('/not-found');
+        }
+        console.log(decryptedData , " Test: 2");
+    }, [lessonData, navigate]);
+
     const { code } = useParams();
 
     const navigateBack = () => navigate(`/c/${code}`);
 
     const [activeLesson, setActiveLesson] = useState(0);
-    const [className, setClassname] = useState(location.state?.name || 'Class Name');
-    const [subject, setSubject] = useState(location.state?.subject || 'Python');
-    const decryptedData = decryptData(lessonData);
+    const [className, setClassname] = useState(location.state?.name || decryptedData?.name);
+    const [subject, setSubject] = useState(location.state?.subject || decryptedData?.subject);
 
     const [lessons, setLessons] = useState(subject=== 'Python' ? PythonLesson : subject === 'Web Development' ? webLessons : rlessons);
 
-    const [lessonIndex, setLessonIndex] = useState(location.state?.lesson || 0);
+    const [lessonIndex, setLessonIndex] = useState(location.state?.lesson || decryptedData?.lesson);
 
-    const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);
+    const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex]?.title);
     
     const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
 
     const [lesson, setLesson] = useState(lessons.find(lesson => lesson.title === currentLesson));
 
-    useEffect(() => {
-         // Check if encryptedData is present in the query params
-        if (!lessonData) {
-            navigate('/not-found'); // Redirect if data is not present
-            return null;
-        } 
-        const decryptedData = decryptData(lessonData);
-        if(decryptedData === null) {
-            navigate('/not-found');
-        }
-        if(location.state === null) {
-            setSubject(decryptedData.subject);
-            setClassname(decryptedData.name);
-            setLessonIndex(decryptedData.lesson);
-            setCurrentLesson(lessons[decryptedData.lesson].title);
-        }
-    }, [subject, lessonData, location.state, navigate]);
+    // useEffect(() => {
+    //      // Check if encryptedData is present in the query params
+    //     if (!lessonData) {
+    //         navigate('/not-found'); // Redirect if data is not present
+    //         return null;
+    //     } 
+    //     const decryptedData = decryptData(lessonData);
+    //     if(decryptedData === null) {
+    //         navigate('/not-found');
+    //     }
+    //     if(location.state === null) {
+    //         setSubject(decryptedData.subject);
+    //         setClassname(decryptedData.name);
+    //         setLessonIndex(decryptedData.lesson);
+    //         setCurrentLesson(lessons[decryptedData.lesson].title);
+    //     }
+    // }, [subject, lessonData, location.state, navigate, lessonIndex, lessons]);
 
-    useEffect(() => {
-        setLesson(lessons.find(lesson => lesson.title === currentLesson));
-    }, [lessonIndex]);
+    // useEffect(() => {
+    //     setLesson(lessons.find(lesson => lesson.title === currentLesson));
+    // }, [lessonIndex]);
 
     const getNextLesson = () => {
         setCurrentLesson(lessonTitle[lessonTitle.indexOf(currentLesson) + 1]);
