@@ -34,7 +34,6 @@ export default function ClassLesson() {
         if (!lessonData || decryptedData  === null || !decryptData) {
             navigate('/not-found');
         }
-        console.log(decryptedData , " Test: 2");
     }, [lessonData, navigate]);
 
     const { code } = useParams();

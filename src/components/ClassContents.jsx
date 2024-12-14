@@ -221,6 +221,12 @@ export default function ClassContents({ data, code, className }) {
         navigate(`/c/${code}/${lesson.id}?info=${encryptedInfo}`, { state: { name: className, lesson: lesson.id, subject: data.subject } });
     }
 
+    const navigateToAssessment = (assessment) => {
+        // { name: className, progress: progress, item: assessment, classSubject: data?.subject } }
+        const encryptedInfo = encryptData(JSON.stringify({ name: className, progress, item: assessment, classSubject: data?.subject }));
+        navigate(`/c/${code}/a/${assessment.title}?info=${encryptedInfo}`, { state: { name: className, progress: progress, item: assessment, classSubject: data?.subject } });
+    }
+
 
     return (
         <div className={styles.contentContainer}>
@@ -332,7 +338,7 @@ export default function ClassContents({ data, code, className }) {
                                         className={`${styles.status} ${isAssessmentUnlocked(lesson.id, lesson.hasAssessment) ? styles.viewAssessment : styles.locked}`}
                                         onClick={() =>
                                             isAssessmentUnlocked(lesson.id, lesson.hasAssessment)
-                                                ? navigate(`/c/${code}/a/${assessment.title}`, { state: { name: className, progress: progress, item: assessment, classSubject: data?.subject } })
+                                                ? navigateToAssessment(assessment)
                                                 : null
                                         }
                                     >

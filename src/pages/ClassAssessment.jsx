@@ -7,7 +7,7 @@ import { Button, Offcanvas } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import CryptoJS from 'crypto-js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import CodeEditor from './CodeEditor';
 import AssessmentContent from '../components/AssessmentContent';
 import lessons from '../utils/data';
@@ -18,10 +18,27 @@ import LoadingPage from './LoadingPage';
 import HomeTemplate from '../templates/HomeTemplate';
 import LogicAssessmentPage from './AssessmentPage/LogicAssessmentPage';
 import { getUserData } from '../utils/userInformation';
+import { decryptData } from '../utils/cryptoUtils';
 
 export default function ClassAssessment() {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [searchParams] = useSearchParams();
+
+    const dataAssessment = searchParams.get('info');
+
+    const decryptedData  = decryptData(dataAssessment);
+    if(decryptedData === null) {
+        window.location.href = "/not-found";
+    }
+
+    useEffect(() => {
+        if (!dataAssessment || decryptedData  === null || !decryptData) {
+            navigate('/not-found');
+        }
+        console.log(decryptedData);
+    }, [dataAssessment, navigate]);
 
     const [totalLeaveFullsreen, setTotalLeaveFullscreen] = useState(0);
     const [totalAltTab, setTotalAltTab] = useState(0);
@@ -43,10 +60,10 @@ export default function ClassAssessment() {
     const [feedback, setFeedback] = useState(null);
     const [submittedCode, setSubmittedCode] = useState();
 
-    const [classSubject, setClassSubject] = useState(location.state?.classSubject || {});
+    const [classSubject, setClassSubject] = useState(location.state?.classSubject || decryptedData?.classSubject);
 
     const user = getUserData();
-    const lessonIndex = location.state?.progress?.last_completed_lesson || 0;
+    const lessonIndex = location.state?.progress?.last_completed_lesson || decryptedData?.progress?.last_completed_lesson;
     const [currentLesson, setCurrentLesson] = useState(() => {
         if (user.role === 'teacher') {
             return lessons[0].title || "Introduction";
@@ -65,11 +82,11 @@ export default function ClassAssessment() {
         setShow(false);
     };
 
-    const [activityId, setActivityId] = useState(location.state?.item?.id);
+    const [activityId, setActivityId] = useState(location.state?.item?.id || decryptedData?.item?.id);
 
     useEffect(() => {
 
-        setActivityId(location.state?.item?.id);
+        setActivityId(location.state?.item?.id || decryptedData?.item?.id);
 
         if (!activityId) {
             navigate('/not-found'); // Navigate away if `activityId` is null
@@ -176,7 +193,7 @@ export default function ClassAssessment() {
     }
 
     if(!isFetching && assessmentData?.coding_problems.length === 0) {
-        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state} />
+        return <LogicAssessmentPage assessmentData={assessmentData} class={location?.state || decryptedData} />
     }
 
     return (
