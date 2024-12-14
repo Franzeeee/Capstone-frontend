@@ -19,6 +19,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 .text {
   display: flex;
@@ -87,6 +88,7 @@
   z-index: 10;
   min-height: 500px;
   font-size: .9rem;
+  font-weight: 500;
 }
 .certificateMsg::before {
   content: "";
@@ -94,6 +96,9 @@
   top: 0;
   left: 0;
   background-color: white;
+}
+.gwa {
+  font-weight: bold;
 }
 @media screen and (max-width: 426px) {
   .container {

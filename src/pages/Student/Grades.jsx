@@ -145,14 +145,12 @@ useEffect(() => {
                               <td>{classItem?.grade?.remarks}</td>
                               <td style={{textAlign: 'center'}}>
                                 <FontAwesomeIcon 
-                                  className={classItem?.certificate &&  classItem?.grade?.final_grade >= 70 ? styles.hasCertificate : styles.noCertificate} 
+                                  className={classItem?.certificate &&  classItem?.grade?.final_grade >= 70 || classItem?.certificate?.issued_to == "all" ? styles.hasCertificate : styles.noCertificate} 
                                   icon={faDownload} 
-                                  onClick={ classItem?.grade?.final_grade && classItem?.grade?.remarks === 'Not yet graded' >= 70 &&
-                                    classItem?.certificate ? 
-                                      () => navigate(`/certificate`, { state: { captureMode: true, studentName: user.name, teacher: classItem?.certificate?.teacher_name, date: classItem?.certificate?.issue_date } }) 
-                                      : 
-                                      null
-                                  }
+                                  onClick={ classItem?.certificate &&  classItem?.grade?.final_grade >= 70 || classItem?.certificate?.issued_to == "all" ?
+                                      () => navigate(`/certificate`, { state: { captureMode: true, studentName: user.name, teacher: classItem?.certificate?.teacher_name, date: classItem?.certificate?.issue_date, className: classItem?.name, gwa: classItem?.grade?.final_grade, remarks: classItem?.grade?.remarks } }) 
+                                    : null
+                                    }
                                 />
                                 
                               </td>
