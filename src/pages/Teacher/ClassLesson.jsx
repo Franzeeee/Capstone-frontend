@@ -116,9 +116,10 @@ export default function ClassLesson() {
 
         // Remove the last segment from the URL
         const newPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+        console.log(newPath);
 
         // Navigate to the new path without the last segment
-        navigate(newPath);
+        navigate(`/c/${code}`);
     };
 
   return (
@@ -180,7 +181,7 @@ export default function ClassLesson() {
                 <ul>
                     <li onClick={() => navigate('/dashboard')}>Dashboard</li>
                     <li>/</li>
-                    <li onClick={handleBack}>{className}</li>
+                    <li onClick={navigateBack}>{className}</li>
                     <li>/</li>
                     <li className={`${styles.active}`}>{currentLesson}</li>
                 </ul>

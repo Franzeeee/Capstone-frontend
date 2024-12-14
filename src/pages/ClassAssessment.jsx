@@ -7,7 +7,7 @@ import { Button, Offcanvas } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import CryptoJS from 'crypto-js';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import CodeEditor from './CodeEditor';
 import AssessmentContent from '../components/AssessmentContent';
 import lessons from '../utils/data';
@@ -23,6 +23,9 @@ import { decryptData } from '../utils/cryptoUtils';
 export default function ClassAssessment() {
     const navigate = useNavigate();
     const location = useLocation();
+    const { code } = useParams();
+
+    const navigateBack = () => navigate(`/c/${code}`);
 
     const [searchParams] = useSearchParams();
 
@@ -236,7 +239,7 @@ export default function ClassAssessment() {
                     <ul>
                         <li onClick={() => navigate('/dashboard')}>Dashboard</li>
                         <li>/</li>
-                        <li onClick={handleBack}>{className}</li>
+                        <li onClick={navigateBack}>{className}</li>
                         <li>/</li>
                         <li className={`${styles.active}`}>{assessmentData?.title || "Assessment Title"}</li>
                     </ul>
