@@ -29,6 +29,14 @@ export default function ClassLesson() {
 
     const navigateBack = () => navigate(`/c/${code}`);
 
+    const [lessons, setLessons] = useState(location.state?.subject === 'Python' ? PythonLesson : location.state?.subject === 'Web Development' ? webLessons : rlessons);
+
+    const [lessonIndex, setLessonIndex] = useState(location.state?.lesson || 0);
+
+    const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);
+    
+    const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
+
     useEffect(() => {
         // Check if encryptedData is present in the query params
         if (!lessonData) {
@@ -39,21 +47,11 @@ export default function ClassLesson() {
                 navigate('/not-found');
             }
             console.log(decryptedData);
-            if (location?.state) {
-                location.state.subject = decryptedData.subject;
-                location.state.lesson = decryptedData.lesson;
-                location.state.name = decryptedData.name;
-            }
+            setLessons(decryptedData.lessons);
+            setLessonIndex(decryptedData.lessonIndex);
+            setCurrentLesson(decryptedData.lessons[decryptedData.lessonIndex].title);
         }
     }, [lessonData, navigate]);
-
-    const lessons = location.state?.subject === 'Python' ? PythonLesson : location.state?.subject === 'Web Development' ? webLessons : rlessons;
-
-    const lessonIndex = location.state?.lesson|| 0;
-
-    const [currentLesson, setCurrentLesson] = useState(lessons[lessonIndex].title);
-    
-    const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     
 
     const getNextLesson = () => {
