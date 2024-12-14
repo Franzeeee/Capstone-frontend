@@ -7,7 +7,7 @@ import { Button, Offcanvas } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as regularSquare } from '@fortawesome/free-regular-svg-icons';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams,useSearchParams } from 'react-router-dom';
 import CodeEditor from '../CodeEditor';
 import TextFormatter from '../../components/TextFormatter';
 import PythonLesson from '../../utils/data';
@@ -15,17 +15,36 @@ import webLessons from '../../utils/BASIC_WEB';
 import rlessons from '../../utils/Rlessons';
 import customFetch from '../../utils/fetchApi';
 import HomeTemplate from '../../templates/HomeTemplate';
+import { decryptData } from '../../utils/cryptoUtils';
 
 
 export default function ClassLesson() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const lessonData = searchParams.get('info');
 
     const { code } = useParams();
 
     const navigateBack = () => navigate(`/c/${code}`);
 
-    const lessons = location.state?.subject === 'Python' ? PythonLesson : location.state?.subject === 'Web' ? webLessons : rlessons;
+    useEffect(() => {
+        // Check if encryptedData is present in the query params
+        if (!lessonData) {
+            navigate('/not-found'); // Redirect if data is not present
+        } else {
+            const decryptedData = decryptData(lessonData);
+            console.log(decryptedData);
+            if (location?.state) {
+                location.state.subject = decryptedData.subject;
+                location.state.lesson = decryptedData.lesson;
+                location.state.name = decryptedData.name;
+            }
+        }
+    }, [lessonData, navigate]);
+
+    const lessons = location.state?.subject === 'Python' ? PythonLesson : location.state?.subject === 'Web Development' ? webLessons : rlessons;
 
     const lessonIndex = location.state?.lesson|| 0;
 

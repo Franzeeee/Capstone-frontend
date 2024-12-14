@@ -10,6 +10,7 @@ import CryptoJS from 'crypto-js';
 import customFetch from '../utils/fetchApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faFilter, faKey, faLock } from '@fortawesome/free-solid-svg-icons';
+import { encryptData } from '../utils/cryptoUtils';
 
 export default function ClassContents({ data, code, className }) {
     const navigate = useNavigate();
@@ -215,6 +216,11 @@ export default function ClassContents({ data, code, className }) {
         }
     }
 
+    const navigateToLesson = (lesson) => {
+        const encryptedInfo = encryptData(JSON.stringify({ name: className, lesson: lesson.id, subject: data.subject }));
+        navigate(`/c/${code}/${lesson}?info=${encryptedInfo}`, { state: { name: className, lesson: lesson.id, subject: data.subject } });
+    }
+
 
     return (
         <div className={styles.contentContainer}>
@@ -292,7 +298,7 @@ export default function ClassContents({ data, code, className }) {
                                     className={`${styles.status} ${isLessonUnlocked(lesson.id, lesson.hasAssessment) ? styles.lesson : styles.locked}`}
                                     onClick={() => {
                                         if (isLessonUnlocked(lesson.id, lesson.hasAssessment)) {
-                                            navigate(`/c/${code}/${lesson.title}`, { state: { name: className, lesson: lesson.id, subject: data.subject} });
+                                            navigateToLesson(lesson);
                                         }
                                     }}
                                 >
