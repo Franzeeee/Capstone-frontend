@@ -43,6 +43,7 @@ export default function ClassAssessment() {
     const [totalLeaveFullsreen, setTotalLeaveFullscreen] = useState(0);
     const [totalAltTab, setTotalAltTab] = useState(0);
     
+    const [className, setClassname] = useState(location.state?.name || decryptedData?.name);
     const [assessment, setAssessment] = useState(location.state?.item || {});
     const [startAssessment, setStartAssessment] = useState(false);
     const [inFullscreen, setInFullscreen] = useState(false);
@@ -235,7 +236,7 @@ export default function ClassAssessment() {
                     <ul>
                         <li onClick={() => navigate('/dashboard')}>Dashboard</li>
                         <li>/</li>
-                        <li onClick={handleBack}>{location.state?.name || "Class Name"}</li>
+                        <li onClick={handleBack}>{className}</li>
                         <li>/</li>
                         <li className={`${styles.active}`}>{assessmentData?.title || "Assessment Title"}</li>
                     </ul>
