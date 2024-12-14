@@ -218,7 +218,7 @@ export default function ClassContents({ data, code, className }) {
 
     const navigateToLesson = (lesson) => {
         const encryptedInfo = encryptData(JSON.stringify({ name: className, lesson: lesson.id, subject: data.subject }));
-        navigate(`/c/${code}/${lesson}?info=${encryptedInfo}`, { state: { name: className, lesson: lesson.id, subject: data.subject } });
+        navigate(`/c/${code}/${lesson.id}?info=${encryptedInfo}`, { state: { name: className, lesson: lesson.id, subject: data.subject } });
     }
 
 

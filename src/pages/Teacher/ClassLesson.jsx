@@ -35,6 +35,9 @@ export default function ClassLesson() {
             navigate('/not-found'); // Redirect if data is not present
         } else {
             const decryptedData = decryptData(lessonData);
+            if(decryptedData === null) {
+                navigate('/not-found');
+            }
             console.log(decryptedData);
             if (location?.state) {
                 location.state.subject = decryptedData.subject;
