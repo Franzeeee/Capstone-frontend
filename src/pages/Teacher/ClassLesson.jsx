@@ -45,23 +45,11 @@ export default function ClassLesson() {
     const [lesson, setLesson] = useState(lessons.find(lesson => lesson.title === currentLesson));
 
     useEffect(() => {
-        // Check if encryptedData is present in the query params
+         // Check if encryptedData is present in the query params
         if (!lessonData) {
             navigate('/not-found'); // Redirect if data is not present
-        } else {
-            const decryptedData = decryptData(lessonData);
-            if(decryptedData === null) {
-                navigate('/not-found');
-            }
-            console.log(decryptedData);
-            if(location.state === null) {
-                setSubject(encryptData.subject);
-                setLessonIndex(encryptData.lesson);
-            }
-        }
-    }, [lessonData, navigate]);
-
-    useEffect(() => {
+            return null;
+        } 
         const decryptedData = decryptData(lessonData);
         if(decryptedData === null) {
             navigate('/not-found');
