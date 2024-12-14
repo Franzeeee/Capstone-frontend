@@ -29,7 +29,10 @@ export default function ClassLesson() {
 
     const navigateBack = () => navigate(`/c/${code}`);
 
-    const [lessons, setLessons] = useState(location.state?.subject === 'Python' ? PythonLesson : location.state?.subject === 'Web Development' ? webLessons : rlessons);
+    const [activeLesson, setActiveLesson] = useState(0);
+    const [subject, setSubject] = useState(location.state?.subject || 'Python');
+
+    const [lessons, setLessons] = useState(subject=== 'Python' ? PythonLesson : subject === 'Web Development' ? webLessons : rlessons);
 
     const [lessonIndex, setLessonIndex] = useState(location.state?.lesson || 0);
 
@@ -47,11 +50,13 @@ export default function ClassLesson() {
                 navigate('/not-found');
             }
             console.log(decryptedData);
-            setLessons(decryptedData.lessons);
-            setLessonIndex(decryptedData.lessonIndex);
-            setCurrentLesson(decryptedData.lessons[decryptedData.lessonIndex].title);
+            if(location.state) {
+                setSubject(location.state.subject);
+                setLessonIndex(location.state.lesson);
+            }
         }
     }, [lessonData, navigate]);
+
     
 
     const getNextLesson = () => {
