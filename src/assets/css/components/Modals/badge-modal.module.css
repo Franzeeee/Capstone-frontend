@@ -1,0 +1,46 @@
+.badgeContainer {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    padding: 1rem;
+    gap: 5px;
+}
+.badgeContent {
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding: 10px 0;
+    max-width: 150px;
+    min-height: 100px;
+    gap: 5px;
+}
+.badgeContent svg {
+    font-size: 5rem;
+}
+.badgeContent .first {
+    color:  gold;
+}
+.badgeContent .second {
+    color: silver;
+}
+.badgeContent .third {
+    color: #cd7f32;
+}
+.badgeContent p {
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+}
+.control {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+.noBadge {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

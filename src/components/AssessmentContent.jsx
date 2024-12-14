@@ -107,7 +107,6 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             });
     }, [data]);
     
-    console.log(feedbackData?.feedback)
     return (
         <>
             <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />

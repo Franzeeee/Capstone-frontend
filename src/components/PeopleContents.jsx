@@ -3,11 +3,12 @@ import styles from '../assets/css/components/people-content.module.css'
 import profile from '../assets/img/user.png'
 import customFetch from '../utils/fetchApi'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAward, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { toast } from 'react-toastify';
 import { getUserData } from '../utils/userInformation';
+import BadgeModal from './Modals/BadgeModal';
 
 export default function PeopleContents({classId, classInfo}) {
     
@@ -37,7 +38,6 @@ export default function PeopleContents({classId, classInfo}) {
                     },
                     classmates: data
                 });
-                console.log(data);
             })
             .catch(error => {
                 console.error('Error:', error.message);
@@ -76,6 +76,14 @@ export default function PeopleContents({classId, classInfo}) {
         });
     }
 
+    const [showBadgeModal, setShowBadgeModal] = useState(false);
+    const [studentId, setStudentId] = useState(null);
+
+    const handleShowBadgeModal = (id) => {
+        setShowBadgeModal(true);
+        setStudentId(id);
+    }
+
     return (
         <div className={styles.container}>
             <ConfirmationModal 
@@ -100,9 +108,15 @@ export default function PeopleContents({classId, classInfo}) {
                 </div>
                 {
                     people?.classmates.map((classmate, index) => (
-                        <div key={index} className={styles.itemCard}>
+                        <div key={index} className={`${styles.itemCard} ${user.id === classmate?.id ? styles.you : ""}`}>
                             <img src={`https://codelabbucket.s3.us-east-1.amazonaws.com/${classmate?.profile.profile_path}` || profile} alt="" />
                             <p>{classmate.name}</p>
+                            <OverlayTrigger
+                                placement="right"
+                                overlay={<Tooltip id={`tooltip-test`}>Student Badges</Tooltip>}
+                            >
+                                <p onClick={() => handleShowBadgeModal(classmate?.id)} className={`${styles.showBadge} ${user.role === 'teacher' ? "" : styles.notTeacher}`}><FontAwesomeIcon icon={faAward}/></p>
+                            </OverlayTrigger>
                             { user.role === 'teacher' && (
                                 <OverlayTrigger
                                     placement="right"
@@ -115,6 +129,12 @@ export default function PeopleContents({classId, classInfo}) {
                     ))
                 }
             </div>
+            <BadgeModal 
+                show={showBadgeModal}
+                handleClose={() => setShowBadgeModal(false)}
+                studentId={studentId}
+                classId={classId}
+            />
         </div>
     )
 }

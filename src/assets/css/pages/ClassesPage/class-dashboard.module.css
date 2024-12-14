@@ -608,6 +608,13 @@
     opacity: 0.5;
 }
 
+.sortIcon {
+    font-size: .8rem;
+    color: #431dfd;
+    transition: all .3s ease;
+    display: none;
+}
+
 @media screen and (max-width: 426px) {
     .container {
         grid-template-columns: 1fr;

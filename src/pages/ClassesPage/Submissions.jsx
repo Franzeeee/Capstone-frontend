@@ -6,7 +6,7 @@ import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faDownload,faSpinner, faMedal } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faDownload,faSpinner, faMedal, faTrophy, faArrowUpShortWide, faSortUp, faUnsorted } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -193,12 +193,6 @@ export default function Submissions() {
                             <div className={styles.gradeControls}>
                                 <OverlayTrigger
                                     placement="bottom"
-                                    overlay={<Tooltip id={`tooltip-test`}>Export Grade to Excel</Tooltip>}
-                                >
-                                    <p className={styles.gradeDistribution} onClick={isExporting ? null : handleExportGrades }><FontAwesomeIcon icon={isExporting ? faSpinner : faDownload} spin={isExporting} /></p>
-                                </OverlayTrigger>
-                                <OverlayTrigger
-                                    placement="bottom"
                                     overlay={<Tooltip id={`tooltip-test`}>Issue Badge</Tooltip>}
                                 >
                                     <p className={styles.gradeDistribution} onClick={issueBadge}><FontAwesomeIcon icon={faMedal} spin={isExporting} /></p>
@@ -213,7 +207,7 @@ export default function Submissions() {
                                                     <tr className='table-secondary'>
                                                         <th scope='col'>#</th>
                                                         <th scope='col'>Student Name</th>
-                                                        <th scope='col'>Points</th>
+                                                        <th scope='col'>Points <FontAwesomeIcon className={`${styles.sortIcon}`} icon={faUnsorted} /></th>
                                                         <th scope='col'>Date Submitted</th>
                                                         <th scope='col'>Action</th>
                                                     </tr>
