@@ -17,7 +17,7 @@ import { Offcanvas } from 'react-bootstrap';
 import CreateAssessmentForm from '../../components/AssessmentForm/CreateAssessmentForm';
 import SubmissionDetailModal from '../../components/SubmissionDetailModal';
 import EditClassModal from '../../components/Modals/EditClassModal';
-
+import LoadingPage from '../../pages/LoadingPage';
 
 
 export default function ClassDashboard() {
@@ -25,6 +25,8 @@ export default function ClassDashboard() {
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = window.location.pathname || null;
+
+    const [pageLoading, setPageLoading] = useState(true);
 
     const { code } = useParams();
     
@@ -45,7 +47,8 @@ export default function ClassDashboard() {
             .catch(error => {
                 console.error("Error fetching class data:", error);
                 navigate('/not-found');
-            });
+            })
+            .finally(() => setPageLoading(false));
         }
     }, [code, navigate, classData]);
 
@@ -78,6 +81,7 @@ export default function ClassDashboard() {
         if (classData) {
             fetchAssessments(currentPage);
             setIsLoading(false);
+            setPageLoading(false);
         }
     }, [currentPage, classData]); // Fetch assessments whenever currentPage changes
 
@@ -223,6 +227,7 @@ export default function ClassDashboard() {
     }
 
     return (
+        pageLoading ? <LoadingPage /> :
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
                 <ConfirmationModal
@@ -288,7 +293,7 @@ export default function ClassDashboard() {
                                     <p className={`${styles.icon} ${styles.language}`}><FontAwesomeIcon icon={getSubjectIcon(classData?.subject)} /></p>
                                     <div className={`${styles.text}`}>
                                         <p>Subject</p>
-                                        <p>{classData?.subject === 'python' ? "Python" : classData?.subject === 'Web Development' ? "Web Dev" : "R"}</p>
+                                        <p>{classData?.subject === 'Python' ? "Python" : classData?.subject === 'Web Development' ? "Web Dev" : "R"}</p>
                                     </div>
                                 </div>
                                 <div className={`${styles.headerItem}`}>
@@ -402,6 +407,7 @@ export default function ClassDashboard() {
     );
 }
 function getSubjectIcon(subject) {
+    console.log(subject)
     const iconMap = {
       "Python": faPython,          // Python icon
       "Web Development": faHtml5, // Web Development icon (HTML5)
