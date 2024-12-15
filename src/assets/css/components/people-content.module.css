@@ -57,6 +57,7 @@
     background-color: #ffffffab;
     border-radius: 100%;
     border: 1px solid #d7d7d7;
+    max-width: 50px;
 }
 .itemCard p {
     font-size: .9rem;
