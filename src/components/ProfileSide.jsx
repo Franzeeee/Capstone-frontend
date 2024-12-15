@@ -27,6 +27,13 @@ export default function ProfileSide({ info }) {
   const navigate = useNavigate();
   const {code} = useParams();
 
+  const firstName = info.first_name || "Undefined";
+  const middleName = info.middle_name || "";
+  const lastName = info.last_name || "Undefined";
+  const suffix = info.suffix || "";
+
+
+  const fullname = `${firstName} ${middleName} ${lastName} ${suffix}` || "Undefined User";
   const [showModal, setShowModal] = useState(false);
   const [profilePicture, setProfilePicture] = useState(profile);
 
@@ -245,7 +252,7 @@ export default function ProfileSide({ info }) {
       <div className={`${styles.userInfo}`}>
         <img src={profilePicture !== null ? profilePicture : profile} alt="Profile Picture" />
         <p className={`${styles.userName} text-center`}>
-          {info ? info.name : "Undefined User"}{" "}
+          {info ? fullname : "Undefined User"}{" "}
           <FontAwesomeIcon title="Edit Name" onClick={() => navigate('/profile')} icon={faEdit}></FontAwesomeIcon>
         </p>
         <p className="text-capitalize">{info ? info.role : "Undefined Role"}</p>

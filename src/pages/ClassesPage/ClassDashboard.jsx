@@ -6,7 +6,7 @@ import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHtml5, faPython, faRProject } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faCopy, faEdit, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faCopy, faEdit, faEllipsisVertical, faExclamation, faQuestionCircle, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -402,14 +402,13 @@ export default function ClassDashboard() {
     );
 }
 function getSubjectIcon(subject) {
-    subject = subject.toLowerCase();
     const iconMap = {
-      "python": faPython,          // Python icon
-      "web development": faHtml5, // Web Development icon (HTML5)
-      "r programming": faRProject // R Programming icon
+      "Python": faPython,          // Python icon
+      "Web Development": faHtml5, // Web Development icon (HTML5)
+      "R Programming": faRProject // R Programming icon
     };
   
     // Return the corresponding icon class or a default icon if subject not found
-    return iconMap[subject.toLowerCase()] || "faQuestionCircle";
+    return iconMap[subject] || faQuestionCircle;
   }
   
