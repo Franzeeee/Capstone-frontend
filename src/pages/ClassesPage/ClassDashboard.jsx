@@ -5,7 +5,7 @@ import ProfileSide from '../../components/ProfileSide';
 import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPython } from '@fortawesome/free-brands-svg-icons';
+import { faHtml5, faPython, faRProject } from '@fortawesome/free-brands-svg-icons';
 import { faChalkboardUser, faCopy, faEdit, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -285,10 +285,10 @@ export default function ClassDashboard() {
                         <div className={`${styles.classInfo}`}>
                             <div className={`${styles.classInfoHeader}`}>
                                 <div className={`${styles.headerItem}`}>
-                                    <p className={`${styles.icon} ${styles.language}`}><FontAwesomeIcon icon={faPython} /></p>
+                                    <p className={`${styles.icon} ${styles.language}`}><FontAwesomeIcon icon={getSubjectIcon(classData?.subject)} /></p>
                                     <div className={`${styles.text}`}>
                                         <p>Subject</p>
-                                        <p>{classData?.subject === 'python' ? "Python" : "Web Dev"}</p>
+                                        <p>{classData?.subject === 'python' ? "Python" : classData?.subject === 'Web Development' ? "Web Dev" : "R"}</p>
                                     </div>
                                 </div>
                                 <div className={`${styles.headerItem}`}>
@@ -401,3 +401,15 @@ export default function ClassDashboard() {
         </HomeTemplate>
     );
 }
+function getSubjectIcon(subject) {
+    subject = subject.toLowerCase();
+    const iconMap = {
+      "python": faPython,          // Python icon
+      "web development": faHtml5, // Web Development icon (HTML5)
+      "r programming": faRProject // R Programming icon
+    };
+  
+    // Return the corresponding icon class or a default icon if subject not found
+    return iconMap[subject.toLowerCase()] || "faQuestionCircle";
+  }
+  

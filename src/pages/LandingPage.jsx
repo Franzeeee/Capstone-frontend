@@ -27,6 +27,7 @@ export default function LandingPage() {
                     Empowering Students to Build Confidence and Skills in Coding. <br />
                     Your Journey to Becoming a Programmer Starts Here
                 </p>
+                <img src={robot} alt="" />
                 <button onClick={() => navigate('/register')}>Get Started</button>
             </div>
             <div>

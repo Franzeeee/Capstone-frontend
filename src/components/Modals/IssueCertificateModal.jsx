@@ -108,7 +108,7 @@ export default function IssueCertificateModal({show, handleClose, classId, nameC
             <button 
                 onMouseEnter={() => setHoveredCog(true)} 
                 onMouseLeave={() => setHoveredCog(false)}
-                onClick={() => navigate('/certificate', { state: { captureMode: true, studetName: "Student Name", teacher: user.name, date: selectedDate } })}
+                onClick={() => navigate('/certificate', { state: { captureMode: true, studetName: "Student Name", teacher: user.name, date: selectedDate, className: nameClass } })}
             >
                 {hoveredCog ? <FontAwesomeIcon icon={faMagnifyingGlass} fade = {hoveredCog}/> : "Preview"}
             </button>

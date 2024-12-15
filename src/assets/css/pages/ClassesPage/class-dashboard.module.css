@@ -608,6 +608,29 @@
     opacity: 0.5;
 }
 
+.sortIcon {
+    font-size: .8rem;
+    color: #431dfd;
+    transition: all .3s ease;
+    display: none;
+}
+
+.badge {
+    font-size: 1rem;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.first {
+    color:  gold;
+}
+.second {
+    color: silver;
+}
+.third {
+    color: #cd7f32;
+}
+
+
 @media screen and (max-width: 426px) {
     .container {
         grid-template-columns: 1fr;

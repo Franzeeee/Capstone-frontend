@@ -15,7 +15,7 @@ import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
 export default function AssessmentContent({ status = false, antiCheat, startButton, feedback, data, time, rank, submission, submittedCode }) {
     const imageUsed = status === 'pending' ? questionMark : status === 'pass' ? happy : sad;
-    const phraseUsed = status === 'pending' ? 'Are you ready and confident to take the lesson assessment?' : status === 'pass' ? 'Congratulations!' : 'Try again!';
+    const phraseUsed = getFeedback(submission?.score);
 
     const user = getUserData();
     const navigate = useNavigate();
@@ -107,7 +107,6 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
             });
     }, [data]);
     
-    console.log(feedbackData?.feedback)
     return (
         <>
             <AssessmentRankingModal show={showRanking} assessmentInfo={data} handleClose={handleClose} />
@@ -222,6 +221,10 @@ export default function AssessmentContent({ status = false, antiCheat, startButt
                             <p>{getOrdinalSuffix(rank?.rank) ?? '--'}</p>
                         </li>
                     </ul>
+                    <div className={styles.robotContainer}>
+                        <img src={happy} alt="" />
+                        <p className='text-justify'>{phraseUsed}</p>
+                    </div>
                 </div>
                 <div className={`${styles.antiCheatStats}`}>
                     <div className={`${antiCheat[0] > 1 ? styles.alerted : ""}`}>
@@ -319,4 +322,35 @@ function parseText(input) {
     const lines = input.split('-').map(line => line.trim()).filter(line => line.length > 0);
 
     return lines;
+}
+function getFeedback(score) {
+    let feedback;
+
+    switch (true) {
+        case (score >= 0 && score <= 10):
+            feedback = "It seems you're just starting out. Don't be discouraged! Review the basics and try again. Practice makes perfect.";
+            break;
+        case (score >= 11 && score <= 30):
+            feedback = "You're making progress, but there’s room for improvement. Focus on understanding the concepts and applying them step by step.";
+            break;
+        case (score >= 31 && score <= 50):
+            feedback = "Good effort! You're getting the hang of it, but there are areas to refine. Revisit the problem requirements and practice more.";
+            break;
+        case (score >= 51 && score <= 70):
+            feedback = "Nice work! You’ve got a good grasp of the fundamentals. Keep practicing to enhance your skills and tackle more complex problems.";
+            break;
+        case (score >= 71 && score <= 85):
+            feedback = "Great job! You're demonstrating solid programming skills. Keep up the momentum and aim for mastery in solving advanced challenges.";
+            break;
+        case (score >= 86 && score <= 95):
+            feedback = "Excellent work! You’ve shown strong problem-solving abilities. With a little more polish, you’ll achieve perfection.";
+            break;
+        case (score >= 96 && score <= 100):
+            feedback = "Outstanding! Your solution is flawless. Keep up the amazing work and continue challenging yourself to learn more!";
+            break;
+        default:
+            feedback = "Invalid score.";
+    }
+
+    return feedback;
 }

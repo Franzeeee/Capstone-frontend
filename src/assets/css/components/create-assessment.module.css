@@ -136,10 +136,13 @@
 .ellipsisIcon::after {
     display: none !important;
 }
-.deleteIcon {
+.deleteIcon, .badgeIcon {
     color: #ff0000 !important;
     margin-right: 5px;
     font-size: .9rem;
+}
+.badgeIcon {
+    color: #5D5DD4 !important;
 }
 .removeBg p{
     background-color: transparent !important;
@@ -147,5 +150,5 @@
     font-size: 1rem !important;
 }
 .removeBg p:hover{
-    color: #2b00ff !important;
+    color: #3d1ed6 !important;
 }

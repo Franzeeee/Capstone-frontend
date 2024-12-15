@@ -6,7 +6,7 @@ import { getUserData } from '../../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faDownload,faSpinner, faMedal, faTrophy, faArrowUpShortWide, faSortUp, faUnsorted, faAward, faA } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -37,6 +37,18 @@ export default function Submissions() {
     const [show, setShow] = useState(false);
     const [activeForm, setActiveForm] = useState('logic');
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+    const [badge, setBadge] = useState(null);
+
+    useEffect(() => {
+        customFetch(`/${assessmentData.id}/badge/fetch`, 'GET')
+        .then(data => {
+            setBadge(data);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+    }, []);
 
     useEffect(() => {
         fetchSubmissions(currentPage);
@@ -104,6 +116,21 @@ export default function Submissions() {
         setItemId(id);
     }
     const handleSubmissionDetailClose = () => setShowSubmissionModal(false);
+
+    const [isExporting, setIsExporting] = useState(false);
+    const handleExportGrades = () => {
+    }
+
+    const issueBadge = () => {
+        customFetch(`/badge/${assessmentData.id}/issue`, { method: 'GET' })
+        .then(data => {
+            toast.success(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            toast.error('Failed to issue badge');
+        });
+    }
 
     return (
         <HomeTemplate>
@@ -175,6 +202,14 @@ export default function Submissions() {
                                 </div>
                             </div>
                             <div className={`${styles.classAssessments}`}>
+                            <div className={styles.gradeControls}>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>Issue Badge</Tooltip>}
+                                >
+                                    <p className={styles.gradeDistribution} onClick={issueBadge}><FontAwesomeIcon icon={faAward} spin={isExporting} /></p>
+                                </OverlayTrigger>
+                            </div>
                                 {
                                     
                                     pagination && pagination.data.length > 0 && pagination !== null?
@@ -184,7 +219,7 @@ export default function Submissions() {
                                                     <tr className='table-secondary'>
                                                         <th scope='col'>#</th>
                                                         <th scope='col'>Student Name</th>
-                                                        <th scope='col'>Points</th>
+                                                        <th scope='col'>Points <FontAwesomeIcon className={`${styles.sortIcon}`} icon={faUnsorted} /></th>
                                                         <th scope='col'>Date Submitted</th>
                                                         <th scope='col'>Action</th>
                                                     </tr>
@@ -193,7 +228,18 @@ export default function Submissions() {
                                                     {pagination?.data.map((submission, index) => (
                                                         <tr key={submission.id}>
                                                             <th scope='row'>{(currentPage - 1) * pagination.per_page + index + 1}</th> {/* Adjust index for pagination */}
-                                                            <td>{submission.name}</td>
+                                                            <td>
+                                                                {submission.name} {badge && badge.length > 0 && badge.map((b, i) => (
+                                                                    b.student_id === submission.student_id && 
+                                                                    <OverlayTrigger
+                                                                        key={i}
+                                                                        placement="top"
+                                                                        overlay={<Tooltip id={`tooltip-${i}`}>{b.description}</Tooltip>}
+                                                                    >
+                                                                        <FontAwesomeIcon index={i} icon={faAward} className={`${styles.badge} ${b?.badge_type === "Gold" ? styles.first : b?.badge_type === "Silver" ? styles.second : styles.third}`}/>
+                                                                    </OverlayTrigger>
+                                                                ))}
+                                                            </td>
                                                             <td>{submission?.score}</td>
                                                             <td>{new Date(submission.created_at).toLocaleDateString() || 'N/A'}</td>
                                                             <td style={{ textAlign: 'center' }}>

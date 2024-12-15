@@ -282,6 +282,7 @@ export default function ClassGradeTable() {
         toast.loading('Grade submission in progress...');
         const gradeData = new FormData(); 
         gradeData.append('final_grade', parseInt(finalGrade));
+        gradeData.append('remarks', remarks);
 
         customFetch(`/grades/${gradeId}/update`, {
             method: 'POST',
@@ -291,6 +292,13 @@ export default function ClassGradeTable() {
         .then(data => {
             toast.dismiss();
             toast.success('Grade updated successfully');
+            pagination.data.forEach((grade) => {
+                if(grade.id === gradeId) {
+                    grade.final_grade = finalGrade;
+                    grade.remarks = data.remarks;
+                }
+            });
+            closeShowStudentGrade();
         })
         .catch(error => {
             toast.dismiss();
@@ -588,7 +596,7 @@ export default function ClassGradeTable() {
                     show={showRemarksModal}
                     handleClose={() => setShowRemarksModal(false)}
                     remarks={remarks}
-                    handleRemarks={(e) => setRemarks(e.target.value)}
+                    handleRemarks={(text) => setRemarks(text)}
                 />
             </div>
         </HomeTemplate>

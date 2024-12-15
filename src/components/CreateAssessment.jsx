@@ -10,10 +10,11 @@ import { toast } from 'react-toastify';
 import { customFetch } from '../utils/api';
 import CryptoJS from 'crypto-js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faAward, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import BadgeModal from '../components/Modals/BadgeModal';
 
 export default function CreateAssessment({handleChangePage, subject,classId}) {
     const [show, setShow] = useState(false);
@@ -159,6 +160,16 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
         }
     }
 
+    const [showBadgeModal, setShowBadgeModal] = useState(false);
+
+    const handleShowBadgeModal = () => {
+        setShowBadgeModal(true);
+    }
+
+    const handleCloseBadgeModal = () => {
+        setShowBadgeModal(false);
+    }
+
     return (
         <>
             <Offcanvas show={show} backdrop="static" className={styles.offCanvas} onHide={handleClose} placement="top" style={{ width: '80vw', height: '90vh', margin: 'auto'}}>
@@ -210,11 +221,17 @@ export default function CreateAssessment({handleChangePage, subject,classId}) {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setShowLeaveModal(true)} href="#/action-2"><FontAwesomeIcon className={styles.deleteIcon} icon={faArrowRightFromBracket} /> Leave Class</Dropdown.Item>
+                                <Dropdown.Item onClick={handleShowBadgeModal} ><FontAwesomeIcon className={styles.badgeIcon} style={{marginRight: '10px'}} icon={faAward} />View Badges</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setShowLeaveModal(true)}><FontAwesomeIcon className={styles.deleteIcon} icon={faArrowRightFromBracket} /> Leave Class</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </>
                 )}
+                <BadgeModal
+                    show={showBadgeModal}
+                    handleClose={handleCloseBadgeModal}
+                    studentId={user.id}
+                />
             </div>
         </>
     )
