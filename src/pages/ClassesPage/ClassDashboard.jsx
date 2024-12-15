@@ -407,7 +407,6 @@ export default function ClassDashboard() {
     );
 }
 function getSubjectIcon(subject) {
-    console.log(subject)
     const iconMap = {
       "Python": faPython,          // Python icon
       "Web Development": faHtml5, // Web Development icon (HTML5)
