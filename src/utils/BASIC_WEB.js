@@ -9,11 +9,7 @@ const lessonsWeb = [
 	HTML, or HyperText Markup Language, is the standard language used to create and design web pages. It provides the basic structure of a website, which is enhanced and modified by other technologies like CSS (Cascading Style Sheets) and JavaScript.
 \`\`\`End
 
-\`\`\`Para
-	HTML, or HyperText Markup Language, is the standard language used to create and design web pages. It provides the basic structure of a website, which is enhanced and modified by other technologies like CSS (Cascading Style Sheets) and JavaScript.
-\`\`\`End
-
-\`\`\`Bold
+\`\`\`
 	Key Concepts:
 \`\`\`End
 
