@@ -1,0 +1,43 @@
+.modalBody {
+    overflow: hidden;
+}
+.tableContainer {
+    width: 100%;
+    padding: 0 1rem;
+    overflow: auto;
+}
+.table {
+    width: 100%;
+}
+.tableHeader {
+    min-width: 150px;
+    max-width: 250px; /* Set your desired max width */
+    text-align: center;
+}
+
+.name {
+    text-align: left !important;
+}
+.remarks {
+    text-align: left !important;
+    min-width: 300px !important;
+}
+
+.gradeDistribution {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 10px 5px;
+    width: 50px;
+    border: 1px solid #7b7b7b;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    align-self: flex-end;
+    transition: all .3s ease;
+}
+.gradeDistribution:hover {
+    background-color: #3731e9de;
+    color: #ffffff;
+    border-color: transparent;
+}

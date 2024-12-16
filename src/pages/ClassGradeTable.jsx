@@ -62,7 +62,6 @@ export default function ClassGradeTable() {
 
     const [showCertificateModal, setShowCertificateModal] = useState(false);
 
-
     const captureOtherPage = async () => {
         // Navigate to the other page
         navigate("/certificate", { state: { captureMode: true } });
@@ -309,42 +308,81 @@ export default function ClassGradeTable() {
     }
 
     const [isExporting, setIsExporting] = useState(false);
-    const [allData, setAllData] = useState([]);
 
     const handleExportGrades = () => {
-        console.log(classData.name)
+        console.log(classData.name);
         setIsExporting(true);
         toast.loading('Exporting Grades...');
+        
         customFetch(`/grades/${classData.id}/print`, {
             method: 'GET',
         })
         .then(data => {
             toast.dismiss();
             toast.success('Grades exported successfully');
-            setAllData(data)
+    
+            // Extract unique activity titles for header columns
+            const activityTitles = [];
+            data.forEach((record) => {
+                record.activities.forEach((activity) => {
+                    if (!activityTitles.includes(activity.activity_title)) {
+                        activityTitles.push(activity.activity_title);
+                    }
+                });
+            });
+    
+            // Create rows with student data and activities
             const newData = data.map((grade) => {
+                const activityData = {};
+                activityTitles.forEach((title) => {
+                    const activity = grade.activities.find(act => act.activity_title === title);
+                    activityData[title] = activity ? activity.score : 'N/A'; // Default to 'N/A' if no score
+                });
+    
+                // Combine student data, activities, and final grade/remarks
                 return {
                     'Student Name': grade.student.name,
-                    'Final Grade': grade.final_grade,
-                    'Remarks': grade.remarks
-                }
+                    ...activityData, // Spread activities here
+                    'Final Grade': grade.final_grade, // Add final grade at the end
+                    'Remarks': grade.remarks // Add remarks at the end
+                };
             });
-            const worksheet = XLSX.utils.json_to_sheet(newData)
+    
+            // Generate Excel worksheet
+            const worksheet = XLSX.utils.json_to_sheet(newData);
+    
+            // Add auto-fit for columns
+            const columnWidths = Object.keys(newData[0]).map(key => {
+                const maxLength = Math.max(
+                    key.length, // Length of header
+                    ...newData.map(row => (row[key]?.toString()?.length || 0)) // Max length of column data
+                );
+                return { wch: maxLength + 2 }; // Add padding for readability
+            });
+    
+            worksheet['!cols'] = columnWidths;
+    
+            // Create workbook and append worksheet
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Grades');
+    
+            // Generate file name
             const rawName = classData.name + ' ' + classData.section;
             const fileName = rawName.replace(/ /g, "_");
     
-            XLSX.writeFile(workbook, 'grades_' + fileName + '.xlsx');
+            // Save file
+            XLSX.writeFile(workbook, `grades_${fileName}.xlsx`);
         })
         .catch(error => {
             toast.dismiss();
-            toast.error("Error Exporting Grades")
+            toast.error("Error Exporting Grades");
+            console.error(error);
         })
         .finally(() => {
             setIsExporting(false);
         });
-    }
+    };
+    
 
     const [showGradeSheet, setShowGradesheet] = useState(false);
 
@@ -610,6 +648,7 @@ export default function ClassGradeTable() {
                 <GradesheetModal 
                     show={showGradeSheet}
                     handleClose={() => setShowGradesheet(false)}
+                    classId={classData.id}
                 />
             </div>
         </HomeTemplate>
