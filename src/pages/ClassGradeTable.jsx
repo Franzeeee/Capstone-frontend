@@ -310,7 +310,7 @@ export default function ClassGradeTable() {
     const [isExporting, setIsExporting] = useState(false);
 
     const handleExportGrades = () => {
-        console.log(classData.name);
+
         setIsExporting(true);
         toast.loading('Exporting Grades...');
         
