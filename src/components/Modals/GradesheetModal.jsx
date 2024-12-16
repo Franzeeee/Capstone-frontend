@@ -36,7 +36,7 @@ function GradesheetModal({show, handleClose, classId}) {
 return (
     <Modal size='xl' show={show} onHide={handleClose}>
             <Modal.Header onClick={handleClose} closeButton>
-                    <h3>Class Gradesheet</h3>
+                    <h3>Class Grade Sheet</h3>
             </Modal.Header>
             <Modal.Body className={`${styles.modalBody}`}>
             <div className={`${styles.tableContainer}`}>

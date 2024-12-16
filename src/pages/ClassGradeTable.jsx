@@ -545,7 +545,7 @@ export default function ClassGradeTable() {
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     placement="bottom"
-                                    overlay={<Tooltip id={`tooltip-test`}>Export Grade to Excel</Tooltip>}
+                                    overlay={<Tooltip id={`tooltip-test`}>Export Grade Sheet to Excel</Tooltip>}
                                 >
                                     <p className={styles.gradeDistribution} onClick={isExporting ? null : handleExportGrades }><FontAwesomeIcon icon={isExporting ? faSpinner : faDownload} spin={isExporting} /></p>
                                 </OverlayTrigger>
