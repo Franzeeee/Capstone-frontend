@@ -16,7 +16,6 @@ function CryptoTest() {
     } else {
       const decryptedData = decryptData(encryptedData);
       setData(decryptedData); // Only update the state once decrypted data is available
-        console.log(decryptedData);
     }
   }, [encryptedData, navigate]);
 
