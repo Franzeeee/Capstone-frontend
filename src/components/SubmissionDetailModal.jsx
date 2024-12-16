@@ -254,12 +254,20 @@ export default function SubmissionDetailModal({ show, handleClose, submissionDat
                                                 <p className={styles.details}>{getOrdinalSuffix(data?.rank)}</p>                                            
                                                 </div>
                                             </li>
-                                            <li>
-                                                <p>Exit Full Screen: <span>{data?.cheating_record !== null ? data?.cheating_record.exit_fullscreen : 0}</span></p>
-                                            </li>
-                                            <li>
-                                                <p>Change Tab: <span>{data?.cheating_record !== null ? data?.cheating_record.change_tab : 0}</span></p>
-                                            </li>
+                                            <div className={styles.ExiTabCont}>
+                                                <li>
+                                                    <div className={styles.exitFscreen}>
+                                                    <p className={styles.Number}>{data?.cheating_record !== null ? data?.cheating_record.exit_fullscreen : 0}</p>
+                                                    <p className={styles.exiText}>Exit Full Screen</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className={styles.exitFscreen}>
+                                                    <p className={styles.Number}>{data?.cheating_record !== null ? data?.cheating_record.change_tab : 0}</p>
+                                                    <p className={styles.exiText}>Change Tab</p>
+                                                    </div>
+                                                </li>
+                                            </div>
                                         </ul>
                                     </div>
                                     </div>

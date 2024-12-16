@@ -123,7 +123,6 @@
 }
 .dataContainer{
     padding: 5px;
-    margin: 0 10% 0 10%;
 }
 .Update {
     background-color: #5d5dd4;
@@ -275,4 +274,31 @@
     align-items: center;
     justify-content: flex-start;
     gap: 5px;
+}
+.ExiTabCont{
+    display: flex;
+    padding: 2% 0 0 0;
+    height: 120px;
+    justify-content: flex-end;
+}
+.exitFscreen{
+    width: 100px;
+    height: 100%;
+    background-color: rgba(132, 108, 255, 0.756);
+    margin-left: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+
+}
+.exiText{
+    font-size: .7rem;
+    color:white;
+}
+.Number{
+    font-size: 3rem;
+    color:white;
+
 }
