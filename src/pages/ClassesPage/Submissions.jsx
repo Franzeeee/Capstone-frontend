@@ -3,7 +3,7 @@ import HomeTemplate from '../../templates/HomeTemplate';
 import styles from '../../assets/css/pages/ClassesPage/class-dashboard.module.css';
 import ProfileSide from '../../components/ProfileSide';
 import { getUserData } from '../../utils/userInformation';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
 import { faChalkboardUser, faClipboardCheck, faCopy, faEllipsisVertical, faExclamation, faDownload,faSpinner, faMedal, faTrophy, faArrowUpShortWide, faSortUp, faUnsorted, faAward, faA } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import customFetch from '../../utils/fetchApi';
 import { Dropdown } from 'react-bootstrap';
+import { decryptData } from '../../utils/cryptoUtils';
 
 import { Offcanvas } from 'react-bootstrap';
 import ConfirmationModal from '../../components/ConfirmationModal';
@@ -20,8 +21,18 @@ import SubmissionDetailModal from '../../components/SubmissionDetailModal';
 export default function Submissions() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const lessonData = searchParams.get('info');
+
+    const decryptedData  = decryptData(lessonData);
+    if(decryptedData === null) {
+        window.location.href = "/not-found";
+    }
+
     const backUrl = location.pathname.split('/').slice(0, -2).join('/');
-    const { classData, assessmentData, previousPath } = location?.state;
+    const { classData, assessmentData, previousPath } = location?.state || decryptData;
+
     const user = getUserData();
     const [isLoading, setIsLoading] = useState(true);
     const [noData, setNoData] = useState(false);
@@ -39,6 +50,10 @@ export default function Submissions() {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     const [badge, setBadge] = useState(null);
+
+    // useEffect(() => {
+
+    // }, []);
 
     useEffect(() => {
         customFetch(`/${assessmentData.id}/badge/fetch`, 'GET')

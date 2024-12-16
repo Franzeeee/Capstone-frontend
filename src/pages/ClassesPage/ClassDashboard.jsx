@@ -18,6 +18,7 @@ import CreateAssessmentForm from '../../components/AssessmentForm/CreateAssessme
 import SubmissionDetailModal from '../../components/SubmissionDetailModal';
 import EditClassModal from '../../components/Modals/EditClassModal';
 import LoadingPage from '../../pages/LoadingPage';
+import { encryptData } from '../../utils/cryptoUtils';
 
 
 export default function ClassDashboard() {
@@ -226,6 +227,15 @@ export default function ClassDashboard() {
         setShowMod(false);
     }
 
+    const navigateToSubmission = (assessment) => {
+        const encryptedData = encryptData(JSON.stringify({
+            classData: classData,
+            assessmentData: assessment,
+            previousPath: currentPath
+        }))
+        navigate(`${assessment.id}/submissions?info=${encryptedData}`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })
+    }
+
     return (
         pageLoading ? <LoadingPage /> :
         <HomeTemplate>
@@ -359,7 +369,7 @@ export default function ClassDashboard() {
                                                                 <Dropdown.Menu>
                                                                     <Dropdown.Item onClick={() => handleShow(index)}>View Details</Dropdown.Item>
                                                                     <Dropdown.Item onClick={() => handleShowDeleteConfirmation(assessment.id)}>Delete</Dropdown.Item>
-                                                                    <Dropdown.Item onClick={() => navigate(`${assessment.id}/submissions`, { state: { classData: classData, assessmentData: assessment, previousPath: currentPath } })}>
+                                                                    <Dropdown.Item onClick={() => navigateToSubmission(assessment)}>
                                                                         Submissions
                                                                     </Dropdown.Item>
                                                                 </Dropdown.Menu>

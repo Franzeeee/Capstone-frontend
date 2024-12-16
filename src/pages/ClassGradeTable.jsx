@@ -321,6 +321,20 @@ export default function ClassGradeTable() {
             toast.dismiss();
             toast.success('Grades exported successfully');
             setAllData(data)
+            const newData = data.map((grade) => {
+                return {
+                    'Student Name': grade.student.name,
+                    'Final Grade': grade.final_grade,
+                    'Remarks': grade.remarks
+                }
+            });
+            const worksheet = XLSX.utils.json_to_sheet(newData)
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Grades');
+            const rawName = classData.name + ' ' + classData.section;
+            const fileName = rawName.replace(/ /g, "_");
+    
+            XLSX.writeFile(workbook, 'grades_' + fileName + '.xlsx');
         })
         .catch(error => {
             toast.dismiss();
@@ -329,21 +343,6 @@ export default function ClassGradeTable() {
         .finally(() => {
             setIsExporting(false);
         });
-
-        const newData = allData.map((grade) => {
-            return {
-                'Student Name': grade.student.name,
-                'Final Grade': grade.final_grade,
-                'Remarks': grade.remarks
-            }
-        });
-        const worksheet = XLSX.utils.json_to_sheet(newData)
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Grades');
-        const rawName = classData.name + ' ' + classData.section;
-        const fileName = rawName.replace(/ /g, "_");
-
-        XLSX.writeFile(workbook, 'grades_' + fileName + '.xlsx');
     }
 
     return (
