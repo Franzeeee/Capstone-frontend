@@ -32,6 +32,7 @@ export default function ClassAssessment() {
     const dataAssessment = searchParams.get('info');
 
     const decryptedData  = decryptData(dataAssessment);
+    console.log(decryptedData);
     if(decryptedData === null) {
         window.location.href = "/not-found";
     }
@@ -67,20 +68,21 @@ export default function ClassAssessment() {
     const [classSubject, setClassSubject] = useState(location.state?.classSubject || decryptedData?.classSubject);
 
     const user = getUserData();
-    const lessonIndex = location.state?.progress?.last_completed_lesson || decryptedData?.progress?.last_completed_lesson;
-    const [currentLesson, setCurrentLesson] = useState(() => {
-        if (user.role === 'teacher') {
-            return lessons[0].title || "Introduction";
-        }
-        return lessons[lessonIndex].title || "Variables";
-    });
+    // const lessonIndex = location.state?.progress?.last_completed_lesson || decryptedData?.progress?.last_completed_lesson;
+    
+    // const [currentLesson, setCurrentLesson] = useState(() => {
+    //     if (user.role === 'teacher') {
+    //         return lessons[0].title || "Introduction";
+    //     }
+    //     return lessons[lessonIndex].title || "Variables";
+    // });
     
     // const [lessonTitle, setLessonTitle] = useState(lessons.map(lesson => lesson.title));
     const [show, setShow] = useState(false);
 
-    const getNextLesson = () => {
-        setCurrentLesson(lessonTitle[lessonTitle.indexOf(currentLesson) + 1]);
-    };
+    // const getNextLesson = () => {
+    //     setCurrentLesson(lessonTitle[lessonTitle.indexOf(currentLesson) + 1]);
+    // };
 
     const handleClose = () => {
         setShow(false);

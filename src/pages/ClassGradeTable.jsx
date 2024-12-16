@@ -6,7 +6,7 @@ import { getUserData } from '../utils/userInformation';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { faChalkboardUser, faChartBar, faCopy, faDownload, faEllipsisVertical, faExclamation, faScaleBalanced, faSpinner, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faChartBar, faCopy, faDownload, faEllipsisVertical, faExclamation, faRectangleList, faScaleBalanced, faSpinner, faUserGraduate, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
@@ -22,6 +22,7 @@ import profile from '../assets/img/1x1Robot2.png';
 import IssueCertificateModal from '../components/Modals/IssueCertificateModal';
 import * as XLSX from 'xlsx';
 import RemarksModal from '../components/Modals/RemarksModal';
+import GradesheetModal from '../components/Modals/GradesheetModal';
 
 
 
@@ -345,6 +346,8 @@ export default function ClassGradeTable() {
         });
     }
 
+    const [showGradeSheet, setShowGradesheet] = useState(false);
+
     return (
         <HomeTemplate>
             <div className={`${styles.container} ${styles.classDashboard}`}>
@@ -498,6 +501,12 @@ export default function ClassGradeTable() {
                             <div className={styles.gradeControls}>
                                 <OverlayTrigger
                                     placement="bottom"
+                                    overlay={<Tooltip id={`tooltip-test`}>View Gradesheet</Tooltip>}
+                                >
+                                    <p className={styles.gradeDistribution} onClick={() => setShowGradesheet(true)}><FontAwesomeIcon icon={faRectangleList} /></p>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    placement="bottom"
                                     overlay={<Tooltip id={`tooltip-test`}>Export Grade to Excel</Tooltip>}
                                 >
                                     <p className={styles.gradeDistribution} onClick={isExporting ? null : handleExportGrades }><FontAwesomeIcon icon={isExporting ? faSpinner : faDownload} spin={isExporting} /></p>
@@ -548,7 +557,8 @@ export default function ClassGradeTable() {
                                                 ))}
                                             </MDBTableBody>
                                             
-                                        </MDBTable><div className={styles.footer}>
+                                        </MDBTable>
+                                        <div className={styles.footer}>
                                                 <div className={styles.totalEntry}>
                                                     <p>Showing </p>
                                                     <select name="entry" id="entry" defaultValue={pagination?.per_page || 10}>
@@ -596,6 +606,10 @@ export default function ClassGradeTable() {
                     handleClose={() => setShowRemarksModal(false)}
                     remarks={remarks}
                     handleRemarks={(text) => setRemarks(text)}
+                />
+                <GradesheetModal 
+                    show={showGradeSheet}
+                    handleClose={() => setShowGradesheet(false)}
                 />
             </div>
         </HomeTemplate>

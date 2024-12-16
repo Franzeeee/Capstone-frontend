@@ -32,7 +32,7 @@ export default function Submissions() {
 
     const backUrl = location.pathname.split('/').slice(0, -2).join('/');
     const { classData, assessmentData, previousPath } = location?.state || decryptData;
-
+    
     const user = getUserData();
     const [isLoading, setIsLoading] = useState(true);
     const [noData, setNoData] = useState(false);
