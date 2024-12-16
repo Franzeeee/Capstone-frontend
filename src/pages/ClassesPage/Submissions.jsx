@@ -22,6 +22,9 @@ export default function Submissions() {
     const location = useLocation();
     const backUrl = location.pathname.split('/').slice(0, -2).join('/');
     const { classData, assessmentData, previousPath } = location?.state;
+
+
+    console.log(classData)
     const user = getUserData();
     const [isLoading, setIsLoading] = useState(true);
     const [noData, setNoData] = useState(false);
@@ -39,6 +42,10 @@ export default function Submissions() {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     const [badge, setBadge] = useState(null);
+
+    // useEffect(() => {
+
+    // }, []);
 
     useEffect(() => {
         customFetch(`/${assessmentData.id}/badge/fetch`, 'GET')
