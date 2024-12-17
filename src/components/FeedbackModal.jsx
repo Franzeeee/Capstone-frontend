@@ -9,8 +9,6 @@ const FeedbackModal = ({feedbackData, sendFeedback}) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    console.log(feedbackData);
-
     const handleChange = (e) => {
         setFeedback(e.target.value);
     }

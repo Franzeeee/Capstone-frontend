@@ -176,14 +176,14 @@ message = "Hello, World!"
             \`\`\`End
     
             \`\`\`Code
-x = 10
+            x = 10
 y = 20
     
-            # Swap the values of x and y
-            x, y = y, x
+# Swap the values of x and y
+x, y = y, x
     
-            print(x)  # Output: 20
-            print(y)  # Output: 10
+print(x)  # Output: 20
+print(y)  # Output: 10
             \`\`\`End
     
             \`\`\`Bold
@@ -1377,11 +1377,14 @@ for key, value in person.items():
             \`\`\`Para
             Syntax for Defining a Function:
             \`\`\`End
-    
-            \`\`\`Para
             def function_name(parameters):
-            """Optional docstring to describe the function."""  
-            # Function body  
+            \`\`\`Para
+            """Optional docstring to describe the function."""
+            \`\`\`End
+            \`\`\`Para
+            # Function body
+            \`\`\`End
+            \`\`\`Para
             return result
             \`\`\`End
     

@@ -32,7 +32,6 @@ export default function ClassAssessment() {
     const dataAssessment = searchParams.get('info');
 
     const decryptedData  = decryptData(dataAssessment);
-    console.log(decryptedData);
     if(decryptedData === null) {
         window.location.href = "/not-found";
     }
@@ -41,7 +40,6 @@ export default function ClassAssessment() {
         if (!dataAssessment || decryptedData  === null || !decryptData) {
             navigate('/not-found');
         }
-        console.log(decryptedData);
     }, [dataAssessment, navigate]);
 
     const [totalLeaveFullsreen, setTotalLeaveFullscreen] = useState(0);

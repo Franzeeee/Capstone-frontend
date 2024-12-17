@@ -3,6 +3,7 @@ import styles from '../assets/css/components/course-content.module.css';
 import book from '../assets/img/book.png';
 import customFetch from '../utils/fetchApi';
 import { useNavigate } from 'react-router-dom';
+import { encryptData } from '../utils/cryptoUtils';
 
 export default function ClassroomWork({ classId, code, className }) {
 
@@ -23,6 +24,12 @@ export default function ClassroomWork({ classId, code, className }) {
                 setIsFetching(false);
             });
     }, [classId]); // Add classId as a dependency to avoid infinite loop
+    
+    const navigateToAssessment = (item) => {
+        const encryptedInfo = encryptData(JSON.stringify({ item: item, code,name: className }));
+        navigate(`a/${item.title}?info=${encryptedInfo}`, { state: { item: item, code,name: className } });
+    }
+
 
     return (
         <div className={styles.contentContainer}>
@@ -40,7 +47,7 @@ export default function ClassroomWork({ classId, code, className }) {
                             <p className={styles.dueText}>{formatDate(item?.end_date)}</p>
                             <p className={styles.lessonTitle}>{item.title}</p>
                             <p className={styles.lessonDescription}>{item.description}</p>
-                            <div className={styles.status} onClick={() => navigate(`a/${item.title}`, { state: { item: item, code,name: className } })}>
+                            <div className={styles.status} onClick={() => navigateToAssessment(item)}>
                                 <p>View</p>
                             </div>
                         </div>
